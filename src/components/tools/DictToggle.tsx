@@ -19,7 +19,7 @@ export default function DictToggle({ enabled, onChange }: Props) {
         onChange={(e) => handle(e.target.checked)}
       />
       <span>
-        <span className="font-medium text-slate-900">Enable word list</span>
+        <span className="font-medium text-slate-900">Use word list</span>
         <span className="block text-xs text-slate-500">
           Loads the dictionary in your browser so tools can search offline. Turn off to skip the download.
         </span>

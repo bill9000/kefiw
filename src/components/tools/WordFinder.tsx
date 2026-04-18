@@ -21,25 +21,26 @@ export default function WordFinder() {
   const [minLen, setMinLen] = useState(2);
   const [maxLen, setMaxLen] = useState(15);
   const [results, setResults] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [everLoaded, setEverLoaded] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedSources = useRef(new Set<string>());
 
   useEffect(() => {
-    if (!dictEnabled) { setResults([]); setLoading(false); return; }
+    if (!dictEnabled) { setResults([]); setPhase('idle'); return; }
     const v = letters.replace(/\s/g, '');
-    if (!v) { setResults([]); return; }
-    setLoading(true);
+    if (!v) { setResults([]); setPhase('idle'); return; }
+    const firstTime = !loadedSources.current.has(mode);
+    setPhase(firstTime ? 'loading' : 'searching');
     const t = setTimeout(async () => {
       const t0 = performance.now();
-      const { results } = await send<{ results: string[] }>('unscramble', { letters: v, minLen, maxLen, dictSource: mode });
-      if (!loadedSources.current.has(mode)) {
+      if (firstTime) {
+        await send('ready', { dictSource: mode });
         loadedSources.current.add(mode);
         track('dict_loaded', { source: mode, ms: Math.round(performance.now() - t0) });
+        setPhase('searching');
       }
+      const { results } = await send<{ results: string[] }>('unscramble', { letters: v, minLen, maxLen, dictSource: mode });
       setResults(results);
-      setLoading(false);
-      setEverLoaded(true);
+      setPhase('idle');
     }, 120);
     return () => clearTimeout(t);
   }, [letters, minLen, maxLen, mode, dictEnabled, send]);
@@ -82,10 +83,10 @@ export default function WordFinder() {
           </div>
           <ResultList
             words={results}
-            loading={loading}
+            loading={phase !== 'idle'}
             group="length"
             tool="word-finder"
-            loadingLabel={!everLoaded ? 'Loading word list…' : 'Searching…'}
+            loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
             emptyLabel="Type some letters to see words you can make."
           />
         </>

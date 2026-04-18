@@ -20,25 +20,26 @@ export default function WordUnscrambler() {
   const [letters, setLetters] = useState('');
   const [minLen, setMinLen] = useState(2);
   const [results, setResults] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [everLoaded, setEverLoaded] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedSources = useRef(new Set<string>());
 
   useEffect(() => {
-    if (!dictEnabled) { setResults([]); setLoading(false); return; }
+    if (!dictEnabled) { setResults([]); setPhase('idle'); return; }
     const v = letters.trim();
-    if (!v) { setResults([]); return; }
-    setLoading(true);
+    if (!v) { setResults([]); setPhase('idle'); return; }
+    const firstTime = !loadedSources.current.has(mode);
+    setPhase(firstTime ? 'loading' : 'searching');
     const t = setTimeout(async () => {
       const t0 = performance.now();
-      const { results } = await send<{ results: string[] }>('unscramble', { letters: v, minLen, dictSource: mode });
-      if (!loadedSources.current.has(mode)) {
+      if (firstTime) {
+        await send('ready', { dictSource: mode });
         loadedSources.current.add(mode);
         track('dict_loaded', { source: mode, ms: Math.round(performance.now() - t0) });
+        setPhase('searching');
       }
+      const { results } = await send<{ results: string[] }>('unscramble', { letters: v, minLen, dictSource: mode });
       setResults(results);
-      setLoading(false);
-      setEverLoaded(true);
+      setPhase('idle');
     }, 120);
     return () => clearTimeout(t);
   }, [letters, minLen, mode, dictEnabled, send]);
@@ -78,10 +79,10 @@ export default function WordUnscrambler() {
           </div>
           <ResultList
             words={results}
-            loading={loading}
+            loading={phase !== 'idle'}
             group="length"
             tool="unscrambler"
-            loadingLabel={!everLoaded ? 'Loading word list…' : 'Searching…'}
+            loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
             emptyLabel="Type some letters to begin."
           />
         </>

@@ -19,25 +19,26 @@ export default function RhymeFinder() {
   const [mode, setMode] = useToolSetting<Mode>('kefiw.mode.rhymes', 'quick');
   const [word, setWord] = useState('');
   const [data, setData] = useState<{ perfect: string[]; near: string[] }>({ perfect: [], near: [] });
-  const [loading, setLoading] = useState(false);
-  const [everLoaded, setEverLoaded] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedOnce = useRef(false);
 
   useEffect(() => {
-    if (!dictEnabled) { setData({ perfect: [], near: [] }); setLoading(false); return; }
+    if (!dictEnabled) { setData({ perfect: [], near: [] }); setPhase('idle'); return; }
     const v = word.trim().toLowerCase().replace(/[^a-z]/g, '');
-    if (!v) { setData({ perfect: [], near: [] }); return; }
-    setLoading(true);
+    if (!v) { setData({ perfect: [], near: [] }); setPhase('idle'); return; }
+    const firstTime = !loadedOnce.current;
+    setPhase(firstTime ? 'loading' : 'searching');
     const t = setTimeout(async () => {
       const t0 = performance.now();
-      const res = await send<{ perfect: string[]; near: string[] }>('rhymes', { word: v, dictSource: 'full' });
-      if (!loadedOnce.current) {
+      if (firstTime) {
+        await send('ready', { dictSource: 'full' });
         loadedOnce.current = true;
         track('dict_loaded', { source: 'full', ms: Math.round(performance.now() - t0) });
+        setPhase('searching');
       }
+      const res = await send<{ perfect: string[]; near: string[] }>('rhymes', { word: v, dictSource: 'full' });
       setData(res);
-      setLoading(false);
-      setEverLoaded(true);
+      setPhase('idle');
     }, 160);
     return () => clearTimeout(t);
   }, [word, dictEnabled, send]);
@@ -64,8 +65,8 @@ export default function RhymeFinder() {
             <label className="label" htmlFor="w">Word</label>
             <input id="w" className="input font-mono" value={word} onChange={(e) => setWord(e.target.value)} placeholder="e.g. time" autoFocus />
           </div>
-          {loading && <div className="text-sm text-slate-500">{everLoaded ? 'Searching rhymes…' : 'Loading word list…'}</div>}
-          {!loading && (data.perfect.length > 0 || data.near.length > 0) && (
+          {phase !== 'idle' && <div className="text-sm text-slate-500">{phase === 'loading' ? 'Loading word list…' : 'Searching rhymes…'}</div>}
+          {phase === 'idle' && (data.perfect.length > 0 || data.near.length > 0) && (
             <>
               <RhymeBlock title="Perfect rhymes" words={data.perfect} />
               {mode === 'extended' && <RhymeBlock title="Near rhymes" words={data.near} />}

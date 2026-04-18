@@ -20,25 +20,26 @@ export default function AnagramSolver() {
   const [letters, setLetters] = useState('');
   const [exact, setExact] = useState(true);
   const [results, setResults] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [everLoaded, setEverLoaded] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedSources = useRef(new Set<string>());
 
   useEffect(() => {
-    if (!dictEnabled) { setResults([]); setLoading(false); return; }
+    if (!dictEnabled) { setResults([]); setPhase('idle'); return; }
     const v = letters.replace(/\s/g, '');
-    if (!v) { setResults([]); return; }
-    setLoading(true);
+    if (!v) { setResults([]); setPhase('idle'); return; }
+    const firstTime = !loadedSources.current.has(mode);
+    setPhase(firstTime ? 'loading' : 'searching');
     const t = setTimeout(async () => {
       const t0 = performance.now();
-      const { results } = await send<{ results: string[] }>('anagrams', { letters: v, exact, dictSource: mode });
-      if (!loadedSources.current.has(mode)) {
+      if (firstTime) {
+        await send('ready', { dictSource: mode });
         loadedSources.current.add(mode);
         track('dict_loaded', { source: mode, ms: Math.round(performance.now() - t0) });
+        setPhase('searching');
       }
+      const { results } = await send<{ results: string[] }>('anagrams', { letters: v, exact, dictSource: mode });
       setResults(results);
-      setLoading(false);
-      setEverLoaded(true);
+      setPhase('idle');
     }, 100);
     return () => clearTimeout(t);
   }, [letters, exact, mode, dictEnabled, send]);
@@ -72,10 +73,10 @@ export default function AnagramSolver() {
           </div>
           <ResultList
             words={results}
-            loading={loading}
+            loading={phase !== 'idle'}
             group="length"
             tool="anagram"
-            loadingLabel={!everLoaded ? 'Loading word list…' : 'Searching…'}
+            loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
             emptyLabel="Enter a word to see its anagrams."
           />
         </>

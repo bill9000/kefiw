@@ -59,3 +59,21 @@ pnpm dlx wrangler pages deploy dist --project-name kefiw
 ```
 
 `wrangler.toml` is checked in so `pages deploy` picks up the output directory automatically.
+
+## Analytics events
+
+`src/lib/analytics.ts` exposes a single `track(event, props)` helper. It is a
+no-op by default — events are only delivered if `window.plausible`, `window.gtag`,
+or `window.dataLayer` are present at runtime. When a provider is attached later,
+these events will start firing automatically. Keep the names and payload shapes
+below stable so dashboards don't break.
+
+| Event            | Fired when                                                | Props                                   |
+| ---------------- | --------------------------------------------------------- | --------------------------------------- |
+| `mode_selected`  | User switches a tool's mode switch to a new value         | `tool: string`, `mode: string`          |
+| `dict_toggled`   | User toggles the "Use word list" checkbox                 | `enabled: boolean`                      |
+| `dict_loaded`    | Dictionary finishes loading for the first time per tool   | `source: 'fast' \| 'full'`, `ms: number` |
+| `copy_result`    | User clicks a `CopyButton` and the copy succeeds          | `tool: string`, `count: number`         |
+
+Tool IDs currently used in `tool` props: `unscrambler`, `anagram`, `word-finder`,
+`rhymes`, `syllables`, `scrabble`, `wwf`.

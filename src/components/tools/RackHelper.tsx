@@ -22,25 +22,26 @@ export default function RackHelper({ valueSet }: Props) {
   const [mode, setMode] = useToolSetting<Mode>(storageKey, 'scored');
   const [rack, setRack] = useState('');
   const [results, setResults] = useState<Array<{ word: string; score: number }>>([]);
-  const [loading, setLoading] = useState(false);
-  const [everLoaded, setEverLoaded] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedOnce = useRef(false);
 
   useEffect(() => {
-    if (!dictEnabled) { setResults([]); setLoading(false); return; }
+    if (!dictEnabled) { setResults([]); setPhase('idle'); return; }
     const v = rack.trim().toLowerCase().replace(/[^a-z?]/g, '').slice(0, 9);
-    if (!v) { setResults([]); return; }
-    setLoading(true);
+    if (!v) { setResults([]); setPhase('idle'); return; }
+    const firstTime = !loadedOnce.current;
+    setPhase(firstTime ? 'loading' : 'searching');
     const t = setTimeout(async () => {
       const t0 = performance.now();
-      const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300, dictSource: 'fast' });
-      if (!loadedOnce.current) {
+      if (firstTime) {
+        await send('ready', { dictSource: 'fast' });
         loadedOnce.current = true;
         track('dict_loaded', { source: 'fast', ms: Math.round(performance.now() - t0) });
+        setPhase('searching');
       }
+      const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300, dictSource: 'fast' });
       setResults(results);
-      setLoading(false);
-      setEverLoaded(true);
+      setPhase('idle');
     }, 140);
     return () => clearTimeout(t);
   }, [rack, valueSet, dictEnabled, send]);
@@ -76,9 +77,9 @@ export default function RackHelper({ valueSet }: Props) {
               <button type="button" onClick={() => setRack('')} className="btn-ghost shrink-0" disabled={!rack}>Reset</button>
             </div>
           </div>
-          {loading && <div className="text-sm text-slate-500">{everLoaded ? 'Solving…' : 'Loading word list…'}</div>}
-          {!loading && displayed.length === 0 && <div className="text-sm text-slate-500">Enter your tiles to see playable words.</div>}
-          {displayed.length > 0 && (
+          {phase !== 'idle' && <div className="text-sm text-slate-500">{phase === 'loading' ? 'Loading word list…' : 'Searching…'}</div>}
+          {phase === 'idle' && displayed.length === 0 && <div className="text-sm text-slate-500">Enter your tiles to see playable words.</div>}
+          {phase === 'idle' && displayed.length > 0 && (
             <div>
               <div className="mb-2 flex items-center justify-between">
                 <div className="text-sm text-slate-600">{displayed.length} plays found</div>
