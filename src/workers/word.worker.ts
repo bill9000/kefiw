@@ -94,7 +94,7 @@ type Req =
   | { id: number; kind: 'startsWith'; prefix: string; minLen?: number; maxLen?: number; dictSource?: DictSource }
   | { id: number; kind: 'endsWith'; suffix: string; minLen?: number; maxLen?: number; dictSource?: DictSource }
   | { id: number; kind: 'contains'; sub: string; minLen?: number; maxLen?: number; dictSource?: DictSource }
-  | { id: number; kind: 'rack'; rack: string; valueSet: 'scrabble' | 'wwf'; minLen?: number; maxLen?: number; limit?: number; dictSource?: DictSource }
+  | { id: number; kind: 'rack'; rack: string; valueSet: 'scrabble' | 'wwf'; minLen?: number; maxLen?: number; limit?: number; dictSource?: DictSource; boardLetter?: string }
   | { id: number; kind: 'rhymes'; word: string; dictSource?: DictSource };
 
 function filterLen(words: string[], minLen?: number, maxLen?: number): string[] {
@@ -174,15 +174,23 @@ self.onmessage = async (e: MessageEvent<Req>) => {
       }
       case 'rack': {
         const rack = msg.rack;
+        const boardLetter = (msg.boardLetter ?? '').toLowerCase().replace(/[^a-z]/g, '').slice(0, 1);
         const values = msg.valueSet === 'wwf' ? WWF_VALUES : SCRABBLE_VALUES;
         const usable = filterLen(words, msg.minLen ?? 2, msg.maxLen ?? 15);
         const matches: Array<{ word: string; score: number }> = [];
         const bingoBonus = msg.valueSet === 'wwf' ? 35 : 50;
+        const rackCap = rack.length + (boardLetter ? 1 : 0);
         for (const w of usable) {
-          if (w.length > rack.length) continue;
-          if (!canMakeFromRack(w, rack)) continue;
+          if (w.length > rackCap) continue;
+          let remainder = w;
+          if (boardLetter) {
+            const idx = w.indexOf(boardLetter);
+            if (idx === -1) continue;
+            remainder = w.slice(0, idx) + w.slice(idx + 1);
+          }
+          if (!canMakeFromRack(remainder, rack)) continue;
           let score = wordScore(w, values);
-          if (w.length === 7) score += bingoBonus;
+          if (remainder.length === 7) score += bingoBonus;
           matches.push({ word: w, score });
         }
         matches.sort((a, b) => b.score - a.score || b.word.length - a.word.length || a.word.localeCompare(b.word));

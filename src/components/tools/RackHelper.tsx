@@ -21,6 +21,7 @@ export default function RackHelper({ valueSet }: Props) {
   const [dictEnabled, setDictEnabled] = useToolBool('kefiw.word-tools.dict-enabled', true);
   const [mode, setMode] = useToolSetting<Mode>(storageKey, 'scored');
   const [rack, setRack] = useState('');
+  const [boardLetter, setBoardLetter] = useState('');
   const [results, setResults] = useState<Array<{ word: string; score: number }>>([]);
   const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedOnce = useRef(false);
@@ -28,6 +29,7 @@ export default function RackHelper({ valueSet }: Props) {
   useEffect(() => {
     if (!dictEnabled) { setResults([]); setPhase('idle'); return; }
     const v = rack.trim().toLowerCase().replace(/[^a-z?]/g, '').slice(0, 9);
+    const bl = boardLetter.trim().toLowerCase().replace(/[^a-z]/g, '').slice(0, 1);
     if (!v) { setResults([]); setPhase('idle'); return; }
     const firstTime = !loadedOnce.current;
     setPhase(firstTime ? 'loading' : 'searching');
@@ -39,12 +41,12 @@ export default function RackHelper({ valueSet }: Props) {
         track('dict_loaded', { source: 'fast', ms: Math.round(performance.now() - t0) });
         setPhase('searching');
       }
-      const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300, dictSource: 'fast' });
+      const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300, dictSource: 'fast', boardLetter: bl });
       setResults(results);
       setPhase('idle');
     }, 140);
     return () => clearTimeout(t);
-  }, [rack, valueSet, dictEnabled, send]);
+  }, [rack, boardLetter, valueSet, dictEnabled, send]);
 
   const displayed = mode === 'basic'
     ? [...results].sort((a, b) => a.word.localeCompare(b.word))
@@ -68,15 +70,24 @@ export default function RackHelper({ valueSet }: Props) {
         </div>
       ) : (
         <>
-          <div>
-            <label className="label" htmlFor="rack">Your tiles (use ? for blanks)</label>
-            <div className="flex gap-2">
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+            <div>
+              <label className="label" htmlFor="rack">Your tiles (use ? for blanks)</label>
               <input id="rack" className="input font-mono uppercase tracking-widest"
                 value={rack} onChange={(e) => setRack(e.target.value.toUpperCase())}
                 placeholder="e.g. RSTLNE?" maxLength={9} autoFocus />
-              <button type="button" onClick={() => setRack('')} className="btn-ghost shrink-0" disabled={!rack}>Reset</button>
+            </div>
+            <div>
+              <label className="label" htmlFor="board-letter">Plays through</label>
+              <input id="board-letter" className="input font-mono uppercase tracking-widest w-16 text-center"
+                value={boardLetter} onChange={(e) => setBoardLetter(e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 1))}
+                placeholder="—" maxLength={1} />
+            </div>
+            <div className="flex items-end">
+              <button type="button" onClick={() => { setRack(''); setBoardLetter(''); }} className="btn-ghost w-full sm:w-auto" disabled={!rack && !boardLetter}>Reset</button>
             </div>
           </div>
+          <p className="-mt-2 text-xs text-slate-500">Optional: enter a single board letter your word must play through. Leave blank to find any rack play.</p>
           {phase !== 'idle' && <div className="text-sm text-slate-500">{phase === 'loading' ? 'Loading word list…' : 'Searching…'}</div>}
           {phase === 'idle' && displayed.length === 0 && <div className="text-sm text-slate-500">Enter your tiles to see playable words.</div>}
           {phase === 'idle' && displayed.length > 0 && (
