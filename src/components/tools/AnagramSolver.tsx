@@ -17,6 +17,7 @@ export default function AnagramSolver() {
   const { send } = useWordWorker();
   const [dictEnabled, setDictEnabled] = useToolBool('kefiw.word-tools.dict-enabled', true);
   const [mode, setMode] = useToolSetting<Mode>('kefiw.mode.anagram', 'fast');
+  const [showScores, setShowScores] = useToolBool('kefiw.scores.anagram', true);
   const [letters, setLetters] = useState('');
   const [exact, setExact] = useState(true);
   const [results, setResults] = useState<string[]>([]);
@@ -71,10 +72,16 @@ export default function AnagramSolver() {
             <button type="button" className={`btn ${!exact ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setExact(false)}>Any letters</button>
             <button type="button" className="btn-ghost ml-auto" onClick={() => setLetters('')} disabled={!letters}>Reset</button>
           </div>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+            <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+              checked={showScores} onChange={(e) => setShowScores(e.target.checked)} />
+            <span>Show Scrabble + WWF scores</span>
+          </label>
           <ResultList
             words={results}
             loading={phase !== 'idle'}
-            group="length"
+            group={showScores ? undefined : 'length'}
+            scores={showScores}
             tool="anagram"
             loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
             emptyLabel="Enter a word to see its anagrams."

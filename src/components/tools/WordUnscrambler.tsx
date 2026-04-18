@@ -17,6 +17,7 @@ export default function WordUnscrambler() {
   const { send } = useWordWorker();
   const [dictEnabled, setDictEnabled] = useToolBool('kefiw.word-tools.dict-enabled', true);
   const [mode, setMode] = useToolSetting<Mode>('kefiw.mode.unscrambler', 'fast');
+  const [showScores, setShowScores] = useToolBool('kefiw.scores.unscrambler', true);
   const [letters, setLetters] = useState('');
   const [minLen, setMinLen] = useState(2);
   const [results, setResults] = useState<string[]>([]);
@@ -77,10 +78,16 @@ export default function WordUnscrambler() {
               <button type="button" onClick={() => setLetters('')} className="btn-ghost w-full sm:w-auto" disabled={!letters}>Reset</button>
             </div>
           </div>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+            <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+              checked={showScores} onChange={(e) => setShowScores(e.target.checked)} />
+            <span>Show Scrabble + WWF scores</span>
+          </label>
           <ResultList
             words={results}
             loading={phase !== 'idle'}
-            group="length"
+            group={showScores ? undefined : 'length'}
+            scores={showScores}
             tool="unscrambler"
             loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
             emptyLabel="Type some letters to begin."

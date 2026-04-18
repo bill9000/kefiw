@@ -17,6 +17,7 @@ export default function WordFinder() {
   const { send } = useWordWorker();
   const [dictEnabled, setDictEnabled] = useToolBool('kefiw.word-tools.dict-enabled', true);
   const [mode, setMode] = useToolSetting<Mode>('kefiw.mode.word-finder', 'fast');
+  const [showScores, setShowScores] = useToolBool('kefiw.scores.word-finder', true);
   const [letters, setLetters] = useState('');
   const [minLen, setMinLen] = useState(2);
   const [maxLen, setMaxLen] = useState(15);
@@ -81,10 +82,16 @@ export default function WordFinder() {
               </select>
             </div>
           </div>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+            <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+              checked={showScores} onChange={(e) => setShowScores(e.target.checked)} />
+            <span>Show Scrabble + WWF scores</span>
+          </label>
           <ResultList
             words={results}
             loading={phase !== 'idle'}
-            group="length"
+            group={showScores ? undefined : 'length'}
+            scores={showScores}
             tool="word-finder"
             loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
             emptyLabel="Type some letters to see words you can make."
