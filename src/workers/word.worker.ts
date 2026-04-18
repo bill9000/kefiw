@@ -3,6 +3,8 @@ import { SCRABBLE_VALUES, WWF_VALUES, canMakeFromRack, matchesPattern, sortedLet
 let WORDS: string[] | null = null;
 let BY_LEN: Map<number, string[]> | null = null;
 let BY_SORTED: Map<string, string[]> | null = null;
+let ENABLE: Set<string> | null = null;
+let enablePromise: Promise<Set<string>> | null = null;
 
 async function loadDict(): Promise<string[]> {
   if (WORDS) return WORDS;
@@ -11,6 +13,24 @@ async function loadDict(): Promise<string[]> {
   const text = await res.text();
   WORDS = text.split(/\r?\n/).map((w) => w.trim().toLowerCase()).filter((w) => w.length > 0);
   return WORDS;
+}
+
+async function loadEnable(): Promise<Set<string>> {
+  if (ENABLE) return ENABLE;
+  if (enablePromise) return enablePromise;
+  enablePromise = (async () => {
+    const res = await fetch('/data/enable.txt');
+    if (!res.ok) throw new Error(`ENABLE fetch failed: ${res.status}`);
+    const text = await res.text();
+    const set = new Set<string>();
+    for (const line of text.split(/\r?\n/)) {
+      const w = line.trim().toLowerCase();
+      if (w) set.add(w);
+    }
+    ENABLE = set;
+    return set;
+  })();
+  return enablePromise;
 }
 
 function byLen(): Map<number, string[]> {
@@ -44,7 +64,7 @@ type Req =
   | { id: number; kind: 'startsWith'; prefix: string; minLen?: number; maxLen?: number }
   | { id: number; kind: 'endsWith'; suffix: string; minLen?: number; maxLen?: number }
   | { id: number; kind: 'contains'; sub: string; minLen?: number; maxLen?: number }
-  | { id: number; kind: 'rack'; rack: string; valueSet: 'scrabble' | 'wwf'; minLen?: number; maxLen?: number; limit?: number }
+  | { id: number; kind: 'rack'; rack: string; valueSet: 'scrabble' | 'wwf'; minLen?: number; maxLen?: number; limit?: number; strict?: boolean }
   | { id: number; kind: 'rhymes'; word: string };
 
 function filterLen(words: string[], minLen?: number, maxLen?: number): string[] {
@@ -124,10 +144,12 @@ self.onmessage = async (e: MessageEvent<Req>) => {
       case 'rack': {
         const rack = msg.rack;
         const values = msg.valueSet === 'wwf' ? WWF_VALUES : SCRABBLE_VALUES;
+        const enable = msg.strict ? await loadEnable() : null;
         const usable = filterLen(WORDS!, msg.minLen ?? 2, msg.maxLen ?? 15);
         const matches: Array<{ word: string; score: number }> = [];
         for (const w of usable) {
           if (w.length > rack.length) continue;
+          if (enable && !enable.has(w)) continue;
           if (!canMakeFromRack(w, rack)) continue;
           let score = wordScore(w, values);
           if (w.length === 7) score += 50;

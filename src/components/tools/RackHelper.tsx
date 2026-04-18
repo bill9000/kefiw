@@ -7,6 +7,7 @@ interface Props { valueSet: 'scrabble' | 'wwf'; }
 export default function RackHelper({ valueSet }: Props) {
   const { send } = useWordWorker();
   const [rack, setRack] = useState('');
+  const [strict, setStrict] = useState(false);
   const [results, setResults] = useState<Array<{ word: string; score: number }>>([]);
   const [loading, setLoading] = useState(false);
 
@@ -15,12 +16,12 @@ export default function RackHelper({ valueSet }: Props) {
     if (!v) { setResults([]); return; }
     setLoading(true);
     const t = setTimeout(async () => {
-      const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300 });
+      const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300, strict });
       setResults(results);
       setLoading(false);
     }, 140);
     return () => clearTimeout(t);
-  }, [rack, valueSet, send]);
+  }, [rack, valueSet, strict, send]);
 
   return (
     <div className="space-y-3">
@@ -33,6 +34,11 @@ export default function RackHelper({ valueSet }: Props) {
           <button type="button" onClick={() => setRack('')} className="btn-ghost shrink-0" disabled={!rack}>Reset</button>
         </div>
       </div>
+      <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
+        <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+          checked={strict} onChange={(e) => setStrict(e.target.checked)} />
+        <span>Strict mode <span className="text-slate-500">— only show common tournament-safe words (ENABLE list)</span></span>
+      </label>
       {loading && <div className="text-sm text-slate-500">Solving…</div>}
       {!loading && results.length === 0 && <div className="text-sm text-slate-500">Enter your tiles to see playable words.</div>}
       {results.length > 0 && (

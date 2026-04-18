@@ -1,15 +1,19 @@
-# Dictionary
+# Dictionary data
 
-`dict.txt` is a newline-delimited lowercase English word list used by the word-tool Web Worker.
+Two newline-delimited lowercase English word lists, fetched lazily by the word-tool Web Worker.
 
-The seed list shipped here is a small curated subset of common English words for v1 functionality.
+## `dict.txt` — full English dictionary (default)
 
-## Upgrading to a larger list
+- ~370,000 words, ~4.0 MB
+- Source: [dwyl/english-words](https://github.com/dwyl/english-words) (`words_alpha.txt`)
+- License: Unlicense (public domain)
+- Used for: every word tool by default
 
-For production, swap in a larger list such as:
+## `enable.txt` — ENABLE1 (strict mode)
 
-- [dwyl/english-words](https://github.com/dwyl/english-words) — `words_alpha.txt` (~370k words, ~4MB)
-- [SCOWL](http://wordlist.aspell.net/) — tunable by frequency
-- TWL06 or SOWPODS (Scrabble-specific)
+- ~172,800 words, ~1.7 MB
+- Source: [dolph/dictionary](https://github.com/dolph/dictionary) mirror of ENABLE1 by Alan Beale
+- License: public domain
+- Used for: the "Strict mode" toggle in Scrabble and Words With Friends helpers to approximate tournament-safe play without shipping the copyrighted TWL or CSW lists
 
-Drop the new file in this directory as `dict.txt` (one lowercase word per line).
+Loaded on demand — only fetched the first time a user enables strict mode. After that it's cached for 7 days via `public/_headers`.

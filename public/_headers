@@ -5,6 +5,9 @@
 /data/dict.txt
   Cache-Control: public, max-age=604800, immutable
 
+/data/enable.txt
+  Cache-Control: public, max-age=604800, immutable
+
 /og-image.svg
   Cache-Control: public, max-age=604800
 
