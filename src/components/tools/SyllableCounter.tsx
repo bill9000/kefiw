@@ -1,7 +1,17 @@
 import { useMemo, useState } from 'react';
 import { countSyllables } from '~/lib/text';
+import { useToolSetting } from './useToolSettings';
+import ModeSwitch from './ModeSwitch';
+
+type Mode = 'quick' | 'extended';
+
+const MODE_OPTIONS: readonly { value: Mode; label: string }[] = [
+  { value: 'quick', label: 'Quick' },
+  { value: 'extended', label: 'Extended' },
+];
 
 export default function SyllableCounter() {
+  const [mode, setMode] = useToolSetting<Mode>('kefiw.mode.syllables', 'quick');
   const [text, setText] = useState('');
   const result = useMemo(() => {
     const words = text.split(/\s+/).filter(Boolean);
@@ -11,7 +21,15 @@ export default function SyllableCounter() {
   }, [text]);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      <ModeSwitch
+        id="syllables-mode"
+        label="Mode"
+        options={MODE_OPTIONS}
+        value={mode}
+        onChange={setMode}
+        hint="Quick shows the total syllable count. Extended adds a per-word breakdown."
+      />
       <div>
         <label className="label" htmlFor="in">Text</label>
         <textarea id="in" className="input h-36" value={text} onChange={(e) => setText(e.target.value)} placeholder="Type a word, sentence, or paragraph…" />
@@ -20,7 +38,7 @@ export default function SyllableCounter() {
         <div className="text-sm text-slate-500">Total syllables</div>
         <div className="text-3xl font-bold">{result.total}</div>
       </div>
-      {result.words.length > 0 && (
+      {mode === 'extended' && result.words.length > 0 && (
         <div>
           <div className="label">Per word</div>
           <div className="flex flex-wrap gap-2">

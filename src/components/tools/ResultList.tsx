@@ -4,11 +4,12 @@ interface Props {
   words: string[];
   loading?: boolean;
   emptyLabel?: string;
+  loadingLabel?: string;
   group?: 'length';
 }
 
-export default function ResultList({ words, loading, emptyLabel = 'No matches yet.', group }: Props) {
-  if (loading) return <div className="p-4 text-sm text-slate-500">Searching…</div>;
+export default function ResultList({ words, loading, emptyLabel = 'No matches yet.', loadingLabel = 'Searching…', group }: Props) {
+  if (loading) return <div className="p-4 text-sm text-slate-500">{loadingLabel}</div>;
   if (!words.length) return <div className="p-4 text-sm text-slate-500">{emptyLabel}</div>;
 
   const byLen: Record<number, string[]> = {};
