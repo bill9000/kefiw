@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWordWorker } from './useWordWorker';
 import { useToolBool, useToolSetting } from './useToolSettings';
+import { track } from '~/lib/analytics';
 import CopyButton from '../CopyButton';
 import DictToggle from './DictToggle';
 import ModeSwitch from './ModeSwitch';
@@ -23,6 +24,7 @@ export default function RackHelper({ valueSet }: Props) {
   const [results, setResults] = useState<Array<{ word: string; score: number }>>([]);
   const [loading, setLoading] = useState(false);
   const [everLoaded, setEverLoaded] = useState(false);
+  const loadedOnce = useRef(false);
 
   useEffect(() => {
     if (!dictEnabled) { setResults([]); setLoading(false); return; }
@@ -30,7 +32,12 @@ export default function RackHelper({ valueSet }: Props) {
     if (!v) { setResults([]); return; }
     setLoading(true);
     const t = setTimeout(async () => {
+      const t0 = performance.now();
       const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300, dictSource: 'fast' });
+      if (!loadedOnce.current) {
+        loadedOnce.current = true;
+        track('dict_loaded', { source: 'fast', ms: Math.round(performance.now() - t0) });
+      }
       setResults(results);
       setLoading(false);
       setEverLoaded(true);
@@ -47,11 +54,12 @@ export default function RackHelper({ valueSet }: Props) {
       <DictToggle enabled={dictEnabled} onChange={setDictEnabled} />
       <ModeSwitch
         id={`${valueSet}-mode`}
+        tool={valueSet}
         label="Mode"
         options={MODE_OPTIONS}
         value={mode}
         onChange={setMode}
-        hint="Basic lists playable words alphabetically. Scored sorts by tile score with a points column."
+        hint="Basic shows playable results. Scored ranks them by points."
       />
       {!dictEnabled ? (
         <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
@@ -77,6 +85,7 @@ export default function RackHelper({ valueSet }: Props) {
                 <CopyButton
                   value={displayed.map((r) => mode === 'scored' ? `${r.word} (${r.score})` : r.word).join('\n')}
                   label="Copy all"
+                  tool={valueSet}
                 />
               </div>
               <div className="overflow-x-auto rounded-md border border-slate-200">

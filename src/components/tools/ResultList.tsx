@@ -6,9 +6,10 @@ interface Props {
   emptyLabel?: string;
   loadingLabel?: string;
   group?: 'length';
+  tool?: string;
 }
 
-export default function ResultList({ words, loading, emptyLabel = 'No matches yet.', loadingLabel = 'Searching…', group }: Props) {
+export default function ResultList({ words, loading, emptyLabel = 'No matches yet.', loadingLabel = 'Searching…', group, tool }: Props) {
   if (loading) return <div className="p-4 text-sm text-slate-500">{loadingLabel}</div>;
   if (!words.length) return <div className="p-4 text-sm text-slate-500">{emptyLabel}</div>;
 
@@ -23,7 +24,7 @@ export default function ResultList({ words, loading, emptyLabel = 'No matches ye
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div className="text-sm text-slate-600">{words.length.toLocaleString()} results</div>
-        <CopyButton value={words.join('\n')} label="Copy all" />
+        <CopyButton value={words.join('\n')} label="Copy all" tool={tool} />
       </div>
       {group === 'length' ? (
         Object.keys(byLen)

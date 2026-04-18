@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWordWorker } from './useWordWorker';
 import { useToolBool, useToolSetting } from './useToolSettings';
+import { track } from '~/lib/analytics';
 import CopyButton from '../CopyButton';
 import DictToggle from './DictToggle';
 import ModeSwitch from './ModeSwitch';
@@ -20,6 +21,7 @@ export default function RhymeFinder() {
   const [data, setData] = useState<{ perfect: string[]; near: string[] }>({ perfect: [], near: [] });
   const [loading, setLoading] = useState(false);
   const [everLoaded, setEverLoaded] = useState(false);
+  const loadedOnce = useRef(false);
 
   useEffect(() => {
     if (!dictEnabled) { setData({ perfect: [], near: [] }); setLoading(false); return; }
@@ -27,7 +29,12 @@ export default function RhymeFinder() {
     if (!v) { setData({ perfect: [], near: [] }); return; }
     setLoading(true);
     const t = setTimeout(async () => {
+      const t0 = performance.now();
       const res = await send<{ perfect: string[]; near: string[] }>('rhymes', { word: v, dictSource: 'full' });
+      if (!loadedOnce.current) {
+        loadedOnce.current = true;
+        track('dict_loaded', { source: 'full', ms: Math.round(performance.now() - t0) });
+      }
       setData(res);
       setLoading(false);
       setEverLoaded(true);
@@ -40,11 +47,12 @@ export default function RhymeFinder() {
       <DictToggle enabled={dictEnabled} onChange={setDictEnabled} />
       <ModeSwitch
         id="rhymes-mode"
+        tool="rhymes"
         label="Mode"
         options={MODE_OPTIONS}
         value={mode}
         onChange={setMode}
-        hint="Quick shows perfect rhymes only. Extended also shows near rhymes."
+        hint="Quick mode gives instant estimates. Extended uses more data when available."
       />
       {!dictEnabled ? (
         <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
@@ -76,7 +84,7 @@ function RhymeBlock({ title, words }: { title: string; words: string[] }) {
     <div>
       <div className="mb-1 flex items-center justify-between">
         <div className="text-sm font-medium text-slate-700">{title} ({words.length})</div>
-        <CopyButton value={words.join('\n')} label="Copy" />
+        <CopyButton value={words.join('\n')} label="Copy" tool="rhymes" />
       </div>
       <div className="flex flex-wrap gap-1">
         {words.map((w) => <span key={w} className="chip">{w}</span>)}

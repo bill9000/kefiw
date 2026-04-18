@@ -24,11 +24,12 @@ export default function SyllableCounter() {
     <div className="space-y-4">
       <ModeSwitch
         id="syllables-mode"
+        tool="syllables"
         label="Mode"
         options={MODE_OPTIONS}
         value={mode}
         onChange={setMode}
-        hint="Quick shows the total syllable count. Extended adds a per-word breakdown."
+        hint="Quick mode gives instant estimates. Extended uses more data when available."
       />
       <div>
         <label className="label" htmlFor="in">Text</label>

@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWordWorker } from './useWordWorker';
 import { useToolBool, useToolSetting } from './useToolSettings';
+import { track } from '~/lib/analytics';
 import ResultList from './ResultList';
 import DictToggle from './DictToggle';
 import ModeSwitch from './ModeSwitch';
@@ -22,6 +23,7 @@ export default function WordFinder() {
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [everLoaded, setEverLoaded] = useState(false);
+  const loadedSources = useRef(new Set<string>());
 
   useEffect(() => {
     if (!dictEnabled) { setResults([]); setLoading(false); return; }
@@ -29,7 +31,12 @@ export default function WordFinder() {
     if (!v) { setResults([]); return; }
     setLoading(true);
     const t = setTimeout(async () => {
+      const t0 = performance.now();
       const { results } = await send<{ results: string[] }>('unscramble', { letters: v, minLen, maxLen, dictSource: mode });
+      if (!loadedSources.current.has(mode)) {
+        loadedSources.current.add(mode);
+        track('dict_loaded', { source: mode, ms: Math.round(performance.now() - t0) });
+      }
       setResults(results);
       setLoading(false);
       setEverLoaded(true);
@@ -42,11 +49,12 @@ export default function WordFinder() {
       <DictToggle enabled={dictEnabled} onChange={setDictEnabled} />
       <ModeSwitch
         id="word-finder-mode"
+        tool="word-finder"
         label="Mode"
         options={MODE_OPTIONS}
         value={mode}
         onChange={setMode}
-        hint="Fast uses a ~173k-word list. Full word list uses all ~370k words, including rarer ones."
+        hint="Fast mode searches a smaller list for quicker results. Full word list checks more words and may take longer on first use."
       />
       {!dictEnabled ? (
         <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
@@ -76,6 +84,7 @@ export default function WordFinder() {
             words={results}
             loading={loading}
             group="length"
+            tool="word-finder"
             loadingLabel={!everLoaded ? 'Loading word list…' : 'Searching…'}
             emptyLabel="Type some letters to see words you can make."
           />

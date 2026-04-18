@@ -1,3 +1,5 @@
+import { track } from '~/lib/analytics';
+
 interface Props<T extends string> {
   label?: string;
   options: readonly { value: T; label: string }[];
@@ -5,9 +7,14 @@ interface Props<T extends string> {
   onChange: (v: T) => void;
   hint?: string;
   id?: string;
+  tool?: string;
 }
 
-export default function ModeSwitch<T extends string>({ label, options, value, onChange, hint, id }: Props<T>) {
+export default function ModeSwitch<T extends string>({ label, options, value, onChange, hint, id, tool }: Props<T>) {
+  const handle = (v: T) => {
+    if (v !== value) track('mode_selected', { tool: tool ?? id ?? 'unknown', mode: v });
+    onChange(v);
+  };
   return (
     <div>
       {label && <div className="label" id={id ? `${id}-label` : undefined}>{label}</div>}
@@ -24,7 +31,7 @@ export default function ModeSwitch<T extends string>({ label, options, value, on
               type="button"
               role="tab"
               aria-selected={active}
-              onClick={() => onChange(opt.value)}
+              onClick={() => handle(opt.value)}
               className={`flex-1 min-h-[40px] rounded-md px-3 text-sm font-medium transition-colors ${
                 active ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
               }`}
