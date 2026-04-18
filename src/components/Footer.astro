@@ -1,0 +1,52 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="mt-16 border-t border-slate-200 bg-slate-50">
+  <div class="container-wide py-10 text-sm text-slate-600">
+    <div class="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+      <div>
+        <div class="mb-2 font-semibold text-slate-900">Word Tools</div>
+        <ul class="space-y-1">
+          <li><a href="/word-tools/word-unscrambler/">Word Unscrambler</a></li>
+          <li><a href="/word-tools/anagram-solver/">Anagram Solver</a></li>
+          <li><a href="/word-tools/scrabble-helper/">Scrabble Helper</a></li>
+          <li><a href="/word-tools/word-counter/">Word Counter</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mb-2 font-semibold text-slate-900">Converters</div>
+        <ul class="space-y-1">
+          <li><a href="/converters/length-converter/">Length</a></li>
+          <li><a href="/converters/weight-converter/">Weight</a></li>
+          <li><a href="/converters/temperature-converter/">Temperature</a></li>
+          <li><a href="/converters/volume-converter/">Volume</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mb-2 font-semibold text-slate-900">Calculators</div>
+        <ul class="space-y-1">
+          <li><a href="/calculators/percentage-calculator/">Percentage</a></li>
+          <li><a href="/calculators/age-calculator/">Age</a></li>
+          <li><a href="/calculators/date-difference-calculator/">Date Difference</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mb-2 font-semibold text-slate-900">Games</div>
+        <ul class="space-y-1">
+          <li><a href="/games/sudoku/">Sudoku</a></li>
+          <li><a href="/games/daily-word/">Daily Word</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-8 flex flex-col items-start justify-between gap-2 border-t border-slate-200 pt-6 sm:flex-row sm:items-center">
+      <div>© {year} Kefiw. Built static-first.</div>
+      <div class="flex flex-wrap gap-x-4 gap-y-1">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>

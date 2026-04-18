@@ -1,0 +1,13 @@
+---
+interface Props { slot: 'below-intro' | 'below-tool' | 'between-sections' | 'sidebar'; }
+const { slot } = Astro.props;
+const heights: Record<string, string> = {
+  'below-intro': 'min-h-[90px]',
+  'below-tool': 'min-h-[120px]',
+  'between-sections': 'min-h-[90px]',
+  'sidebar': 'min-h-[600px]',
+};
+---
+<div class={`ad-slot ${heights[slot]} my-6 flex items-center justify-center rounded border border-dashed border-slate-200 text-xs text-slate-300`} data-slot={slot} aria-hidden="true">
+  <!-- Ad slot reserved ({slot}). Populated later. -->
+</div>

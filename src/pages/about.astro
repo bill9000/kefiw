@@ -1,0 +1,34 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="About — Kefiw"
+  description="Kefiw is a small collection of fast, free web tools: word unscramblers, anagram solvers, converters, calculators, and lightweight games. Mobile-first, runs in your browser, no signup."
+  canonical="/about/"
+  keywords={['about kefiw', 'free web tools', 'privacy-first tools']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">About Kefiw</h1>
+    <p>Kefiw is a small, fast collection of everyday web utilities — word unscramblers, anagram solvers, unit converters, calculators, and a few lightweight games. Everything runs right in your browser.</p>
+
+    <h2>What makes it different</h2>
+    <ul>
+      <li><strong>No signup.</strong> Open any page and use it. No accounts, no paywalls, no trial timers.</li>
+      <li><strong>Mobile-first.</strong> Every tool is designed to work with one thumb on a phone before it works on a desktop.</li>
+      <li><strong>Privacy-friendly.</strong> Calculations happen on your device. We do not track individual visitors and we do not sell data.</li>
+      <li><strong>Fast.</strong> Pages are static and ship minimal JavaScript. Dictionary searches use a background Web Worker so the UI never freezes.</li>
+    </ul>
+
+    <h2>What&rsquo;s inside</h2>
+    <p>Kefiw is organised into four sections:</p>
+    <ul>
+      <li><a href="/word-tools/">Word tools</a> — anagrams, unscramblers, pattern finders, rhymes, letter and syllable counters.</li>
+      <li><a href="/converters/">Converters</a> — length, weight, temperature, volume, area, speed, and time.</li>
+      <li><a href="/calculators/">Calculators</a> — percentages, age, date differences, and more.</li>
+      <li><a href="/games/">Games</a> — Sudoku today, more on the way.</li>
+    </ul>
+
+    <h2>Feedback</h2>
+    <p>Spotted a bug, a missing tool, or a suggestion? See the <a href="/contact/">contact page</a>.</p>
+  </article>
+</BaseLayout>

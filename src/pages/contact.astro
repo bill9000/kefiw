@@ -1,0 +1,27 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Contact — Kefiw"
+  description="Get in touch with Kefiw. Report a bug, suggest a new tool, or send general feedback."
+  canonical="/contact/"
+  keywords={['contact kefiw', 'feedback', 'bug report']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Contact</h1>
+    <p>We&rsquo;d love to hear from you. Whether it&rsquo;s a bug, a feature request, or a new tool idea, the best way to reach us is email:</p>
+    <p><a href="mailto:hello@kefiw.com"><strong>hello@kefiw.com</strong></a></p>
+
+    <h2>When reporting a bug</h2>
+    <p>Include the following so we can reproduce it quickly:</p>
+    <ul>
+      <li>The tool page (URL).</li>
+      <li>What you entered and what you expected to happen.</li>
+      <li>What actually happened.</li>
+      <li>Your device and browser, if you can (e.g. iPhone Safari, Android Chrome, desktop Firefox).</li>
+    </ul>
+
+    <h2>Suggesting a new tool</h2>
+    <p>Tell us what you&rsquo;d use it for. Concrete examples help more than abstract requests — e.g. &ldquo;I need to convert between oven temperatures in three countries&rdquo; beats &ldquo;add more converters&rdquo;.</p>
+  </article>
+</BaseLayout>

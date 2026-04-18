@@ -1,0 +1,25 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ToolCard from '~/components/ToolCard.astro';
+import { CATEGORIES, toolsByCategory } from '~/data/tools';
+const cat = CATEGORIES.games;
+const tools = toolsByCategory('games');
+---
+<BaseLayout
+  title="Browser Games — Sudoku, Daily Word Puzzle | Kefiw"
+  description="Lightweight browser games. Sudoku with difficulty levels, daily word puzzles, and more."
+  canonical="/games/"
+  keywords={['browser games', 'sudoku', 'daily word game']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/games/', label: cat.title }]} />
+  <header class="container-wide py-6">
+    <h1 class="text-3xl font-bold tracking-tight">Games</h1>
+    <p class="mt-2 max-w-2xl text-slate-600">{cat.blurb}</p>
+  </header>
+  <section class="container-wide">
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {tools.map((t) => <ToolCard tool={t} />)}
+    </div>
+  </section>
+</BaseLayout>

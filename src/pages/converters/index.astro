@@ -1,0 +1,25 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ToolCard from '~/components/ToolCard.astro';
+import { CATEGORIES, toolsByCategory } from '~/data/tools';
+const cat = CATEGORIES.converters;
+const tools = toolsByCategory('converters');
+---
+<BaseLayout
+  title="Unit Converters — Length, Weight, Temperature | Kefiw"
+  description="Fast, client-side unit converters: length, weight, temperature, area, volume, speed, and time."
+  canonical="/converters/"
+  keywords={['unit converter', 'metric to imperial', 'temperature converter', 'length converter']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/converters/', label: cat.title }]} />
+  <header class="container-wide py-6">
+    <h1 class="text-3xl font-bold tracking-tight">Converters</h1>
+    <p class="mt-2 max-w-2xl text-slate-600">{cat.blurb}</p>
+  </header>
+  <section class="container-wide">
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {tools.map((t) => <ToolCard tool={t} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+const updated = '2026-04-17';
+---
+<BaseLayout
+  title="Privacy Policy — Kefiw"
+  description="Kefiw privacy policy. We don't require accounts, we don't sell data, and most calculations happen entirely in your browser."
+  canonical="/privacy/"
+  keywords={['privacy policy', 'kefiw privacy']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Privacy Policy</h1>
+    <p class="text-sm text-slate-500">Last updated: {updated}</p>
+
+    <p>This policy explains what data Kefiw collects, why, and what we do with it. It is intentionally short.</p>
+
+    <h2>The short version</h2>
+    <ul>
+      <li>We do not require an account and do not know who you are.</li>
+      <li>We do not sell personal data. We do not have personal data to sell.</li>
+      <li>Most tools run entirely in your browser. What you type into them stays on your device.</li>
+      <li>Some games save progress to your device&rsquo;s local storage. You can clear it from your browser at any time.</li>
+    </ul>
+
+    <h2>Analytics</h2>
+    <p>We may use a privacy-focused, cookie-less analytics provider (such as Cloudflare Web Analytics) to understand how many people visit Kefiw and which tools are used. This records aggregate information (country, browser family, referring site, page views) and does not identify individual visitors.</p>
+
+    <h2>Advertising</h2>
+    <p>Kefiw may display ads from a third-party ad network on some pages to keep the service free. If enabled, those networks operate under their own privacy policies and may use cookies or similar technologies to measure impressions. You can usually opt out of personalised advertising in your browser or operating system settings.</p>
+
+    <h2>Local storage</h2>
+    <p>Kefiw stores small amounts of data locally in your browser so you don&rsquo;t lose game progress or preferences between visits. Examples include the current Sudoku puzzle state. This data never leaves your device.</p>
+
+    <h2>Cookies</h2>
+    <p>Kefiw itself does not set tracking cookies. Third-party scripts (if any) may do so under their own policies.</p>
+
+    <h2>Children</h2>
+    <p>Kefiw is suitable for general audiences. We do not knowingly collect data from anyone.</p>
+
+    <h2>Changes</h2>
+    <p>We may update this policy. Material changes will be reflected by updating the &ldquo;Last updated&rdquo; date above.</p>
+
+    <h2>Contact</h2>
+    <p>Questions? <a href="/contact/">Get in touch</a>.</p>
+  </article>
+</BaseLayout>

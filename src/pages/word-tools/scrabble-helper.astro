@@ -1,0 +1,7 @@
+---
+import ToolLayout from '~/layouts/ToolLayout.astro';
+import { TOOLS_BY_ID } from '~/data/tools';
+import Island from '~/components/tools/ScrabbleHelper.tsx';
+const tool = TOOLS_BY_ID['scrabble-helper'];
+---
+<ToolLayout tool={tool}><Island client:load /></ToolLayout>

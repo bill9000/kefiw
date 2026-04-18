@@ -1,0 +1,71 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import FAQ from '~/components/FAQ.astro';
+import RelatedTools from '~/components/RelatedTools.astro';
+import AdSlot from '~/components/AdSlot.astro';
+import type { ToolConfig } from '~/data/tools';
+import { CATEGORIES, toolHref } from '~/data/tools';
+
+interface Props { tool: ToolConfig; }
+const { tool } = Astro.props;
+const cat = CATEGORIES[tool.category];
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: `/${cat.slug}/`, label: cat.title },
+  { href: toolHref(tool), label: tool.h1 },
+];
+
+const webAppJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: tool.h1,
+  description: tool.description,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any',
+  url: new URL(toolHref(tool), Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={tool.title}
+  description={tool.description}
+  canonical={toolHref(tool)}
+  keywords={tool.keywords}
+  noindex={tool.comingSoon === true}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webAppJsonLd)} />
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{tool.h1}</h1>
+      <p class="mt-2 max-w-3xl text-slate-600">{tool.intro}</p>
+    </header>
+
+    <AdSlot slot="below-intro" />
+
+    <section aria-label="Tool" class="mb-8">
+      <slot />
+    </section>
+
+    <AdSlot slot="below-tool" />
+
+    <section class="prose-tool max-w-3xl">
+      <h2>How to use</h2>
+      <ol class="my-3 list-decimal pl-6 text-slate-700">
+        {tool.howTo.map((step) => <li>{step}</li>)}
+      </ol>
+
+      <h2>Examples</h2>
+      {tool.examples.map((ex) => (
+        <div class="mb-3 rounded-md border border-slate-200 bg-slate-50 p-3">
+          <div class="text-sm font-semibold text-slate-900">{ex.title}</div>
+          <div class="text-sm text-slate-700">{ex.body}</div>
+        </div>
+      ))}
+    </section>
+
+    <FAQ items={tool.faq} />
+    <RelatedTools tool={tool} />
+  </article>
+</BaseLayout>
