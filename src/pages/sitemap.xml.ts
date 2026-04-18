@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { TOOLS, CATEGORIES, toolHref } from '~/data/tools';
+import { buildSeoPages } from '~/lib/seo-pages';
 
 const STATIC_ROUTES = [
   '/',
@@ -12,9 +13,11 @@ const STATIC_ROUTES = [
 
 export const GET: APIRoute = ({ site }) => {
   const base = (site ?? new URL('https://kefiw.com')).toString().replace(/\/$/, '');
+  const { pages: seoPages } = buildSeoPages();
   const urls = [
     ...STATIC_ROUTES,
     ...TOOLS.filter((t) => !t.comingSoon).map(toolHref),
+    ...seoPages.map((p) => `/word-tools/${p.slug}/`),
   ];
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
