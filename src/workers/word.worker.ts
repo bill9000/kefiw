@@ -177,11 +177,12 @@ self.onmessage = async (e: MessageEvent<Req>) => {
         const values = msg.valueSet === 'wwf' ? WWF_VALUES : SCRABBLE_VALUES;
         const usable = filterLen(words, msg.minLen ?? 2, msg.maxLen ?? 15);
         const matches: Array<{ word: string; score: number }> = [];
+        const bingoBonus = msg.valueSet === 'wwf' ? 35 : 50;
         for (const w of usable) {
           if (w.length > rack.length) continue;
           if (!canMakeFromRack(w, rack)) continue;
           let score = wordScore(w, values);
-          if (w.length === 7) score += 50;
+          if (w.length === 7) score += bingoBonus;
           matches.push({ word: w, score });
         }
         matches.sort((a, b) => b.score - a.score || b.word.length - a.word.length || a.word.localeCompare(b.word));
