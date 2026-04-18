@@ -37,9 +37,13 @@ const interactiveHref =
 const interactiveLabel =
   page.family === 'prefix' ? 'Words Starting With (interactive)' : 'Words Ending With (interactive)';
 
+const DISPLAY_CAP = 3000;
+const capped = page.family === 'curated-suffix' && page.words.length > DISPLAY_CAP;
+const displayWords = capped ? page.words.slice(0, DISPLAY_CAP) : page.words;
+
 const wordsByLength: Record<number, string[]> = {};
 if (page.family === 'curated-suffix') {
-  for (const w of page.words) {
+  for (const w of displayWords) {
     (wordsByLength[w.length] ??= []).push(w);
   }
 }
@@ -78,6 +82,11 @@ const itemListJsonLd = {
 
     <section aria-label="Word list" class="mb-10">
       <h2 class="mb-3 text-xl font-semibold">All {page.count.toLocaleString()} words</h2>
+      {capped && (
+        <p class="mb-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+          Showing the first {DISPLAY_CAP.toLocaleString()} matches. Use <a href="/word-tools/word-finder/" class="underline">Word Finder</a> for narrower searches.
+        </p>
+      )}
       {page.family === 'curated-suffix' ? (
         <div class="space-y-4">
           {wordLengths.map((n) => (
