@@ -2,9 +2,12 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ToolCard from '~/components/ToolCard.astro';
+import FeaturedClusters from '~/components/FeaturedClusters.astro';
 import { CATEGORIES, toolsByCategory } from '~/data/tools';
+import { clustersBySection } from '~/data/clusters';
 const cat = CATEGORIES.converters;
 const tools = toolsByCategory('converters');
+const clusterSlugs = clustersBySection('converters').map((c) => c.slug);
 ---
 <BaseLayout
   title="Unit Converters — Length, Weight, Temperature | Kefiw"
@@ -22,4 +25,12 @@ const tools = toolsByCategory('converters');
       {tools.map((t) => <ToolCard tool={t} />)}
     </div>
   </section>
+
+  {clusterSlugs.length > 0 && (
+    <FeaturedClusters
+      slugs={clusterSlugs}
+      title="Converter topics"
+      subhead="Grouped by unit family and use case."
+    />
+  )}
 </BaseLayout>

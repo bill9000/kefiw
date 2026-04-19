@@ -1,146 +1,204 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import WordListPageLayout from '~/layouts/WordListPageLayout.astro';
+import HubLayout from '~/layouts/HubLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import FAQ from '~/components/FAQ.astro';
 import { buildSeoPages, buildFaq, relatedSlugs, type SeoPage } from '~/lib/seo-pages';
+import {
+  contentPagesBySection,
+  type ContentPageConfig,
+} from '~/data/content-pages';
+import { clustersBySection, type ClusterConfig } from '~/data/clusters';
+
+type SeoProps = { kind: 'seo'; page: SeoPage };
+type ContentProps = { kind: 'content'; config: ContentPageConfig; words: string[] };
+type HubProps = { kind: 'hub'; cluster: ClusterConfig };
+type PageProps = SeoProps | ContentProps | HubProps;
 
 export async function getStaticPaths() {
-  const { pages } = buildSeoPages();
-  return pages.map((page) => ({
-    params: { slug: page.slug },
-    props: { page },
-  }));
+  const { pages: seoPages } = buildSeoPages();
+  const contentPages = contentPagesBySection('word-tools').filter((c) => c.kind === 'word-list');
+  const hubClusters = clustersBySection('word-tools');
+
+  const seoSlugs = new Set(seoPages.map((p) => p.slug));
+  const seen = new Set<string>();
+  const results: Array<{ params: { slug: string }; props: PageProps }> = [];
+
+  for (const page of seoPages) {
+    if (seen.has(page.slug)) throw new Error(`[word-tools/[slug]] duplicate slug: ${page.slug}`);
+    seen.add(page.slug);
+    results.push({ params: { slug: page.slug }, props: { kind: 'seo', page } });
+  }
+  for (const config of contentPages) {
+    if (seoSlugs.has(config.slug)) {
+      throw new Error(`[word-tools/[slug]] content-page slug collides with SEO page: ${config.slug}`);
+    }
+    if (seen.has(config.slug)) throw new Error(`[word-tools/[slug]] duplicate slug: ${config.slug}`);
+    const words = config.buildWords?.() ?? [];
+    const threshold = config.minWords ?? 10;
+    if (words.length < threshold) continue;
+    seen.add(config.slug);
+    results.push({ params: { slug: config.slug }, props: { kind: 'content', config, words } });
+  }
+  for (const cluster of hubClusters) {
+    if (seen.has(cluster.hubSlug)) throw new Error(`[word-tools/[slug]] hub slug collides: ${cluster.hubSlug}`);
+    seen.add(cluster.hubSlug);
+    results.push({ params: { slug: cluster.hubSlug }, props: { kind: 'hub', cluster } });
+  }
+  return results;
 }
 
-interface Props { page: SeoPage; }
-const { page } = Astro.props;
+const props = Astro.props as PageProps;
 
-const crumbs = [
-  { href: '/', label: 'Home' },
-  { href: '/word-tools/', label: 'Word Tools' },
-  { href: `/word-tools/${page.slug}/`, label: page.h1 },
-];
+// --- SEO programmatic branch ---
+const seoPage = props.kind === 'seo' ? props.page : null;
+const faq = seoPage ? buildFaq(seoPage) : [];
+const related = seoPage ? relatedSlugs(seoPage) : [];
+const canonical = seoPage ? `/word-tools/${seoPage.slug}/` : '';
 
-const faq = buildFaq(page);
-const related = relatedSlugs(page);
-const canonical = `/word-tools/${page.slug}/`;
+const introLead = seoPage
+  ? seoPage.family === 'prefix' && seoPage.length != null
+    ? `There are ${seoPage.count.toLocaleString()} ${seoPage.length}-letter words starting with the letter ${seoPage.letter.toUpperCase()} in the Kefiw game word list. Common examples include ${seoPage.examples.join(', ')}. The complete alphabetical list is below.`
+    : seoPage.family === 'suffix' && seoPage.length != null
+    ? `There are ${seoPage.count.toLocaleString()} ${seoPage.length}-letter words ending in the letter ${seoPage.letter.toUpperCase()} in the Kefiw game word list. Early entries include ${seoPage.examples.join(', ')}. The complete alphabetical list is below.`
+    : seoPage.family === 'contains' && seoPage.length != null
+    ? `${seoPage.count.toLocaleString()} ${seoPage.length}-letter words in the Kefiw game word list contain the letter ${seoPage.letter.toUpperCase()}. Examples include ${seoPage.examples.join(', ')}. The complete alphabetical list is below.`
+    : seoPage.family === 'curated-digraph'
+    ? `${seoPage.count.toLocaleString()} English words contain the digraph "${seoPage.letter}". Short examples include ${seoPage.examples.join(', ')}. The longest is ${seoPage.longest}.`
+    : `${seoPage.count.toLocaleString()} English words end with the letters "${seoPage.letter}". Short examples include ${seoPage.examples.join(', ')}. The longest match in this list is ${seoPage.longest}.`
+  : '';
 
-const introLead =
-  page.family === 'prefix' && page.length != null
-    ? `There are ${page.count.toLocaleString()} ${page.length}-letter words starting with the letter ${page.letter.toUpperCase()} in the Kefiw fast word list. Common examples include ${page.examples.join(', ')}. The complete alphabetical list is below.`
-    : page.family === 'suffix' && page.length != null
-    ? `There are ${page.count.toLocaleString()} ${page.length}-letter words ending in the letter ${page.letter.toUpperCase()} in the Kefiw fast word list. Early entries include ${page.examples.join(', ')}. The complete alphabetical list is below.`
-    : `${page.count.toLocaleString()} English words end with the letters "${page.letter}". Short examples include ${page.examples.join(', ')}. The longest match in this list is ${page.longest}.`;
-
-const interactiveHref =
-  page.family === 'prefix' ? '/word-tools/words-starting-with/' : '/word-tools/words-ending-with/';
-const interactiveLabel =
-  page.family === 'prefix' ? 'Words Starting With (interactive)' : 'Words Ending With (interactive)';
+const interactiveHref = seoPage
+  ? seoPage.family === 'prefix'
+    ? '/word-tools/words-starting-with/'
+    : seoPage.family === 'suffix' || seoPage.family === 'curated-suffix'
+    ? '/word-tools/words-ending-with/'
+    : '/word-tools/words-containing/'
+  : '';
+const interactiveLabel = seoPage
+  ? seoPage.family === 'prefix'
+    ? 'Words Starting With (interactive)'
+    : seoPage.family === 'suffix' || seoPage.family === 'curated-suffix'
+    ? 'Words Ending With (interactive)'
+    : 'Words Containing (interactive)'
+  : '';
 
 const DISPLAY_CAP = 3000;
-const capped = page.family === 'curated-suffix' && page.words.length > DISPLAY_CAP;
-const displayWords = capped ? page.words.slice(0, DISPLAY_CAP) : page.words;
+const shouldGroupByLength = seoPage ? (seoPage.family === 'curated-suffix' || seoPage.family === 'curated-digraph') : false;
+const capped = seoPage ? shouldGroupByLength && seoPage.words.length > DISPLAY_CAP : false;
+const displayWords = seoPage ? (capped ? seoPage.words.slice(0, DISPLAY_CAP) : seoPage.words) : [];
 
 const wordsByLength: Record<number, string[]> = {};
-if (page.family === 'curated-suffix') {
-  for (const w of displayWords) {
-    (wordsByLength[w.length] ??= []).push(w);
-  }
+if (seoPage && shouldGroupByLength) {
+  for (const w of displayWords) (wordsByLength[w.length] ??= []).push(w);
 }
 const wordLengths = Object.keys(wordsByLength).map(Number).sort((a, b) => a - b);
 
-const itemListJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  name: page.h1,
-  numberOfItems: page.count,
-  itemListElement: page.examples.map((w, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    name: w,
-  })),
-};
+const itemListJsonLd = seoPage
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: seoPage.h1,
+      numberOfItems: seoPage.count,
+      itemListElement: seoPage.examples.map((w, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: w,
+      })),
+    }
+  : null;
+
+const seoCrumbs = seoPage
+  ? [
+      { href: '/', label: 'Home' },
+      { href: '/word-tools/', label: 'Word Tools' },
+      { href: `/word-tools/${seoPage.slug}/`, label: seoPage.h1 },
+    ]
+  : [];
 ---
-<BaseLayout
-  title={page.title}
-  description={page.metaDescription}
-  canonical={canonical}
->
-  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(itemListJsonLd)} />
-  <Breadcrumb crumbs={crumbs} />
-  <article class="container-wide py-6">
-    <header class="mb-6">
-      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{page.h1}</h1>
-      <p class="mt-2 max-w-3xl text-slate-600">{introLead}</p>
-    </header>
+{props.kind === 'hub' ? (
+  <HubLayout cluster={props.cluster} />
+) : props.kind === 'content' ? (
+  <WordListPageLayout config={props.config} words={props.words} />
+) : (
+  <BaseLayout
+    title={seoPage!.title}
+    description={seoPage!.metaDescription}
+    canonical={canonical}
+  >
+    <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(itemListJsonLd)} />
+    <Breadcrumb crumbs={seoCrumbs} />
+    <article class="container-wide py-6">
+      <header class="mb-6">
+        <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{seoPage!.h1}</h1>
+        <p class="mt-2 max-w-3xl text-slate-600">{introLead}</p>
+      </header>
 
-    <section aria-label="Quick actions" class="mb-6 flex flex-wrap gap-2">
-      <a href={interactiveHref} class="btn-primary">Open in {interactiveLabel}</a>
-      <a href="/word-tools/word-finder/" class="btn-ghost">Word Finder</a>
-      <a href="/word-tools/scrabble-helper/" class="btn-ghost">Scrabble Helper</a>
-    </section>
-
-    <section aria-label="Word list" class="mb-10">
-      <h2 class="mb-3 text-xl font-semibold">All {page.count.toLocaleString()} words</h2>
-      {capped && (
-        <p class="mb-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-          Showing the first {DISPLAY_CAP.toLocaleString()} matches. Use <a href="/word-tools/word-finder/" class="underline">Word Finder</a> for narrower searches.
-        </p>
-      )}
-      {page.family === 'curated-suffix' ? (
-        <div class="space-y-4">
-          {wordLengths.map((n) => (
-            <details class="rounded-md border border-slate-200 bg-white p-3" open={n <= 6}>
-              <summary class="cursor-pointer text-sm font-semibold text-slate-700">
-                {n}-letter words ({wordsByLength[n].length.toLocaleString()})
-              </summary>
-              <ul class="mt-2 flex flex-wrap gap-1.5 font-mono text-sm">
-                {wordsByLength[n].map((w) => (
-                  <li class="chip">{w}</li>
-                ))}
-              </ul>
-            </details>
-          ))}
-        </div>
-      ) : (
-        <ul class="flex flex-wrap gap-1.5 font-mono text-sm">
-          {page.words.map((w) => (
-            <li class="chip">{w}</li>
-          ))}
-        </ul>
-      )}
-    </section>
-
-    <section class="prose-tool max-w-3xl">
-      <h2>About this list</h2>
-      <p>
-        This list is drawn from the public-domain ENABLE1 word list, which covers the majority of
-        standard English Scrabble- and Words With Friends-legal plays. A small fraction of entries
-        may be judged differently by tournament dictionaries like TWL or SOWPODS — when in doubt,
-        confirm with the interactive helper below.
-      </p>
-      <p>
-        Want a different length, a different letter, or a custom pattern? The{' '}
-        <a href="/word-tools/word-finder/">Word Finder</a> supports pattern mode with
-        <code>?</code> wildcards (for example, <code>c?t</code>).
-      </p>
-    </section>
-
-    {related.length > 0 && (
-      <section aria-label="Related lists" class="container-wide mt-10">
-        <h2 class="mb-3 text-xl font-semibold">Related lists</h2>
-        <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {related.map((link) => (
-            <li>
-              <a href={link.href} class="block rounded-md border border-slate-200 p-3 text-sm hover:border-brand-500 hover:bg-brand-50">
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <section aria-label="Quick actions" class="mb-6 flex flex-wrap gap-2">
+        <a href={interactiveHref} class="btn-primary">Open in {interactiveLabel}</a>
+        <a href="/word-tools/word-finder/" class="btn-ghost">Word Finder</a>
+        <a href="/word-tools/scrabble-helper/" class="btn-ghost">Scrabble Helper</a>
       </section>
-    )}
 
-    <FAQ items={faq} />
-  </article>
-</BaseLayout>
+      <section aria-label="Word list" class="mb-10">
+        <h2 class="mb-3 text-xl font-semibold">All {seoPage!.count.toLocaleString()} words</h2>
+        {capped && (
+          <p class="mb-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+            Showing the first {DISPLAY_CAP.toLocaleString()} matches. Use <a href="/word-tools/word-finder/" class="underline">Word Finder</a> for narrower searches.
+          </p>
+        )}
+        {shouldGroupByLength ? (
+          <div class="space-y-4">
+            {wordLengths.map((n) => (
+              <details class="rounded-md border border-slate-200 bg-white p-3" open={n <= 6}>
+                <summary class="cursor-pointer text-sm font-semibold text-slate-700">
+                  {n}-letter words ({wordsByLength[n].length.toLocaleString()})
+                </summary>
+                <ul class="mt-2 flex flex-wrap gap-1.5 font-mono text-sm">
+                  {wordsByLength[n].map((w) => <li class="chip">{w}</li>)}
+                </ul>
+              </details>
+            ))}
+          </div>
+        ) : (
+          <ul class="flex flex-wrap gap-1.5 font-mono text-sm">
+            {seoPage!.words.map((w) => <li class="chip">{w}</li>)}
+          </ul>
+        )}
+      </section>
+
+      <section class="prose-tool max-w-3xl">
+        <h2>About this list</h2>
+        <p>
+          This list is drawn from the public-domain ENABLE1 word list, which covers the majority of
+          standard English Scrabble- and Words With Friends-legal plays. A small fraction of entries
+          may be judged differently by tournament dictionaries like TWL or SOWPODS — when in doubt,
+          confirm with the interactive helper below.
+        </p>
+        <p>
+          Want a different length, a different letter, or a custom pattern? The{' '}
+          <a href="/word-tools/word-finder/">Word Finder</a> supports pattern mode with
+          <code>?</code> wildcards (for example, <code>c?t</code>).
+        </p>
+      </section>
+
+      {related.length > 0 && (
+        <section aria-label="Related lists" class="container-wide mt-10">
+          <h2 class="mb-3 text-xl font-semibold">Related lists</h2>
+          <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {related.map((link) => (
+              <li>
+                <a href={link.href} class="block rounded-md border border-slate-200 p-3 text-sm hover:border-brand-500 hover:bg-brand-50">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <FAQ items={faq} />
+    </article>
+  </BaseLayout>
+)}

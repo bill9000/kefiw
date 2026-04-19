@@ -30,7 +30,7 @@ export default function ResultList({ words, loading, emptyLabel = 'No matches ye
           <CopyButton value={copyValue} label="Copy all" tool={tool} />
         </div>
         <div className="overflow-x-auto rounded-md border border-slate-200">
-          <table className="w-full min-w-[22rem] text-sm">
+          <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase text-slate-500">
               <tr>
                 <th className="p-2">Word</th>

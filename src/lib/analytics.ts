@@ -8,7 +8,6 @@
 //
 // Supported event names (keep these stable — used as analytics event IDs):
 //   - 'mode_selected'      props: { tool, mode }
-//   - 'dict_toggled'       props: { enabled }
 //   - 'dict_loaded'        props: { source, ms }
 //   - 'copy_result'        props: { tool, count }
 

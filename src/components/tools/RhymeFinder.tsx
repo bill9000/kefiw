@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useWordWorker } from './useWordWorker';
-import { useToolBool, useToolSetting } from './useToolSettings';
+import { useToolSetting } from './useToolSettings';
 import { track } from '~/lib/analytics';
 import CopyButton from '../CopyButton';
-import DictToggle from './DictToggle';
 import ModeSwitch from './ModeSwitch';
+import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
 type Mode = 'quick' | 'extended';
 
@@ -15,7 +15,6 @@ const MODE_OPTIONS: readonly { value: Mode; label: string }[] = [
 
 export default function RhymeFinder() {
   const { send } = useWordWorker();
-  const [dictEnabled, setDictEnabled] = useToolBool('kefiw.word-tools.dict-enabled', true);
   const [mode, setMode] = useToolSetting<Mode>('kefiw.mode.rhymes', 'quick');
   const [word, setWord] = useState('');
   const [data, setData] = useState<{ perfect: string[]; near: string[] }>({ perfect: [], near: [] });
@@ -23,7 +22,6 @@ export default function RhymeFinder() {
   const loadedOnce = useRef(false);
 
   useEffect(() => {
-    if (!dictEnabled) { setData({ perfect: [], near: [] }); setPhase('idle'); return; }
     const v = word.trim().toLowerCase().replace(/[^a-z]/g, '');
     if (!v) { setData({ perfect: [], near: [] }); setPhase('idle'); return; }
     const firstTime = !loadedOnce.current;
@@ -41,11 +39,10 @@ export default function RhymeFinder() {
       setPhase('idle');
     }, 160);
     return () => clearTimeout(t);
-  }, [word, dictEnabled, send]);
+  }, [word, send]);
 
   return (
     <div className="space-y-4">
-      <DictToggle enabled={dictEnabled} onChange={setDictEnabled} />
       <ModeSwitch
         id="rhymes-mode"
         tool="rhymes"
@@ -55,26 +52,47 @@ export default function RhymeFinder() {
         onChange={setMode}
         hint="Quick mode gives instant estimates. Extended uses more data when available."
       />
-      {!dictEnabled ? (
-        <div className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-          Dictionary is off — enable it above to search.
-        </div>
-      ) : (
+      <div>
+        <label className="label" htmlFor="w">Word</label>
+        <input id="w" className="input font-mono" value={word} onChange={(e) => setWord(e.target.value)} placeholder="e.g. time" autoFocus />
+      </div>
+      {phase !== 'idle' && <div className="text-sm text-slate-500">{phase === 'loading' ? 'Loading word list…' : 'Searching rhymes…'}</div>}
+      {phase === 'idle' && (data.perfect.length > 0 || data.near.length > 0) && (() => {
+        const allShown = mode === 'extended' ? [...data.perfect, ...data.near] : data.perfect;
+        const total = allShown.length;
+        const shortest = allShown.reduce<string | null>((a, b) => (!a || b.length < a.length ? b : a), null);
+        const longest = allShown.reduce<string | null>((a, b) => (!a || b.length > a.length ? b : a), null);
+        const strongest = data.perfect.length > 0 ? 'Perfect' : 'Near';
+        const cards: MaybeCard[] = [
+          { kind: 'summary', text: `Found ${total.toLocaleString()} rhyme${total === 1 ? '' : 's'} for "${word.toLowerCase()}".` },
+          {
+            kind: 'stats',
+            items: [
+              { label: 'Mode', value: mode === 'quick' ? 'Quick' : 'Extended' },
+              { label: 'Perfect', value: data.perfect.length.toLocaleString() },
+              ...(mode === 'extended' ? [{ label: 'Near', value: data.near.length.toLocaleString() }] : []),
+              ...(shortest ? [{ label: 'Shortest', value: shortest }] : []),
+              ...(longest ? [{ label: 'Longest', value: longest }] : []),
+            ],
+          },
+          { kind: 'takeaway', text: `Strongest bucket: ${strongest} rhymes.` },
+          {
+            kind: 'nextStep',
+            actions: [
+              { href: '/word-tools/syllable-counter/', label: 'Syllable Counter' },
+              { href: '/word-tools/haiku-checker/', label: 'Haiku Checker' },
+            ],
+          },
+        ];
+        return <OutcomeLayer cards={cards} />;
+      })()}
+      {phase === 'idle' && (data.perfect.length > 0 || data.near.length > 0) && (
         <>
-          <div>
-            <label className="label" htmlFor="w">Word</label>
-            <input id="w" className="input font-mono" value={word} onChange={(e) => setWord(e.target.value)} placeholder="e.g. time" autoFocus />
-          </div>
-          {phase !== 'idle' && <div className="text-sm text-slate-500">{phase === 'loading' ? 'Loading word list…' : 'Searching rhymes…'}</div>}
-          {phase === 'idle' && (data.perfect.length > 0 || data.near.length > 0) && (
-            <>
-              <RhymeBlock title="Perfect rhymes" words={data.perfect} />
-              {mode === 'extended' && <RhymeBlock title="Near rhymes" words={data.near} />}
-            </>
-          )}
-          <p className="text-xs text-slate-500">Rhymes are computed by trailing-letter match. For a full phonetic dictionary, a CMU-style engine is planned.</p>
+          <RhymeBlock title="Perfect rhymes" words={data.perfect} />
+          {mode === 'extended' && <RhymeBlock title="Near rhymes" words={data.near} />}
         </>
       )}
+      <p className="text-xs text-slate-500">Rhymes are computed by trailing-letter match. For a full phonetic dictionary, a CMU-style engine is planned.</p>
     </div>
   );
 }

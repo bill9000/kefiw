@@ -32,7 +32,7 @@ export default function ModeSwitch<T extends string>({ label, options, value, on
               role="tab"
               aria-selected={active}
               onClick={() => handle(opt.value)}
-              className={`flex-1 min-h-[40px] rounded-md px-3 text-sm font-medium transition-colors ${
+              className={`flex-1 min-h-[44px] rounded-md px-3 text-sm font-medium transition-colors ${
                 active ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
               }`}
             >

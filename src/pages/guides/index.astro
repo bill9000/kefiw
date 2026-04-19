@@ -1,0 +1,60 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import { contentPagesBySection, type ContentPageConfig } from '~/data/content-pages';
+
+const guides = contentPagesBySection('guides').filter((c) => c.kind === 'guide');
+
+const byCat: Record<string, ContentPageConfig[]> = {};
+for (const g of guides) {
+  const cat = g.guideCategory ?? 'General';
+  (byCat[cat] ??= []).push(g);
+}
+const cats = Object.keys(byCat).sort();
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/guides/', label: 'Guides' },
+];
+---
+
+<BaseLayout
+  title="Guides — Kefiw"
+  description="In-depth guides on word games, scoring, Scrabble strategy, Wordle tips, and more."
+  canonical="/guides/"
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Guides</h1>
+      <p class="mt-2 max-w-3xl text-slate-600">
+        Explainers, strategy, and reference for word games, text tools, and puzzles. Short reads,
+        one topic each.
+      </p>
+    </header>
+
+    {guides.length === 0 && (
+      <p class="text-sm text-slate-600">No guides published yet.</p>
+    )}
+
+    {cats.map((cat) => (
+      <section class="mb-8">
+        <h2 class="mb-3 text-xl font-semibold">{cat}</h2>
+        <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {byCat[cat].map((g) => (
+            <li>
+              <a
+                href={`/guides/${g.slug}/`}
+                class="block rounded-lg border border-slate-200 bg-white p-4 transition hover:border-brand-500 hover:bg-brand-50"
+              >
+                <div class="font-semibold text-slate-900">{g.h1}</div>
+                {g.subhead && <div class="mt-1 text-sm text-slate-600">{g.subhead}</div>}
+                {!g.subhead && <div class="mt-1 text-sm text-slate-600">{g.description}</div>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </article>
+</BaseLayout>

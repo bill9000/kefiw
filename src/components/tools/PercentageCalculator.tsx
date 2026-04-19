@@ -1,11 +1,22 @@
 import { useMemo, useState } from 'react';
+import OutcomeLayer, { type OutcomeCard } from './outcome/OutcomeLayer';
 
 type Mode = 'of' | 'isWhat' | 'change';
 
-export default function PercentageCalculator() {
-  const [mode, setMode] = useState<Mode>('of');
-  const [a, setA] = useState('15');
-  const [b, setB] = useState('80');
+interface PercentageCalculatorProps {
+  lockedMode?: Mode;
+}
+
+export default function PercentageCalculator({ lockedMode }: PercentageCalculatorProps = {}) {
+  const [mode, setMode] = useState<Mode>(lockedMode ?? 'of');
+  const defaultsFor = (m: Mode): [string, string] => {
+    if (m === 'of') return ['15', '80'];
+    if (m === 'isWhat') return ['20', '50'];
+    return ['100', '125'];
+  };
+  const [aInit, bInit] = defaultsFor(lockedMode ?? 'of');
+  const [a, setA] = useState(aInit);
+  const [b, setB] = useState(bInit);
 
   const result = useMemo(() => {
     const x = parseFloat(a); const y = parseFloat(b);
@@ -19,11 +30,13 @@ export default function PercentageCalculator() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        <Tab active={mode==='of'} onClick={() => setMode('of')}>What is X% of Y?</Tab>
-        <Tab active={mode==='isWhat'} onClick={() => setMode('isWhat')}>X is what % of Y?</Tab>
-        <Tab active={mode==='change'} onClick={() => setMode('change')}>% change X → Y</Tab>
-      </div>
+      {!lockedMode && (
+        <div className="flex flex-wrap gap-2">
+          <Tab active={mode==='of'} onClick={() => setMode('of')}>What is X% of Y?</Tab>
+          <Tab active={mode==='isWhat'} onClick={() => setMode('isWhat')}>X is what % of Y?</Tab>
+          <Tab active={mode==='change'} onClick={() => setMode('change')}>% change X → Y</Tab>
+        </div>
+      )}
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="a">{mode === 'of' ? 'Percent' : mode === 'isWhat' ? 'Part' : 'From'}</label>
@@ -38,6 +51,74 @@ export default function PercentageCalculator() {
         <div className="text-sm text-slate-500">Result</div>
         <div className="text-3xl font-bold">{result}</div>
       </div>
+      {(() => {
+        const x = parseFloat(a); const y = parseFloat(b);
+        if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+        let cards: OutcomeCard[] = [];
+        if (mode === 'of') {
+          const val = (x / 100) * y;
+          cards = [
+            { kind: 'summary', text: `${x}% of ${y} is ${fmt(val)}.` },
+            {
+              kind: 'stats',
+              items: [
+                { label: '10% of ' + fmt(y), value: fmt(y / 10) },
+                { label: '1% of ' + fmt(y), value: fmt(y / 100) },
+                { label: '50% of ' + fmt(y), value: fmt(y / 2) },
+                { label: '25% of ' + fmt(y), value: fmt(y / 4) },
+              ],
+            },
+            { kind: 'takeaway', text: `Quick math: 10% = ${fmt(y / 10)}, 1% = ${fmt(y / 100)}.` },
+            {
+              kind: 'comparison',
+              title: 'Reverse interpretation',
+              rows: [
+                { label: `${fmt(val)} is what % of ${y}?`, value: `${fmt(x)}%` },
+                { label: `What % change ${y} → ${fmt(val)}?`, value: y === 0 ? '–' : `${fmt(((val - y) / y) * 100)}%` },
+              ],
+            },
+          ];
+        } else if (mode === 'isWhat') {
+          if (y === 0) return null;
+          const pct = (x / y) * 100;
+          cards = [
+            { kind: 'summary', text: `${x} is ${fmt(pct)}% of ${y}.` },
+            {
+              kind: 'stats',
+              items: [
+                { label: 'Percent', value: `${fmt(pct)}%` },
+                { label: 'Remainder', value: fmt(y - x) },
+                { label: 'Remainder %', value: `${fmt(100 - pct)}%` },
+              ],
+            },
+            { kind: 'takeaway', text: `Remainder: ${fmt(y - x)} (${fmt(100 - pct)}%).` },
+          ];
+        } else {
+          if (x === 0) return null;
+          const delta = y - x;
+          const pct = (delta / x) * 100;
+          cards = [
+            { kind: 'summary', text: `${fmt(Math.abs(pct))}% ${delta >= 0 ? 'increase' : 'decrease'} from ${x} to ${y}.` },
+            {
+              kind: 'stats',
+              items: [
+                { label: 'Change', value: `${delta >= 0 ? '+' : ''}${fmt(delta)}` },
+                { label: 'Percent', value: `${fmt(pct)}%` },
+                { label: 'Ratio', value: fmt(y / x) },
+              ],
+            },
+            { kind: 'takeaway', text: `Difference: ${delta >= 0 ? '+' : ''}${fmt(delta)}.` },
+          ];
+        }
+        cards.push({
+          kind: 'nextStep',
+          actions: [
+            { href: '/calculators/discount-calculator/', label: 'Discount Calculator' },
+            { href: '/calculators/tip-calculator/', label: 'Tip Calculator' },
+          ],
+        });
+        return <OutcomeLayer cards={cards} />;
+      })()}
     </div>
   );
 }

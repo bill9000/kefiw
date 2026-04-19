@@ -1,0 +1,91 @@
+---
+import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
+import { TOOLS_BY_ID, toolHref } from '~/data/tools';
+import { contentPageById, contentHref } from '~/data/content-pages';
+
+interface Props {
+  title?: string;
+  subhead?: string;
+  slugs: string[];
+}
+
+const { title = 'Explore by topic', subhead = 'Curated clusters — the right tool plus the guides that make it click.', slugs } = Astro.props;
+const allTopicsHref = '/clusters/';
+
+interface ClusterCard {
+  href: string;
+  h1: string;
+  subhead: string;
+  chips: Array<{ href: string; label: string }>;
+}
+
+const cards: ClusterCard[] = slugs
+  .map((slug): ClusterCard | null => {
+    const cluster = CLUSTERS_BY_SLUG[slug];
+    if (!cluster) return null;
+
+    const chips: Array<{ href: string; label: string }> = [];
+    const topToolId = cluster.featuredToolIds[0];
+    if (topToolId) {
+      const tool = TOOLS_BY_ID[topToolId];
+      if (tool && !tool.comingSoon) chips.push({ href: toolHref(tool), label: tool.h1 });
+    }
+    const topSupportId = cluster.featuredSupportIds[0];
+    if (topSupportId) {
+      const page = contentPageById(topSupportId);
+      if (page) chips.push({ href: contentHref(page), label: page.h1 });
+    }
+    const topListId = cluster.featuredListIds[0];
+    if (topListId) {
+      const page = contentPageById(topListId);
+      if (page) chips.push({ href: contentHref(page), label: page.h1 });
+    }
+
+    return {
+      href: clusterHref(cluster),
+      h1: cluster.h1,
+      subhead: cluster.subhead,
+      chips: chips.slice(0, 3),
+    };
+  })
+  .filter((x): x is ClusterCard => x !== null);
+---
+{cards.length > 0 && (
+  <section class="container-wide mt-10" aria-label={title}>
+    <div class="mb-3 flex items-baseline justify-between gap-4">
+      <div>
+        <h2 class="text-xl font-semibold">
+          <a href={allTopicsHref} class="hover:text-brand-700 no-underline">{title}</a>
+        </h2>
+        {subhead && <p class="text-sm text-slate-600">{subhead}</p>}
+      </div>
+      <a href={allTopicsHref} class="shrink-0 text-sm font-medium text-brand-700 hover:underline">See all topics →</a>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {cards.map((c) => (
+        <div class="card flex h-full flex-col">
+          <a href={c.href} class="no-underline">
+            <h3 class="text-base font-semibold text-slate-900 hover:text-brand-700">{c.h1}</h3>
+            <p class="mt-1 text-sm text-slate-600">{c.subhead}</p>
+          </a>
+          {c.chips.length > 0 && (
+            <div class="mt-3 flex flex-wrap gap-1.5">
+              {c.chips.map((chip) => (
+                <a
+                  href={chip.href}
+                  class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-700 no-underline hover:bg-brand-50 hover:text-brand-700"
+                >
+                  {chip.label}
+                </a>
+              ))}
+            </div>
+          )}
+          <a href={c.href} class="mt-auto pt-3 text-xs font-medium text-brand-700 hover:underline">
+            Explore cluster →
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+)}

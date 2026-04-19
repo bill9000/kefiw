@@ -1,0 +1,184 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import FAQ from '~/components/FAQ.astro';
+import AdSlot from '~/components/AdSlot.astro';
+import type { ContentPageConfig } from '~/data/content-pages';
+import { contentPageById, contentHref } from '~/data/content-pages';
+import { TOOLS_BY_ID, toolHref } from '~/data/tools';
+import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
+
+interface Props {
+  config: ContentPageConfig;
+}
+
+const { config } = Astro.props;
+const canonical = `/guides/${config.slug}/`;
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/guides/', label: 'Guides' },
+  { href: canonical, label: config.h1 },
+];
+
+// Resolve "when to use which tool" — each entry becomes a rich card.
+const whenToUseResolved = (config.whenToUse ?? [])
+  .map((item) => {
+    const tool = TOOLS_BY_ID[item.toolId];
+    if (!tool || tool.comingSoon) return null;
+    return { tool, note: item.note };
+  })
+  .filter((x): x is { tool: typeof TOOLS_BY_ID[string]; note: string } => !!x);
+
+// Related — union of explicit relatedLinks + relatedIds (tools or content pages).
+interface ResolvedLink { href: string; label: string; sub?: string; }
+const resolvedFromIds: ResolvedLink[] = (config.relatedIds ?? []).flatMap((id) => {
+  const tool = TOOLS_BY_ID[id];
+  if (tool && !tool.comingSoon) return [{ href: toolHref(tool), label: tool.h1, sub: tool.description }];
+  const page = contentPageById(id);
+  if (page) return [{ href: contentHref(page), label: page.h1, sub: page.subhead }];
+  return [];
+});
+const allRelated: ResolvedLink[] = [
+  ...(config.relatedLinks ?? []).map((r) => ({ href: r.href, label: r.label })),
+  ...resolvedFromIds,
+];
+
+const cluster = config.clusterId ? CLUSTERS_BY_SLUG[config.clusterId] : undefined;
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: config.h1,
+  description: config.description,
+  articleSection: config.guideCategory ?? 'Word Tools',
+  mainEntityOfPage: canonical,
+};
+
+const hasFaq = (config.faq ?? []).length > 0;
+const secondaryCtas = config.secondaryCtas ?? [];
+const showCtaRow = !!config.primaryCta || secondaryCtas.length > 0;
+const hasBody = !!config.bodyHtml;
+const hasKeyPoints = (config.keyPoints ?? []).length > 0;
+const hasExamples = (config.examples ?? []).length > 0;
+const hasHowTo = (config.howTo ?? []).length > 0;
+const hasWhenToUse = whenToUseResolved.length > 0;
+---
+
+<BaseLayout
+  title={config.title}
+  description={config.description}
+  canonical={canonical}
+  keywords={config.keywords}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(articleJsonLd)} />
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{config.h1}</h1>
+      {config.subhead && <p class="mt-1 text-lg text-slate-700">{config.subhead}</p>}
+      {config.outcomeLine && (
+        <p class="mt-1 text-sm font-medium text-brand-700">{config.outcomeLine}</p>
+      )}
+      <p class="mt-2 max-w-3xl text-slate-600">{config.intro}</p>
+      {cluster && (
+        <p class="mt-2 text-xs text-slate-500">
+          Part of: <a href={clusterHref(cluster)} class="text-brand-700 hover:underline">{cluster.h1}</a>
+        </p>
+      )}
+    </header>
+
+    {showCtaRow && (
+      <section aria-label="Quick actions" class="mb-6 flex flex-wrap gap-2">
+        {config.primaryCta && (
+          <a href={config.primaryCta.href} class="btn-primary">{config.primaryCta.label}</a>
+        )}
+        {secondaryCtas.map((c) => (
+          <a href={c.href} class="btn-ghost">{c.label}</a>
+        ))}
+      </section>
+    )}
+
+    <AdSlot slot="below-intro" />
+
+    {hasKeyPoints && (
+      <section aria-label="Key points" class="mb-8">
+        <h2 class="mb-3 text-xl font-semibold">Key points</h2>
+        <ul class="space-y-2">
+          {config.keyPoints!.map((pt) => (
+            <li class="flex gap-2 rounded-md border border-slate-200 bg-white p-3 text-sm">
+              <span class="mt-0.5 text-brand-600">•</span>
+              <span class="text-slate-800">{pt}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {hasHowTo && (
+      <section aria-label="How to" class="mb-8">
+        <h2 class="mb-3 text-xl font-semibold">How to</h2>
+        <ol class="list-decimal space-y-1 pl-6 text-sm text-slate-800">
+          {config.howTo!.map((step) => <li>{step}</li>)}
+        </ol>
+      </section>
+    )}
+
+    {hasExamples && (
+      <section aria-label="Examples" class="mb-8">
+        <h2 class="mb-3 text-xl font-semibold">Examples</h2>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {config.examples!.map((ex) => (
+            <li class="rounded-md border border-slate-200 bg-white p-3">
+              <div class="text-sm font-semibold text-slate-900">{ex.title}</div>
+              <div class="mt-1 text-sm text-slate-700">{ex.body}</div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {hasWhenToUse && (
+      <section aria-label="When to use which tool" class="mb-8">
+        <h2 class="mb-3 text-xl font-semibold">When to use which tool</h2>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {whenToUseResolved.map(({ tool, note }) => (
+            <li>
+              <a href={toolHref(tool!)} class="block rounded-md border border-slate-200 bg-white p-3 hover:border-brand-500 hover:bg-brand-50">
+                <div class="text-sm font-semibold text-slate-900">{tool!.h1}</div>
+                <div class="mt-1 text-sm text-slate-700">{note}</div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {hasBody && (
+      <section class="prose-tool max-w-3xl">
+        <Fragment set:html={config.bodyHtml!} />
+      </section>
+    )}
+
+    <AdSlot slot="below-tool" />
+
+    {allRelated.length > 0 && (
+      <section aria-label="Related" class="mt-10">
+        <h2 class="mb-3 text-xl font-semibold">Related</h2>
+        <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {allRelated.map((link) => (
+            <li>
+              <a href={link.href} class="block rounded-md border border-slate-200 p-3 hover:border-brand-500 hover:bg-brand-50">
+                <div class="text-sm font-semibold text-slate-900">{link.label}</div>
+                {link.sub && <div class="mt-0.5 text-xs text-slate-600">{link.sub}</div>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {hasFaq && <FAQ items={config.faq} />}
+  </article>
+</BaseLayout>

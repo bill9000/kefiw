@@ -1,0 +1,7 @@
+---
+import ToolLayout from '~/layouts/ToolLayout.astro';
+import { TOOLS_BY_ID } from '~/data/tools';
+import Island from '~/components/tools/WordFinder.tsx';
+const tool = TOOLS_BY_ID['5-letter-word-finder'];
+---
+<ToolLayout tool={tool}><Island client:load lockedLength={5} /></ToolLayout>

@@ -1,0 +1,88 @@
+---
+import type { ToolConfig } from '~/data/tools';
+import { TOOLS_BY_ID, toolHref } from '~/data/tools';
+import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
+import { CONTENT_PAGES, contentPageById, contentHref, type ContentPageConfig } from '~/data/content-pages';
+
+interface Props { tool: ToolConfig; }
+const { tool } = Astro.props;
+
+const cluster = tool.clusterId ? CLUSTERS_BY_SLUG[tool.clusterId] : undefined;
+
+interface LinkEntry { href: string; label: string; }
+
+const seenTip = new Set<string>();
+const tipLinks: LinkEntry[] = [];
+const relatedLinks: LinkEntry[] = [];
+
+function pushTip(p: ContentPageConfig) {
+  if (tipLinks.length >= 10 || seenTip.has(p.id)) return;
+  seenTip.add(p.id);
+  tipLinks.push({ href: contentHref(p), label: p.h1 });
+}
+
+for (const p of CONTENT_PAGES) {
+  if (p.kind !== 'guide') continue;
+  if (!p.relatedIds?.includes(tool.id)) continue;
+  pushTip(p);
+}
+
+if (cluster) {
+  for (const id of cluster.featuredSupportIds) {
+    const p = contentPageById(id);
+    if (p) pushTip(p);
+  }
+
+  for (const id of cluster.featuredToolIds) {
+    if (id === tool.id) continue;
+    if (relatedLinks.length >= 3) break;
+    const t = TOOLS_BY_ID[id];
+    if (t && !t.comingSoon) relatedLinks.push({ href: toolHref(t), label: t.h1 });
+  }
+  for (const id of cluster.featuredListIds) {
+    if (relatedLinks.length >= 6) break;
+    const p = contentPageById(id);
+    if (p) relatedLinks.push({ href: contentHref(p), label: p.h1 });
+  }
+}
+
+const hasContent = tipLinks.length > 0 || relatedLinks.length > 0;
+---
+{hasContent && (
+  <section class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+    <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <h2 class="text-lg font-semibold text-slate-900">Tips & related reading</h2>
+      {cluster && (
+        <a href={clusterHref(cluster)} class="text-sm font-medium text-brand-700 hover:underline">
+          See the {cluster.h1} hub →
+        </a>
+      )}
+    </div>
+
+    {tipLinks.length > 0 && (
+      <div class="mt-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Tips &amp; how-tos</h3>
+        <ul class="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+          {tipLinks.map((l) => (
+            <li>
+              <a href={l.href} class="text-sm text-brand-700 hover:underline">{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {relatedLinks.length > 0 && (
+      <div class="mt-4">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Relevant links</h3>
+        <ul class="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+          {relatedLinks.map((l) => (
+            <li>
+              <a href={l.href} class="text-sm text-brand-700 hover:underline">{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </section>
+)}

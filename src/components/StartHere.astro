@@ -1,0 +1,34 @@
+---
+import type { ToolConfig } from '~/data/tools';
+import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
+import { contentPageById, contentHref } from '~/data/content-pages';
+
+interface Props { tool: ToolConfig; }
+const { tool } = Astro.props;
+
+const cluster = tool.clusterId ? CLUSTERS_BY_SLUG[tool.clusterId] : undefined;
+
+type Link = { href: string; label: string };
+const links: Link[] = [];
+
+if (cluster) {
+  const topSupportId = cluster.featuredSupportIds[0];
+  if (topSupportId) {
+    const page = contentPageById(topSupportId);
+    if (page) links.push({ href: contentHref(page), label: page.h1 });
+  }
+  links.push({ href: clusterHref(cluster), label: `${cluster.h1} hub` });
+}
+---
+{links.length > 0 && (
+  <aside class="mt-4 rounded-md border border-brand-100 bg-brand-50/60 px-4 py-3 text-sm">
+    <div class="font-medium text-slate-900">New to this? Start with…</div>
+    <ul class="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+      {links.map((l) => (
+        <li>
+          <a href={l.href} class="text-brand-700 hover:underline">{l.label}</a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}

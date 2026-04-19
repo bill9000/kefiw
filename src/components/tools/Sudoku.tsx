@@ -1,7 +1,32 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { conflicts, generate, isComplete, type Board, type Difficulty } from '~/lib/sudoku';
+import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
-const STORAGE_KEY = 'kefiw.sudoku.v1';
+const DEFAULT_STORAGE_KEY = 'kefiw.sudoku.v1';
+const BEST_KEY = 'kefiw.sudoku.best.';
+
+function loadBest(diff: Difficulty): number | null {
+  if (typeof localStorage === 'undefined') return null;
+  const v = localStorage.getItem(BEST_KEY + diff);
+  if (!v) return null;
+  const n = parseInt(v, 10);
+  return Number.isFinite(n) ? n : null;
+}
+
+function saveBest(diff: Difficulty, ms: number) {
+  try { localStorage.setItem(BEST_KEY + diff, String(ms)); } catch {}
+}
+
+function fmtTime(ms: number): string {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${r.toString().padStart(2, '0')}`;
+}
+
+const NEXT_DIFF: Record<Difficulty, Difficulty | null> = {
+  easy: 'medium', medium: 'hard', hard: 'expert', expert: null,
+};
 
 interface Saved {
   difficulty: Difficulty;
@@ -9,63 +34,99 @@ interface Saved {
   solution: Board;
   state: Board;
   started: number;
+  mistakes?: number;
 }
 
-function loadSaved(): Saved | null {
+function loadSaved(key: string): Saved | null {
   if (typeof localStorage === 'undefined') return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return null;
     return JSON.parse(raw) as Saved;
   } catch { return null; }
 }
 
-function saveState(s: Saved) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch {}
+function saveState(key: string, s: Saved) {
+  try { localStorage.setItem(key, JSON.stringify(s)); } catch {}
 }
 
-export default function Sudoku() {
+interface SudokuProps {
+  lockedDifficulty?: Difficulty;
+}
+
+export default function Sudoku({ lockedDifficulty }: SudokuProps = {}) {
+  const storageKey = lockedDifficulty ? `${DEFAULT_STORAGE_KEY}.${lockedDifficulty}` : DEFAULT_STORAGE_KEY;
   const [saved, setSaved] = useState<Saved | null>(null);
   const [sel, setSel] = useState<number | null>(null);
 
   useEffect(() => {
-    const s = loadSaved();
-    if (s) setSaved(s);
-    else newGame('easy', true);
-  }, []);
+    const s = loadSaved(storageKey);
+    if (s && (!lockedDifficulty || s.difficulty === lockedDifficulty)) setSaved(s);
+    else newGame(lockedDifficulty ?? 'easy', true);
+  }, [storageKey, lockedDifficulty]);
 
   const newGame = useCallback((diff: Difficulty, silent = false) => {
     if (!silent && saved && !isComplete(saved.state) && !confirm('Start a new game? Progress will be lost.')) return;
     const { puzzle, solution } = generate(diff);
-    const s: Saved = { difficulty: diff, puzzle, solution, state: [...puzzle], started: Date.now() };
-    saveState(s);
+    const s: Saved = { difficulty: diff, puzzle, solution, state: [...puzzle], started: Date.now(), mistakes: 0 };
+    saveState(storageKey, s);
     setSaved(s);
     setSel(null);
-  }, [saved]);
+  }, [saved, storageKey]);
 
   const restart = useCallback(() => {
     setSaved((prev) => {
       if (!prev) return prev;
-      const next = { ...prev, state: [...prev.puzzle] };
-      saveState(next);
+      const next = { ...prev, state: [...prev.puzzle], mistakes: 0 };
+      saveState(storageKey, next);
       return next;
     });
     setSel(null);
-  }, []);
+  }, [storageKey]);
 
   const setCell = useCallback((i: number, v: number) => {
     setSaved((prev) => {
       if (!prev) return prev;
       if (prev.puzzle[i] !== 0) return prev;
       const state = [...prev.state];
+      const prevVal = state[i];
       state[i] = v;
-      const next = { ...prev, state };
-      saveState(next);
+      let mistakes = prev.mistakes ?? 0;
+      if (v !== 0 && v !== prev.solution[i] && v !== prevVal) mistakes += 1;
+      const next = { ...prev, state, mistakes };
+      saveState(storageKey, next);
       return next;
     });
-  }, []);
+  }, [storageKey]);
 
   const complete = saved && isComplete(saved.state);
+  const [finishedAt, setFinishedAt] = useState<number | null>(null);
+  const [best, setBest] = useState<number | null>(null);
+  const [prevBest, setPrevBest] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!saved) { setFinishedAt(null); return; }
+    if (complete) {
+      if (finishedAt === null) {
+        const now = Date.now();
+        setFinishedAt(now);
+        const elapsed = now - saved.started;
+        const prior = loadBest(saved.difficulty);
+        setPrevBest(prior);
+        if (prior === null || elapsed < prior) {
+          saveBest(saved.difficulty, elapsed);
+          setBest(elapsed);
+        } else {
+          setBest(prior);
+        }
+      }
+    } else {
+      setFinishedAt(null);
+      setBest(loadBest(saved.difficulty));
+      setPrevBest(null);
+    }
+  }, [complete, saved, finishedAt]);
+
   const badCells = useMemo(() => {
     if (!saved) return new Set<number>();
     const out = new Set<number>();
@@ -90,12 +151,17 @@ export default function Sudoku() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        {(['easy','medium','hard','expert'] as Difficulty[]).map((d) => (
+        {!lockedDifficulty && (['easy','medium','hard','expert'] as Difficulty[]).map((d) => (
           <button key={d} onClick={() => newGame(d)}
             className={`btn ${saved.difficulty===d ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900 hover:bg-slate-200'}`}>
             {d[0].toUpperCase() + d.slice(1)}
           </button>
         ))}
+        {lockedDifficulty && (
+          <span className="rounded bg-brand-600 px-3 py-1 text-sm font-semibold text-white">
+            {lockedDifficulty[0].toUpperCase() + lockedDifficulty.slice(1)}
+          </span>
+        )}
         <button onClick={() => newGame(saved.difficulty)} className="btn-ghost">New puzzle</button>
         <button onClick={restart} className="btn-ghost">Restart</button>
       </div>
@@ -141,12 +207,42 @@ export default function Sudoku() {
         </button>
       </div>
 
-      {complete && (
-        <div className="rounded-md border border-green-200 bg-green-50 p-4 text-green-900">
-          <div className="text-lg font-semibold">Solved!</div>
-          <div className="text-sm">Difficulty: {saved.difficulty}.</div>
-        </div>
-      )}
+      {complete && finishedAt !== null && (() => {
+        const elapsed = finishedAt - saved.started;
+        const isNewBest = prevBest === null || elapsed < prevBest;
+        const diffLabel = saved.difficulty[0].toUpperCase() + saved.difficulty.slice(1);
+        const next = NEXT_DIFF[saved.difficulty];
+        const mistakes = saved.mistakes ?? 0;
+        const cards: MaybeCard[] = [
+          { kind: 'summary', text: `Solved ${diffLabel} in ${fmtTime(elapsed)}.` },
+          {
+            kind: 'stats',
+            items: [
+              { label: 'Difficulty', value: diffLabel },
+              { label: 'Time', value: fmtTime(elapsed) },
+              { label: 'Mistakes', value: String(mistakes) },
+              { label: 'Best', value: fmtTime(best ?? elapsed) },
+            ],
+          },
+          {
+            kind: 'takeaway',
+            text: isNewBest
+              ? (prevBest === null
+                ? `First ${diffLabel} solve — this is your best time.`
+                : `New best! ${fmtTime(prevBest - elapsed)} faster than your previous ${fmtTime(prevBest)}.`)
+              : `Your best ${diffLabel} is ${fmtTime(best ?? elapsed)} — ${fmtTime(elapsed - (best ?? elapsed))} slower today.`,
+          },
+          mistakes === 0 ? { kind: 'takeaway' as const, text: 'Clean solve — no mistakes.' } : null,
+          {
+            kind: 'nextStep',
+            actions: [
+              { href: '/games/daily-word/', label: 'Daily Word' },
+              ...(next ? [{ href: '/games/sudoku/', label: `Try ${next[0].toUpperCase() + next.slice(1)}` }] : []),
+            ],
+          },
+        ];
+        return <OutcomeLayer cards={cards} />;
+      })()}
     </div>
   );
 }

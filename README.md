@@ -71,7 +71,6 @@ below stable so dashboards don't break.
 | Event            | Fired when                                                | Props                                   |
 | ---------------- | --------------------------------------------------------- | --------------------------------------- |
 | `mode_selected`  | User switches a tool's mode switch to a new value         | `tool: string`, `mode: string`          |
-| `dict_toggled`   | User toggles the "Use word list" checkbox                 | `enabled: boolean`                      |
 | `dict_loaded`    | Dictionary finishes loading for the first time per tool   | `source: 'fast' \| 'full'`, `ms: number` |
 | `copy_result`    | User clicks a `CopyButton` and the copy succeeds          | `tool: string`, `count: number`         |
 

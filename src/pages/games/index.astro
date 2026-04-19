@@ -2,9 +2,12 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ToolCard from '~/components/ToolCard.astro';
+import FeaturedClusters from '~/components/FeaturedClusters.astro';
 import { CATEGORIES, toolsByCategory } from '~/data/tools';
+import { clustersBySection } from '~/data/clusters';
 const cat = CATEGORIES.games;
 const tools = toolsByCategory('games');
+const clusterSlugs = clustersBySection('games').map((c) => c.slug);
 ---
 <BaseLayout
   title="Browser Games — Sudoku, Daily Word Puzzle | Kefiw"
@@ -22,4 +25,12 @@ const tools = toolsByCategory('games');
       {tools.map((t) => <ToolCard tool={t} />)}
     </div>
   </section>
+
+  {clusterSlugs.length > 0 && (
+    <FeaturedClusters
+      slugs={clusterSlugs}
+      title="Game topics"
+      subhead="Daily puzzles and light games."
+    />
+  )}
 </BaseLayout>

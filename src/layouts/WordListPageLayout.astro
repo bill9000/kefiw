@@ -1,0 +1,190 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import FAQ from '~/components/FAQ.astro';
+import AdSlot from '~/components/AdSlot.astro';
+import type { ContentPageConfig } from '~/data/content-pages';
+import { TOOLS_BY_ID, toolHref } from '~/data/tools';
+
+interface KeyStat { label: string; value: string; }
+
+interface Props {
+  config: ContentPageConfig;
+  words: string[];
+  keyStats?: KeyStat[];
+  breadcrumbParent?: { href: string; label: string };
+}
+
+const { config, words, keyStats, breadcrumbParent } = Astro.props;
+
+const canonical = `/word-tools/${config.slug}/`;
+
+const parent = breadcrumbParent ?? { href: '/word-tools/', label: 'Word Tools' };
+const crumbs = [
+  { href: '/', label: 'Home' },
+  parent,
+  { href: canonical, label: config.h1 },
+];
+
+const LIST_GROUP_THRESHOLD = 80;
+const DISPLAY_CAP = 3000;
+
+const lengths = new Set(words.map((w) => w.length));
+const groupByLength = !config.flatList && words.length > LIST_GROUP_THRESHOLD && lengths.size > 1;
+
+const capped = words.length > DISPLAY_CAP;
+const displayWords = capped ? words.slice(0, DISPLAY_CAP) : words;
+
+const wordsByLength: Record<number, string[]> = {};
+if (groupByLength) {
+  for (const w of displayWords) (wordsByLength[w.length] ??= []).push(w);
+}
+const wordLengths = Object.keys(wordsByLength)
+  .map(Number)
+  .sort((a, b) => a - b);
+
+const derivedRelated = (config.relatedIds ?? [])
+  .map((id) => TOOLS_BY_ID[id])
+  .filter((t) => t && !t.comingSoon)
+  .map((t) => ({ href: toolHref(t!), label: t!.h1 }));
+const allRelated = [...(config.relatedLinks ?? []), ...derivedRelated];
+
+const exampleNames = words.slice(0, 10);
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: config.h1,
+  numberOfItems: words.length,
+  itemListElement: exampleNames.map((w, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: w,
+  })),
+};
+
+const hasFaq = (config.faq ?? []).length > 0;
+const secondaryCtas = config.secondaryCtas ?? [];
+const showCtaRow = !!config.primaryCta || secondaryCtas.length > 0;
+---
+
+<BaseLayout
+  title={config.title}
+  description={config.description}
+  canonical={canonical}
+  keywords={config.keywords}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(itemListJsonLd)} />
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{config.h1}</h1>
+      {config.subhead && <p class="mt-1 text-lg text-slate-700">{config.subhead}</p>}
+      <p class="mt-2 max-w-3xl text-slate-600">{config.intro}</p>
+    </header>
+
+    {keyStats && keyStats.length > 0 && (
+      <section aria-label="Summary stats" class="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {keyStats.map((s) => (
+          <div class="card text-center">
+            <div class="text-xl font-semibold">{s.value}</div>
+            <div class="text-xs text-slate-500">{s.label}</div>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {showCtaRow && (
+      <section aria-label="Quick actions" class="mb-6 flex flex-wrap gap-2">
+        {config.primaryCta && (
+          <a href={config.primaryCta.href} class="btn-primary">{config.primaryCta.label}</a>
+        )}
+        {secondaryCtas.map((c) => (
+          <a href={c.href} class="btn-ghost">{c.label}</a>
+        ))}
+      </section>
+    )}
+
+    <AdSlot slot="below-intro" />
+
+    <section aria-label="Word list" class="mb-10">
+      <h2 class="mb-3 text-xl font-semibold">
+        {config.wordListHeading ?? `All ${words.length.toLocaleString()} words`}
+      </h2>
+      {config.listNote && (
+        <p class="mb-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+          {config.listNote}
+        </p>
+      )}
+      {capped && (
+        <p class="mb-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+          Showing the first {DISPLAY_CAP.toLocaleString()} of {words.length.toLocaleString()} matches.
+          Use <a href="/word-tools/word-finder/" class="underline">Word Finder</a> for narrower searches.
+        </p>
+      )}
+      {words.length === 0 ? (
+        <p class="text-sm text-slate-600">No matches in the current word list.</p>
+      ) : groupByLength ? (
+        <div class="space-y-4">
+          {wordLengths.map((n) => (
+            <details class="rounded-md border border-slate-200 bg-white p-3" open={n <= 6}>
+              <summary class="cursor-pointer text-sm font-semibold text-slate-700">
+                {n}-letter words ({wordsByLength[n].length.toLocaleString()})
+              </summary>
+              <ul class="mt-2 flex flex-wrap gap-1.5 font-mono text-sm">
+                {wordsByLength[n].map((w) => <li class="chip">{w}</li>)}
+              </ul>
+            </details>
+          ))}
+        </div>
+      ) : (
+        <ul class="flex flex-wrap gap-1.5 font-mono text-sm">
+          {displayWords.map((w) => <li class="chip">{w}</li>)}
+        </ul>
+      )}
+    </section>
+
+    <AdSlot slot="below-tool" />
+
+    {(config.howTo?.length || config.examples?.length) && (
+      <section class="prose-tool max-w-3xl">
+        {config.howTo && config.howTo.length > 0 && (
+          <>
+            <h2>How to use this list</h2>
+            <ol>{config.howTo.map((step) => <li>{step}</li>)}</ol>
+          </>
+        )}
+        {config.examples && config.examples.length > 0 && (
+          <>
+            <h2>Examples</h2>
+            {config.examples.map((ex) => (
+              <div class="mb-4">
+                <h3 class="text-base font-semibold">{ex.title}</h3>
+                <p>{ex.body}</p>
+              </div>
+            ))}
+          </>
+        )}
+      </section>
+    )}
+
+    <slot />
+
+    {allRelated.length > 0 && (
+      <section aria-label="Related" class="container-wide mt-10">
+        <h2 class="mb-3 text-xl font-semibold">Related</h2>
+        <ul class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {allRelated.map((link) => (
+            <li>
+              <a href={link.href} class="block rounded-md border border-slate-200 p-3 text-sm hover:border-brand-500 hover:bg-brand-50">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {hasFaq && <FAQ items={config.faq} />}
+  </article>
+</BaseLayout>

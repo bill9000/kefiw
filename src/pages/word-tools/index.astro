@@ -2,9 +2,12 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ToolCard from '~/components/ToolCard.astro';
+import FeaturedClusters from '~/components/FeaturedClusters.astro';
 import { CATEGORIES, toolsByCategory } from '~/data/tools';
+import { clustersBySection } from '~/data/clusters';
 const cat = CATEGORIES['word-tools'];
 const tools = toolsByCategory('word-tools');
+const clusterSlugs = clustersBySection('word-tools').map((c) => c.slug);
 ---
 <BaseLayout
   title="Word Tools — Unscramblers, Anagrams, Scrabble Helpers | Kefiw"
@@ -22,4 +25,12 @@ const tools = toolsByCategory('word-tools');
       {tools.map((t) => <ToolCard tool={t} />)}
     </div>
   </section>
+
+  {clusterSlugs.length > 0 && (
+    <FeaturedClusters
+      slugs={clusterSlugs}
+      title="Word tool topics"
+      subhead="Bundled tools, lists, and guides for each word-game situation."
+    />
+  )}
 </BaseLayout>

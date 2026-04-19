@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { diffDates, todayISO } from '~/lib/dates';
+import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
 export default function DateDifferenceCalculator() {
   const [from, setFrom] = useState('2026-01-01');
@@ -30,6 +31,27 @@ export default function DateDifferenceCalculator() {
             <Stat label="Hours" value={r.totalHours.toLocaleString()} />
             <Stat label="Minutes" value={r.totalMinutes.toLocaleString()} />
           </div>
+          {(() => {
+            const days = Math.abs(r.totalDays);
+            const weeks = Math.floor(days / 7);
+            const leftover = days - weeks * 7;
+            const reversed = r.totalDays < 0;
+            const cards: MaybeCard[] = [
+              { kind: 'summary', text: `${r.years} year${r.years === 1 ? '' : 's'}, ${r.months} month${r.months === 1 ? '' : 's'}, ${r.days} day${r.days === 1 ? '' : 's'}.` },
+              {
+                kind: 'stats',
+                items: [
+                  { label: 'Total days', value: days.toLocaleString() },
+                  { label: 'Total weeks', value: r.totalWeeks.toFixed(1) },
+                  { label: 'Total hours', value: r.totalHours.toLocaleString() },
+                  { label: 'Total minutes', value: r.totalMinutes.toLocaleString() },
+                ],
+              },
+              { kind: 'takeaway', text: `${days.toLocaleString()} day${days === 1 ? '' : 's'} = ${weeks} week${weeks === 1 ? '' : 's'} and ${leftover} day${leftover === 1 ? '' : 's'}${reversed ? ' (From is after To — swap to reverse).' : '.'}` },
+              { kind: 'nextStep', actions: [{ href: '/calculators/age-calculator/', label: 'Age Calculator' }, { href: '/calculators/hours-calculator/', label: 'Hours Calculator' }] },
+            ];
+            return <OutcomeLayer cards={cards} />;
+          })()}
         </div>
       )}
     </div>

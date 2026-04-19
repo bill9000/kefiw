@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import CopyButton from '../CopyButton';
 import { sortLines } from '~/lib/text';
 import type { SortMode } from '~/lib/text';
+import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
 const MODES: { id: SortMode; label: string }[] = [
   { id: 'alpha-asc', label: 'A → Z' },
@@ -43,6 +44,49 @@ export default function SortLines() {
         </div>
         <textarea id="out" readOnly className="input h-48 bg-slate-50 font-mono" value={out} />
       </div>
+      {text.length > 0 && (() => {
+        const sortedLines = out.split('\n').filter((l) => l.trim());
+        const lines = sortedLines.length;
+        const label = MODES.find((m) => m.id === mode)?.label ?? mode;
+        const seen = new Set<string>();
+        for (const l of sortedLines) seen.add(caseSensitive ? l : l.toLowerCase());
+        const duplicates = lines - seen.size;
+        const first = sortedLines.slice(0, 3);
+        const last = sortedLines.slice(Math.max(0, lines - 3));
+        const cards: MaybeCard[] = [
+          { kind: 'summary', text: `Sorted ${lines.toLocaleString()} line${lines === 1 ? '' : 's'} (${label}).` },
+          {
+            kind: 'stats',
+            items: [
+              { label: 'Lines', value: lines.toLocaleString() },
+              { label: 'Unique', value: seen.size.toLocaleString() },
+              { label: 'Duplicates', value: duplicates.toLocaleString() },
+              { label: 'Case', value: caseSensitive ? 'Sensitive' : 'Insensitive' },
+            ],
+          },
+          lines > 3
+            ? {
+                kind: 'comparison' as const,
+                title: 'After sort',
+                columns: [
+                  { title: 'First 3', items: first },
+                  { title: 'Last 3', items: last.reverse() },
+                ],
+              }
+            : null,
+          duplicates > 0
+            ? { kind: 'takeaway' as const, text: `${duplicates} duplicate${duplicates === 1 ? '' : 's'} remain — use Remove Duplicate Lines to dedupe.` }
+            : { kind: 'takeaway' as const, text: caseSensitive ? 'Case-sensitive comparison.' : 'Case-insensitive comparison — toggle above to change.' },
+          {
+            kind: 'nextStep',
+            actions: [
+              { href: '/text-tools/remove-duplicate-lines/', label: 'Remove Duplicate Lines' },
+              { href: '/text-tools/reverse-text/', label: 'Reverse Text' },
+            ],
+          },
+        ];
+        return <OutcomeLayer cards={cards} />;
+      })()}
     </div>
   );
 }

@@ -1,0 +1,9 @@
+---
+import ToolLayout from '~/layouts/ToolLayout.astro';
+import { TOOLS_BY_ID } from '~/data/tools';
+import Island from '~/components/tools/DailyAnagram.tsx';
+const tool = TOOLS_BY_ID['daily-unscramble'];
+---
+<ToolLayout tool={tool}>
+  <Island client:load length={7} storageNamespace="daily-unscramble" variantLabel="Daily Unscramble" />
+</ToolLayout>

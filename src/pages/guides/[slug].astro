@@ -1,0 +1,17 @@
+---
+import GuideLayout from '~/layouts/GuideLayout.astro';
+import { contentPagesBySection, type ContentPageConfig } from '~/data/content-pages';
+
+export async function getStaticPaths() {
+  const guides = contentPagesBySection('guides').filter((c) => c.kind === 'guide');
+  return guides.map((config) => ({
+    params: { slug: config.slug },
+    props: { config },
+  }));
+}
+
+interface Props { config: ContentPageConfig; }
+const { config } = Astro.props;
+---
+
+<GuideLayout config={config} />

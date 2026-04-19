@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import CopyButton from '../CopyButton';
 import { toTitleCase, toSentenceCase, toCamelCase, toSnakeCase, toKebabCase, toConstantCase } from '~/lib/text';
+import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
 type Mode = 'upper' | 'lower' | 'title' | 'sentence' | 'camel' | 'snake' | 'kebab' | 'constant';
 const MODES: { id: Mode; label: string }[] = [
@@ -51,6 +52,38 @@ export default function CaseConverter() {
         </div>
         <textarea id="out" readOnly className="input h-36 bg-slate-50" value={out} />
       </div>
+      {text.length > 0 && (() => {
+        const label = MODES.find((m) => m.id === mode)?.label ?? mode;
+        const delta = out.length - text.length;
+        const words = (text.match(/\b[\w'-]+\b/g) ?? []).length;
+        const lines = text.split('\n').length;
+        const cards: MaybeCard[] = [
+          { kind: 'summary', text: `Converted ${text.length.toLocaleString()} character${text.length === 1 ? '' : 's'} to ${label}.` },
+          {
+            kind: 'stats',
+            items: [
+              { label: 'Characters', value: text.length.toLocaleString() },
+              { label: 'Words', value: words.toLocaleString() },
+              { label: 'Lines', value: lines.toLocaleString() },
+              { label: 'Δ length', value: `${delta > 0 ? '+' : ''}${delta}` },
+            ],
+          },
+          {
+            kind: 'takeaway',
+            text: delta === 0
+              ? 'Same length — no joiners added or removed.'
+              : `Output is ${Math.abs(delta)} character${Math.abs(delta) === 1 ? '' : 's'} ${delta > 0 ? 'longer' : 'shorter'}.`,
+          },
+          {
+            kind: 'nextStep',
+            actions: [
+              { href: '/text-tools/reverse-text/', label: 'Reverse Text' },
+              { href: '/word-tools/word-counter/', label: 'Word Counter' },
+            ],
+          },
+        ];
+        return <OutcomeLayer cards={cards} />;
+      })()}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import CopyButton from '../CopyButton';
 import { removeDuplicateLines } from '~/lib/text';
+import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
 export default function RemoveDuplicateLines() {
   const [text, setText] = useState('');
@@ -8,6 +9,7 @@ export default function RemoveDuplicateLines() {
   const out = useMemo(() => removeDuplicateLines(text, preserveOrder), [text, preserveOrder]);
   const inCount = text ? text.split('\n').length : 0;
   const outCount = out ? out.split('\n').length : 0;
+  const removed = Math.max(0, inCount - outCount);
 
   return (
     <div className="space-y-3">
@@ -29,6 +31,35 @@ export default function RemoveDuplicateLines() {
         </div>
         <textarea id="out" readOnly className="input h-48 bg-slate-50 font-mono" value={out} />
       </div>
+      {inCount > 0 && (() => {
+        const uniquePct = Math.round((outCount / inCount) * 100);
+        const cards: MaybeCard[] = [
+          {
+            kind: 'summary',
+            text: removed === 0
+              ? `No duplicates found in ${inCount.toLocaleString()} line${inCount === 1 ? '' : 's'}.`
+              : `Removed ${removed.toLocaleString()} duplicate${removed === 1 ? '' : 's'} from ${inCount.toLocaleString()} line${inCount === 1 ? '' : 's'}.`,
+          },
+          {
+            kind: 'stats',
+            items: [
+              { label: 'Input', value: inCount.toLocaleString() },
+              { label: 'Output', value: outCount.toLocaleString() },
+              { label: 'Removed', value: removed.toLocaleString() },
+              { label: 'Unique rate', value: `${uniquePct}%` },
+            ],
+          },
+          { kind: 'takeaway', text: preserveOrder ? 'Kept the first occurrence and dropped later duplicates.' : 'Sorted uniques — toggle above to preserve original order.' },
+          {
+            kind: 'nextStep',
+            actions: [
+              { href: '/text-tools/sort-lines/', label: 'Sort Lines' },
+              { href: '/word-tools/word-counter/', label: 'Word Counter' },
+            ],
+          },
+        ];
+        return <OutcomeLayer cards={cards} />;
+      })()}
     </div>
   );
 }

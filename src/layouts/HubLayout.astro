@@ -1,0 +1,146 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import FAQ from '~/components/FAQ.astro';
+import ToolCard from '~/components/ToolCard.astro';
+import AdSlot from '~/components/AdSlot.astro';
+import { TOOLS_BY_ID } from '~/data/tools';
+import { CLUSTERS_BY_SLUG, clusterHref, type ClusterConfig } from '~/data/clusters';
+import { contentPageById, contentHref, type ContentPageConfig, CATEGORY_LABEL } from '~/data/content-pages';
+
+interface Props { cluster: ClusterConfig; }
+const { cluster } = Astro.props;
+const canonical = `/${cluster.section}/${cluster.hubSlug}/`;
+
+const tools = cluster.featuredToolIds
+  .map((id) => TOOLS_BY_ID[id])
+  .filter((t) => t && !t.comingSoon);
+
+const lists: ContentPageConfig[] = cluster.featuredListIds
+  .map((id) => contentPageById(id))
+  .filter((p): p is ContentPageConfig => !!p)
+  .filter((p) => {
+    if (p.kind !== 'word-list') return true;
+    const words = p.buildWords?.() ?? [];
+    const min = p.minWords ?? 10;
+    return words.length >= min;
+  });
+
+const supports: ContentPageConfig[] = cluster.featuredSupportIds
+  .map((id) => contentPageById(id))
+  .filter((p): p is ContentPageConfig => !!p);
+
+const relatedClusters = cluster.relatedClusterSlugs
+  .map((s) => CLUSTERS_BY_SLUG[s])
+  .filter(Boolean);
+
+const sectionLabel = CATEGORY_LABEL[cluster.section];
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: `/${cluster.section}/`, label: sectionLabel },
+  { href: canonical, label: cluster.h1 },
+];
+
+const hubJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: cluster.h1,
+  description: cluster.description,
+  mainEntityOfPage: canonical,
+};
+---
+
+<BaseLayout
+  title={cluster.title}
+  description={cluster.description}
+  canonical={canonical}
+  keywords={cluster.keywords}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(hubJsonLd)} />
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{cluster.h1}</h1>
+      <p class="mt-1 text-lg text-slate-700">{cluster.subhead}</p>
+      <p class="mt-2 max-w-3xl text-slate-600">{cluster.intro}</p>
+    </header>
+
+    {cluster.startHere.length > 0 && (
+      <section aria-label="Start here" class="mb-8 rounded-lg border border-brand-200 bg-brand-50 p-4">
+        <h2 class="mb-3 text-lg font-semibold text-brand-900">Start here</h2>
+        <ul class="space-y-2">
+          {cluster.startHere.map((link) => (
+            <li>
+              <a href={link.href} class="font-semibold text-brand-700 hover:underline">{link.label}</a>
+              {link.note && <span class="text-sm text-slate-700"> — {link.note}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <AdSlot slot="below-intro" />
+
+    {tools.length > 0 && (
+      <section aria-label="Featured tools" class="mb-10">
+        <h2 class="mb-3 text-xl font-semibold">Featured tools</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {tools.map((t) => <ToolCard tool={t!} />)}
+        </div>
+      </section>
+    )}
+
+    {supports.length > 0 && (
+      <section aria-label="Guides & explainers" class="mb-10">
+        <h2 class="mb-3 text-xl font-semibold">Guides & explainers</h2>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {supports.map((p) => (
+            <li>
+              <a href={contentHref(p)} class="block rounded-md border border-slate-200 p-3 hover:border-brand-500 hover:bg-brand-50">
+                <div class="text-sm font-semibold text-slate-900">{p.h1}</div>
+                {p.subhead && <div class="mt-0.5 text-xs text-slate-600">{p.subhead}</div>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {lists.length > 0 && (
+      <section aria-label="Curated word lists" class="mb-10">
+        <h2 class="mb-3 text-xl font-semibold">Curated word lists</h2>
+        <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {lists.map((p) => (
+            <li>
+              <a href={contentHref(p)} class="block rounded-md border border-slate-200 p-3 hover:border-brand-500 hover:bg-brand-50">
+                <div class="text-sm font-semibold text-slate-900">{p.h1}</div>
+                {p.subhead && <div class="mt-0.5 text-xs text-slate-600">{p.subhead}</div>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <AdSlot slot="below-tool" />
+
+    {relatedClusters.length > 0 && (
+      <section aria-label="Related clusters" class="mt-10">
+        <h2 class="mb-3 text-xl font-semibold">Related clusters</h2>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {relatedClusters.map((rc) => (
+            <li>
+              <a href={clusterHref(rc)} class="block rounded-md border border-slate-200 p-3 hover:border-brand-500 hover:bg-brand-50">
+                <div class="text-sm font-semibold text-slate-900">{rc.h1}</div>
+                <div class="mt-0.5 text-xs text-slate-600">{rc.subhead}</div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <FAQ items={cluster.faq} />
+  </article>
+</BaseLayout>

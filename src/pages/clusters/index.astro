@@ -1,0 +1,52 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import { CLUSTERS, clusterHref } from '~/data/clusters';
+import { CATEGORY_LABEL, type ContentSection } from '~/data/content-pages';
+
+const SECTION_ORDER: ContentSection[] = ['word-tools', 'calculators', 'converters', 'games'];
+const bySection = SECTION_ORDER
+  .map((section) => ({ section, clusters: CLUSTERS.filter((c) => c.section === section) }))
+  .filter((g) => g.clusters.length > 0);
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/clusters/', label: 'Topics' },
+];
+---
+<BaseLayout
+  title="All Topics — Kefiw"
+  description="Every Kefiw topic: Scrabble, unscramble, pattern solvers, rhyme, word families, everyday calculators, shopping math, unit converters, and daily games."
+  canonical="/clusters/"
+  keywords={['topics', 'word tool topics', 'calculator topics']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Explore by topic</h1>
+      <p class="mt-2 max-w-3xl text-slate-600">
+        Each topic bundles the right tool with the lists and guides that make it click. Pick a topic
+        to see its hub, featured tools, word lists, and how-tos.
+      </p>
+    </header>
+
+    {bySection.map((group) => (
+      <section class="mb-8">
+        <h2 class="mb-3 text-xl font-semibold">{CATEGORY_LABEL[group.section]}</h2>
+        <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {group.clusters.map((c) => (
+            <li>
+              <a
+                href={clusterHref(c)}
+                class="block h-full rounded-lg border border-slate-200 bg-white p-4 transition hover:border-brand-500 hover:bg-brand-50 no-underline"
+              >
+                <div class="font-semibold text-slate-900">{c.h1}</div>
+                {c.subhead && <div class="mt-1 text-sm text-slate-600">{c.subhead}</div>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </article>
+</BaseLayout>

@@ -1,11 +1,9 @@
 ---
 import ToolLayout from '~/layouts/ToolLayout.astro';
 import { TOOLS_BY_ID } from '~/data/tools';
+import Island from '~/components/tools/DailyAnagram.tsx';
 const tool = TOOLS_BY_ID['daily-word'];
 ---
 <ToolLayout tool={tool}>
-  <div class="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-    <div class="font-semibold">Coming soon.</div>
-    <p class="mt-1">A new daily word puzzle is in development. In the meantime, try <a href="/games/sudoku/">Sudoku</a> or the <a href="/word-tools/">Word Tools</a>.</p>
-  </div>
+  <Island client:load length={5} storageNamespace="daily-word" variantLabel="Daily Word" />
 </ToolLayout>

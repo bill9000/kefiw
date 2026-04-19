@@ -1,0 +1,15 @@
+---
+import HubLayout from '~/layouts/HubLayout.astro';
+import { clustersBySection, type ClusterConfig } from '~/data/clusters';
+
+export async function getStaticPaths() {
+  return clustersBySection('calculators').map((cluster) => ({
+    params: { slug: cluster.hubSlug },
+    props: { cluster },
+  }));
+}
+
+interface Props { cluster: ClusterConfig; }
+const { cluster } = Astro.props;
+---
+<HubLayout cluster={cluster} />

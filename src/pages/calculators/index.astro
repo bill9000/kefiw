@@ -2,15 +2,18 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ToolCard from '~/components/ToolCard.astro';
+import FeaturedClusters from '~/components/FeaturedClusters.astro';
 import { CATEGORIES, toolsByCategory } from '~/data/tools';
+import { clustersBySection } from '~/data/clusters';
 const cat = CATEGORIES.calculators;
 const tools = toolsByCategory('calculators');
+const clusterSlugs = clustersBySection('calculators').map((c) => c.slug);
 ---
 <BaseLayout
-  title="Calculators — Percentage, Age, Date Difference | Kefiw"
-  description="Everyday calculators: percentage, age, and date difference. Mobile-friendly, client-side."
+  title="Calculators — Percentage, Discount, Tip, Hours, Fractions | Kefiw"
+  description="Everyday calculators: percentage, age, date difference, discount, tip, hours, reading time, average, ratio, and fraction. Mobile-friendly, client-side."
   canonical="/calculators/"
-  keywords={['calculators', 'percentage calculator', 'age calculator', 'date difference']}
+  keywords={['calculators', 'percentage calculator', 'discount calculator', 'tip calculator', 'hours calculator', 'fraction calculator', 'ratio calculator']}
 >
   <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/calculators/', label: cat.title }]} />
   <header class="container-wide py-6">
@@ -22,4 +25,12 @@ const tools = toolsByCategory('calculators');
       {tools.map((t) => <ToolCard tool={t} />)}
     </div>
   </section>
+
+  {clusterSlugs.length > 0 && (
+    <FeaturedClusters
+      slugs={clusterSlugs}
+      title="Calculator topics"
+      subhead="Grouped by situation — everyday math, shopping decisions, and more."
+    />
+  )}
 </BaseLayout>

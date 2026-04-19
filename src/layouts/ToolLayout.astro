@@ -3,13 +3,17 @@ import BaseLayout from './BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import FAQ from '~/components/FAQ.astro';
 import RelatedTools from '~/components/RelatedTools.astro';
+import StartHere from '~/components/StartHere.astro';
+import ToolTips from '~/components/ToolTips.astro';
 import AdSlot from '~/components/AdSlot.astro';
 import type { ToolConfig } from '~/data/tools';
 import { CATEGORIES, toolHref } from '~/data/tools';
+import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
 
 interface Props { tool: ToolConfig; }
 const { tool } = Astro.props;
 const cat = CATEGORIES[tool.category];
+const cluster = tool.clusterId ? CLUSTERS_BY_SLUG[tool.clusterId] : undefined;
 const crumbs = [
   { href: '/', label: 'Home' },
   { href: `/${cat.slug}/`, label: cat.title },
@@ -39,7 +43,14 @@ const webAppJsonLd = {
   <article class="container-wide py-6">
     <header class="mb-6">
       <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{tool.h1}</h1>
+      {tool.outcomeLine && <p class="mt-1 max-w-3xl text-base font-medium text-slate-700">{tool.outcomeLine}</p>}
       <p class="mt-2 max-w-3xl text-slate-600">{tool.intro}</p>
+      {cluster && (
+        <p class="mt-2 text-xs text-slate-500">
+          Part of: <a href={clusterHref(cluster)} class="text-brand-700 hover:underline">{cluster.h1}</a>
+        </p>
+      )}
+      <StartHere tool={tool} />
     </header>
 
     <AdSlot slot="below-intro" />
@@ -66,6 +77,7 @@ const webAppJsonLd = {
     </section>
 
     <FAQ items={tool.faq} />
+    <ToolTips tool={tool} />
     <RelatedTools tool={tool} />
   </article>
 </BaseLayout>
