@@ -270,6 +270,15 @@ export const CLUSTER_A: ContentPageConfig[] = [
       { q: 'Are all "un-" words hyphenated?', a: 'No. Most are solid (unhappy, unzip, unlearn). A few compounds use a hyphen (un-American) but are excluded from Scrabble lists.' },
       { q: 'Can I prefix "un-" to any verb?', a: 'No — attaching "un-" to arbitrary roots is not always valid in Scrabble dictionaries. Check the list before playing.' },
     ],
+    thresholds: {
+      cyan: '20-80 focused matches — scan and pick the play that fits your rack.',
+      gold: '80-300 browsable — filter by length or hook letter.',
+      magenta: '300+ noise — narrow with a fixed letter or Scrabble-only dictionary.',
+    },
+    pivotLink: {
+      toolId: 'scrabble-helper',
+      note: 'List too broad? Feed your actual rack to the helper for ranked, playable un- words only.',
+    },
     relatedIds: ['scrabble-helper', 'words-with-friends-helper', 'word-finder'],
     relatedLinks: [
       { href: '/word-tools/words-starting-with-re/', label: 'Words Starting With "Re"' },

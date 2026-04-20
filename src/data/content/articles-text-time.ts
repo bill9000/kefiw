@@ -33,6 +33,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Does Title Case handle "of", "the", "and" correctly?', a: 'Most implementations capitalise every word, which is the safe default. If you need AP-style (lowercase short prepositions), check the tool options or hand-fix a few words after.' },
       { q: 'Is case conversion destructive?', a: 'The output loses the original capitalisation. Keep a copy of the source before you convert if you might need to compare back.' },
     ],
+    thresholds: {
+      cyan: 'Under 50 lines — paste, convert, copy back in one pass.',
+      gold: '50-500 lines — scan for edge cases (acronyms, proper nouns) before pasting back.',
+      magenta: 'Over 500 lines or mixed content — spot-check 5-10 samples before trusting output.',
+    },
+    pivotLink: {
+      toolId: 'sort-lines',
+      note: 'Case normalized — now sort cleanly without uppercase jumping the queue.',
+    },
   },
   {
     id: 'art-tt-case-converter-editing-instincts',
@@ -131,6 +140,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Does it reverse by character or by word?', a: 'Most tools offer both. Character-reverse turns "hello world" into "dlrow olleh". Word-reverse gives "world hello".' },
       { q: 'Can I reverse Unicode and emoji?', a: 'Yes, but combining characters and emoji flag sequences can break. For pure ASCII it is bulletproof.' },
     ],
+    thresholds: {
+      cyan: 'Single word or short string — reversal is fast, verification trivial.',
+      gold: 'Multi-line lists under 500 items — review reversed output before next step.',
+      magenta: 'Over 500 lines or mixed Unicode — spot-check output; combining chars may break.',
+    },
+    pivotLink: {
+      toolId: 'sort-lines',
+      note: 'Lines reversed — now sort to cluster words by their original suffix.',
+    },
   },
   {
     id: 'art-tt-reverse-text-pattern-recognition',
@@ -229,6 +247,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Does sort lines preserve the original?', a: 'Sort is reversible in principle (un-sort is impossible), so keep a copy of the original if you need the source order back.' },
       { q: 'How does alphabetical sort handle numbers?', a: 'As strings — "10" sorts before "2". Use natural sort if you want "1, 2, 10" order.' },
     ],
+    thresholds: {
+      cyan: 'Under 50 lines — sort, eyeball dupes or clusters instantly.',
+      gold: '50-500 lines — sort first, then dedupe or diff for the real task.',
+      magenta: 'Over 500 lines — sort alone is not enough; pair with dedupe or filters.',
+    },
+    pivotLink: {
+      toolId: 'remove-duplicate-lines',
+      note: 'List sorted — now strip duplicates before the real review.',
+    },
   },
   {
     id: 'art-tt-sort-lines-structure-thinking',
@@ -523,6 +550,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Is "ending with" the same as "rhymes with"?', a: 'Close but not identical. "Cough" and "rough" end with "-ough" but rhyme differently. Ending-with is a strong starting point; confirm with ear or a rhyme-sound tool.' },
       { q: 'Can I combine starts-with and ends-with?', a: 'Yes — pattern search. "Starts with c, ends with t" of length 4 gives cost, cast, coat, cart, etc.' },
     ],
+    thresholds: {
+      cyan: 'Under 50 matches — tight enough for puzzle fills or a rhyme shortlist.',
+      gold: '50-500 matches — browsable for vocabulary study, add a length filter.',
+      magenta: 'Over 500 matches — unfiltered noise, tighten the suffix or length.',
+    },
+    pivotLink: {
+      toolId: 'rhyme-finder',
+      note: 'Spelling match found — now confirm by sound before the rhyme lands.',
+    },
   },
   {
     id: 'art-tt-words-ending-suffix-patterns',
@@ -621,6 +657,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Does contains match position?', a: 'Most tools match anywhere — start, middle, or end. If you need middle-only, combine with "not starts with" and "not ends with" filters.' },
       { q: 'Can I search for multiple letter sequences?', a: 'Usually yes, as an AND filter. "Contains QU AND contains X": quintuplex, quixotic, equinox — a short, interesting list.' },
     ],
+    thresholds: {
+      cyan: 'Under 50 matches — playable Scrabble candidates or a tight crossword list.',
+      gold: '50-500 matches — scannable for research, add length bounds.',
+      magenta: 'Over 500 matches — too broad, add a second contains clause or length.',
+    },
+    pivotLink: {
+      toolId: 'pattern-solver',
+      note: 'Need position-aware matching? Switch to the pattern solver.',
+    },
   },
   {
     id: 'art-tt-words-containing-spelling',
@@ -719,6 +764,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Is the age inclusive or exclusive of birth day?', a: 'Your age on your birthday is 0 on the day you are born, 1 on your first birthday. Calculator matches this standard convention.' },
       { q: 'What about time zones?', a: 'For day-precision age, time zone rarely matters. If you need hour-precision, use the birth time zone as the reference.' },
     ],
+    thresholds: {
+      cyan: 'Form or official use — exact years/months/days, matches the field.',
+      gold: 'Casual check — years alone suffice, but confirm birthday has passed this year.',
+      magenta: 'Leap-year birth or jurisdiction-sensitive eligibility — verify the convention.',
+    },
+    pivotLink: {
+      toolId: 'age-on-date-calculator',
+      note: 'Need age on a future or past date? Shift the reference point.',
+    },
   },
   {
     id: 'art-tt-age-calculator-time-awareness',
@@ -817,6 +871,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Can I use dates in the past?', a: 'Yes — "age on 2015-01-01" works the same as a future date. Good for biography and historical research.' },
       { q: 'Does it handle BC/AD boundary?', a: 'Most online calculators use proleptic Gregorian calendar, handling dates back to year 1 AD. BC dates often need a specialised tool.' },
     ],
+    thresholds: {
+      cyan: 'Eligibility cutoff — exact age on target date answers the form directly.',
+      gold: 'Milestone planning — near a boundary (school, retirement), recheck convention.',
+      magenta: 'Leap-year birth or pre-1582 date — confirm calendar convention before relying.',
+    },
+    pivotLink: {
+      toolId: 'date-difference-calculator',
+      note: 'Need the raw day gap instead of age framing? Drop the birthday lens.',
+    },
   },
   {
     id: 'art-tt-age-on-date-biography',
@@ -915,6 +978,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Does it include both endpoints?', a: 'Convention varies. Most calculators give exclusive duration (start excluded, end included, or vice versa). Add 1 if your context needs inclusive counting.' },
       { q: 'Is "months" ambiguous?', a: 'Yes — a month is 28, 29, 30, or 31 days. Good calculators give you exact "years, months, days" breakdown instead of fractional months.' },
     ],
+    thresholds: {
+      cyan: 'Under 1 year — days are the honest unit; avoid fractional months.',
+      gold: '1-10 year span — use years/months/days breakdown; leap days start to matter.',
+      magenta: 'Over 10 years or legal/financial context — specify inclusive vs exclusive explicitly.',
+    },
+    pivotLink: {
+      toolId: 'hours-calculator',
+      note: 'Need sub-day precision? Drop to hours for shift or billing math.',
+    },
   },
   {
     id: 'art-tt-date-diff-time-scale',
@@ -1013,6 +1085,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'Do I include the break?', a: 'No — breaks are usually unpaid and excluded from worked hours. Paid breaks are an exception; check your contract.' },
       { q: 'How does overtime stack?', a: 'Daily OT (>8h) and weekly OT (>40h) can stack or substitute depending on jurisdiction. Know your local rule.' },
     ],
+    thresholds: {
+      cyan: 'Single shift under 8h — break subtracted, no OT to untangle.',
+      gold: '8-10h day or weekly total 40-45h — daily OT threshold in play; verify local rule.',
+      magenta: 'Split shifts, midnight crossover, or 45h+ week — stack daily and weekly OT carefully.',
+    },
+    pivotLink: {
+      toolId: 'date-difference-calculator',
+      note: 'Shift spans multiple days? Switch to the date-difference calculator.',
+    },
   },
   {
     id: 'art-tt-hours-calculator-time-sense',
@@ -1111,6 +1192,15 @@ export const ARTICLES_TEXT_TIME: ContentPageConfig[] = [
       { q: 'What wpm should I use?', a: 'Silent reading: 225 wpm default. Speaking: 140 wpm. Adjust up or down based on audience and content density.' },
       { q: 'Does the calculator count punctuation time?', a: 'Most use pure word count. For speaking, add 10-15% buffer for natural pauses and punctuation.' },
     ],
+    thresholds: {
+      cyan: 'Draft under target by 10-15% — leaves room for pauses and pacing.',
+      gold: 'Draft within 5% of target — tight; rehearse once before committing.',
+      magenta: 'Draft over target — cut now; over-running kills talks and loses readers.',
+    },
+    pivotLink: {
+      toolId: 'word-counter',
+      note: 'Trimming to hit a time target? Watch the word count as you edit.',
+    },
   },
   {
     id: 'art-tt-reading-time-length-sense',

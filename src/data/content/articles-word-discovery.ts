@@ -33,6 +33,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Is using a word finder cheating?', a: 'Depends on the context. In competitive play, yes. For learning, casual games, or solving puzzles, it is a training tool — the way a calculator is for arithmetic.' },
       { q: 'Why are some high-scoring words not in the finder?', a: 'Different dictionaries. TWL (US) and SOWPODS (international) disagree on thousands of words. Check which list your game uses.' },
     ],
+    thresholds: {
+      cyan: 'Top 2-3 plays clearly outscore the rest — pick and go.',
+      gold: '4-10 plays within 5 points — weigh leave and board defence before choosing.',
+      magenta: '10+ indistinguishable plays — rack is low-value; consider a swap next turn.',
+    },
+    pivotLink: {
+      toolId: 'scrabble-helper',
+      note: 'Found the words — now price them against hooks and premium squares.',
+    },
   },
   {
     id: 'art-wd-word-finder-vocabulary-growth',
@@ -195,6 +204,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Why does Google Docs show a different number than an online counter?', a: 'Google Docs excludes headers, footers, and footnotes by default; many online tools include them. Both are correct for different purposes.' },
       { q: 'Should I trust reading time estimates?', a: 'For general prose, yes — 250 wpm is a solid average. For dense technical content, expect half that. The counter estimates speed, not comprehension.' },
     ],
+    thresholds: {
+      cyan: 'Within 1% of the target word limit — submit with confidence.',
+      gold: '2-5% gap between tools — match the grader\'s tool before trusting.',
+      magenta: '5%+ discrepancy or you missed the limit by dozens — strip formatting and recount.',
+    },
+    pivotLink: {
+      toolId: 'letter-counter',
+      note: 'Word count does not fit the limit? Character-based platforms (Twitter, SMS) need a letter counter instead.',
+    },
   },
 
   // ---------- rhyme-finder (3) ----------
@@ -229,6 +247,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Should I always use perfect rhymes?', a: 'No. Perfect rhymes resolve the line — good for choruses. Slant rhymes keep the tension — good for verses building toward a chorus.' },
       { q: 'How do I rhyme a word with no rhymes?', a: 'ORANGE, SILVER, MONTH — truly unrhymable. Move the word inside the line and end with a rhymable word, or use a slant rhyme like HINGE for ORANGE.' },
     ],
+    thresholds: {
+      cyan: '2-3 rhymes that fit the meaning — choose on syllable match.',
+      gold: '4-10 rhymes — filter by stressed syllable and image.',
+      magenta: '10+ clichéd rhymes or zero matches — reword the line so a fresher word ends it.',
+    },
+    pivotLink: {
+      toolId: 'syllable-counter',
+      note: 'Rhyme fits but the line still stumbles? Syllable count usually reveals the meter break.',
+    },
   },
   {
     id: 'art-wd-rhyme-finder-phonological-awareness',
@@ -327,6 +354,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'What if I have no confirmed letters?', a: 'Use a word finder instead — pattern solvers need at least one known position to narrow results. With zero positions you are just listing the dictionary.' },
       { q: 'Can I combine ? and *?', a: 'Yes. Pattern c?*t matches CAT, COAT, CABINET — one fixed char after C, any number before T. Powerful but returns long lists.' },
     ],
+    thresholds: {
+      cyan: '2-3 pattern matches — the clue meaning picks the winner.',
+      gold: '4-10 candidates — one more crossing letter resolves it.',
+      magenta: '10+ matches — pattern too loose; anchor with another fixed letter or length.',
+    },
+    pivotLink: {
+      toolId: 'crossword-solver',
+      note: 'Pattern is right but no clue-meaning filter? The crossword solver joins pattern to clue type.',
+    },
   },
   {
     id: 'art-wd-pattern-solver-pattern-recognition',
@@ -489,6 +525,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Why do counters not just use a dictionary?', a: 'Dictionaries cover 100k-200k words; English has 600k+. Counters use pattern rules to extend, which works most of the time and fails on the edges.' },
       { q: 'What is the fastest manual check?', a: 'Count vowel sounds (not letters). Say the word slowly. Each distinct vowel sound is one syllable. BREAD = one E sound = 1 syllable.' },
     ],
+    thresholds: {
+      cyan: 'Counter agrees with your ear — trust and move on.',
+      gold: '1-syllable disagreement on dialect words (FIRE, POEM) — pick a tradition and stay consistent.',
+      magenta: '2+ disagreements per poem or loanword silence — override with a dictionary, not the counter.',
+    },
+    pivotLink: {
+      toolId: 'haiku-checker',
+      note: 'Syllable disputes still wrecking meter? Haiku checker validates 5-7-5 against the same dictionary.',
+    },
   },
 
   // ---------- letter-counter (3) ----------
@@ -587,6 +632,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Can a letter counter check readability?', a: 'Not directly. Readability depends on sentence length, syllable count, and vocabulary — not letter frequency. Use a readability tool.' },
       { q: 'Difference between letter frequency and character frequency?', a: 'Letter frequency usually excludes spaces, digits, punctuation. Character frequency includes them. For puzzle work, you want letters.' },
     ],
+    thresholds: {
+      cyan: 'Pangram covers all 26 letters or lipogram holds zero forbidden letters — done.',
+      gold: '1-3 letters missing or over-quota — one sentence rewrite fixes it.',
+      magenta: '4+ letters off target — structural rewrite needed, not a word swap.',
+    },
+    pivotLink: {
+      toolId: 'word-counter',
+      note: 'Counting letters but the brief says words? The word counter hands back tokens, sentences, and reading time.',
+    },
   },
 
   // ---------- haiku-checker (3) ----------
@@ -621,6 +675,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Does every haiku need a seasonal word?', a: 'Traditional Japanese haiku do. English haiku loosen this — many modern haiku skip kigo. Use it when it earns the line.' },
       { q: 'Can I write a 3-5-3 haiku?', a: 'Yes — many modern English haiku poets argue 3-5-3 is closer to Japanese rhythm than 5-7-5. Both are accepted. Pick a form and commit.' },
     ],
+    thresholds: {
+      cyan: '5-7-5 passes and the turn lands between lines 2 and 3 — haiku works.',
+      gold: 'Count correct but image is soft — swap an abstract noun for a concrete one.',
+      magenta: 'Count off by 2+ or zero turn — draft fails as haiku regardless of syllables.',
+    },
+    pivotLink: {
+      toolId: 'syllable-counter',
+      note: 'Haiku checker flags the wrong line? Syllable counter pinpoints which word blew the count.',
+    },
   },
   {
     id: 'art-wd-haiku-checker-concision-skill',
@@ -719,6 +782,15 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Should I always guess the most frequent letter?', a: 'Close to always — but if the pattern already excludes most words with E, you gain more from a less frequent letter that discriminates better.' },
       { q: 'Does the solver work on custom word lists?', a: 'The best ones let you paste or pick a list. A kids\' word list has different frequencies than a full dictionary — tune accordingly.' },
     ],
+    thresholds: {
+      cyan: '2-3 candidate words left — next guess likely wins the round.',
+      gold: '4-10 possibilities — pick the letter that splits them most evenly.',
+      magenta: '10+ candidates with 2 wrong guesses banked — switch to frequency order and stop gambling.',
+    },
+    pivotLink: {
+      toolId: 'pattern-solver',
+      note: 'Need to see the full candidate list behind the solver\'s choice? Pattern solver lists every match.',
+    },
   },
   {
     id: 'art-wd-hangman-solver-bayesian-thinking',
@@ -783,5 +855,146 @@ export const ARTICLES_WORD_DISCOVERY: ContentPageConfig[] = [
       { q: 'Is using a hangman solver cheating?', a: 'In casual play with friends, yes. In single-player training, no — it is how you get better. Context matters.' },
       { q: 'What is the easiest way to improve without the solver?', a: 'Memorise the length-based letter order (E T A O I N S H R D for 4+ letter words). Guess in that order until pattern emerges. You will win more immediately.' },
     ],
+  },
+
+  // ---------- 6-letter-word-finder (1) ----------
+  {
+    id: 'art-wd-6-letter-word-finder-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: '6-letter-word-finder-guide',
+    guideCategory: 'Word Tools',
+    title: '6-Letter Word Finder — Pattern Guide for Crosswords, Wordle Spinoffs, and Scrabble | Kefiw',
+    h1: '6-Letter Word Finder Guide',
+    subhead: 'Six letters sit in the sweet spot — long enough for a real play, short enough to brute-force a pattern.',
+    outcomeLine: 'Pattern in, shortlist out — run the finder the same way every time and you will clear any 6-letter clue or rack in under a minute.',
+    description: 'How to use a 6-letter word finder for crosswords, Wordle spinoff puzzles, and Scrabble racks — exact syntax, common mistakes, and when to pivot to a rack solver.',
+    keywords: ['6 letter word finder', '6 letter words', 'six letter word finder', 'pattern search 6 letters'],
+    intro: 'Six-letter words show up everywhere: crossword fills, Wordle-style spinoffs (Wordle 6, Squaredle, Spelling Bee pangrams often include a 6), and Scrabble plays that thread an existing letter on the board. A 6-letter finder narrows thousands of candidates to a handful in one query — if you feed it the right pattern.',
+    clusterId: 'pattern',
+    keyPoints: [
+      'Type exactly six characters. Use ? for any unknown slot — the tool requires the correct count before it will return results.',
+      'Pattern mode locks position (fits crosswords and partially-revealed puzzles); Letters mode ignores position (fits Scrabble racks with a known board letter).',
+      'Typical 6-letter dictionary has around 18,000 entries in ENABLE1 — most pattern queries with two fixed letters return under 100 matches.',
+      'Double-letter patterns (??EE??, ??OO??) cut the candidate pool fast — useful when you see a doubled clue in a crossword.',
+      'Combine with a Scrabble scorer afterwards: a 6-letter play scoring 24+ usually beats a 4- or 5-letter play even on a good bonus square.',
+    ],
+    examples: [
+      { title: 'Crossword pattern C?R??T', body: 'Returns CARPET, CARROT, CORSET, CURVET — four candidates, one fits every crossing letter.' },
+      { title: 'Wordle-6 opener ?OUND?', body: 'Surfaces BOUNDS, FOUNDS, HOUNDS, MOUNDS, POUNDS, ROUNDS, SOUNDS, WOUNDS — eight candidates, eliminate on the next guess.' },
+      { title: 'Scrabble rack RSTLNEA + board A', body: 'Switch to Letters mode, add A, ask for 6-letter words: ANTLER, RENTAL, LEARNT, STERNAL fragments, and LATEEN-style fits appear ranked by score.' },
+    ],
+    whenToUse: [
+      { toolId: '6-letter-word-finder', note: 'Use when you have a 6-letter slot or a 6-letter target — pattern or rack. Skip if the length is unknown; start with the generic Word Finder.' },
+    ],
+    relatedIds: ['6-letter-word-finder', '5-letter-word-finder', '7-letter-word-finder', 'word-finder', 'scrabble-helper'],
+    faq: [
+      { q: 'Why does the tool reject a 5- or 7-character pattern?', a: 'By design — the finder is length-specific. Use the 5-letter or 7-letter variants, or drop to the general Word Finder for mixed lengths.' },
+      { q: 'Can I include a wildcard for multiple unknown letters?', a: 'Yes — each ? is one unknown letter. For three unknowns in a row, type ??? (three question marks), not a single *.' },
+      { q: 'Does the finder check a Scrabble-legal dictionary?', a: 'It uses ENABLE1 (public domain). ENABLE1 is very close to TWL/SOWPODS but not identical — verify unusual words in the dictionary your game enforces.' },
+    ],
+    thresholds: {
+      cyan: 'Under 100 candidates — pattern is focused, scan the list and pick.',
+      gold: '100 to 800 candidates — browsable but slow; add one more known letter if the puzzle allows.',
+      magenta: 'Over 800 candidates — pattern is too loose; tighten a position or switch to a rack-based search.',
+    },
+    pivotLink: {
+      toolId: 'scrabble-helper',
+      note: '6-letter candidates ready — now score them against your real rack and bonus squares.',
+    },
+  },
+
+  // ---------- 7-letter-word-finder (1) ----------
+  {
+    id: 'art-wd-7-letter-word-finder-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: '7-letter-word-finder-guide',
+    guideCategory: 'Word Tools',
+    title: '7-Letter Word Finder — Bingo Hunting Guide for Scrabble | Kefiw',
+    h1: '7-Letter Word Finder Guide',
+    subhead: 'Every 7-letter play in Scrabble earns a 50-point bingo bonus — this is the tool that finds them.',
+    outcomeLine: 'Feed your full rack in, read the top three candidates, and you will hit at least one bingo every three racks on average.',
+    description: 'Use a 7-letter word finder to hunt Scrabble bingos — the 50-point bonus for playing all seven tiles — with rack workflow, bingo-friendly racks, and blank handling.',
+    keywords: ['7 letter word finder', 'scrabble bingo', 'seven letter words', 'bingo candidate finder', 'rack solver 7 letters'],
+    intro: 'A bingo is the biggest single swing in Scrabble: 50 points on top of the word score, usually pushing the play to 65–90 points. Top tournament players bingo once every 3–4 racks because they drill bingo-friendly letter sets and feed full racks into a 7-letter finder the moment the rack looks promising.',
+    clusterId: 'scrabble',
+    keyPoints: [
+      'Switch to Letters mode and type all 7 rack tiles — the finder returns every full-rack word regardless of order.',
+      'Bingo-prone racks share two features: balanced vowel:consonant (3:4 or 4:3) and common suffixes (-ING, -ERS, -IER, -ATE, -IEST).',
+      'The classic "bingo stem" RETINA (AEINRT) combines with any of a dozen letters: B→BANTER, C→CERTAIN, D→DETRAIN, G→GRANITE, H→HAIRNET, L→LATRINE, P→PAINTER, S→STAINER.',
+      'Blanks double your candidate pool — include ? in the rack and the finder expands across all 26 substitutions.',
+      'About 40% of 7-letter bingos hook onto an existing board letter as an 8-letter play — re-run the finder with that board tile added to your rack.',
+    ],
+    examples: [
+      { title: 'Full rack AEILNRT', body: 'Finder returns RETINAL, LATRINE, RELIANT, TRENAIL, ENTRAIL — every one is a 7-letter bingo worth 60+ points before board multipliers.' },
+      { title: 'Rack with a blank: SATIRE?', body: 'One blank expands to ~30 bingo candidates — ARTISAN (N), ARISETH (H, archaic), AIRBOAT (no fit), AORTAE (too short). Finder filters to valid 7-letter words only.' },
+      { title: 'Hook to board', body: 'Rack OUTLINE, board has an S at a triple-word. Run the finder with OUTLINES (8 letters) — the play threads the S and scores the bingo plus triple = 86+ points.' },
+    ],
+    whenToUse: [
+      { toolId: '7-letter-word-finder', note: 'Use whenever you draw a fresh 7-tile rack in Scrabble or Words With Friends — the bingo bonus is worth the 15 seconds of checking.' },
+    ],
+    relatedIds: ['7-letter-word-finder', 'scrabble-helper', 'words-with-friends-helper', 'anagram-solver', 'word-unscrambler'],
+    faq: [
+      { q: 'What exactly is a bingo?', a: 'Playing all seven tiles from your rack in a single turn. Scrabble awards a flat 50-point bonus on top of the word score — Words With Friends awards 35.' },
+      { q: 'Are bingos worth forcing?', a: 'Only when the rack supports one. Holding for a bingo through three turns usually costs more than one bingo pays. Rule of thumb: keep hunting if rack has 3–4 vowels and a common suffix; swap if not.' },
+      { q: 'How many blanks can I include?', a: 'Up to two — that matches the Scrabble tile set. Two blanks in the rack open thousands of candidate words; the finder ranks them by score.' },
+    ],
+    thresholds: {
+      cyan: 'Under 50 candidates — rack has clear bingo paths, pick the highest-scoring.',
+      gold: '50 to 300 candidates — lots of options, filter by score and board fit.',
+      magenta: 'Over 300 candidates (usually means blanks) — shortlist by top 10 score, ignore the rest.',
+    },
+    pivotLink: {
+      toolId: 'scrabble-helper',
+      note: 'Bingo candidates identified — now price them on your actual board with bonus squares and hooks.',
+    },
+  },
+
+  // ---------- words-with-friends-helper (1) ----------
+  {
+    id: 'art-wd-words-with-friends-scoring-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'words-with-friends-scoring-guide',
+    guideCategory: 'Word Tools',
+    title: 'Words With Friends Scoring Guide — Tile Values, Board Layout, Rack Workflow | Kefiw',
+    h1: 'Words With Friends Scoring Guide',
+    subhead: 'Same racks, different tile values — the plays that win in Scrabble are often second-best in WWF.',
+    outcomeLine: 'Use the WWF helper for WWF games — the J, X, and Z math, plus the board premiums, are different enough to flip the top play.',
+    description: 'Words With Friends scoring breakdown — how tile values differ from Scrabble (J, X, Z, and common letters), board premium layout, and the rack-solve workflow.',
+    keywords: ['words with friends scoring', 'wwf tile values', 'wwf helper', 'wwf vs scrabble', 'wwf bingo bonus'],
+    intro: 'Words With Friends looks like Scrabble but plays differently. The tile values reshuffle the rare letters (J is a 10-point monster instead of a humble 8; X drops from 8 to 8 but the X-slots cluster differently), the board has two more bonus squares, and the bingo bonus is 35 not 50. Run the dedicated WWF helper when you are playing WWF — the Scrabble helper will point you at the wrong word often enough to cost games.',
+    clusterId: 'scrabble',
+    keyPoints: [
+      'WWF tile values that differ from Scrabble: J = 10 (vs 8), X = 8 (same), Z = 10 (vs 10), Q = 10 (vs 10), but common letters shift too — H is 3 (vs 4), F is 4 (vs 4), W is 4 (vs 4).',
+      'Board layout: WWF uses a 15x15 grid with Triple-Word squares at different positions than Scrabble, and the star center is a Double-Word (not Double-Letter).',
+      'Bingo bonus in WWF is 35 points, not 50 — bingo-hunting is still profitable but less aggressive than in Scrabble.',
+      'Rack workflow: paste tiles into the WWF helper (not the Scrabble helper), use ? for blanks, sort by WWF score, scan the top 10.',
+      'Common trap: a word that scores 48 in Scrabble may score only 36 in WWF because the Triple-Letter under the J is in a different place — always rescore for the game you are playing.',
+    ],
+    examples: [
+      { title: 'Rack SQUEEZE', body: 'WWF helper ranks SQUEEZE top with Z (10) and Q (10) stacked — typical open-board score is 90–110 points depending on bonus alignment.' },
+      { title: 'Rack JUDGING', body: 'J (10) drives the play in WWF; in Scrabble the same rack favours JUDGING with J on 8 points. Helper returns WWF-ranked list so the top entry is the right one.' },
+      { title: 'Defensive pass', body: 'Helper shows QUIZZES for 96 next to an opponent-friendly Triple-Word. Passing for a 42-point play that blocks the lane often wins the game — high score is not always the right play.' },
+    ],
+    whenToUse: [
+      { toolId: 'words-with-friends-helper', note: 'Use for every WWF rack — tile values and board bonuses differ from Scrabble enough that the top play is often a different word.' },
+    ],
+    relatedIds: ['words-with-friends-helper', 'scrabble-helper', 'word-unscrambler', 'word-finder', '7-letter-word-finder'],
+    faq: [
+      { q: 'Can I use a Scrabble helper for WWF?', a: 'The word list overlaps almost completely (ENABLE1 covers both), but the scoring differs. You will find valid words, but the ranking will mislead you — use the WWF helper for ranking.' },
+      { q: 'Is the WWF dictionary different from Scrabble?', a: 'WWF uses its own list derived from ENABLE1 with additions and removals. Most words play in both, but a handful (especially short slang) play in WWF and not Scrabble.' },
+      { q: 'What is the bingo bonus in WWF exactly?', a: '35 points added when you play all seven tiles in one turn. Scrabble awards 50 for the same feat.' },
+    ],
+    thresholds: {
+      cyan: 'Top play scores above 40 — excellent turn, play it unless defence demands otherwise.',
+      gold: 'Top play scores 20 to 40 — solid, standard-quality turn.',
+      magenta: 'Top play scores below 20 — weak rack; consider swapping tiles if you have swap turns left.',
+    },
+    pivotLink: {
+      toolId: 'scrabble-helper',
+      note: 'Playing Scrabble instead? Same rack, different tile values — swap to the Scrabble helper for correct scoring.',
+    },
   },
 ];

@@ -38,6 +38,15 @@ export const SUPPORT_TEXT_CLEANUP: ContentPageConfig[] = [
       { q: 'Does removing duplicates change the order?', a: 'Depends on the tool setting. "Preserve order" keeps the first occurrence in place. "Sort then dedupe" produces alphabetical output.' },
       { q: 'What counts as a duplicate?', a: 'By default, an exact byte-for-byte match. Toggle case-insensitive to treat Apple and APPLE as the same; trim whitespace to ignore trailing spaces.' },
     ],
+    thresholds: {
+      cyan: 'Dedupe drops under 10% of lines — input was already mostly clean.',
+      gold: '10-40% shrink — confirm case and whitespace normalisation before shipping.',
+      magenta: '40%+ collapse or zero change — one of those signals the wrong settings.',
+    },
+    pivotLink: {
+      toolId: 'sort-lines',
+      note: 'Need sorted-unique output? Sort first, then dedupe catches near-duplicates your eye misses.',
+    },
   },
   {
     id: 'cS-sort-lines-when',

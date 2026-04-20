@@ -1,0 +1,56 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import Triad, { RUNWAY_TRIAD_PILLARS } from '~/components/triad/StressTestTriad.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/scenarios/', label: 'Scenarios' },
+  { href: '/scenarios/stress-test-triad/', label: 'Stress-Test Triad' },
+];
+---
+<BaseLayout
+  title="Stress-Test Triad — Baseline · Optimized · Crisis | Kefiw"
+  description="Three Runway Zero scenarios running in parallel. Baseline, Optimized, Crisis. Watch how the same forecast bends under different assumptions."
+  canonical="/scenarios/stress-test-triad/"
+  keywords={['stress test calculator', 'baseline optimized crisis', 'runway scenario analysis', 'parallel scenarios']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">Stress-Test Triad</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Baseline · Optimized · Crisis</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Three Runway Zero instances running in parallel. Each pillar is pre-seeded with a different set
+        of assumptions — and keeps its own state from there. Adjust any column to see how far apart the
+        Zero Dates can drift from the same starting cash.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        Baseline is your current trajectory. Optimized trims burn and pushes revenue. Crisis zeroes
+        revenue and asks how long pure cash decay buys you.
+      </p>
+    </header>
+
+    <Triad
+      client:only="react"
+      tool="runway-zero"
+      storagePrefix="runway-zero-v1"
+      pillars={RUNWAY_TRIAD_PILLARS}
+    />
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">How the triad works</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Each pillar is a namespaced Runway Zero instance. Scenario states live in separate localStorage
+        keys (<code class="rounded bg-white px-1 text-xs text-cyan-800">runway-zero-v1__baseline</code>,
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">__optimized</code>,
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">__crisis</code>). On first visit the
+        triad pre-seeds each with its starting assumptions; after that your edits persist.
+      </p>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Any Pipeline Boost you've set upstream (Subscription Purge, Gig-Net Floor, Geo Arbitrage) feeds
+        all three columns simultaneously — because the session-context field is shared, not namespaced.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

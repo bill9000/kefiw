@@ -1,0 +1,34 @@
+---
+import type { ToolConfig } from '~/data/tools';
+import { TOOLS_BY_ID, toolHref } from '~/data/tools';
+
+interface Props { tool: ToolConfig; }
+const { tool } = Astro.props;
+
+const followUps = (tool.followUps ?? [])
+  .map((f) => {
+    const t = TOOLS_BY_ID[f.toolId];
+    if (!t || t.comingSoon) return null;
+    return { href: toolHref(t), label: t.h1, cta: f.cta };
+  })
+  .filter((x): x is { href: string; label: string; cta: string } => x !== null)
+  .slice(0, 2);
+---
+{followUps.length > 0 && (
+  <section class="mt-8">
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-500">Next up</h2>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {followUps.map((f) => (
+        <a
+          href={f.href}
+          class="group flex flex-col rounded-lg border border-slate-200 bg-white p-4 transition hover:border-brand-500 hover:shadow-sm"
+        >
+          <span class="text-sm text-slate-600">{f.cta}</span>
+          <span class="mt-2 text-base font-semibold text-brand-700 group-hover:underline">
+            {f.label} →
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+)}

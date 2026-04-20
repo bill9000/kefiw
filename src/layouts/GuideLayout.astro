@@ -3,6 +3,8 @@ import BaseLayout from './BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import FAQ from '~/components/FAQ.astro';
 import AdSlot from '~/components/AdSlot.astro';
+import InlineMetric from '~/components/InlineMetric.astro';
+import PivotSwitch from '~/components/PivotSwitch.tsx';
 import type { ContentPageConfig } from '~/data/content-pages';
 import { contentPageById, contentHref } from '~/data/content-pages';
 import { TOOLS_BY_ID, toolHref } from '~/data/tools';
@@ -56,6 +58,9 @@ const articleJsonLd = {
 };
 
 const hasFaq = (config.faq ?? []).length > 0;
+const hasThresholds = !!config.thresholds;
+const pivotTool = config.pivotLink ? TOOLS_BY_ID[config.pivotLink.toolId] : undefined;
+const hasPivot = !!(config.pivotLink && pivotTool && !pivotTool.comingSoon);
 const secondaryCtas = config.secondaryCtas ?? [];
 const showCtaRow = !!config.primaryCta || secondaryCtas.length > 0;
 const hasBody = !!config.bodyHtml;
@@ -63,6 +68,24 @@ const hasKeyPoints = (config.keyPoints ?? []).length > 0;
 const hasExamples = (config.examples ?? []).length > 0;
 const hasHowTo = (config.howTo ?? []).length > 0;
 const hasWhenToUse = whenToUseResolved.length > 0;
+
+// SOP tone — industrial brutalist shell
+const isSop = config.toneProfile === 'sop';
+const lmSpecs = config.liveMetrics ?? [];
+const hasFormula = !!config.formulaAnchor;
+const hasGates = (config.logicalGates ?? []).length > 0;
+
+// PivotSwitch targets (resolved to tools; falls back to static pivotLink if unset)
+function resolvePivotTarget(t?: { toolId: string; note: string }) {
+  if (!t) return null;
+  const tool = TOOLS_BY_ID[t.toolId];
+  if (!tool || tool.comingSoon) return null;
+  return { href: toolHref(tool), label: tool.h1, note: t.note };
+}
+const pvCritical = resolvePivotTarget(config.pivotSwitch?.critical);
+const pvStable = resolvePivotTarget(config.pivotSwitch?.stable);
+const pvFallback = resolvePivotTarget(config.pivotSwitch?.fallback);
+const hasPivotSwitch = !!(pvCritical && pvStable && pvFallback);
 ---
 
 <BaseLayout
@@ -74,20 +97,43 @@ const hasWhenToUse = whenToUseResolved.length > 0;
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(articleJsonLd)} />
   <Breadcrumb crumbs={crumbs} />
 
-  <article class="container-wide py-6">
+  <article class={`container-wide py-6 ${isSop ? 'kfw-sop' : ''}`}>
     <header class="mb-6">
-      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{config.h1}</h1>
-      {config.subhead && <p class="mt-1 text-lg text-slate-700">{config.subhead}</p>}
+      {isSop ? (
+        <div class="mb-2 text-[11px] font-mono uppercase tracking-[0.22em] text-[#22d3ee]">▸ SOP · {config.guideCategory ?? 'Protocol'}</div>
+      ) : null}
+      <h1 class={isSop ? 'text-3xl font-bold tracking-tight sm:text-4xl font-mono text-slate-900' : 'text-3xl font-bold tracking-tight sm:text-4xl'}>{config.h1}</h1>
+      {config.subhead && <p class={isSop ? 'mt-1 text-base font-mono text-slate-700' : 'mt-1 text-lg text-slate-700'}>{config.subhead}</p>}
       {config.outcomeLine && (
-        <p class="mt-1 text-sm font-medium text-brand-700">{config.outcomeLine}</p>
+        <p class={isSop ? 'mt-1 text-xs font-mono uppercase tracking-widest text-[#0891b2]' : 'mt-1 text-sm font-medium text-brand-700'}>{config.outcomeLine}</p>
       )}
-      <p class="mt-2 max-w-3xl text-slate-600">{config.intro}</p>
+      <p class={isSop ? 'mt-2 max-w-3xl font-mono text-sm text-slate-700' : 'mt-2 max-w-3xl text-slate-600'}>
+        <InlineMetric text={config.intro} specs={lmSpecs} />
+      </p>
       {cluster && (
         <p class="mt-2 text-xs text-slate-500">
           Part of: <a href={clusterHref(cluster)} class="text-brand-700 hover:underline">{cluster.h1}</a>
         </p>
       )}
     </header>
+
+    {isSop && hasFormula && (
+      <section aria-label="Formula anchor" class="mb-6 rounded-lg border border-slate-800 bg-slate-950 p-4 font-mono">
+        <div class="mb-2 text-[11px] uppercase tracking-[0.22em] text-[#22d3ee]">▸ {config.formulaAnchor!.caption}</div>
+        <pre class="overflow-x-auto whitespace-pre-wrap text-sm leading-relaxed text-slate-100">{config.formulaAnchor!.expression}</pre>
+      </section>
+    )}
+
+    {isSop && hasGates && (
+      <section aria-label="Logical gates" class="mb-8 rounded-lg border border-slate-800 bg-slate-950 p-4 font-mono text-sm text-slate-200">
+        <div class="mb-2 text-[11px] uppercase tracking-[0.22em] text-[#facc15]">▸ Logical Gates</div>
+        <ol class="list-decimal space-y-1 pl-6">
+          {config.logicalGates!.map((g) => (
+            <li><InlineMetric text={g} specs={lmSpecs} /></li>
+          ))}
+        </ol>
+      </section>
+    )}
 
     {showCtaRow && (
       <section aria-label="Quick actions" class="mb-6 flex flex-wrap gap-2">
@@ -104,12 +150,12 @@ const hasWhenToUse = whenToUseResolved.length > 0;
 
     {hasKeyPoints && (
       <section aria-label="Key points" class="mb-8">
-        <h2 class="mb-3 text-xl font-semibold">Key points</h2>
+        <h2 class={isSop ? 'mb-3 text-xl font-mono uppercase tracking-wider text-slate-900' : 'mb-3 text-xl font-semibold'}>{isSop ? '▸ Key Specs' : 'Key points'}</h2>
         <ul class="space-y-2">
           {config.keyPoints!.map((pt) => (
-            <li class="flex gap-2 rounded-md border border-slate-200 bg-white p-3 text-sm">
-              <span class="mt-0.5 text-brand-600">•</span>
-              <span class="text-slate-800">{pt}</span>
+            <li class={isSop ? 'flex gap-2 rounded-md border border-slate-800 bg-slate-950 p-3 font-mono text-sm text-slate-200' : 'flex gap-2 rounded-md border border-slate-200 bg-white p-3 text-sm'}>
+              <span class={isSop ? 'mt-0.5 text-[#22d3ee]' : 'mt-0.5 text-brand-600'}>▸</span>
+              <span class={isSop ? '' : 'text-slate-800'}><InlineMetric text={pt} specs={lmSpecs} /></span>
             </li>
           ))}
         </ul>
@@ -118,21 +164,21 @@ const hasWhenToUse = whenToUseResolved.length > 0;
 
     {hasHowTo && (
       <section aria-label="How to" class="mb-8">
-        <h2 class="mb-3 text-xl font-semibold">How to</h2>
-        <ol class="list-decimal space-y-1 pl-6 text-sm text-slate-800">
-          {config.howTo!.map((step) => <li>{step}</li>)}
+        <h2 class={isSop ? 'mb-3 text-xl font-mono uppercase tracking-wider text-slate-900' : 'mb-3 text-xl font-semibold'}>{isSop ? '▸ Procedure' : 'How to'}</h2>
+        <ol class={isSop ? 'list-decimal space-y-1 pl-6 font-mono text-sm text-slate-800' : 'list-decimal space-y-1 pl-6 text-sm text-slate-800'}>
+          {config.howTo!.map((step) => <li><InlineMetric text={step} specs={lmSpecs} /></li>)}
         </ol>
       </section>
     )}
 
     {hasExamples && (
       <section aria-label="Examples" class="mb-8">
-        <h2 class="mb-3 text-xl font-semibold">Examples</h2>
+        <h2 class={isSop ? 'mb-3 text-xl font-mono uppercase tracking-wider text-slate-900' : 'mb-3 text-xl font-semibold'}>{isSop ? '▸ Worked Examples' : 'Examples'}</h2>
         <ul class="grid gap-3 sm:grid-cols-2">
           {config.examples!.map((ex) => (
-            <li class="rounded-md border border-slate-200 bg-white p-3">
-              <div class="text-sm font-semibold text-slate-900">{ex.title}</div>
-              <div class="mt-1 text-sm text-slate-700">{ex.body}</div>
+            <li class={isSop ? 'rounded-md border border-slate-800 bg-slate-950 p-3 font-mono' : 'rounded-md border border-slate-200 bg-white p-3'}>
+              <div class={isSop ? 'text-sm font-semibold text-[#22d3ee]' : 'text-sm font-semibold text-slate-900'}>{ex.title}</div>
+              <div class={isSop ? 'mt-1 text-sm text-slate-300' : 'mt-1 text-sm text-slate-700'}><InlineMetric text={ex.body} specs={lmSpecs} /></div>
             </li>
           ))}
         </ul>
@@ -161,6 +207,40 @@ const hasWhenToUse = whenToUseResolved.length > 0;
       </section>
     )}
 
+    {hasThresholds && (
+      <section aria-label="Operational thresholds" class="mb-8 rounded-lg border border-slate-800 bg-slate-950 p-4 font-mono text-sm text-slate-200">
+        <div class="mb-3 text-xs uppercase tracking-widest text-slate-500">▸ Operational Thresholds</div>
+        <ul class="space-y-2">
+          <li class="flex gap-3">
+            <span class="mt-0.5 inline-block h-2 w-2 flex-none rounded-full" style="background:#22d3ee;box-shadow:0 0 6px #22d3ee;"></span>
+            <div><span class="font-bold text-[#22d3ee]">CYAN · STABLE</span> — <span class="text-slate-300">{config.thresholds!.cyan}</span></div>
+          </li>
+          <li class="flex gap-3">
+            <span class="mt-0.5 inline-block h-2 w-2 flex-none rounded-full" style="background:#facc15;box-shadow:0 0 6px #facc15;"></span>
+            <div><span class="font-bold text-[#facc15]">GOLD · GUARDED</span> — <span class="text-slate-300">{config.thresholds!.gold}</span></div>
+          </li>
+          <li class="flex gap-3">
+            <span class="mt-0.5 inline-block h-2 w-2 flex-none rounded-full" style="background:#f472b6;box-shadow:0 0 6px #f472b6;"></span>
+            <div><span class="font-bold text-[#f472b6]">MAGENTA · CRITICAL</span> — <span class="text-slate-300">{config.thresholds!.magenta}</span></div>
+          </li>
+        </ul>
+      </section>
+    )}
+
+    {hasPivotSwitch ? (
+      <section aria-label="Contextual pivot" class="mb-8">
+        <PivotSwitch client:load critical={pvCritical!} stable={pvStable!} fallback={pvFallback!} />
+      </section>
+    ) : hasPivot && (
+      <section aria-label="Pivot" class="mb-8">
+        <a href={toolHref(pivotTool!)} class="block rounded-lg border border-brand-500 bg-brand-50 p-4 no-underline hover:border-brand-700 hover:bg-brand-100">
+          <div class="text-xs uppercase tracking-widest text-brand-700">▸ Pivot</div>
+          <div class="mt-1 text-sm text-slate-700">{config.pivotLink!.note}</div>
+          <div class="mt-2 text-base font-semibold text-brand-700">{pivotTool!.h1} →</div>
+        </a>
+      </section>
+    )}
+
     <AdSlot slot="below-tool" />
 
     {allRelated.length > 0 && (
@@ -182,3 +262,49 @@ const hasWhenToUse = whenToUseResolved.length > 0;
     {hasFaq && <FAQ items={config.faq} />}
   </article>
 </BaseLayout>
+
+<style is:global>
+  @media print {
+    nav, header, footer,
+    aside, [role="banner"], [role="navigation"],
+    .no-print, [data-ad-slot],
+    iframe {
+      display: none !important;
+    }
+    html, body {
+      background: #ffffff !important;
+      color: #000000 !important;
+      font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace !important;
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+    article { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+    a { color: #000 !important; text-decoration: underline; }
+    a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #555; }
+    h1, h2, h3, h4 { color: #000 !important; page-break-after: avoid; }
+    h1 { font-size: 16pt; border-bottom: 2px solid #000; padding-bottom: 4pt; }
+    h2 { font-size: 13pt; border-bottom: 1px solid #000; padding-bottom: 2pt; margin-top: 18pt; }
+    h3 { font-size: 11pt; }
+    pre, code { background: #f4f4f4 !important; color: #000 !important; border: 1px solid #000; padding: 4pt; font-size: 9pt; }
+    section[aria-label="Deterministic Formula"],
+    section[aria-label="Logical Gates"] {
+      page-break-before: auto;
+      page-break-inside: avoid;
+      border: 2px solid #000 !important;
+      background: #fff !important;
+      padding: 8pt;
+      margin: 10pt 0;
+    }
+    [data-live-metric] {
+      color: #000 !important;
+      border-bottom: 1px dashed #000 !important;
+      font-weight: 700;
+    }
+    .grid { display: block !important; }
+    .grid > * { margin-bottom: 6pt; }
+    button, input, select, textarea, .pivot-switch, [role="button"] { display: none !important; }
+    ul, ol { padding-left: 14pt; }
+    li { page-break-inside: avoid; }
+    @page { margin: 14mm 14mm 18mm 14mm; }
+  }
+</style>

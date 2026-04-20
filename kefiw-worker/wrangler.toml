@@ -1,0 +1,14 @@
+name = "kefiw-worker"
+main = "src/index.ts"
+compatibility_date = "2026-04-19"
+account_id = "79f62ffec161faf33ffb7ca0bde5eac7"
+
+# D1 binding — replace database_id with the ID from dash.cloudflare.com → D1
+[[d1_databases]]
+binding = "DB"
+database_name = "kefiw-telemetry"
+database_id = "72b319c3-7f4a-47b7-848a-027573804c0e"
+
+# CORS origins that may hit the Worker (expand when custom domain goes live)
+[vars]
+ALLOWED_ORIGINS = "https://kefiw.pages.dev,http://localhost:4321"

@@ -1,0 +1,131 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import FAQ from '~/components/FAQ.astro';
+import ToolCard from '~/components/ToolCard.astro';
+import AdSlot from '~/components/AdSlot.astro';
+import { TOOLS_BY_ID } from '~/data/tools';
+import { contentPageById, contentHref, type ContentPageConfig } from '~/data/content-pages';
+import {
+  DECISION_CLUSTERS,
+  type DecisionCluster,
+} from '~/data/decision-clusters';
+
+export async function getStaticPaths() {
+  return DECISION_CLUSTERS.map((cluster) => ({
+    params: { slug: cluster.slug },
+    props: { cluster },
+  }));
+}
+
+interface Props { cluster: DecisionCluster; }
+const { cluster } = Astro.props;
+const canonical = `/decisions/clusters/${cluster.slug}/`;
+
+const tools = cluster.toolIds
+  .map((id) => TOOLS_BY_ID[id])
+  .filter((t) => t && !t.comingSoon);
+
+const supports: ContentPageConfig[] = cluster.supportIds
+  .map((id) => contentPageById(id))
+  .filter((p): p is ContentPageConfig => !!p);
+
+const otherClusters = DECISION_CLUSTERS.filter((c) => c.slug !== cluster.slug);
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/decisions/', label: 'Decisions' },
+  { href: canonical, label: cluster.h1 },
+];
+
+const hubJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: cluster.h1,
+  description: cluster.description,
+  mainEntityOfPage: canonical,
+};
+---
+
+<BaseLayout
+  title={cluster.title}
+  description={cluster.description}
+  canonical={canonical}
+  keywords={cluster.keywords}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(hubJsonLd)} />
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+        Decision Cluster {cluster.letter} — {cluster.pillar}
+      </p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{cluster.h1}</h1>
+      <p class="mt-2 text-lg text-slate-700">{cluster.subhead}</p>
+      <p class="mt-3 text-slate-600">{cluster.intro}</p>
+    </header>
+
+    {cluster.startHere.length > 0 && (
+      <section aria-label="Start here" class="mb-8 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+        <h2 class="mb-3 text-lg font-semibold text-emerald-900">Start here</h2>
+        <ul class="space-y-2">
+          {cluster.startHere.map((link) => (
+            <li>
+              <a href={link.href} class="font-semibold text-emerald-800 hover:underline">{link.label}</a>
+              {link.note && <span class="text-sm text-slate-700"> — {link.note}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <AdSlot slot="below-intro" />
+
+    {tools.length > 0 && (
+      <section aria-label="Tools in this cluster" class="mb-10">
+        <h2 class="mb-3 text-xl font-semibold">Tools in this cluster</h2>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {tools.map((t) => <ToolCard tool={t!} />)}
+        </div>
+      </section>
+    )}
+
+    {supports.length > 0 && (
+      <section aria-label="Curated guides" class="mb-10">
+        <h2 class="mb-3 text-xl font-semibold">Curated guides</h2>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {supports.map((p) => (
+            <li>
+              <a href={contentHref(p)} class="block rounded-md border border-slate-200 p-3 hover:border-emerald-500 hover:bg-emerald-50">
+                <div class="text-sm font-semibold text-slate-900">{p.h1}</div>
+                {p.subhead && <div class="mt-0.5 text-xs text-slate-600">{p.subhead}</div>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <AdSlot slot="below-tool" />
+
+    {otherClusters.length > 0 && (
+      <section aria-label="Other decision clusters" class="mt-10">
+        <h2 class="mb-3 text-xl font-semibold">Other decision clusters</h2>
+        <ul class="grid gap-3 sm:grid-cols-2">
+          {otherClusters.map((rc) => (
+            <li>
+              <a href={`/decisions/clusters/${rc.slug}/`} class="block rounded-md border border-slate-200 p-3 hover:border-emerald-500 hover:bg-emerald-50">
+                <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Cluster {rc.letter} — {rc.pillar}</div>
+                <div class="mt-1 text-sm font-semibold text-slate-900">{rc.h1}</div>
+                <div class="mt-0.5 text-xs text-slate-600">{rc.subhead}</div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <FAQ items={cluster.faq} />
+  </article>
+</BaseLayout>

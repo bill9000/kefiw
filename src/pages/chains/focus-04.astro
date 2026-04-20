@@ -1,0 +1,118 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import PipelineStage from '~/components/pipeline/PipelineStage.astro';
+import PipelineConnector from '~/components/pipeline/PipelineConnector.tsx';
+import PipelineReset from '~/components/pipeline/PipelineReset.tsx';
+import TaskSwitchingTax from '~/components/tools/TaskSwitchingTax.tsx';
+import DeepWorkCapacity from '~/components/tools/DeepWorkCapacity.tsx';
+import DecisionFatigue from '~/components/tools/DecisionFatigue.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/chains/', label: 'Chains' },
+  { href: '/chains/focus-04/', label: 'FOCUS-04' },
+];
+
+const hoursFmt = (n: number) => `${n.toFixed(2)}h`;
+const pctFmt = (n: number) => `${n.toFixed(1)}%`;
+---
+<BaseLayout
+  title="FOCUS-04 — Cognitive Repair Day | Kefiw"
+  description="Cognitive triage pipeline: measure context-switch tax, project focus decay, then check willpower reserves. Three closed-form models, connected."
+  canonical="/chains/focus-04/"
+  keywords={['cognitive repair day', 'focus calculator chain', 'task switching calculator', 'willpower battery']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">
+        Chain · FOCUS-04
+      </p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">
+        Cognitive Repair Day
+      </h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Three cognitive diagnostics wired to one session. How many usable hours survive context-switching;
+        how fast focus decays inside those hours; how much willpower you have left to spend on the work
+        that matters.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        Each stage broadcasts a <span class="font-mono text-cyan-600">Live Variable</span>. A repair day
+        shortens the list — fewer concurrent projects, shorter blocks, fewer trivial choices.
+      </p>
+    </header>
+
+    <section class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+            How the pipeline works
+          </div>
+          <p class="mt-1 max-w-2xl text-sm text-slate-600">
+            Stage 1 prices the CPU overhead of concurrent contexts. Stage 2 runs an exponential decay
+            against a continuous focus block. Stage 3 drains the willpower battery with weighted
+            decisions. The readouts cascade.
+          </p>
+        </div>
+        <PipelineReset client:load />
+      </div>
+    </section>
+
+    <PipelineStage
+      stage={1}
+      totalStages={3}
+      title="Measure the CPU overhead of concurrent projects"
+      summary="Each additional context costs 20% of remaining capacity. Effective usable hours per day pipes downstream."
+      toolHref="/logic/task-switching/"
+      toolTitle="Task Switching Tax"
+    >
+      <TaskSwitchingTax client:load />
+    </PipelineStage>
+
+    <PipelineConnector
+      client:load
+      fieldKey="effective_work_hours"
+      label="effective work hours / day"
+      format={hoursFmt}
+    />
+
+    <PipelineStage
+      stage={2}
+      totalStages={3}
+      title="Project focus decay inside one block"
+      summary="Focus = 100 × e^(−0.01 × min). Half-life ≈ 69 minutes. Quality percent broadcasts downstream as the cognitive signal-to-noise marker."
+      toolHref="/logic/focus-horizon/"
+      toolTitle="Focus Horizon"
+    >
+      <DeepWorkCapacity client:load />
+    </PipelineStage>
+
+    <PipelineConnector
+      client:load
+      fieldKey="focus_quality_pct"
+      label="focus quality"
+      format={pctFmt}
+    />
+
+    <PipelineStage
+      stage={3}
+      totalStages={3}
+      title="Check willpower reserves for the rest of the day"
+      summary="Willpower = 100 − Σ(count × weight). Trivial × 1, moderate × 5, heavy × 10. The remaining charge says whether you should decide or defer."
+      toolHref="/logic/decision-fatigue/"
+      toolTitle="Decision Fatigue"
+    >
+      <DecisionFatigue client:load />
+    </PipelineStage>
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">Why this pipeline exists</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        A single cognitive metric is a mood reading. Three stacked in sequence is a diagnosis. The point
+        of a repair day isn't to be stoic — it's to shrink the inputs so the math comes out different.
+        Change one number and watch the rest fall into line.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

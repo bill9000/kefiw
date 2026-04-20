@@ -1,0 +1,84 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ToolCard from '~/components/ToolCard.astro';
+import FeaturedClusters from '~/components/FeaturedClusters.astro';
+import { CATEGORIES, TOOLS_BY_ID } from '~/data/tools';
+import { clustersBySection } from '~/data/clusters';
+const cat = CATEGORIES.health;
+
+const PILLARS = [
+  {
+    slug: 'biological-maintenance',
+    title: 'I. Biological Maintenance',
+    tagline: 'The fuel floor, the decay curves, the sleep window, the red-flag router.',
+    toolIds: ['metabolic-floor', 'substance-decay', 'rem-sync', 'medical-triage'],
+  },
+  {
+    slug: 'body-composition',
+    title: 'II. Health & Body Composition',
+    tagline: 'Impairment math, chassis density, coolant load, cessation ladder.',
+    toolIds: ['impairment-bac', 'structural-density', 'hydraulic-integrity', 'cessation-ladder'],
+  },
+  {
+    slug: 'structural-output',
+    title: 'III. Structural Output',
+    tagline: '1RM, relative power, heart-rate zones, kinetic expenditure.',
+    toolIds: ['max-load-capacity', 'strength-efficiency', 'heart-rate-zones', 'kinetic-expenditure'],
+  },
+  {
+    slug: 'bio-logistics',
+    title: 'IV. Bio-Chemical Logistics',
+    tagline: 'Fuel split, visceral incline, electrolyte loss, MPS bolus.',
+    toolIds: ['fuel-partition', 'metabolic-incline', 'ion-balance', 'anabolic-trigger'],
+  },
+  {
+    slug: 'environmental-stressors',
+    title: 'V. Environmental Stressors',
+    tagline: 'UV, CO₂, heat, cold — the four atmospheric loads that degrade performance.',
+    toolIds: ['uv-exposure', 'co2-cognitive-tax', 'thermal-failure', 'insulation-logic'],
+  },
+];
+
+const clusterSlugs = clustersBySection('health').map((c) => c.slug);
+---
+<BaseLayout
+  title="Health Calculators — BMR, BAC, 1RM, Hydration, WBGT | Kefiw"
+  description="Deterministic health calculators: BMR/TDEE, caffeine & alcohol half-life, sleep-cycle timing, Brzycki 1RM, Widmark BAC, US Navy body fat, WBGT heat stress, and red-flag triage. Pure formulas, no AI, no ads."
+  canonical="/health/"
+  keywords={['health calculators', 'BMR calculator', 'TDEE calculator', 'BAC calculator', '1RM calculator', 'heart rate zones', 'sleep cycle calculator', 'WBGT heat stress']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/health/', label: cat.title }]} />
+  <header class="container-wide py-6">
+    <h1 class="text-3xl font-bold tracking-tight">Health</h1>
+    <p class="mt-2 max-w-3xl text-slate-600">{cat.blurb}</p>
+    <p class="mt-2 max-w-3xl text-sm text-slate-500">Twenty instruments across five sub-systems. Each one hard-codes a published formula and returns a number. No advice layer, no sponsored products, no account required.</p>
+  </header>
+
+  {PILLARS.map((p) => (
+    <section class="container-wide pt-6">
+      <h2 class="text-xl font-semibold tracking-tight text-slate-900">{p.title}</h2>
+      <p class="mt-1 max-w-3xl text-sm text-slate-600">{p.tagline}</p>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {p.toolIds.map((id) => {
+          const t = TOOLS_BY_ID[id];
+          return t ? <ToolCard tool={t} /> : null;
+        })}
+      </div>
+    </section>
+  ))}
+
+  {clusterSlugs.length > 0 && (
+    <FeaturedClusters
+      slugs={clusterSlugs}
+      title="Health topics"
+      subhead="Curated guides — when to use which tool, and how the numbers interact."
+    />
+  )}
+
+  <section class="container-wide pt-10">
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+      <strong class="text-slate-900">Safety note.</strong> These are deterministic calculators. They don't diagnose, don't store data off-device, and don't replace a physician. BAC estimates are not admissible in any legal proceeding. Triage routing is a red-flag heuristic, not a medical assessment. Numbers degrade in edge cases — trust labs, not models.
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,48 @@
+---
+import LiveMetric from './LiveMetric.tsx';
+
+interface LmSpec {
+  token: string;
+  metric: 'runway_months' | 'survival_efficiency' | 'cognitive_load' | 'willpower_pct';
+  fallback: string;
+  decimals?: number;
+  suffix?: string;
+  prefix?: string;
+}
+
+interface Props {
+  text: string;
+  specs?: LmSpec[];
+}
+
+const { text, specs = [] } = Astro.props;
+
+// Split `text` on any {{lm:<token>}} occurrence while preserving the tokens.
+const TOKEN_RE = /\{\{lm:([a-z_]+)\}\}/g;
+const parts: Array<{ kind: 'text'; value: string } | { kind: 'metric'; spec: LmSpec }> = [];
+let cursor = 0;
+const matches = [...text.matchAll(TOKEN_RE)];
+for (const m of matches) {
+  const start = m.index ?? 0;
+  if (start > cursor) parts.push({ kind: 'text', value: text.slice(cursor, start) });
+  const key = m[1];
+  const spec = specs.find((s) => s.token === key);
+  if (spec) parts.push({ kind: 'metric', spec });
+  else parts.push({ kind: 'text', value: m[0] }); // leave unknown tokens untouched
+  cursor = start + m[0].length;
+}
+if (cursor < text.length) parts.push({ kind: 'text', value: text.slice(cursor) });
+if (parts.length === 0) parts.push({ kind: 'text', value: text });
+---
+{parts.map((p) =>
+  p.kind === 'text'
+    ? p.value
+    : <LiveMetric
+        client:load
+        metric={p.spec.metric}
+        fallback={p.spec.fallback}
+        decimals={p.spec.decimals}
+        suffix={p.spec.suffix}
+        prefix={p.spec.prefix}
+      />
+)}

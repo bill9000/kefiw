@@ -443,6 +443,15 @@ export const ARTICLES_CALC_EVERYDAY: ContentPageConfig[] = [
       { q: 'Should I tip on the pre-tax or post-tax amount?', a: 'Etiquette varies. Tipping on pre-tax is more common among regular diners; tipping on the post-tax "total" is easier because it is the bigger number on the receipt. The difference is usually under $1.' },
       { q: 'How do I handle an automatic gratuity for large parties?', a: 'The restaurant has already added 18% or 20%. You can add more for exceptional service, but you do not compute on top of the gratuity line.' },
     ],
+    thresholds: {
+      cyan: 'Bill under $100, even split — mental math in under 3 seconds.',
+      gold: 'Bill $100-$500 or uneven split — tool saves a minute of arithmetic.',
+      magenta: 'Auto-gratuity applied or 5+ way split — verify you are not tipping twice.',
+    },
+    pivotLink: {
+      toolId: 'percentage-calculator',
+      note: 'Odd percentage or non-standard split? Drop to the general-purpose tool.',
+    },
   },
   {
     id: 'art-ce-tip-working-memory',
@@ -718,5 +727,805 @@ export const ARTICLES_CALC_EVERYDAY: ContentPageConfig[] = [
       { q: 'How do I convert a ratio to a percent?', a: 'Add the parts to get the whole, then divide each part by the whole. 3:2 -> total 5 -> 3/5 = 60% and 2/5 = 40%.' },
       { q: 'When is part-to-part vs part-to-whole the right form?', a: 'Use part-to-part (3:2) for mixing and comparing two quantities. Use part-to-whole (3/5) for probability, percentages, and shares.' },
     ],
+  },
+
+  // =========================================================================
+  // length-converter — primary guide
+  // =========================================================================
+  {
+    id: 'art-cv-length-units-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'length-units-guide',
+    guideCategory: 'Converters',
+    title: 'Length Unit Converter Guide: mm, cm, m, km, in, ft, yd, mi | Kefiw',
+    h1: 'Length Unit Converter Guide',
+    subhead: 'Every common metric and imperial length unit, the exact conversion factors, and the precision rules that keep you out of trouble.',
+    outcomeLine: 'Pick the right length unit and convert without losing significant figures.',
+    description: 'Full length-unit reference: mm, cm, m, km, in, ft, yd, mi. Exact conversion factors, precision notes, and worked examples.',
+    keywords: ['length converter', 'meters to feet', 'cm to inches', 'km to miles', 'length units'],
+    intro: 'Length is the easiest unit family to convert — every pair has a single multiplier — but the numbers only help if you keep the right number of decimal places. This guide lists the common metric and imperial units, the exact factors between them, and the rounding habits that stop small errors from compounding.',
+    keyPoints: [
+      'Metric ladder: 1 km = 1,000 m = 100,000 cm = 1,000,000 mm. Powers of ten everywhere.',
+      'Imperial: 1 ft = 12 in, 1 yd = 3 ft = 36 in, 1 mi = 1,760 yd = 5,280 ft.',
+      'Cross-system anchors: 1 in = 2.54 cm (exact, by international definition), 1 ft = 0.3048 m (exact), 1 mi = 1.609344 km (exact).',
+      'Fast mental conversion: metres to feet, multiply by 3.28 (tight for under ~50 m). Km to miles, multiply by 0.621; miles to km, multiply by 1.609.',
+      'Precision rule: carry one more significant figure through the conversion than you report. Six decimals is the tool default and is enough for every everyday use.',
+      'Common failure: truncating 2.54 to 2.5 for cm↔in — a 1.6% bias that shows up immediately on anything over a metre.',
+    ],
+    howTo: [
+      'Identify the source and target unit families (metric vs imperial, length only).',
+      'Enter the source value in the converter.',
+      'Pick source and target units from the dropdowns.',
+      'Read the result — decimals default to six places, tighten or widen as needed.',
+      'Sanity-check against a memorised anchor (1 m ≈ 3.28 ft, 1 mi ≈ 1.609 km).',
+    ],
+    examples: [
+      { title: '5 ft 9 in to cm', body: '5 ft × 30.48 + 9 × 2.54 = 152.4 + 22.86 = 175.26 cm. Typical adult height in metric.' },
+      { title: '26.2 mi to km', body: '26.2 × 1.609344 = 42.165 km — marathon distance.' },
+      { title: '1,200 mm to inches', body: '1,200 / 25.4 = 47.244 in (since 1 in = 25.4 mm exactly). A standard door height.' },
+    ],
+    whenToUse: [
+      { toolId: 'length-converter', note: 'Dimensions, heights, distances, cable runs, fabric, lumber — any one-dimensional length.' },
+    ],
+    faq: [
+      { q: 'Why is 1 inch defined as exactly 2.54 cm?', a: 'The international yard agreement (1959) pinned 1 yd = 0.9144 m exactly, which makes 1 in = 2.54 cm exactly. Before that, US and UK inches drifted by about 2 parts per million.' },
+      { q: 'Which anchor should I memorise?', a: 'Pick three: 1 m ≈ 3.281 ft, 1 km ≈ 0.621 mi, 1 in = 2.54 cm. Everything else builds from those.' },
+      { q: 'Does the tool handle mixed units like 5\'9"?', a: 'Enter each piece and add — feet-to-cm plus inches-to-cm — then sum. The converter itself works on one pair at a time.' },
+    ],
+    thresholds: {
+      cyan: 'Everyday length (under 100 m or 300 ft) — four decimals is plenty.',
+      gold: 'Construction, fabric, or print layout — six decimals, check the anchor before committing.',
+      magenta: 'Survey, engineering, or scientific work — keep the exact factor (2.54, 0.3048) and round only at the end.',
+    },
+    pivotLink: {
+      toolId: 'area-converter',
+      note: 'Going from length to area? The factor squares — do not just multiply by the length ratio.',
+    },
+    relatedIds: ['length-converter', 'area-converter', 'volume-converter'],
+    clusterId: 'units',
+  },
+
+  // =========================================================================
+  // weight-converter — primary guide
+  // =========================================================================
+  {
+    id: 'art-cv-weight-units-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'weight-units-guide',
+    guideCategory: 'Converters',
+    title: 'Weight Unit Converter Guide: g, kg, oz, lb, st, ton | Kefiw',
+    h1: 'Weight Unit Converter Guide',
+    subhead: 'Mass vs weight, the metric–imperial bridge, and the three ton definitions you need to keep straight.',
+    outcomeLine: 'Convert between every common mass unit and know which "ton" you are actually using.',
+    description: 'Complete weight-unit reference: grams, kilograms, ounces, pounds, stones, tons. Conversion factors, mass-vs-weight distinction, and ton disambiguation.',
+    keywords: ['weight converter', 'kg to lbs', 'pounds to kilograms', 'ounces to grams', 'stone conversion'],
+    intro: 'Weight conversion is easy until you hit "ton" — which has three different values depending on where you are — or until someone asks whether you mean mass or force. This guide covers the common units, the exact bridges, and the two places the naming trips people up.',
+    keyPoints: [
+      'Metric: 1 kg = 1,000 g. 1 tonne (metric ton) = 1,000 kg.',
+      'Imperial: 1 lb = 16 oz. 1 stone = 14 lb. 1 short ton (US) = 2,000 lb. 1 long ton (UK) = 2,240 lb.',
+      'Cross-system anchors: 1 lb = 0.45359237 kg exactly. 1 oz = 28.349523125 g exactly. 1 kg ≈ 2.2046 lb.',
+      'Three tons: metric tonne 1,000 kg = 2,204.62 lb; US short ton 2,000 lb = 907.185 kg; UK long ton 2,240 lb = 1,016.047 kg. The three differ by up to 12%.',
+      'Mass vs weight: the tool reports mass (kg, lb). Weight (force) is mass × g, measured in newtons. Day-to-day the words are interchangeable; in physics they are not.',
+      'Stone is alive in the UK and Ireland for body weight. 11 st 3 lb is 157 lb or 71.21 kg.',
+    ],
+    howTo: [
+      'Enter the mass value in the source unit.',
+      'Pick the target unit — watch for tonne vs short ton vs long ton.',
+      'Read the result at six decimals; round to sensible places for the context (kg body weight: one decimal; shipping: whole numbers).',
+      'If you see "ton" in a spec sheet, confirm which ton before converting.',
+    ],
+    examples: [
+      { title: '180 lb to kg', body: '180 × 0.45359237 = 81.647 kg. Typical adult weight.' },
+      { title: '11 st 3 lb to kg', body: '11 × 14 + 3 = 157 lb. 157 × 0.45359237 = 71.21 kg.' },
+      { title: '2 short tons to metric tonnes', body: '2 × 907.185 / 1,000 = 1.814 tonnes — a US truck of gravel weighs about 1.8 metric tonnes.' },
+    ],
+    whenToUse: [
+      { toolId: 'weight-converter', note: 'Body weight, shipping, cooking ingredients, fitness plates, parcel mass — any scalar mass conversion.' },
+    ],
+    faq: [
+      { q: 'Are mass and weight actually different?', a: 'Yes. Mass is the amount of matter (kg, lb). Weight is the force gravity exerts on that mass (newtons). On Earth the distinction rarely matters; on the Moon a 70 kg person still has 70 kg of mass but weighs only about one-sixth as much.' },
+      { q: 'Which ton is the default in US shipping?', a: 'US freight uses the short ton (2,000 lb) unless the label says "metric tonne" or "MT." International shipping almost always means the metric tonne.' },
+      { q: 'Why is 1 lb defined in terms of kg?', a: 'The international pound was redefined as exactly 0.45359237 kg in 1959 so every English-speaking country uses the same value. The kilogram is the primary SI unit.' },
+    ],
+    thresholds: {
+      cyan: 'Cooking, fitness, body weight — one or two decimals is enough.',
+      gold: 'Shipping, commercial weighing — keep four decimals and name the ton explicitly.',
+      magenta: 'Metrology, calibration, scientific mass measurement — carry the full 0.45359237 factor and round only at report time.',
+    },
+    pivotLink: {
+      toolId: 'volume-converter',
+      note: 'Selling by weight and volume? Run both — density ties them together.',
+    },
+    relatedIds: ['weight-converter', 'length-converter', 'volume-converter'],
+    clusterId: 'units',
+  },
+
+  // =========================================================================
+  // temperature-converter — primary guide
+  // =========================================================================
+  {
+    id: 'art-cv-temperature-scale-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'temperature-scale-guide',
+    guideCategory: 'Converters',
+    title: 'Temperature Scale Guide: Celsius, Fahrenheit, Kelvin | Kefiw',
+    h1: 'Temperature Scale Guide',
+    subhead: 'Why temperature is the one "unit" family that breaks the multiply-by-a-factor rule — and the anchors that make every conversion easy.',
+    outcomeLine: 'Convert between °C, °F, and K without forgetting the offset that makes temperature special.',
+    description: 'Complete temperature scale reference: Celsius, Fahrenheit, Kelvin. Formulas, boiling and freezing anchors, why offsets matter, and worked examples.',
+    keywords: ['temperature converter', 'celsius to fahrenheit', 'kelvin to celsius', 'f to c formula', 'temperature scales'],
+    intro: 'Temperature does not scale like length or mass. Because each scale has a different zero point, you cannot just multiply by a factor — you have to shift as well. Once you have three anchors in your head (freezing, room temp, boiling), every everyday conversion becomes a mental check.',
+    keyPoints: [
+      'Celsius → Fahrenheit: °F = °C × 9/5 + 32.',
+      'Fahrenheit → Celsius: °C = (°F − 32) × 5/9.',
+      'Celsius → Kelvin: K = °C + 273.15 (exact). Kelvin has no degree sign; it is an absolute scale starting at absolute zero.',
+      'Three memorisation anchors: 0 °C = 32 °F = 273.15 K (water freezes). 100 °C = 212 °F = 373.15 K (water boils at sea level). 20 °C ≈ 68 °F (room temperature).',
+      'The offset matters: a 10 °C difference equals an 18 °F difference, but 10 °C itself equals 50 °F — not 18 °F. For temperature differences alone, multiply by 9/5 only (no +32).',
+      'Rankine is Fahrenheit-on-an-absolute-scale: °R = °F + 459.67. Rare outside US engineering thermodynamics.',
+    ],
+    howTo: [
+      'Pick source and target scales.',
+      'If converting °C ↔ °F, apply the full formula (multiply AND shift).',
+      'If converting °C ↔ K, add or subtract 273.15.',
+      'For a temperature difference (ΔT), use the ratio only: 9/5 for °C to °F, 1 for °C to K.',
+      'Cross-check against the freezing/boiling anchors — any answer wildly outside expected range usually means the offset was dropped.',
+    ],
+    examples: [
+      { title: 'Oven at 200 °C to °F', body: '200 × 9/5 + 32 = 360 + 32 = 392 °F. Typical bread-baking temperature.' },
+      { title: '−40 °F to °C', body: '(−40 − 32) × 5/9 = −72 × 5/9 = −40 °C. The one point where both scales agree.' },
+      { title: '25 °C to kelvin', body: '25 + 273.15 = 298.15 K. "Standard temperature" in chemistry is 298.15 K.' },
+    ],
+    whenToUse: [
+      { toolId: 'temperature-converter', note: 'Cooking from an international recipe, calibrating thermostats, weather reports, scientific readings, oven settings.' },
+    ],
+    faq: [
+      { q: 'Why does temperature use an offset when other units do not?', a: 'Because the three scales were defined independently with different zero points — Celsius at water freezing, Fahrenheit at a brine freezing point, Kelvin at absolute zero. Length and mass all share the same zero (no length, no mass), so a pure multiplier works.' },
+      { q: 'Do I ever need to convert a temperature "difference" differently?', a: 'Yes. For a ΔT value (like "the oven rose by 30 °C"), skip the +32. 30 °C change = 54 °F change = 30 K change — no offset needed for differences.' },
+      { q: 'Is Kelvin worth learning for non-scientists?', a: 'Mostly no. It matters for physics, chemistry, and astronomy. For cooking, weather, and everyday temperature, Celsius and Fahrenheit are all you need.' },
+    ],
+    thresholds: {
+      cyan: 'Weather, cooking, thermostat — mental math from anchors is usually fine.',
+      gold: 'Medical (body temp), industrial process control — keep one decimal, use the exact formula.',
+      magenta: 'Scientific work, cryogenics, combustion — use Kelvin or Rankine on an absolute scale, carry two decimals through.',
+    },
+    pivotLink: {
+      toolId: 'volume-converter',
+      note: 'Recipe from another country? Convert temperature first, then oven-tray volumes.',
+    },
+    relatedIds: ['temperature-converter', 'length-converter', 'weight-converter'],
+    clusterId: 'units',
+  },
+
+  // =========================================================================
+  // area-converter — primary guide
+  // =========================================================================
+  {
+    id: 'art-cv-area-units-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'area-units-guide',
+    guideCategory: 'Converters',
+    title: 'Area Unit Converter Guide: m², ft², acre, hectare | Kefiw',
+    h1: 'Area Unit Converter Guide',
+    subhead: 'Why 1 m² is not 100 cm² — and every other squaring trap that costs people money on construction and land deals.',
+    outcomeLine: 'Convert area without falling into the squaring mistake that inflates errors by 10,000× or more.',
+    description: 'Area unit reference: m², ft², acre, hectare. Squaring pitfalls (1 m² ≠ 100 cm²), conversion factors, and real estate / construction examples.',
+    keywords: ['area converter', 'sq ft to sq m', 'acres to hectares', 'square meters', 'area units'],
+    intro: 'Area is the first unit family where a seemingly innocent mistake — forgetting to square the conversion factor — multiplies your error by a huge amount. 1 m is 100 cm, but 1 m² is 10,000 cm², not 100. This guide covers the everyday units and the squaring rule that keeps you from over- or under-estimating space by orders of magnitude.',
+    keyPoints: [
+      'Metric: 1 m² = 10,000 cm². 1 hectare = 10,000 m² = 0.01 km². 1 km² = 100 hectares.',
+      'Imperial: 1 ft² = 144 in². 1 yd² = 9 ft². 1 acre = 43,560 ft² = 4,840 yd².',
+      'Cross-system: 1 m² = 10.7639 ft². 1 acre = 4,046.86 m² = 0.404686 hectares. 1 hectare = 2.47105 acres.',
+      'The squaring rule: when you convert length, multiply by the factor. When you convert area, multiply by the factor SQUARED. 3 ft × 3 ft = 9 ft², not 3 × 0.3048 m².',
+      'Real-estate context: a 1,500 ft² house is 139.4 m². A quarter-acre lot is 1,011.7 m² or about 10,890 ft².',
+      'Common failure: "the room is 4 m × 5 m = 20 m² = 200 ft²." Wrong — 20 m² × 10.7639 = 215.3 ft². The "100 cm = 1 m, so 100 × 20 = 2,000" instinct is the trap.',
+    ],
+    howTo: [
+      'Enter the area value in the source unit.',
+      'Pick source and target units.',
+      'The converter applies the squared factor automatically — you do not need to square anything yourself.',
+      'If you are converting by hand, always square the length factor (2.54² = 6.4516 for cm² ↔ in²).',
+      'Cross-check: a room that feels "about 200 ft²" should land near 18.6 m², not 2 m² or 2,000 m².',
+    ],
+    examples: [
+      { title: '1,500 ft² to m²', body: '1,500 / 10.7639 = 139.35 m². A medium US house.' },
+      { title: '2 hectares to acres', body: '2 × 2.47105 = 4.942 acres. A small farm plot.' },
+      { title: '120 cm × 60 cm desk surface in m² and ft²', body: '120 × 60 = 7,200 cm² = 0.72 m² = 7.75 ft². Not 72 m².' },
+    ],
+    whenToUse: [
+      { toolId: 'area-converter', note: 'Real estate, flooring, roofing, land surveys, paint coverage, agricultural plots.' },
+    ],
+    faq: [
+      { q: 'Why does 1 m² equal 10,000 cm² and not 100?', a: 'Because you are covering a 100 cm × 100 cm square, which is 100 × 100 = 10,000 cm². Length scales linearly; area scales quadratically. Forgetting this is the #1 area conversion error.' },
+      { q: 'Is a US acre and a UK acre the same?', a: 'Yes, within 4 parts in 10 million — practically identical. The US survey acre differs from the international acre by about 0.0000004%, irrelevant for anything short of continental-scale surveys.' },
+      { q: 'How do I estimate acres at a glance?', a: 'One acre is roughly a football field without the end zones, or 208 ft × 208 ft. If it "fits in a football field", it is under an acre.' },
+    ],
+    thresholds: {
+      cyan: 'Rooms, gardens, paint coverage (under ~200 m²) — one decimal place.',
+      gold: 'Real estate listings, farm plots — two decimals, name the unit explicitly (ft² vs yd² vs m²).',
+      magenta: 'Survey, legal land description — use the exact factor (4,046.8564224 m²/acre) and square to full precision.',
+    },
+    pivotLink: {
+      toolId: 'length-converter',
+      note: 'Got area; need the side length for fencing or flooring? Use the length tool — do not take the square root of a converted area.',
+    },
+    relatedIds: ['area-converter', 'length-converter', 'volume-converter'],
+    clusterId: 'units',
+  },
+
+  // =========================================================================
+  // volume-converter — primary guide
+  // =========================================================================
+  {
+    id: 'art-cv-volume-units-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'volume-units-guide',
+    guideCategory: 'Converters',
+    title: 'Volume Unit Converter Guide: L, mL, gal, qt, pt, cup, fl oz | Kefiw',
+    h1: 'Volume Unit Converter Guide',
+    subhead: 'Every kitchen and shipping volume unit — and the crucial US vs UK gallon difference that ruins international recipes.',
+    outcomeLine: 'Convert volumes without scrambling a recipe or mis-quoting a shipping volume.',
+    description: 'Complete volume reference: liters, milliliters, gallons, quarts, pints, cups, fluid ounces. US vs UK gallon divergence and cubing pitfalls.',
+    keywords: ['volume converter', 'liters to gallons', 'ml to oz', 'us gallon vs uk gallon', 'cups to ml'],
+    intro: 'Volume is where "US vs UK" bites hardest: a US gallon is 3.785 L and a UK (imperial) gallon is 4.546 L — a 20% difference on the same word. This guide lists every common volume unit, the exact factors, and the places that the US/UK split and the cubing rule will bite you.',
+    keyPoints: [
+      'Metric: 1 L = 1,000 mL = 1,000 cm³ = 0.001 m³.',
+      'US customary: 1 US gal = 4 qt = 8 pt = 16 cups = 128 fl oz = 3.785411784 L (exact).',
+      'UK (imperial): 1 imp gal = 4 qt = 8 pt = 160 fl oz = 4.54609 L (exact). Imperial pint is 20 fl oz, not 16.',
+      'Critical gotcha: 1 US gal ≈ 3.785 L; 1 UK gal ≈ 4.546 L. About 20% difference. Always confirm which gallon.',
+      'Cooking: 1 US cup = 236.588 mL, 1 metric cup = 250 mL, 1 UK cup ≈ 284 mL. Recipes rarely state which one. If unsure, metric 250 mL is the safe bet for UK/Australian/NZ recipes; 240 mL rounds for US.',
+      'Cubing rule: for L ↔ cubic units, the length factor is cubed. 1 inch = 2.54 cm, so 1 in³ = 2.54³ = 16.387 cm³.',
+    ],
+    howTo: [
+      'Identify the system behind the source (US vs UK vs metric).',
+      'Enter the value and pick source and target units. The converter distinguishes US gal from UK gal.',
+      'For recipe conversion, prefer metric for precision (mL or g); volume-to-weight via ingredient density gives cleaner answers.',
+      'For shipping quotes, confirm which gallon is in the contract.',
+      'If the source omits "US" or "UK", use the default for the country of origin.',
+    ],
+    examples: [
+      { title: '1 US gal to L', body: '1 × 3.785412 = 3.785 L. A US milk jug.' },
+      { title: '1 UK pt to mL', body: '1 × 568.261 = 568 mL. The British pint (larger than the US pint of 473 mL).' },
+      { title: '500 mL to US fl oz', body: '500 / 29.5735 = 16.907 fl oz. A typical bottled drink.' },
+    ],
+    whenToUse: [
+      { toolId: 'volume-converter', note: 'Cooking (cups, mL, tsp, tbsp), fuel (US vs UK gal), shipping (cubic metres vs cubic feet), beverages (pints, fl oz).' },
+    ],
+    faq: [
+      { q: 'Why is a US gallon smaller than a UK gallon?', a: 'Historical divergence. The US kept the older "Queen Anne" gallon (3.785 L); the UK redefined the imperial gallon in 1824 based on 10 lb of water (4.546 L). Neither is "correct" — they are genuinely different units that share a name.' },
+      { q: 'Should I use US cups or metric cups for online recipes?', a: 'Default US (240 mL) for US sites, metric (250 mL) for UK/AUS/NZ sites, metric (250 mL) for generic European sites. If the outcome matters, weight in grams beats any volume.' },
+      { q: 'Are fluid ounces the same as weight ounces?', a: 'No. A fluid ounce is a volume (29.57 mL US, 28.41 mL UK). A weight ounce is a mass (28.35 g). For water, 1 fl oz of water weighs almost exactly 1 weight oz — coincidence that only holds for water.' },
+    ],
+    thresholds: {
+      cyan: 'Everyday cooking or drinking volumes — round to sensible kitchen amounts.',
+      gold: 'Baking, brewing, commercial shipping — state US vs UK, hold three decimals.',
+      magenta: 'Pharmaceutical dosing, calibration, scientific work — use exact factors (3.785411784 L/US gal), round only at the end.',
+    },
+    pivotLink: {
+      toolId: 'weight-converter',
+      note: 'Liquid volume known? Convert to mass via density for shipping or baking — the two are not interchangeable.',
+    },
+    relatedIds: ['volume-converter', 'weight-converter', 'length-converter'],
+    clusterId: 'units',
+  },
+
+  // =========================================================================
+  // speed-converter — primary guide
+  // =========================================================================
+  {
+    id: 'art-cv-speed-units-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'speed-units-guide',
+    guideCategory: 'Converters',
+    title: 'Speed Unit Converter Guide: mph, km/h, m/s, knots | Kefiw',
+    h1: 'Speed Unit Converter Guide',
+    subhead: 'The four common speed units, the anchor values worth memorising, and the nautical-mile quirk that defines the knot.',
+    outcomeLine: 'Convert between mph, km/h, m/s, and knots without fumbling for a calculator mid-conversation.',
+    description: 'Speed conversion reference: mph, km/h, m/s, knots, feet per second. Exact factors, speed anchors, and where each unit dominates.',
+    keywords: ['speed converter', 'kph to mph', 'knots to mph', 'm/s to km/h', 'speed units'],
+    intro: 'Speed lives in four common units: km/h for cars in most of the world, mph for cars in the US and UK, m/s for physics, and knots for anything at sea or in the air. All four are connected by a handful of exact factors — and a few mental anchors that make ballpark estimates effortless.',
+    keyPoints: [
+      'Exact bridges: 1 mph = 1.609344 km/h. 1 km/h = 0.277778 m/s. 1 m/s = 3.6 km/h. 1 knot = 1.852 km/h = 1.15078 mph (from the nautical mile).',
+      'A knot is 1 nautical mile per hour. The nautical mile (1,852 m) is defined as one minute of latitude on Earth — purely geometric.',
+      'Mental anchors worth memorising: 60 mph = 96.6 km/h ≈ 100 km/h. 100 km/h = 62.1 mph. 10 m/s = 36 km/h = 22.4 mph.',
+      'Running pace: 10 km/h = 6 min/km = 9 min 40 s/mile. Marathon world record ~21 km/h.',
+      'Sound: ~343 m/s at 20 °C = ~1,235 km/h = ~767 mph = ~667 knots. Mach 1.',
+      'Common failure: forgetting that a speed limit and a cruise reading can be in different units on the same vehicle (US dashboards often show both mph and km/h — check).',
+    ],
+    howTo: [
+      'Enter the source speed value.',
+      'Pick source and target units.',
+      'Cross-check against a mental anchor before trusting the reading.',
+      'For navigation (air/sea), prefer knots; for road travel, prefer the local unit (mph US/UK, km/h elsewhere).',
+      'For physics, use m/s — all the SI formulas assume it.',
+    ],
+    examples: [
+      { title: '100 km/h to mph', body: '100 / 1.609344 = 62.14 mph. A European highway cruising speed.' },
+      { title: '30 knots to km/h', body: '30 × 1.852 = 55.56 km/h. A fast cruising powerboat.' },
+      { title: 'Usain Bolt 100 m in 9.58 s', body: '100 / 9.58 = 10.44 m/s = 37.58 km/h = 23.35 mph (peak speed is higher, about 12.3 m/s).' },
+    ],
+    whenToUse: [
+      { toolId: 'speed-converter', note: 'Cruise-control readings, running pace, wind speed, boat speed, aircraft speed, physics homework.' },
+    ],
+    faq: [
+      { q: 'Why do ships and planes use knots?', a: 'Because one knot equals one nautical mile per hour, and one nautical mile equals one minute of latitude. Charts are graduated in degrees/minutes of arc — knots make distance and direction math line up cleanly.' },
+      { q: 'What is the easiest mental conversion between mph and km/h?', a: 'Multiply km/h by 0.6 for rough mph (it is really 0.621). For the reverse, multiply mph by 1.6 (really 1.609). Good enough for highway signs.' },
+      { q: 'Is m/s used anywhere outside physics class?', a: 'Yes — aviation wind reports, meteorology, athletics (100-metre peak speed), and most engineering. SI favours m/s as the base unit.' },
+    ],
+    thresholds: {
+      cyan: 'Everyday driving, running, cycling — one decimal is enough.',
+      gold: 'Aviation, marine, motorsports — carry full factors (1.609344, 1.852), one or two decimals.',
+      magenta: 'Physics, engineering, ballistics — use m/s, keep full precision until the final report.',
+    },
+    pivotLink: {
+      toolId: 'time-converter',
+      note: 'Speed is set. Need travel time over a known distance? Convert units cleanly and divide.',
+    },
+    relatedIds: ['speed-converter', 'length-converter', 'time-converter'],
+    clusterId: 'units',
+  },
+
+  // =========================================================================
+  // time-converter — primary guide
+  // =========================================================================
+  {
+    id: 'art-cv-time-units-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'time-units-guide',
+    guideCategory: 'Converters',
+    title: 'Time Unit Converter Guide: Seconds to Years | Kefiw',
+    h1: 'Time Unit Converter Guide',
+    subhead: 'All the standard time units, and the non-integer ratios (months, years) that make date math messier than it looks.',
+    outcomeLine: 'Convert durations cleanly and know when to switch from a unit converter to a date-difference tool.',
+    description: 'Time conversion reference: seconds, minutes, hours, days, weeks, months, years. Non-integer month/year ratios and when to use a date tool instead.',
+    keywords: ['time converter', 'seconds to minutes', 'days to hours', 'weeks to years', 'time units'],
+    intro: 'Seconds, minutes, hours, days, weeks — all exact integer ratios. Months and years are where it gets fuzzy: there is no whole number of days in a month, and an average year is 365.25 days. A plain time-unit converter is correct for durations, but for actual dates you need calendar math.',
+    keyPoints: [
+      'Exact ratios: 1 min = 60 s. 1 hr = 60 min = 3,600 s. 1 day = 24 hr = 1,440 min = 86,400 s. 1 week = 7 days = 604,800 s.',
+      'Average month: 30.4375 days (365.25 / 12). The converter uses this for durations — do NOT use it to add "one month" to a specific date.',
+      'Average year: 365.25 days (Julian). Actual calendar years alternate between 365 and 366 (leap years, every 4 years with the 100/400 exception).',
+      'A "month" and a "year" in the converter are statistical averages; real calendar math needs a date-difference calculator.',
+      'Typical confusion: "30 days" ≠ "1 month" for precise dating. 30 days after Jan 1 is Jan 31; one month after Jan 1 is Feb 1. The converter will not tell you which you need.',
+      'Useful memorised durations: 1 billion seconds ≈ 31.7 years. 1 million seconds ≈ 11.6 days. 1 year ≈ 3.1536 × 10⁷ s.',
+    ],
+    howTo: [
+      'Enter a duration value.',
+      'Pick source and target units.',
+      'If the source or target is "month" or "year," the converter uses average values (30.4375 days / 365.25 days).',
+      'For specific calendar dates — "how many days until my deadline" — switch to the date-difference calculator.',
+      'For wall-clock timing or shift work, use the hours calculator.',
+    ],
+    examples: [
+      { title: '1 day in seconds', body: '24 × 60 × 60 = 86,400 s. The number every developer forgets to use exactly.' },
+      { title: '3 years in days (statistical)', body: '3 × 365.25 = 1,095.75 days. For a specific 3-year span, use actual calendar dates.' },
+      { title: '10,000 hours to years', body: '10,000 / (24 × 365.25) = 1.14 years. Popularised as the mastery threshold — roughly 3.5 years at 8 hr/day.' },
+    ],
+    whenToUse: [
+      { toolId: 'time-converter', note: 'Durations, timers, estimating total hours in a year, physics homework, pace calculations.' },
+    ],
+    faq: [
+      { q: 'How many days are in a year for conversion purposes?', a: '365.25 — the Julian average that accounts for leap years. The converter uses this by default. For specific calendar dates (birthdays, contracts), use the date-difference calculator.' },
+      { q: 'Why does the average month use 30.4375 days?', a: 'Because 365.25 days / 12 months = 30.4375 days per average month. Real months range from 28 to 31 days, so this is only valid for rough durations.' },
+      { q: 'Should I use this for project planning?', a: 'For rough estimates ("about 6 months"), yes. For exact deadlines ("delivered on a date"), use the date-difference calculator — otherwise you will be off by 0 to 3 days depending on the month.' },
+    ],
+    thresholds: {
+      cyan: 'Durations under one month, rough estimates — exact to the second.',
+      gold: 'Multi-month projects, cumulative hours — safe if you know the duration is an average, not a date.',
+      magenta: 'Contracts, deadlines, specific dates — switch to date math, the average month/year will mislead you.',
+    },
+    pivotLink: {
+      toolId: 'date-difference-calculator',
+      note: 'Need days between two specific calendar dates? The unit converter gives the average — switch to date math for the exact answer.',
+    },
+    relatedIds: ['time-converter', 'date-difference-calculator', 'hours-calculator'],
+    clusterId: 'units',
+  },
+
+  // =========================================================================
+  // percent-math-calculator-guide — CONSOLIDATED (percentage + percent-of + percent-change)
+  // =========================================================================
+  {
+    id: 'art-ce-percent-math-calculator-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'percent-math-calculator-guide',
+    guideCategory: 'Calculators',
+    title: 'Percent Math Calculator Guide: The Three Modes | Kefiw',
+    h1: 'Percent Math Calculator Guide',
+    subhead: 'All three percent questions in one place — "X is what % of Y?", "X% of Y = ?", and "% change from A to B?"',
+    outcomeLine: 'Pick the right percent-math mode the first time and avoid the classic confusion between the three.',
+    description: 'The three percent-math modes explained: percent-of, percent-is, and percent-change. Formulas, worked examples, and when to pick each tool.',
+    keywords: ['percentage calculator', 'percent of calculator', 'percent change calculator', 'percent math', 'percentage formulas'],
+    intro: 'Almost every real-world percent question fits one of three patterns: "What is 20% of 80?", "15 is what percent of 60?", or "100 changed to 125 — what percent is that?" The three modes look similar but use different formulas and different denominators. Getting the mode right is more important than the arithmetic.',
+    keyPoints: [
+      'Mode 1 — Percent OF (multiplication): "What is X% of Y?" Formula: (X/100) × Y. Example: 15% of 80 = 12.',
+      'Mode 2 — Percent IS (what fraction): "X is what % of Y?" Formula: (X/Y) × 100. Example: 20 is what % of 50? → (20/50) × 100 = 40%.',
+      'Mode 3 — Percent CHANGE: "From A to B, what % change?" Formula: ((B − A) / A) × 100. Example: 100 to 125 = +25%. Base is the OLD value.',
+      'The denominator tells you the mode. Mode 1: the whole (Y). Mode 2: the whole (Y). Mode 3: the STARTING value (A). Modes 2 and 3 differ only by whether you include the "change" subtraction on top.',
+      'Classic confusion: "from 50% to 60%" — is that a 10% change or a 20% change? It is a 10-percentage-point change but a 20% relative change (10/50). Percent-of-percent is always two-layer.',
+      'Sanity check: mode 1 answer is usually smaller than Y. Mode 2 answer is usually between 0 and 100%. Mode 3 answer can be any sign or magnitude.',
+    ],
+    howTo: [
+      'Read the question and identify which mode fits: "of" → mode 1; "what percent of" → mode 2; "change from...to" → mode 3.',
+      'Pick the matching calculator tool (percentage-calculator handles all three; dedicated tools exist for mode 1 and mode 3).',
+      'Enter the two knowns; read off the answer.',
+      'Cross-check with rough mental math (10% anchor, halving) to catch decimal-place errors.',
+    ],
+    examples: [
+      { title: 'Mode 1: "What is 8% of $250?"', body: '(8/100) × 250 = 20. Tip on a $250 dinner at 8% is $20.' },
+      { title: 'Mode 2: "12 is what % of 80?"', body: '(12/80) × 100 = 15%. Twelve out of eighty scored correct is 15%.' },
+      { title: 'Mode 3: "Revenue went from $400k to $340k."', body: '((340 − 400) / 400) × 100 = −15%. A 15% decline, not a 60% decline.' },
+    ],
+    whenToUse: [
+      { toolId: 'percent-of-calculator', note: 'Mode 1 — use when you know the percent and the whole, want the part. Fastest for shopping, tipping, and quick "how much of" questions.' },
+      { toolId: 'percentage-calculator', note: 'Mode 2 (or any of the three) — use the general-purpose tool when you have both numbers and want the ratio, or when the question mixes modes.' },
+      { toolId: 'percent-change-calculator', note: 'Mode 3 — use when you have a before and an after. Returns signed percent change and the absolute delta.' },
+    ],
+    faq: [
+      { q: 'How do I tell if a question is mode 2 or mode 3?', a: 'Mode 3 always has a time direction ("grew from", "changed to", "went up"). Mode 2 is a static "what fraction of" with no before/after. Same numbers, different mode, different answer.' },
+      { q: 'Why is percent change asymmetric?', a: 'Because the base is always the starting value. 100 → 125 is +25% (25/100), but 125 → 100 is −20% (−25/125). Getting back to where you started takes a smaller relative move than the original.' },
+      { q: 'Can I use one tool for all three modes?', a: 'Yes — the percentage-calculator handles all three. The dedicated percent-of and percent-change tools are faster for their specific modes, with built-in anchors and signed deltas.' },
+    ],
+    thresholds: {
+      cyan: 'Simple one-shot percent — mental math or any of the three tools works.',
+      gold: 'Multi-step (e.g., stacked discount, percent change on a percentage) — use the mode-specific tool to avoid mixing denominators.',
+      magenta: 'Reporting or finance — label the mode explicitly ("percentage points" vs "percent change") so downstream readers cannot confuse the two.',
+    },
+    pivotLink: {
+      toolId: 'percent-change-calculator',
+      note: 'Once you have the percent, "percent change" is the most misused of the three — verify direction and base explicitly.',
+    },
+    relatedIds: ['percentage-calculator', 'percent-of-calculator', 'percent-change-calculator'],
+    clusterId: 'everyday-calculators',
+  },
+
+  // =========================================================================
+  // average-calculator — primary guide
+  // =========================================================================
+  {
+    id: 'art-ce-mean-median-mode-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'mean-median-mode-guide',
+    guideCategory: 'Calculators',
+    title: 'Mean vs Median vs Mode: Picking the Right Average | Kefiw',
+    h1: 'Mean vs Median vs Mode Guide',
+    subhead: 'Three "averages" that can give wildly different answers on the same list — and how outliers decide which one is honest.',
+    outcomeLine: 'Know which average to report for any dataset, and why the wrong choice can mislead.',
+    description: 'Mean, median, mode: what each measures, when each is honest, and how outliers flip the answer. Worked examples with salary, home price, and test-score data.',
+    keywords: ['mean median mode', 'average calculator', 'outlier sensitivity', 'when to use median', 'central tendency'],
+    intro: 'Three numbers called "the average" coexist: mean (sum ÷ count), median (middle value), and mode (most common value). On clean, symmetric data they are all close. On skewed data they can differ by a factor of ten — and which one a headline quotes is usually the one that supports the author\'s argument.',
+    keyPoints: [
+      'Mean: sum of all values divided by the count. Sensitive to every number. Distorted by a single outlier.',
+      'Median: the middle value when sorted (or the average of the two middles for even counts). Robust to outliers. Half the data is below, half above.',
+      'Mode: the most frequently occurring value. Useful for categorical or bimodal data. Can be undefined (no repeats) or multiple (ties).',
+      'Outlier rule: if any single value is more than ~3× the typical, report the median. Salaries, home prices, income, reaction times — all skewed, median is honest.',
+      'Symmetry check: if mean ≈ median ≈ mode, the data is roughly symmetric and any "average" works. A gap means skew.',
+      'Standard deviation pairs with mean, not median. The average calculator reports population std dev (divide by N). For sample std dev, multiply the result by √(N/(N−1)).',
+    ],
+    howTo: [
+      'Paste your numbers (commas, spaces, tabs, line breaks all work).',
+      'The tool computes mean, median, sum, min, max, range, and standard deviation automatically.',
+      'Check the gap between mean and median — a large gap (>20% of the median) signals outliers.',
+      'If the data is skewed, report the median. If symmetric, the mean is more informative.',
+      'For categorical data or duplicates-heavy lists, the mode is the relevant measure.',
+    ],
+    examples: [
+      { title: 'Salary data: 35, 40, 42, 45, 48, 300 (thousands)', body: 'Mean = 85 (pulled by the 300 outlier). Median = 43.5 (the middle). Reporting the mean suggests everyone earns ~$85k; the median truth is ~$43.5k.' },
+      { title: 'Test scores: 78, 82, 85, 85, 88, 90, 92', body: 'Mean = 85.7. Median = 85. Mode = 85. Symmetric enough that all three agree — the "average score" is honestly ~85.' },
+      { title: 'Home prices (millions): 0.4, 0.45, 0.48, 0.5, 0.55, 12.0', body: 'Mean = 2.4M (distorted). Median = 0.49M (real). If a neighborhood reports "average price $2.4M" you know one mansion is skewing it.' },
+    ],
+    whenToUse: [
+      { toolId: 'average-calculator', note: 'Any quick summary of a number list: grades, times, prices, measurements. Gives all three centrality measures plus spread.' },
+    ],
+    faq: [
+      { q: 'When should I prefer the median to the mean?', a: 'Whenever the data is skewed or contains outliers: income, home prices, reaction times, response latencies. The median is not pulled by extreme values.' },
+      { q: 'Can a dataset have more than one mode?', a: 'Yes. If two values tie for highest frequency, the data is bimodal. Reaction times by population often are. Report both modes rather than picking one.' },
+      { q: 'What does the standard deviation tell me?', a: 'How tightly the values cluster around the mean. Small std dev: numbers are close to the mean. Large std dev: the data is spread out. Pair it with the mean; it has no meaning paired with the median.' },
+    ],
+    thresholds: {
+      cyan: 'Symmetric data, no outliers — any of the three averages works.',
+      gold: 'Mild skew or a single outlier (common in real data) — prefer the median and report the range.',
+      magenta: 'Heavy skew, bimodal, or zero-heavy data (income, failures) — report median + mode + clarifying distribution, never a bare mean.',
+    },
+    pivotLink: {
+      toolId: 'ratio-calculator',
+      note: 'Comparing two averages? Switch to ratios — the relative difference is usually what matters.',
+    },
+    relatedIds: ['average-calculator', 'ratio-calculator', 'percentage-calculator'],
+    clusterId: 'everyday-calculators',
+  },
+
+  // =========================================================================
+  // discount-calculator — primary guide
+  // =========================================================================
+  {
+    id: 'art-ce-discount-math-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'discount-math-guide',
+    guideCategory: 'Calculators',
+    title: 'Discount Math Guide: Sale Price and Stacked Discounts | Kefiw',
+    h1: 'Discount Math Guide',
+    subhead: 'The single formula for sale price — and the stacking trap that turns "30% plus 20% off" into something less than 50% off.',
+    outcomeLine: 'Compute sale prices correctly, and spot the stacked-discount math that stores use to nudge perceived savings.',
+    description: 'Discount math explained: sale price = original × (1 − rate). Stacked discount pitfall, worked examples, and how to reverse the math from a known sale price.',
+    keywords: ['discount calculator', 'percent off calculator', 'sale price formula', 'stacked discounts', 'shopping math'],
+    intro: 'A discount is a single subtraction done multiplicatively: sale price = original × (1 − rate). The formula stays tidy until you try to combine two discounts — "30% off plus an extra 20%" is NOT 50% off. This guide covers the basic math, the stacking trap, and the reverse calculation for when only the sale price is quoted.',
+    keyPoints: [
+      'Core formula: sale price = original × (1 − rate/100). For 20% off $49.99 → 49.99 × 0.80 = $39.99. Savings: $10.00.',
+      'Savings amount: original × (rate/100). 40% off $120 → 0.40 × 120 = $48 saved; $72 paid.',
+      'Stacked discounts MULTIPLY, not add. 30% off, then 20% off the reduced price: 0.70 × 0.80 = 0.56, i.e. 44% off total. Not 50%.',
+      'Reverse the math: if a $60 item is now $45, the discount rate is (60 − 45) / 60 = 25%.',
+      'Tax is applied to the sale price, not the original. "$100 item, 20% off, 7% tax" → $80 × 1.07 = $85.60.',
+      'Coupon math: a percent coupon stacks with sale price multiplicatively; a dollar-off coupon subtracts after the percent. Store policy decides the order.',
+    ],
+    howTo: [
+      'Enter the original price.',
+      'Enter the discount percent.',
+      'The tool shows savings and final price instantly.',
+      'For a second discount, enter the NEW (reduced) price and apply the second percent.',
+      'For tax, apply it to the final sale price — not the original.',
+    ],
+    examples: [
+      { title: '20% off $49.99', body: 'Save $10.00, pay $39.99. (From the tool example.)' },
+      { title: 'Stacked: 30% then 20%', body: '$100 → 0.70 × 100 = $70 → 0.80 × 70 = $56. You save $44, a 44% effective discount — not 50%.' },
+      { title: 'Reverse: known sale price', body: 'Tag says "$36 (was $48)." Discount = (48 − 36) / 48 = 25%.' },
+    ],
+    whenToUse: [
+      { toolId: 'discount-calculator', note: 'Any percent-off sale: clothing, electronics, groceries with a coupon, Black Friday bundles.' },
+    ],
+    faq: [
+      { q: 'Why is "30% + 20% off" not 50% off?', a: 'Because the second discount applies to the already-reduced price. 0.70 × 0.80 = 0.56 (44% off total). The absent 6 percentage points are the second discount being "wasted" on a smaller base.' },
+      { q: 'Do I include tax in the discount math?', a: 'No. Compute the sale price first, then add tax on top. Tax on the pre-discount price is incorrect (and illegal in most jurisdictions).' },
+      { q: 'What about a "50% off the second item"?', a: 'That is 25% off the pair if the items are priced the same. Two items at $40 each = $80; the second is $20 off; total $60, which is 25% off $80.' },
+    ],
+    thresholds: {
+      cyan: 'Single percent-off discount — mental math or one tool pass.',
+      gold: 'Stacked discounts, percent-off plus dollar-off coupon — use the tool for each layer, do not sum percents.',
+      magenta: 'Bundle/BOGO offers with store-policy quirks — compute the effective per-unit price; the percent rarely captures it cleanly.',
+    },
+    pivotLink: {
+      toolId: 'tip-calculator',
+      note: 'Discount applied. Now figure out the tip on what\'s left.',
+    },
+    relatedIds: ['discount-calculator', 'percentage-calculator', 'tip-calculator'],
+    clusterId: 'shopping',
+  },
+
+  // =========================================================================
+  // ratio-calculator — primary guide
+  // =========================================================================
+  {
+    id: 'art-ce-ratio-and-proportion-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'ratio-and-proportion-guide',
+    guideCategory: 'Calculators',
+    title: 'Ratio and Proportion Guide: Simplify, Scale, Cross-Multiply | Kefiw',
+    h1: 'Ratio and Proportion Guide',
+    subhead: 'How ratios simplify, how proportions scale, and why "part-to-part" vs "part-to-whole" is the error that hides in half of all ratio problems.',
+    outcomeLine: 'Simplify ratios, scale them cleanly, and avoid the part-to-whole confusion that breaks mixing and probability problems.',
+    description: 'Ratio and proportion math: simplification by GCD, cross-multiplication, part-to-part vs part-to-whole, and worked examples from recipes to aspect ratios.',
+    keywords: ['ratio calculator', 'simplify ratio', 'cross multiplication', 'part to part vs part to whole', 'aspect ratio'],
+    intro: 'A ratio compares two quantities; a proportion is a claim that two ratios are equal. Simplification (divide by the GCD) and scaling (multiply both sides) are the only two moves. Most errors are not in the math — they are in whether the ratio means "part to part" (3 coffee : 2 milk) or "part to whole" (3 out of 5 total). Pick the wrong frame and the answer is off.',
+    keyPoints: [
+      'Ratio: A : B compares two quantities. Simplify by dividing both by their greatest common divisor. 30 : 45 → ÷15 → 2 : 3.',
+      'Proportion: A : B = C : D. Cross-multiply: A × D = B × C. If three of the four are known, solve for the fourth.',
+      'Part-to-part: 3 : 2 means 3 of one, 2 of the other — total is 5. Use for mixing, odds, recipes.',
+      'Part-to-whole: 3/5 = 60%. Use for probability, percentages, shares.',
+      'Aspect ratio: 16 : 9 (widescreen), 4 : 3 (old TV), 3 : 2 (photography). Decimal equivalents: 1.778, 1.333, 1.500.',
+      'Scaling: to scale 2 : 3 to a total of 150, find the unit: 150 / (2+3) = 30, so 60 : 90. Preserves the ratio.',
+    ],
+    howTo: [
+      'Enter values for A and B.',
+      'The simplified form and decimal equivalent update automatically.',
+      'Use the scale field to project A onto any new size (or any new total).',
+      'For a 4-term proportion (A:B = ?:D), cross-multiply: ? = (A × D) / B.',
+      'Decide part-to-part vs part-to-whole before quoting the answer.',
+    ],
+    examples: [
+      { title: 'Simplify 30 : 45', body: 'GCD(30, 45) = 15. → 2 : 3. Decimal 0.6667.' },
+      { title: 'Aspect ratio check', body: '16 : 9 has decimal 1.7778 — confirm a 1920 × 1080 image matches: 1920/1080 = 1.7778 ✓.' },
+      { title: 'Recipe scaling', body: 'Pancakes for 4 use 2 cups flour. For 7 people, the ratio stays 2 : 4 = x : 7. Cross-multiply: x = (2 × 7)/4 = 3.5 cups.' },
+    ],
+    whenToUse: [
+      { toolId: 'ratio-calculator', note: 'Recipes, aspect ratios, mixing, odds, map scales, and any two-quantity proportional problem.' },
+    ],
+    faq: [
+      { q: 'When is part-to-part vs part-to-whole the right form?', a: 'Part-to-part (3:2) for mixing, comparing, odds. Part-to-whole (3/5) for probability, percent, shares.' },
+      { q: 'How do I simplify a ratio with decimals?', a: 'Multiply both sides by powers of ten until integers. 1.5 : 2.5 → × 10 → 15 : 25 → ÷ 5 → 3 : 5.' },
+      { q: 'What is the fastest way to scale a ratio?', a: 'Find the unit. For 2 : 3 scaled to total 100: 100/(2+3) = 20 per unit, so 40 : 60.' },
+    ],
+    thresholds: {
+      cyan: 'Clean integer ratios, single proportion — mental math or one tool pass.',
+      gold: 'Decimal or multi-term ratios, cross-multiplication — tool keeps precision across scaling.',
+      magenta: 'Mixed part-to-part vs part-to-whole, multi-level scaling (e.g., serving sizes × recipe × percent) — verify each layer, easy to slip.',
+    },
+    pivotLink: {
+      toolId: 'fraction-calculator',
+      note: 'Ratios and fractions are the same math; flip to the fraction tool when you need common denominators.',
+    },
+    relatedIds: ['ratio-calculator', 'fraction-calculator', 'percentage-calculator'],
+    clusterId: 'everyday-calculators',
+  },
+
+  // =========================================================================
+  // fraction-calculator — primary guide
+  // =========================================================================
+  {
+    id: 'art-ce-fraction-arithmetic-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'fraction-arithmetic-guide',
+    guideCategory: 'Calculators',
+    title: 'Fraction Arithmetic Guide: Add, Subtract, Multiply, Divide | Kefiw',
+    h1: 'Fraction Arithmetic Guide',
+    subhead: 'The four operations in a single page — plus the LCD trick that makes addition painless and the "keep-change-flip" rule for division.',
+    outcomeLine: 'Add, subtract, multiply, and divide fractions without reaching for a decimal conversion.',
+    description: 'Fraction arithmetic explained: addition and subtraction via LCD, multiplication, division by reciprocal, simplification, and mixed numbers.',
+    keywords: ['fraction calculator', 'add fractions', 'subtract fractions', 'multiply fractions', 'divide fractions', 'LCD'],
+    intro: 'Fractions scare people because addition and subtraction require a common denominator while multiplication and division do not. Once the four rules sit in your head, fraction math is faster than converting to decimals — and the answer is exact, not rounded.',
+    keyPoints: [
+      'Addition / subtraction: common denominator first. a/b + c/d = (a × d + c × b) / (b × d). Simplify after.',
+      'LCD (least common denominator): find the smallest number both denominators divide into. For 1/4 + 1/6, LCD = 12. → 3/12 + 2/12 = 5/12.',
+      'Multiplication: straight across. a/b × c/d = (a × c) / (b × d). Simplify before or after.',
+      'Division: multiply by the reciprocal — "keep, change, flip." a/b ÷ c/d = a/b × d/c.',
+      'Simplify: divide numerator and denominator by their GCD. 6/8 → ÷2 → 3/4.',
+      'Mixed numbers: 2 1/3 = 7/3 (improper) for arithmetic, then convert back at the end. Improper is the working form; mixed is the display form.',
+    ],
+    howTo: [
+      'Enter the numerator and denominator of each fraction.',
+      'Pick the operator: +, −, ×, or ÷.',
+      'The tool shows the simplified fraction, the decimal, and the mixed-number form.',
+      'For addition or subtraction with different denominators, the tool handles the LCD automatically.',
+      'For mixed-number inputs, convert to improper first (a × c + b)/c for a b/c.',
+    ],
+    examples: [
+      { title: '1/2 + 1/3', body: 'LCD = 6. → 3/6 + 2/6 = 5/6 ≈ 0.8333.' },
+      { title: '3/4 × 2/3', body: 'Multiply: (3×2) / (4×3) = 6/12 → simplify → 1/2.' },
+      { title: '5/6 ÷ 2/3', body: 'Keep-change-flip: 5/6 × 3/2 = 15/12 → simplify → 5/4 = 1 1/4.' },
+    ],
+    whenToUse: [
+      { toolId: 'fraction-calculator', note: 'Cooking (1/3 cup + 1/4 cup), carpentry (3/8 in measurements), music (note durations), any situation where decimals would round.' },
+    ],
+    faq: [
+      { q: 'Why not just convert to decimals?', a: 'Decimals lose exactness (1/3 = 0.333... never terminates). For cooking or carpentry that is fine; for algebra or exact ratios, fractions stay precise.' },
+      { q: 'What is the fastest way to find the LCD?', a: 'If one denominator is a multiple of the other, use the larger. Otherwise multiply them and simplify at the end. For 1/4 + 1/6: multiply 4 × 6 = 24; 6/24 + 4/24 = 10/24 → 5/12. LCD would give 5/12 directly, but either route works.' },
+      { q: 'How do I handle negative fractions?', a: 'Put the minus sign on the numerator (−3/4 means minus three-fourths). Arithmetic rules apply as normal with signed integers.' },
+    ],
+    thresholds: {
+      cyan: 'Simple same-denominator arithmetic or single multiply/divide — mental math.',
+      gold: 'Different denominators, mixed numbers — the tool keeps the simplification and mixed conversion clean.',
+      magenta: 'Long expressions, chained operations, or algebraic fractions — work in improper form throughout, simplify only at the end.',
+    },
+    pivotLink: {
+      toolId: 'ratio-calculator',
+      note: 'Fractions and ratios are two views of the same math — switch tools if you want part-to-part form.',
+    },
+    relatedIds: ['fraction-calculator', 'ratio-calculator', 'percentage-calculator'],
+    clusterId: 'everyday-calculators',
+  },
+
+  // =========================================================================
+  // mortgage-extra-payment-calculator — primary guide
+  // =========================================================================
+  {
+    id: 'art-ce-mortgage-prepayment-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'mortgage-prepayment-guide',
+    guideCategory: 'Calculators',
+    title: 'Mortgage Prepayment Guide: Extra Payments, Biweekly, Lump Sums | Kefiw',
+    h1: 'Mortgage Prepayment Guide',
+    subhead: 'Why a small monthly extra payment beats a lump sum at year-end, and how biweekly-equivalent math cuts years off a 30-year loan.',
+    outcomeLine: 'Quantify the interest savings from any prepayment strategy and pick the one that matches your cash flow.',
+    description: 'Mortgage prepayment math: how extra payments accelerate amortisation, interest saved, biweekly-equivalent strategy, and monthly-vs-lump timing.',
+    keywords: ['mortgage extra payment', 'mortgage payoff', 'prepayment calculator', 'biweekly mortgage', 'amortisation'],
+    intro: 'Every extra dollar of principal you pay today saves you interest on that dollar every month for the remaining life of the loan. Early extra payments compound; late ones barely move the needle. This guide covers the four common prepayment strategies and the interest savings each produces.',
+    keyPoints: [
+      'Extra principal reduces the balance that interest is charged on every month thereafter. The earlier the payment, the larger the compounding effect.',
+      'Typical impact: on a $320,000 / 6.5% / 30-year loan, +$200/month pays off ~6 years sooner and saves ~$128,000 in interest. +$100/month saves ~$75,000 and shortens by ~3.5 years.',
+      'Even small extras matter: an extra $50/month on a 30-year loan at 6–7% typically shortens payoff by roughly 2 years.',
+      'Monthly extra beats annual lump sum (when the total is the same) — the balance drops earlier, so each month\'s interest is slightly smaller.',
+      'Biweekly equivalent: 26 half-payments per year = 13 full payments = 1 extra monthly payment per year. On a 30-year loan this typically cuts 4–6 years and saves tens of thousands in interest.',
+      'Do NOT confuse "biweekly" with "twice a month." Twice a month is 24 payments = 12 full payments per year — same total, no acceleration.',
+    ],
+    howTo: [
+      'Enter your loan amount, interest rate, and original term.',
+      'Enter an extra monthly amount (or leave $0 for the baseline).',
+      'Optional: add a one-time or annual extra payment.',
+      'Compare the side-by-side scenario: months saved, interest saved, new payoff date.',
+      'For biweekly equivalence, enter (monthly payment / 12) as the extra monthly amount.',
+    ],
+    examples: [
+      { title: '+$200/month on $320,000 / 6.5% / 30-year', body: 'Pays off ~6 years sooner. Saves ~$128,000 in interest. (From the tool example.)' },
+      { title: '+$100/month, same loan', body: '~3.5 years sooner, ~$75,000 saved.' },
+      { title: 'Biweekly equivalent', body: 'Base P&I on a $320k loan at 6.5% ≈ $2,022. Divide by 12 → extra ~$169/month. That is ~4–5 years off and ~$100k saved.' },
+    ],
+    whenToUse: [
+      { toolId: 'mortgage-extra-payment-calculator', note: 'Before setting up recurring extra payments, testing biweekly vs monthly, or deciding whether to deploy a lump sum now or over time.' },
+    ],
+    faq: [
+      { q: 'Why do extra payments save so much interest?', a: 'Extra principal reduces the balance that interest is charged on every month thereafter. Compounded over years, a single early extra payment can save multiples of itself.' },
+      { q: 'Monthly extra vs annual lump sum — which wins?', a: 'A fixed total spread monthly usually saves slightly more than the same total paid once a year, because the principal drops earlier in each cycle.' },
+      { q: 'Should I prepay the mortgage or invest the money?', a: 'Math: if your after-tax mortgage rate exceeds your expected after-tax investment return, prepay. If not, invest. Risk: prepayment is a guaranteed return; investing is not. Most people benefit from a split.' },
+    ],
+    thresholds: {
+      cyan: 'Steady small extra (≤ 10% of monthly P&I) — easy to sustain, years 2–4 off the term.',
+      gold: 'Biweekly equivalent or +20–30% monthly — 4–7 years off, meaningful interest saved, requires disciplined cash flow.',
+      magenta: 'Aggressive prepayment (>50% extra, large lump sums) — check liquidity first; cash tied up in home equity is hard to reclaim without a HELOC or refinance.',
+    },
+    pivotLink: {
+      toolId: 'mortgage-calculator',
+      note: 'Curious about the base payment before adding extras? Start from the standard mortgage tool.',
+    },
+    relatedIds: ['mortgage-extra-payment-calculator', 'mortgage-calculator', 'savings-goal-calculator'],
+    clusterId: 'everyday-calculators',
+  },
+
+  // =========================================================================
+  // markup-vs-margin-guide — CONSOLIDATED (markup + margin + markup-margin)
+  // =========================================================================
+  {
+    id: 'art-ce-markup-vs-margin-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'markup-vs-margin-guide',
+    guideCategory: 'Calculators',
+    title: 'Markup vs Margin Guide: Same Profit, Different Base | Kefiw',
+    h1: 'Markup vs Margin Guide',
+    subhead: 'Why 50% markup is only 33.3% margin — and the conversion table every pricing conversation should have in front of it.',
+    outcomeLine: 'Speak both languages of retail pricing and stop conflating markup with margin on the same product.',
+    description: 'Markup vs margin explained: markup = profit/cost, margin = profit/price. Why 50% markup ≠ 50% margin, with conversion table and worked examples.',
+    keywords: ['markup vs margin', 'markup calculator', 'margin calculator', 'gross margin', 'cost plus pricing'],
+    intro: 'Markup and margin describe the same dollar of profit with different denominators. Markup divides by cost; margin divides by price. Because price is always larger than cost, margin is always the smaller percent — and the two diverge more as profit grows. Confusing them is a real business mistake: a "50% margin goal" set as "50% markup" leaves you 16.7 percentage points of margin short.',
+    keyPoints: [
+      'Markup = profit / cost. Divides the profit by the smaller number (cost). Used in cost-plus pricing and wholesale.',
+      'Margin = profit / price. Divides the same profit by the larger number (selling price). Used in retail and gross-margin reporting.',
+      'Same profit, different base → markup is always higher than margin. 50% markup = 33.3% margin. 100% markup = 50% margin. 200% markup = 66.7% margin.',
+      'Conversion: margin = markup / (1 + markup). Markup = margin / (1 − margin). Both as decimals.',
+      'Why margin caps at 100%: 100% margin would need zero cost. Margin asymptotes to 100% as cost approaches zero. Markup has no ceiling — a 500% markup is fine.',
+      'Retailer rule of thumb: "keystone pricing" is 100% markup = 50% margin. A common retail target.',
+    ],
+    howTo: [
+      'Decide which lens the conversation is using — markup (cost-plus) or margin (retail / reporting).',
+      'Pick the matching tool: markup-calculator for cost-plus pricing, margin-calculator for a target margin, markup-margin-calculator for bidirectional conversion.',
+      'Enter two knowns (cost + price, or cost + target %).',
+      'Read off all four figures: cost, price, profit, markup %, margin %.',
+      'When presenting to someone else, state BOTH numbers — "50% markup, 33.3% margin" — to avoid confusion.',
+    ],
+    examples: [
+      { title: 'Cost $40, price $60', body: 'Profit = $20. Markup = 20/40 = 50%. Margin = 20/60 = 33.3%. Same profit, different lens.' },
+      { title: 'Cost $40, 100% markup', body: 'Price = $80. Profit = $40. Margin = 40/80 = 50%. "Keystone pricing."' },
+      { title: 'Target margin 40% on cost $40', body: 'Price must be $66.67 to hit 40% margin. Equivalent markup: 66.67%.' },
+    ],
+    whenToUse: [
+      { toolId: 'markup-calculator', note: 'Cost-plus pricing — you know cost and want to set or verify a markup. Standard in manufacturing, wholesale, and trades.' },
+      { toolId: 'margin-calculator', note: 'Retail or reporting — you have a target gross-margin percent and need the price that hits it. Standard in retail and P&L statements.' },
+      { toolId: 'markup-margin-calculator', note: 'Bidirectional — when the buyer talks margin and the supplier talks markup, this tool converts either way and shows both at once.' },
+    ],
+    faq: [
+      { q: 'Why is markup always higher than margin?', a: 'Margin divides profit by the (larger) selling price; markup divides the same profit by the (smaller) cost. Same numerator, bigger denominator → smaller percent. Mathematically: margin = markup / (1 + markup).' },
+      { q: 'Can margin reach 100%?', a: 'No — 100% margin would require zero cost. Margin asymptotes to 100% as cost approaches zero. Markup has no upper limit.' },
+      { q: 'My supplier quotes markup; my retail team quotes margin. Which should I use?', a: 'State both. For internal decisions, use whichever matches your reporting standard (margin for P&L, markup for quoting). For negotiations, translate each time — the gap can be 15–25 percentage points on the same deal.' },
+    ],
+    thresholds: {
+      cyan: 'Low-profit products (markup < 30%) — markup and margin only differ by a few points; either frame is fine.',
+      gold: 'Standard retail pricing (markup 50–100%, margin 33–50%) — the gap matters; always state which you mean.',
+      magenta: 'High-margin goods or keystone+ pricing (markup > 100%, margin > 50%) — the two diverge sharply; confusing them misprices the product by double-digit percentage points.',
+    },
+    pivotLink: {
+      toolId: 'markup-margin-calculator',
+      note: 'Need to switch frames mid-conversation? The bidirectional tool converts either way and shows both at once.',
+    },
+    relatedIds: ['markup-calculator', 'margin-calculator', 'markup-margin-calculator'],
+    clusterId: 'shopping',
   },
 ];

@@ -77,6 +77,15 @@ export const SUPPORT_PATTERN: ContentPageConfig[] = [
       { q: 'What starter word does a solver recommend?', a: 'CRANE, SLATE, RAISE, and SOARE are all evidence-based strong starters — they expose high-frequency letters across five slots.' },
       { q: 'Is using a finder cheating?', a: 'It depends on how you use it. Narrowing after you have spent your own guesses is a learning aid; getting an answer before your first guess is not Wordle.' },
     ],
+    thresholds: {
+      cyan: '2-3 candidates after filters — one guess should finish it.',
+      gold: '4-10 candidates — add an excludes or yellow to cut in half.',
+      magenta: '10+ matches past guess 3 — constraints are too loose or misentered.',
+    },
+    pivotLink: {
+      toolId: 'wordle-solver',
+      note: 'Grid-style colour feedback easier to enter? Wordle solver runs the same engine with a mirror UI.',
+    },
   },
   {
     id: 'cS-wordle-green-yellow-gray',

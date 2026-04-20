@@ -1,0 +1,119 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import PipelineStage from '~/components/pipeline/PipelineStage.astro';
+import PipelineConnector from '~/components/pipeline/PipelineConnector.tsx';
+import PipelineReset from '~/components/pipeline/PipelineReset.tsx';
+import MinimumViableRate from '~/components/tools/MinimumViableRate.tsx';
+import GigNetFloor from '~/components/tools/GigNetFloor.tsx';
+import RunwayZero from '~/components/tools/RunwayZero.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/chains/', label: 'Chains' },
+  { href: '/chains/pivot-02/', label: 'PIVOT-02' },
+];
+
+const moneyFmt = (n: number) =>
+  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+---
+<BaseLayout
+  title="PIVOT-02 — Entrepreneurial Transition | Kefiw"
+  description="Freelancer-pivot pipeline: set your minimum viable rate, size a real side-hustle, and project runway. Deterministic math, connected."
+  canonical="/chains/pivot-02/"
+  keywords={['entrepreneurial transition calculator', 'freelancer pivot', 'minimum viable rate chain', 'runway projection']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">
+        Chain · PIVOT-02
+      </p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">
+        Entrepreneurial Transition
+      </h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Quitting the salary is easy. Quitting the salary and keeping the lifestyle is the hard part. This
+        chain sizes the rate you actually need, checks whether your current gig clears that bar, and
+        projects the runway you have to reach it.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        Each stage writes a <span class="font-mono text-cyan-600">Live Variable</span> downstream.
+        Change any input — the Zero Date moves in real time.
+      </p>
+    </header>
+
+    <section class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+            How the pipeline works
+          </div>
+          <p class="mt-1 max-w-2xl text-sm text-slate-600">
+            Stage 1 broadcasts your target hourly rate. Stage 2 measures what your gig actually pays after
+            operating costs. Stage 3 stacks the gig's monthly net onto your revenue and shows the runway
+            that buys you.
+          </p>
+        </div>
+        <PipelineReset client:load />
+      </div>
+    </section>
+
+    <PipelineStage
+      stage={1}
+      totalStages={3}
+      title="Price the corporate salary you left behind"
+      summary="Add benefits, overhead, realistic utilization. The result is the rate your freelance self must clear to stand still."
+      toolHref="/logic/minimum-viable-rate/"
+      toolTitle="Minimum Viable Rate"
+    >
+      <MinimumViableRate client:load />
+    </PipelineStage>
+
+    <PipelineConnector
+      client:load
+      fieldKey="target_hourly_rate"
+      label="target hourly rate"
+      format={moneyFmt}
+      unit="/hr"
+    />
+
+    <PipelineStage
+      stage={2}
+      totalStages={3}
+      title="Check what your current gig actually pays"
+      summary="Gross minus IRS-standard mileage cost. Compare the real hourly against the rate you need. Monthly net pipes downstream."
+      toolHref="/decisions/gig-net-floor/"
+      toolTitle="Gig-Net Floor"
+    >
+      <GigNetFloor client:load />
+    </PipelineStage>
+
+    <PipelineConnector
+      client:load
+      fieldKey="side_hustle_monthly_net"
+      label="side hustle monthly net"
+      format={moneyFmt}
+    />
+
+    <PipelineStage
+      stage={3}
+      totalStages={3}
+      title="Project the runway the pivot buys"
+      summary="Monthly gig-net stacks onto base revenue as a Live Variable. Watch the Zero Date slide as you tune upstream rates and shifts."
+      toolHref="/decisions/runway-zero/"
+      toolTitle="Runway Zero"
+    >
+      <RunwayZero client:load />
+    </PipelineStage>
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">Why this pipeline exists</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        A freelance rate in isolation is a guess. A freelance rate measured against your own salary,
+        checked against your actual gig economics, and projected onto your runway is a plan. Same
+        deterministic math — connected.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

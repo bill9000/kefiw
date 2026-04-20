@@ -9,3 +9,4 @@ dist
 .vscode
 .idea
 my-agents/
+.seo-cache/

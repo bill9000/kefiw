@@ -1,0 +1,68 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ToolCard from '~/components/ToolCard.astro';
+import FeaturedClusters from '~/components/FeaturedClusters.astro';
+import { CATEGORIES, TOOLS_BY_ID } from '~/data/tools';
+import { clustersBySection } from '~/data/clusters';
+const cat = CATEGORIES.logic;
+
+const PILLARS = [
+  {
+    slug: 'cognitive-throughput',
+    title: 'I. Cognitive Throughput',
+    tagline: 'The four meters that govern what your brain can actually process per day — input efficiency, switching cost, willpower drain, and the focus decay curve.',
+    toolIds: ['signal-to-noise', 'task-switching', 'decision-fatigue', 'focus-horizon'],
+  },
+  {
+    slug: 'logistical-mobility',
+    title: 'II. Logistical Mobility & Lifecycle Logic',
+    tagline: 'When to move, when to retrain, when to cut the subscription stack, and which relationships are net-positive — the big life-structure decisions, math-first.',
+    toolIds: ['geo-arbitrage', 'upskill-payback', 'leak-detection', 'connection-check'],
+  },
+];
+
+const clusterSlugs = clustersBySection('logic').map((c) => c.slug);
+---
+<BaseLayout
+  title="Logic Calculators — Focus, Decision Fatigue, Geo Arbitrage, Subscription Purge | Kefiw"
+  description="Industrial-aesthetic calculators for the operating system behind your life: signal-to-noise ratio, task-switching tax, decision fatigue, focus horizon, geographic arbitrage, upskill ROI, subscription purge, and social utility."
+  canonical="/logic/"
+  keywords={['logic calculators', 'decision fatigue calculator', 'task switching tax', 'focus horizon', 'geographic arbitrage', 'subscription audit', 'upskill ROI', 'social utility']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/logic/', label: cat.title }]} />
+  <header class="container-wide py-6">
+    <h1 class="text-3xl font-bold tracking-tight">Logic</h1>
+    <p class="mt-2 max-w-3xl text-slate-600">{cat.blurb}</p>
+    <p class="mt-2 max-w-3xl text-sm text-slate-500">
+      A system monitor for the brain and the life-logistics layer sitting above it. Every tool is closed-form math — no AI, no opaque weighting, no vibes. Inputs persist locally.
+    </p>
+  </header>
+
+  {PILLARS.map((p) => (
+    <section class="container-wide pt-6">
+      <h2 class="text-xl font-semibold tracking-tight text-slate-900">{p.title}</h2>
+      <p class="mt-1 max-w-3xl text-sm text-slate-600">{p.tagline}</p>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {p.toolIds.map((id) => {
+          const t = TOOLS_BY_ID[id];
+          return t ? <ToolCard tool={t} /> : null;
+        })}
+      </div>
+    </section>
+  ))}
+
+  {clusterSlugs.length > 0 && (
+    <FeaturedClusters
+      slugs={clusterSlugs}
+      title="Logic topics"
+      subhead="Guides that connect the tools in this suite — how the numbers interact and when to stack them."
+    />
+  )}
+
+  <section class="container-wide pt-10">
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+      <strong class="text-slate-900">Note.</strong> These are deterministic models of heuristics that researchers and operators use — they are useful thinking tools, not clinical measures. Use them to surface patterns, not to pass judgement on specific people or days.
+    </div>
+  </section>
+</BaseLayout>

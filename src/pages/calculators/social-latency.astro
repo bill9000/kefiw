@@ -1,0 +1,7 @@
+---
+import ToolLayout from '~/layouts/ToolLayout.astro';
+import { TOOLS_BY_ID } from '~/data/tools';
+import Island from '~/components/tools/SocialLatency.tsx';
+const tool = TOOLS_BY_ID['social-latency'];
+---
+<ToolLayout tool={tool}><Island client:load /></ToolLayout>

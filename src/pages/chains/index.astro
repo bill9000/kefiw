@@ -1,0 +1,89 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+---
+<BaseLayout
+  title="Chains — The Deterministic Engine | Kefiw"
+  description="Chained calculator pipelines. Each stage's output becomes the next stage's input via a shared session context. Closed-form math, connected."
+  canonical="/chains/"
+  keywords={['chained calculators', 'life path calculator', 'financial survival pipeline', 'deterministic engine']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/chains/', label: 'Chains' }]} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">The Deterministic Engine</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Chains</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        A chain is a pipeline: multiple calculators wired to a shared session context. Change an
+        upstream input, watch every downstream number move. Same deterministic math — connected.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        Treat data as a stream, not a one-off. One data entry flows through to a final verdict.
+      </p>
+    </header>
+
+    <section class="grid gap-4 sm:grid-cols-2">
+      <a
+        href="/chains/survival-01/"
+        class="block rounded-lg border border-cyan-200 bg-white p-5 transition hover:border-cyan-500 hover:bg-cyan-50"
+      >
+        <div class="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-600">SURVIVAL-01</div>
+        <div class="mt-1 text-lg font-semibold text-slate-900">The Life-Path Pipeline</div>
+        <p class="mt-2 text-sm text-slate-600">
+          Subscription Purge → Gig-Net Floor → Runway Zero. Cut hidden leaks, size a real side-hustle,
+          and watch your bankruptcy date move in real time.
+        </p>
+        <div class="mt-3 text-xs text-slate-500">3 stages · live variables · ~2 min to complete</div>
+      </a>
+
+      <a
+        href="/chains/pivot-02/"
+        class="block rounded-lg border border-cyan-200 bg-white p-5 transition hover:border-cyan-500 hover:bg-cyan-50"
+      >
+        <div class="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-600">PIVOT-02</div>
+        <div class="mt-1 text-lg font-semibold text-slate-900">Entrepreneurial Transition</div>
+        <p class="mt-2 text-sm text-slate-600">
+          Minimum Viable Rate → Gig-Net Floor → Runway Zero. Price the corporate salary you left, check
+          what the gig actually pays, project the runway the pivot buys.
+        </p>
+        <div class="mt-3 text-xs text-slate-500">3 stages · live variables · ~2 min to complete</div>
+      </a>
+
+      <a
+        href="/chains/move-03/"
+        class="block rounded-lg border border-cyan-200 bg-white p-5 transition hover:border-cyan-500 hover:bg-cyan-50"
+      >
+        <div class="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-600">MOVE-03</div>
+        <div class="mt-1 text-lg font-semibold text-slate-900">Geographic Relocation</div>
+        <p class="mt-2 text-sm text-slate-600">
+          Geo Arbitrage → Subscription Purge → Runway Zero. Size the here-vs-there surplus, reset the
+          subscription stack, and see the Zero Date move.
+        </p>
+        <div class="mt-3 text-xs text-slate-500">3 stages · live variables · ~2 min to complete</div>
+      </a>
+
+      <a
+        href="/chains/focus-04/"
+        class="block rounded-lg border border-cyan-200 bg-white p-5 transition hover:border-cyan-500 hover:bg-cyan-50"
+      >
+        <div class="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-600">FOCUS-04</div>
+        <div class="mt-1 text-lg font-semibold text-slate-900">Cognitive Repair Day</div>
+        <p class="mt-2 text-sm text-slate-600">
+          Task Switching Tax → Focus Horizon → Decision Fatigue. Measure context overhead, focus decay,
+          and willpower reserves — three closed-form models, one cascade.
+        </p>
+        <div class="mt-3 text-xs text-slate-500">3 stages · live variables · ~2 min to complete</div>
+      </a>
+    </section>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-lg font-semibold text-slate-900">How chains work</h2>
+      <p class="mt-2 text-sm text-slate-700">
+        Every chain stage writes its primary output to a shared JSON object in your browser
+        (<code class="rounded bg-white px-1 text-xs text-slate-800">kfw-session-context</code>).
+        Downstream stages subscribe to relevant keys and re-hydrate live. Inputs stay local to your device —
+        nothing is sent to a server.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

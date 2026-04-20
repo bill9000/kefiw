@@ -1,0 +1,118 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import PipelineStage from '~/components/pipeline/PipelineStage.astro';
+import PipelineConnector from '~/components/pipeline/PipelineConnector.tsx';
+import PipelineReset from '~/components/pipeline/PipelineReset.tsx';
+import GeoArbitrage from '~/components/tools/GeoArbitrage.tsx';
+import SubPurge from '~/components/tools/SubPurge.tsx';
+import RunwayZero from '~/components/tools/RunwayZero.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/chains/', label: 'Chains' },
+  { href: '/chains/move-03/', label: 'MOVE-03' },
+];
+
+const moneyFmt = (n: number) =>
+  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+---
+<BaseLayout
+  title="MOVE-03 — Geographic Relocation | Kefiw"
+  description="Relocation pipeline: size the geo-arbitrage surplus, purge hidden subscription leaks, then watch both stack into your runway."
+  canonical="/chains/move-03/"
+  keywords={['geographic relocation calculator', 'geo arbitrage chain', 'relocation runway', 'deterministic engine']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">
+        Chain · MOVE-03
+      </p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">
+        Geographic Relocation
+      </h1>
+      <p class="mt-3 text-lg text-slate-700">
+        A move is a bet on future cost structure. This chain prices the monthly gain from relocating,
+        folds in the subscription leaks you recover by resetting your stack, and projects the runway both
+        together buy you.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        Change the city, the rent, the grocery floor — every downstream number updates as a
+        <span class="font-mono text-cyan-600">Live Variable</span>.
+      </p>
+    </header>
+
+    <section class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">
+            How the pipeline works
+          </div>
+          <p class="mt-1 max-w-2xl text-sm text-slate-600">
+            Stage 1 compares your here-and-there surplus and broadcasts the monthly gain. Stage 2 lists
+            the recurring charges you'd cancel during a reset. Stage 3 stacks both as live revenue and
+            draws the new Zero Date.
+          </p>
+        </div>
+        <PipelineReset client:load />
+      </div>
+    </section>
+
+    <PipelineStage
+      stage={1}
+      totalStages={3}
+      title="Price the monthly gain of the move"
+      summary="Income minus cost-of-living, here vs. there, minus amortized move cost. The surplus delta pipes downstream."
+      toolHref="/logic/geo-arbitrage/"
+      toolTitle="Geo Arbitrage"
+    >
+      <GeoArbitrage client:load />
+    </PipelineStage>
+
+    <PipelineConnector
+      client:load
+      fieldKey="relocation_monthly_gain"
+      label="relocation monthly gain"
+      format={moneyFmt}
+    />
+
+    <PipelineStage
+      stage={2}
+      totalStages={3}
+      title="Reset the subscription stack"
+      summary="A move is the cheapest excuse to cancel everything. Sum the recurring charges you'll drop — Recoverable Cash pipes downstream."
+      toolHref="/logic/leak-detection/"
+      toolTitle="Subscription Purge"
+    >
+      <SubPurge client:load />
+    </PipelineStage>
+
+    <PipelineConnector
+      client:load
+      fieldKey="monthly_savings_recoverable"
+      label="monthly savings recoverable"
+      format={moneyFmt}
+    />
+
+    <PipelineStage
+      stage={3}
+      totalStages={3}
+      title="Project the new Zero Date"
+      summary="Geo gain and recovered subscriptions stack into effective revenue. Watch the runway extend as the move pays for itself."
+      toolHref="/decisions/runway-zero/"
+      toolTitle="Runway Zero"
+    >
+      <RunwayZero client:load />
+    </PipelineStage>
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">Why this pipeline exists</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        A relocation decision rarely fails because the math is wrong — it fails because the math is
+        fragmented. Cost-of-living spreadsheets live separately from subscription audits, and neither
+        connects to your actual runway. This chain is the connective tissue.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

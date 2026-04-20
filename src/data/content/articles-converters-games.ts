@@ -725,6 +725,15 @@ export const ARTICLES_CONVERTERS_GAMES: ContentPageConfig[] = [
       { q: 'What\'s a good solve time for a medium Sudoku?', a: 'Around 8-12 minutes for practiced players. Easy: 3-5 minutes. Hard: 15-25 minutes.' },
       { q: 'Should I guess when I\'m stuck?', a: 'Only on evil-level puzzles. Well-designed puzzles have a logical path — if you can\'t find it, you\'re missing a technique.' },
     ],
+    thresholds: {
+      cyan: 'Naked and hidden singles still flowing — solve on pace.',
+      gold: 'Stalled 60+ seconds — scan digit-by-digit for a missed hidden single.',
+      magenta: 'Three minutes no progress or guessing — you missed a technique; rescan from box 1.',
+    },
+    pivotLink: {
+      toolId: 'daily-word',
+      note: 'Sudoku stuck? Switch to a quick daily-word break and come back with fresh eyes.',
+    },
   },
   {
     id: 'art-cg-sudoku-cognition',
@@ -825,6 +834,15 @@ export const ARTICLES_CONVERTERS_GAMES: ContentPageConfig[] = [
       { q: 'Is there a single "best" starter word?', a: 'CRANE, SLATE, and SALET all perform within 0.1 of an expected guess of each other. Pick one and stick with it for consistency.' },
       { q: 'Should I always narrow, never try to win early?', a: 'Narrowing wins more often but "trying to win" on guess 2 is correct if only 1-2 possibilities remain.' },
     ],
+    thresholds: {
+      cyan: 'Solve in 3-4 guesses — streak building, strategy working.',
+      gold: '5 guesses or a near-miss — one constraint misread; review the colour grid.',
+      magenta: '6-guess fails twice in a row — switch openers or slow the second guess.',
+    },
+    pivotLink: {
+      toolId: 'wordle-solver',
+      note: 'Constraints tangled mid-game? Paste greens/yellows/greys into the solver to rescue the streak.',
+    },
   },
   {
     id: 'art-cg-daily-word-cognition',
@@ -956,6 +974,15 @@ export const ARTICLES_CONVERTERS_GAMES: ContentPageConfig[] = [
       { q: 'Do anagrams help with Scrabble?', a: 'Yes — directly. Scrabble is anagramming with constraints. Anagram speed is a top-3 Scrabble skill.' },
       { q: 'Should I time myself?', a: 'Yes, loosely. Watching your 10-puzzle average over weeks is more motivating than any single solve.' },
     ],
+    thresholds: {
+      cyan: 'Solve under 30 seconds — suffix/pair recognition is firing.',
+      gold: '30-90 seconds — holding the letters but search is still linear.',
+      magenta: '2+ minutes no progress — perception lock; rewrite letters in a circle or alphabetically.',
+    },
+    pivotLink: {
+      toolId: 'anagram-solver',
+      note: 'Genuinely stuck past the hint budget? Solver shows the answer so tomorrow\'s retrieval is faster.',
+    },
   },
   {
     id: 'art-cg-daily-anagram-practical',
@@ -1088,5 +1115,67 @@ export const ARTICLES_CONVERTERS_GAMES: ContentPageConfig[] = [
       { q: 'Why do I get stuck on the same kinds of words?', a: 'Everyone has blind spots. Double letters (RR, LL), silent letters (-MB, KN-), and uncommon affixes (-OUR, -EUR) trip most solvers. Note yours.' },
       { q: 'Is it better to solve one hard puzzle or five easy ones?', a: 'Five easy ones daily beats one hard one weekly. Frequency builds the reflex; difficulty only matters once the reflex exists.' },
     ],
+    thresholds: {
+      cyan: 'Category plus letters resolves in under a minute — streak intact.',
+      gold: '1-3 minutes in, still circling — reread the category and re-order letters.',
+      magenta: '3+ minutes no candidate — take the first-letter hint; pride costs learning.',
+    },
+    pivotLink: {
+      toolId: 'word-unscrambler',
+      note: 'Category useless? The raw unscrambler lists every valid subset so you can spot the fit.',
+    },
+  },
+
+  // ===== SUDOKU DIFFICULTY LEVELS (consolidated) =====
+  {
+    id: 'art-cg-sudoku-difficulty-levels-guide',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'sudoku-difficulty-levels-guide',
+    guideCategory: 'Games',
+    title: 'Sudoku Difficulty Levels: Easy, Medium, Hard, Expert — Techniques and Benchmarks | Kefiw',
+    h1: 'Sudoku Difficulty Levels Explained',
+    subhead: 'Each difficulty is defined by the techniques it requires — not just fewer clues.',
+    outcomeLine: 'Match the techniques to the level — easy wants scanning, expert wants chains — and your solve times stabilise at every tier.',
+    description: 'The four Sudoku difficulty levels on Kefiw (easy, medium, hard, expert) broken down by clue count, required techniques, solve time benchmarks, and when to drop or climb a level.',
+    keywords: ['sudoku difficulty', 'sudoku easy medium hard expert', 'sudoku techniques by level', 'sudoku clue count', 'sudoku skill plateau'],
+    intro: 'Difficulty in Sudoku is not really about how many starting clues you get — it is about which logical techniques you need to finish. Easy puzzles surrender to a single scan for naked and hidden singles. Expert puzzles resist every basic move and require colouring chains or nice loops. Kefiw runs four tiers (~36, ~30, ~26, ~22 clues) that map cleanly to four technique tiers.',
+    clusterId: 'daily',
+    keyPoints: [
+      'Easy (~36 clues): naked singles and hidden singles are enough. Typical solve 3–7 minutes.',
+      'Medium (~30 clues): add locked candidates (pointing pairs and claiming pairs) — a digit in a box that can only sit in one row cleans that digit from the rest of the row. Typical solve 7–15 minutes.',
+      'Hard (~26 clues): naked and hidden pairs/triples, then X-Wing and basic Swordfish patterns. Typical solve 15–30 minutes.',
+      'Expert (~22 clues): colouring chains, XY-Wing, Swordfish, uniqueness rectangles, and simple nice loops. Below 20 clues the puzzle often has no forcing chain-free path. Typical solve 30+ minutes.',
+      'The theoretical minimum for a uniquely-solvable Sudoku is 17 clues, proven by exhaustive search in 2012 — most expert puzzles stay at 22–24 to remain human-solvable.',
+      'Climb a tier only when the current tier solves reliably without guessing in under the lower solve-time band — jumping early builds the guess-and-check habit, which caps growth.',
+    ],
+    examples: [
+      { title: 'Easy puzzle, naked single', body: 'A cell with 1, 2, 3, 4, 5, 6, 7, 8 already present in its row, column, or box — 9 is the only candidate. Fill, move on. Easy boards surrender entirely to this scan.' },
+      { title: 'Medium, pointing pair', body: 'Box 1 has the digit 3 only available in r1c2 and r1c3. Therefore 3 cannot appear elsewhere in row 1 — eliminate the candidate from r1c4 through r1c9. Medium puzzles hinge on moves like this one.' },
+      { title: 'Hard, X-Wing', body: 'Digit 7 appears as a candidate in exactly two columns of rows 2 and 6, forming a rectangle. That means 7 must go in two diagonal corners of the rectangle — eliminate 7 from every other cell in those two columns.' },
+      { title: 'Expert, XY-Wing', body: 'Three cells hold candidate pairs (AB), (BC), (AC) with the pivot seeing both wings. Any cell seeing both wings cannot hold A — the elimination unlocks the chain. Expert boards often have one or two of these as the only path forward.' },
+    ],
+    whenToUse: [
+      { toolId: 'sudoku', note: 'Main Sudoku launcher — pick a difficulty, or cycle through the tiers in a single session for a mixed workout.' },
+      { toolId: 'sudoku-easy', note: 'Start here if you are new, or want a 3–7 minute puzzle. Drill naked and hidden singles until solve time is consistent.' },
+      { toolId: 'sudoku-medium', note: 'Step up once easy solves are under 5 minutes reliably. Medium forces pointing and claiming pairs — the first "real" Sudoku tier.' },
+      { toolId: 'sudoku-hard', note: 'Climb here when medium solves flow without pencil marks. Hard demands X-Wing, naked/hidden triples, and discipline around guessing.' },
+      { toolId: 'sudoku-expert', note: 'The top tier — expect 30+ minutes, expect to need XY-Wing or colouring. Only worth tackling when hard solves under 20 minutes consistently.' },
+    ],
+    relatedIds: ['sudoku', 'sudoku-easy', 'sudoku-medium', 'sudoku-hard', 'sudoku-expert'],
+    faq: [
+      { q: 'Why does clue count not fully determine difficulty?', a: 'Two puzzles with 26 clues can be wildly different — one may fall to singles and pairs, another may require Swordfish. The generator enforces a difficulty class by the hardest technique needed, not raw clue count.' },
+      { q: 'Is every uniquely-solvable puzzle logic-solvable without guessing?', a: 'Yes in theory — if the solution is unique, a sufficiently powerful technique set finds it. In practice, some "evil" puzzles require chains long enough that guess-and-check is faster for humans.' },
+      { q: 'Should I keep climbing difficulty or plateau on one level?', a: 'Plateau first. The working-memory and scanning reflex need weeks of repetition at a stable tier before they transfer to the next. Climbing too fast caps growth around medium forever.' },
+    ],
+    thresholds: {
+      cyan: 'Solve time sits in the lower half of the band for your tier — plateau is stable, consider climbing a level.',
+      gold: 'Solve time hovers near the upper edge of your tier band — plateau is guarded, stay at this tier one to two more weeks.',
+      magenta: 'Solve time exceeds the band by 50% or you are guessing to finish — plateau is critical, drop one tier and rebuild the technique base.',
+    },
+    pivotLink: {
+      toolId: 'sudoku',
+      note: 'Pick a tier and start — each difficulty keeps its own saved board, so you can work several in parallel.',
+    },
   },
 ];

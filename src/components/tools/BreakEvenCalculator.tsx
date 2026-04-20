@@ -1,256 +1,290 @@
-import { useMemo, useState } from 'react';
-import { formatCurrency, formatMonthsAsYearsMonths } from '~/lib/finance';
-import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Scale, Activity, AlertTriangle } from 'lucide-react';
+import { writeField } from '~/lib/session-context';
+
+const STORAGE = 'break-even-calculator-v1';
+const PIPELINE_MONTHS_KEY = 'break_even_months';
+const PIPELINE_UNITS_KEY = 'break_even_units';
+const PIPELINE_SOURCE = 'break-even-calculator';
+const PIPELINE_LABEL = 'Break-Even Calculator';
+
+const COLOR_BG = '#0b1120';
+const COLOR_PANEL = '#0f172a';
+const COLOR_BORDER = '#1e293b';
+const COLOR_TEXT = '#e2e8f0';
+const COLOR_DIM = '#64748b';
+const COLOR_OK = '#4ade80';
+const COLOR_WARN = '#f59e0b';
+const COLOR_DANGER = '#ef4444';
+const COLOR_ACCENT = '#22d3ee';
 
 type Mode = 'business' | 'decision';
 
-export default function BreakEvenCalculator() {
-  const [mode, setMode] = useState<Mode>('business');
-
-  return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={() => setMode('business')} className={mode === 'business' ? 'btn btn-primary' : 'btn-ghost'}>Business (units)</button>
-        <button type="button" onClick={() => setMode('decision')} className={mode === 'decision' ? 'btn btn-primary' : 'btn-ghost'}>Decision (months to pay back)</button>
-      </div>
-
-      {mode === 'business' ? <BusinessMode /> : <DecisionMode />}
-    </div>
-  );
+interface State {
+  mode: Mode;
+  fixed: string;
+  price: string;
+  variable: string;
+  upfront: string;
+  savings: string;
+  recurring: string;
 }
 
-function BusinessMode() {
-  const [fixed, setFixed] = useState('5000');
-  const [price, setPrice] = useState('25');
-  const [variable, setVariable] = useState('10');
+const DEFAULT_STATE: State = {
+  mode: 'business',
+  fixed: '5000',
+  price: '25',
+  variable: '10',
+  upfront: '1200',
+  savings: '100',
+  recurring: '0',
+};
 
-  const parsed = useMemo(() => {
-    const f = parseFloat(fixed);
-    const p = parseFloat(price);
-    const v = parseFloat(variable);
-    if (![f, p, v].every(Number.isFinite) || f < 0 || p < 0 || v < 0) return null;
+function parseNum(s: string): number {
+  const n = parseFloat(s.replace(/[,$\s]/g, ''));
+  return Number.isFinite(n) ? n : 0;
+}
+function formatCurrency(n: number): string {
+  if (!Number.isFinite(n)) return '$0';
+  return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+}
+function formatMonths(months: number): string {
+  if (!Number.isFinite(months) || months < 0) return '—';
+  const y = Math.floor(months / 12);
+  const m = Math.round(months - y * 12);
+  if (y === 0) return `${m}mo`;
+  if (m === 0) return `${y}y`;
+  return `${y}y ${m}mo`;
+}
+
+export default function BreakEvenCalculator() {
+  const [state, setState] = useState<State>(DEFAULT_STATE);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE);
+      if (raw) setState({ ...DEFAULT_STATE, ...JSON.parse(raw) });
+    } catch {}
+    setHydrated(true);
+  }, []);
+  useEffect(() => {
+    if (hydrated) localStorage.setItem(STORAGE, JSON.stringify(state));
+  }, [state, hydrated]);
+
+  const businessResult = useMemo(() => {
+    const f = parseNum(state.fixed);
+    const p = parseNum(state.price);
+    const v = parseNum(state.variable);
     const margin = p - v;
     if (margin <= 0) return { invalid: true as const, f, p, v, margin };
     const units = f / margin;
-    const revenue = units * p;
-    return { invalid: false as const, f, p, v, margin, units, revenue };
-  }, [fixed, price, variable]);
+    return { invalid: false as const, f, p, v, margin, units, revenue: units * p };
+  }, [state.fixed, state.price, state.variable]);
 
-  return (
-    <>
-      <div className="card">
-        <div className="grid gap-3 sm:grid-cols-3">
-          <Field id="fc" label="Fixed costs ($)" value={fixed} onChange={setFixed} />
-          <Field id="pp" label="Price per unit ($)" value={price} onChange={setPrice} />
-          <Field id="vc" label="Variable cost per unit ($)" value={variable} onChange={setVariable} />
-        </div>
-      </div>
-
-      {parsed?.invalid && (
-        <div className="card border-rose-200 bg-rose-50 text-sm text-rose-800">
-          Price per unit must exceed variable cost per unit for a break-even to exist.
-        </div>
-      )}
-
-      {parsed && !parsed.invalid && (
-        <>
-          <div className="grid gap-2 sm:grid-cols-2">
-            <div className="card border-emerald-200 bg-emerald-50 text-center">
-              <div className="text-xs font-medium uppercase tracking-wide text-emerald-700">Units to break even</div>
-              <div className="mt-1 text-3xl font-bold text-emerald-900">{Math.ceil(parsed.units).toLocaleString()}</div>
-            </div>
-            <div className="card text-center">
-              <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Revenue at break-even</div>
-              <div className="mt-1 text-3xl font-bold text-slate-900">{formatCurrency(parsed.revenue)}</div>
-            </div>
-          </div>
-
-          {(() => {
-            const cards: MaybeCard[] = [
-              {
-                kind: 'summary',
-                text: `Break even at ${Math.ceil(parsed.units).toLocaleString()} units — ${formatCurrency(parsed.revenue)} in revenue.`,
-              },
-              {
-                kind: 'stats',
-                items: [
-                  { label: 'Contribution margin', value: formatCurrency(parsed.margin) },
-                  { label: 'Margin ratio', value: `${((parsed.margin / parsed.p) * 100).toFixed(1)}%` },
-                  { label: 'Units to break even', value: Math.ceil(parsed.units).toLocaleString() },
-                  { label: 'Revenue at BE', value: formatCurrency(parsed.revenue) },
-                ],
-              },
-              {
-                kind: 'takeaway',
-                text: `Each unit contributes ${formatCurrency(parsed.margin)} toward fixed costs after covering variable cost.`,
-              },
-              {
-                kind: 'comparison',
-                title: 'Profit at volume',
-                rows: [
-                  { label: `At ${Math.ceil(parsed.units * 1.5).toLocaleString()} units`, value: formatCurrency(Math.ceil(parsed.units * 1.5) * parsed.margin - parsed.f) },
-                  { label: `At ${Math.ceil(parsed.units * 2).toLocaleString()} units`, value: formatCurrency(Math.ceil(parsed.units * 2) * parsed.margin - parsed.f) },
-                  { label: `At ${Math.ceil(parsed.units * 3).toLocaleString()} units`, value: formatCurrency(Math.ceil(parsed.units * 3) * parsed.margin - parsed.f) },
-                ],
-              },
-              {
-                kind: 'nextStep',
-                actions: [
-                  { href: '/calculators/markup-calculator/', label: 'Markup Calculator' },
-                  { href: '/calculators/margin-calculator/', label: 'Margin Calculator' },
-                  { href: '/calculators/percentage-calculator/', label: 'Percentage Calculator' },
-                ],
-              },
-            ];
-            return <OutcomeLayer cards={cards} />;
-          })()}
-        </>
-      )}
-    </>
-  );
-}
-
-type DecisionParse =
-  | { kind: 'error'; error: string }
-  | { kind: 'no-breakeven'; u: number; s: number; r: number; net: number }
-  | { kind: 'ok'; u: number; s: number; r: number; net: number; months: number };
-
-function DecisionMode() {
-  const [upfront, setUpfront] = useState('1200');
-  const [savings, setSavings] = useState('100');
-
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [recurring, setRecurring] = useState('0');
-
-  const parsed = useMemo<DecisionParse>(() => {
-    const u = parseFloat(upfront);
-    const s = parseFloat(savings);
-    const r = parseFloat(recurring) || 0;
-    if (!Number.isFinite(u) || u < 0) return { kind: 'error', error: 'Enter an upfront cost.' };
-    if (!Number.isFinite(s) || s < 0) return { kind: 'error', error: 'Enter monthly savings or gain.' };
-    if (r < 0) return { kind: 'error', error: 'Recurring cost cannot be negative.' };
+  const decisionResult = useMemo(() => {
+    const u = parseNum(state.upfront);
+    const s = parseNum(state.savings);
+    const r = parseNum(state.recurring);
     const net = s - r;
-    if (net <= 0) return { kind: 'no-breakeven', u, s, r, net };
-    const months = u / net;
-    return { kind: 'ok', u, s, r, net, months };
-  }, [upfront, savings, recurring]);
+    if (net <= 0) return { invalid: true as const, u, s, r, net };
+    return { invalid: false as const, u, s, r, net, months: u / net };
+  }, [state.upfront, state.savings, state.recurring]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (state.mode === 'business' && !businessResult.invalid) {
+      writeField(PIPELINE_UNITS_KEY, businessResult.units, PIPELINE_SOURCE, PIPELINE_LABEL);
+    }
+    if (state.mode === 'decision' && !decisionResult.invalid) {
+      writeField(PIPELINE_MONTHS_KEY, decisionResult.months, PIPELINE_SOURCE, PIPELINE_LABEL);
+    }
+  }, [state.mode, businessResult, decisionResult, hydrated]);
 
   return (
-    <>
-      <div className="card">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Field id="uf" label="Upfront cost ($)" value={upfront} onChange={setUpfront} />
-          <Field id="sv" label="Monthly savings or gain ($)" value={savings} onChange={setSavings} />
-        </div>
-        <button
-          type="button"
-          className="mt-3 text-xs font-medium text-brand-700 hover:underline"
-          onClick={() => setShowAdvanced((x) => !x)}
-          aria-expanded={showAdvanced}
-        >
-          {showAdvanced ? 'Hide advanced' : 'Add recurring monthly cost →'}
-        </button>
-        {showAdvanced && (
-          <div className="mt-3">
-            <Field id="rc" label="Monthly ongoing cost ($)" value={recurring} onChange={setRecurring} />
+    <div style={wrap}>
+      <div style={header}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Scale size={22} color={COLOR_ACCENT} />
+          <div>
+            <div style={title}>BREAK_EVEN</div>
+            <div style={subtitle}>Units to clear fixed cost, or months to recover upfront outlay</div>
           </div>
-        )}
+        </div>
+        <div style={{ display: 'flex', gap: 6 }}>
+          <ModeBtn active={state.mode === 'business'} onClick={() => setState((s) => ({ ...s, mode: 'business' }))}>
+            BUSINESS
+          </ModeBtn>
+          <ModeBtn active={state.mode === 'decision'} onClick={() => setState((s) => ({ ...s, mode: 'decision' }))}>
+            DECISION
+          </ModeBtn>
+        </div>
       </div>
 
-      {parsed.kind === 'error' && (
-        <div className="card border-amber-200 bg-amber-50 text-sm text-amber-900">{parsed.error}</div>
-      )}
-
-      {parsed.kind === 'no-breakeven' && (
-        <div className="card border-rose-200 bg-rose-50 text-sm text-rose-800">
-          No break-even: recurring costs ({formatCurrency(parsed.r)}/mo) meet or exceed monthly savings ({formatCurrency(parsed.s)}/mo). Net monthly benefit is {formatCurrency(parsed.net)}.
-        </div>
-      )}
-
-      {parsed.kind === 'ok' && (
+      {state.mode === 'business' ? (
         <>
-          <div className="grid gap-2 sm:grid-cols-3">
-            <div className="card border-emerald-200 bg-emerald-50 text-center">
-              <div className="text-xs font-medium uppercase tracking-wide text-emerald-700">Break-even</div>
-              <div className="mt-1 text-3xl font-bold text-emerald-900">{formatMonthsAsYearsMonths(parsed.months)}</div>
-              <div className="text-xs text-emerald-700">{parsed.months.toFixed(1)} months</div>
-            </div>
-            <div className="card text-center">
-              <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Net monthly benefit</div>
-              <div className="mt-1 text-3xl font-bold text-slate-900">{formatCurrency(parsed.net)}</div>
-            </div>
-            <div className="card text-center">
-              <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Year-1 gain</div>
-              <div className="mt-1 text-3xl font-bold text-slate-900">{formatCurrency(parsed.net * 12 - parsed.u)}</div>
-            </div>
+          <div style={inputsGrid}>
+            <InputCell label="Fixed Costs" prefix="$" value={state.fixed} onChange={(v) => setState((s) => ({ ...s, fixed: v }))} />
+            <InputCell label="Price / Unit" prefix="$" value={state.price} onChange={(v) => setState((s) => ({ ...s, price: v }))} />
+            <InputCell label="Variable Cost / Unit" prefix="$" value={state.variable} onChange={(v) => setState((s) => ({ ...s, variable: v }))} />
           </div>
 
-          {(() => {
-            const perTen = 10;
-            const monthsAtPlus10 = parsed.u / (parsed.net + perTen);
-            const shaved = parsed.months - monthsAtPlus10;
-            const scenarios = [10, 25, 50].map((add) => ({
-              add,
-              months: parsed.u / (parsed.net + add),
-            }));
+          {businessResult.invalid ? (
+            <Warning>
+              Price per unit must exceed variable cost per unit. Contribution margin is {formatCurrency(businessResult.margin)} — no break-even exists.
+            </Warning>
+          ) : (
+            <>
+              <div style={resultPanel(COLOR_OK)}>
+                <div style={resultLabel}>UNITS TO BREAK EVEN</div>
+                <div style={{ ...resultValue, color: COLOR_OK }}>
+                  {Math.ceil(businessResult.units).toLocaleString()}
+                  <span style={{ fontSize: 18, color: COLOR_DIM, fontWeight: 600, marginLeft: 8 }}>units</span>
+                </div>
+                <div style={resultSub}>Revenue at break-even: {formatCurrency(businessResult.revenue)}</div>
+              </div>
 
-            const cards: MaybeCard[] = [
-              {
-                kind: 'summary',
-                text: `Pays back in ${formatMonthsAsYearsMonths(parsed.months)} at ${formatCurrency(parsed.net)}/mo net benefit.`,
-              },
-              {
-                kind: 'stats',
-                items: [
-                  { label: 'Upfront cost', value: formatCurrency(parsed.u) },
-                  { label: 'Monthly savings', value: formatCurrency(parsed.s) },
-                  ...(parsed.r > 0 ? [{ label: 'Recurring cost', value: formatCurrency(parsed.r) }] : []),
-                  { label: 'Net monthly', value: formatCurrency(parsed.net) },
-                  { label: 'Break-even', value: formatMonthsAsYearsMonths(parsed.months) },
-                  { label: 'Year-2 gain', value: formatCurrency(parsed.net * 24 - parsed.u) },
-                ],
-              },
-              {
-                kind: 'takeaway',
-                text: `Every extra $${perTen}/month shortens break-even by about ${shaved.toFixed(1)} months.`,
-              },
-              parsed.r > 0 ? {
-                kind: 'takeaway' as const,
-                text: `Recurring costs of ${formatCurrency(parsed.r)}/mo delay break-even — without them, payback would be ${formatMonthsAsYearsMonths(parsed.u / parsed.s)}.`,
-              } : null,
-              {
-                kind: 'comparison',
-                title: 'If savings were higher',
-                columns: scenarios.map((sc) => ({
-                  title: `+$${sc.add}/mo`,
-                  items: [`Break-even: ${formatMonthsAsYearsMonths(sc.months)}`],
-                })).concat([{
-                  title: 'Current',
-                  items: [`Break-even: ${formatMonthsAsYearsMonths(parsed.months)}`],
-                }]),
-              },
-              {
-                kind: 'nextStep',
-                actions: [
-                  { href: '/calculators/savings-goal-calculator/', label: 'Savings Goal' },
-                  { href: '/calculators/mortgage-extra-payment-calculator/', label: 'Mortgage Extra Payment' },
-                ],
-              },
-            ];
-            return <OutcomeLayer cards={cards} />;
-          })()}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8, marginBottom: 14 }}>
+                <Metric label="Contribution Margin" value={formatCurrency(businessResult.margin)} color={COLOR_OK} />
+                <Metric label="Margin Ratio" value={`${((businessResult.margin / businessResult.p) * 100).toFixed(1)}%`} color={COLOR_ACCENT} />
+                <Metric label="Profit @ 1.5× BE" value={formatCurrency(Math.ceil(businessResult.units * 1.5) * businessResult.margin - businessResult.f)} color={COLOR_OK} />
+                <Metric label="Profit @ 2× BE" value={formatCurrency(Math.ceil(businessResult.units * 2) * businessResult.margin - businessResult.f)} color={COLOR_OK} />
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <div style={inputsGrid}>
+            <InputCell label="Upfront Cost" prefix="$" value={state.upfront} onChange={(v) => setState((s) => ({ ...s, upfront: v }))} />
+            <InputCell label="Monthly Savings / Gain" prefix="$" value={state.savings} onChange={(v) => setState((s) => ({ ...s, savings: v }))} />
+            <InputCell label="Monthly Recurring Cost" prefix="$" value={state.recurring} onChange={(v) => setState((s) => ({ ...s, recurring: v }))} />
+          </div>
+
+          {decisionResult.invalid ? (
+            <Warning>
+              Recurring costs ({formatCurrency(decisionResult.r)}/mo) meet or exceed monthly savings ({formatCurrency(decisionResult.s)}/mo). Net {formatCurrency(decisionResult.net)}/mo — no break-even.
+            </Warning>
+          ) : (
+            <>
+              <div style={resultPanel(COLOR_OK)}>
+                <div style={resultLabel}>MONTHS TO PAYBACK</div>
+                <div style={{ ...resultValue, color: COLOR_OK }}>
+                  {formatMonths(decisionResult.months)}
+                  <span style={{ fontSize: 18, color: COLOR_DIM, fontWeight: 600, marginLeft: 8 }}>
+                    · {decisionResult.months.toFixed(1)} mo
+                  </span>
+                </div>
+                <div style={resultSub}>Net monthly benefit: {formatCurrency(decisionResult.net)}</div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8, marginBottom: 14 }}>
+                <Metric label="Net Monthly" value={formatCurrency(decisionResult.net)} color={COLOR_OK} />
+                <Metric label="Year-1 Gain" value={formatCurrency(decisionResult.net * 12 - decisionResult.u)} color={decisionResult.net * 12 - decisionResult.u > 0 ? COLOR_OK : COLOR_WARN} />
+                <Metric label="Year-2 Gain" value={formatCurrency(decisionResult.net * 24 - decisionResult.u)} color={COLOR_OK} />
+                <Metric label="@ +$10/mo net" value={formatMonths(decisionResult.u / (decisionResult.net + 10))} color={COLOR_ACCENT} />
+              </div>
+            </>
+          )}
         </>
       )}
-    </>
-  );
-}
 
-interface FieldProps { id: string; label: string; value: string; onChange: (v: string) => void; }
-function Field({ id, label, value, onChange }: FieldProps) {
-  return (
-    <div>
-      <label className="label" htmlFor={id}>{label}</label>
-      <input id={id} type="number" inputMode="decimal" className="input" value={value} onChange={(e) => onChange(e.target.value)} />
+      <div style={brief}>
+        <div style={briefHeader}>▸ METHODOLOGY</div>
+        {state.mode === 'business'
+          ? 'Units to break even = Fixed ÷ (Price − Variable). Contribution margin is the per-unit dollar flow into fixed-cost recovery. Above break-even, every unit contributes pure profit; below, every unit widens the loss.'
+          : 'Months to payback = Upfront ÷ (Monthly Savings − Monthly Recurring). Net monthly benefit is what actually flows into recovery after ongoing costs. A positive decision requires positive net — otherwise you accelerate the loss.'}
+      </div>
     </div>
   );
 }
+
+function ModeBtn({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        padding: '6px 12px',
+        border: `1px solid ${active ? COLOR_ACCENT : COLOR_BORDER}`,
+        background: active ? `${COLOR_ACCENT}11` : 'transparent',
+        color: active ? COLOR_ACCENT : COLOR_DIM,
+        borderRadius: 6,
+        fontSize: 11,
+        letterSpacing: '.12em',
+        fontFamily: 'inherit',
+        fontWeight: 700,
+        cursor: 'pointer',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function InputCell({ label, prefix, value, onChange }: { label: string; prefix?: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div style={{ ...panel, padding: 12 }}>
+      <label style={{ fontSize: 10, letterSpacing: '.16em', color: COLOR_DIM, display: 'block', marginBottom: 6 }}>{label}</label>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+        {prefix && <span style={{ color: COLOR_DIM, fontSize: 14 }}>{prefix}</span>}
+        <input inputMode="decimal" value={value} onChange={(e) => onChange(e.target.value)} style={inputStyle} />
+      </div>
+    </div>
+  );
+}
+
+function Metric({ label, value, color }: { label: string; value: string; color: string }) {
+  return (
+    <div style={{ ...panel, padding: 10 }}>
+      <div style={{ fontSize: 10, letterSpacing: '.14em', color: COLOR_DIM, display: 'flex', alignItems: 'center', gap: 4 }}>
+        <Activity size={12} color={color} />
+        {label}
+      </div>
+      <div style={{ fontSize: 18, color, fontWeight: 700, marginTop: 4 }}>{value}</div>
+    </div>
+  );
+}
+
+function Warning({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        ...panel,
+        padding: 12,
+        marginBottom: 14,
+        borderColor: COLOR_DANGER,
+        background: 'rgba(239,68,68,0.08)',
+        color: COLOR_DANGER,
+        fontSize: 12,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+      }}
+    >
+      <AlertTriangle size={14} /> {children}
+    </div>
+  );
+}
+
+const wrap: React.CSSProperties = {
+  padding: 24,
+  background: COLOR_BG,
+  color: COLOR_TEXT,
+  fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+  minHeight: '100%',
+  borderRadius: 12,
+  border: `1px solid ${COLOR_BORDER}`,
+};
+const header: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 };
+const title: React.CSSProperties = { fontSize: 18, fontWeight: 700, letterSpacing: '.08em' };
+const subtitle: React.CSSProperties = { fontSize: 12, color: COLOR_DIM };
+const panel: React.CSSProperties = { background: COLOR_PANEL, border: `1px solid ${COLOR_BORDER}`, borderRadius: 8 };
+const inputsGrid: React.CSSProperties = { display: 'grid', gap: 10, gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', marginBottom: 14 };
+const inputStyle: React.CSSProperties = { flex: 1, background: 'transparent', border: 'none', borderBottom: `1px solid ${COLOR_BORDER}`, color: COLOR_TEXT, fontFamily: 'inherit', fontSize: 18, fontWeight: 600, outline: 'none', padding: '2px 0', minWidth: 0 };
+const resultPanel = (color: string): React.CSSProperties => ({ ...panel, padding: 18, textAlign: 'center', borderColor: color, boxShadow: `0 0 20px ${color}22`, marginBottom: 14 });
+const resultLabel: React.CSSProperties = { fontSize: 11, letterSpacing: '.18em', color: COLOR_DIM, marginBottom: 6 };
+const resultValue: React.CSSProperties = { fontSize: 40, fontWeight: 800, letterSpacing: '.02em', color: COLOR_TEXT };
+const resultSub: React.CSSProperties = { fontSize: 13, color: COLOR_DIM, marginTop: 6 };
+const brief: React.CSSProperties = { fontSize: 11, color: COLOR_DIM, lineHeight: 1.6 };
+const briefHeader: React.CSSProperties = { color: COLOR_TEXT, fontWeight: 700, letterSpacing: '.08em', marginBottom: 4 };

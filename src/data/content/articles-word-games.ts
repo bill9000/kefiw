@@ -36,6 +36,15 @@ export const ARTICLES_WORD_GAMES: ContentPageConfig[] = [
       { q: 'Should I always play the longest word?', a: 'No. Length plus bonus squares plus tile values decide the score. A 3-letter ZA on a triple-letter often beats a 6-letter low-value word.' },
       { q: 'What is a good rack leave?', a: 'Keep 2-3 vowels and 3-4 consonants, and avoid duplicates like II or UU. Unload Q, V, W early unless they score big.' },
     ],
+    thresholds: {
+      cyan: '2-3 strong plays stand out — pick the one that protects your rack leave.',
+      gold: '4-10 contenders tied on score — sort by leave quality, not face value.',
+      magenta: '10+ equal plays or a tile-dump rack — rethink before burning the turn.',
+    },
+    pivotLink: {
+      toolId: 'scrabble-helper',
+      note: 'Unscrambled the rack — now price every play against hooks and premiums.',
+    },
   },
   {
     id: 'art-wg-vocabulary-word-unscrambler',
@@ -204,6 +213,15 @@ export const ARTICLES_WORD_GAMES: ContentPageConfig[] = [
       { q: 'Can an anagram solver find phrase anagrams?', a: 'Good ones can. Look for a multi-word option and expect slower results — the search space is massive.' },
       { q: 'What if I only have 5 of 7 letters I think are the anagram?', a: 'That is an unscrambler job. Anagram solvers require the complete letter set.' },
     ],
+    thresholds: {
+      cyan: '2-3 all-letter matches — pick the one that fits the clue.',
+      gold: '4-10 anagrams returned — clue context should narrow it.',
+      magenta: '10+ matches or none at all — you need an unscrambler, not an anagram solver.',
+    },
+    pivotLink: {
+      toolId: 'word-unscrambler',
+      note: 'Anagram solver empty-handed? Drop to an unscrambler — partial matches open the puzzle.',
+    },
   },
 
   // ============================================================
@@ -308,6 +326,15 @@ export const ARTICLES_WORD_GAMES: ContentPageConfig[] = [
       { q: 'How do I know which dictionary my game uses?', a: 'Official Scrabble apps in North America use TWL; international apps use SOWPODS. Check the app settings or just try a known SOWPODS-only word like ZO.' },
       { q: 'Does it hurt my learning to use the helper every turn?', a: 'Only if you stop thinking. Try to guess the top play before running the search — the guess-then-check habit is where the learning happens.' },
     ],
+    thresholds: {
+      cyan: '2-3 plays cluster near the top — pick the one with the best leave.',
+      gold: '4-10 close-scoring options — compare hooks and S-preservation before choosing.',
+      magenta: '10+ plays tightly bunched or zero bingos — dictionary or board anchors likely wrong.',
+    },
+    pivotLink: {
+      toolId: 'word-unscrambler',
+      note: 'Helper blank? Drop to the raw unscrambler to see every letter combo before scoring.',
+    },
   },
 
   // ============================================================
@@ -514,6 +541,15 @@ export const ARTICLES_WORD_GAMES: ContentPageConfig[] = [
       { q: 'What if my solver returns 100+ candidates?', a: 'You entered too few constraints or mislabelled some. Double-check yellows (letter AND position), greens, and every grey letter.' },
       { q: 'How do I handle the NYT "hard mode" rule?', a: 'Hard mode forces you to keep greens and yellows in your next guess. A good solver has a hard-mode toggle that filters candidates to valid hard-mode plays.' },
     ],
+    thresholds: {
+      cyan: '2-3 candidates — pick the one covering the most unknown letters.',
+      gold: '4-10 still viable — play a burner that splits the set.',
+      magenta: '10+ candidates after guess 3 — a constraint is mislabelled; recheck greys and yellows.',
+    },
+    pivotLink: {
+      toolId: '5-letter-word-finder',
+      note: 'Too many candidates? Switch to the length-locked finder and rebuild the pattern from greens alone.',
+    },
   },
 
   // ============================================================
@@ -617,5 +653,14 @@ export const ARTICLES_WORD_GAMES: ContentPageConfig[] = [
       { q: 'When should I give up and use the solver?', a: 'After 2-3 minutes on a single clue with no progress, or when you have exhausted crossings. Earlier than that and you are killing the learning.' },
       { q: 'Does the solver work on cryptic clues?', a: 'It works on the pattern half. The wordplay half (anagrams, hidden words, charades) still needs manual parsing.' },
     ],
+    thresholds: {
+      cyan: '2-3 pattern matches — clue meaning picks the winner.',
+      gold: '4-10 candidates — add a crossing letter before querying again.',
+      magenta: '10+ results — pattern is too loose; length or a fixed letter is missing.',
+    },
+    pivotLink: {
+      toolId: 'pattern-solver',
+      note: 'Crossword solver too noisy? A raw wildcard pattern surfaces fewer matches once you add length.',
+    },
   },
 ];

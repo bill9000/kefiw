@@ -1,0 +1,58 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ComparisonMatrix from '~/components/matrix/ComparisonMatrix.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/comparisons/', label: 'Comparisons' },
+  { href: '/comparisons/dual-career-path/', label: 'Dual Career Path' },
+];
+---
+<BaseLayout
+  title="Dual Career Path — Stay vs. Move | Kefiw"
+  description="Side-by-side Geo Arbitrage. Price the stay path against the move path on the same form — the delta bar shows the winning scenario in real time."
+  canonical="/comparisons/dual-career-path/"
+  keywords={['dual career path comparison', 'stay vs move calculator', 'geo arbitrage comparison', 'side by side decision']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">Comparison Matrix</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Dual Career Path</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Two scenarios, one form. Left column is the stay path — your current city, current rent. Right
+        column is the move path — new income, new cost floor. The delta bar below shows which one wins,
+        and by how much.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        Each column keeps its own state. Change the rent on either side and only that side updates. The
+        delta bar re-computes live.
+      </p>
+    </header>
+
+    <ComparisonMatrix
+      client:load
+      tool="geo-arbitrage"
+      fieldKey="relocation_monthly_gain"
+      labelA="Stay"
+      labelB="Move"
+      deltaCaption="Move monthly gain − Stay monthly gain"
+    />
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">How the matrix works</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Each column is a namespaced instance of the tool. Scenario A writes to
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">relocation_monthly_gain__a</code>;
+        Scenario B writes to
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">relocation_monthly_gain__b</code>.
+        The delta bar subscribes to both keys. Inputs never cross-contaminate.
+      </p>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Same deterministic math as the standalone tool — just run in parallel. Nothing is sent to a
+        server.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

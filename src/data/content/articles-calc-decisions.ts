@@ -99,6 +99,15 @@ export const ARTICLES_CALC_DECISIONS: ContentPageConfig[] = [
       { q: 'When does PMI fall off?', a: 'Automatically at 78% LTV based on original value, or on request at 80% LTV. On FHA loans, PMI often lasts the life of the loan unless you refinance.' },
       { q: 'Are property taxes fixed?', a: 'No — they reassess, typically every 1-3 years depending on jurisdiction. Budget for 2-4% annual tax-line drift over the life of the loan.' },
     ],
+    thresholds: {
+      cyan: 'PITI under 28% of gross income — affordable with real headroom.',
+      gold: 'PITI 28-36% of gross income — tight; stress-test against one-earner-drop scenario.',
+      magenta: 'PITI over 36% of gross income — house-poor territory, one shock breaks it.',
+    },
+    pivotLink: {
+      toolId: 'mortgage-extra-payment-calculator',
+      note: 'Payment locked — now see what extra principal really saves over 30 years.',
+    },
   },
 
   // =====================================================
@@ -300,6 +309,15 @@ export const ARTICLES_CALC_DECISIONS: ContentPageConfig[] = [
       { q: 'Should I use nominal or real return in a savings calculator?', a: 'If your target is in "today dollars" (groceries, a car model), use real return. If it is a fixed future dollar amount (a specific loan balance), use nominal.' },
       { q: 'How conservative should my return assumption be?', a: 'Knock 1-2 percentage points off historical averages. If the plan still works, you have margin. If it only works at historical average, you are one bad decade away from missing.' },
     ],
+    thresholds: {
+      cyan: 'Plan works at conservative return (historical minus 2%) — real margin.',
+      gold: 'Plan works only at historical average — one bad decade will miss it.',
+      magenta: 'Plan only works at best-case return — not a plan, a wish; rework contributions.',
+    },
+    pivotLink: {
+      toolId: 'shock-survival',
+      note: 'Saving for a goal? First confirm your emergency shock buffer is sized.',
+    },
   },
 
   // =====================================================
@@ -401,6 +419,15 @@ export const ARTICLES_CALC_DECISIONS: ContentPageConfig[] = [
       { q: 'Should I include depreciation in break-even?', a: 'For operational break-even, use cash expenses only. For economic break-even (are we creating value?), include depreciation and cost of capital.' },
       { q: 'How do I handle seasonal volume?', a: 'Compute annual break-even, not monthly. Winter losses are recovered by summer surpluses in seasonal businesses; monthly break-even is meaningless for them.' },
     ],
+    thresholds: {
+      cyan: 'Break-even under 40% of realistic market capacity — robust plan.',
+      gold: 'Break-even 40-70% of capacity — viable but fragile; add margin or volume.',
+      magenta: 'Break-even over 70% of capacity — one bad month kills it; rework pricing.',
+    },
+    pivotLink: {
+      toolId: 'runway-zero',
+      note: 'Break-even known — now count how many months of cash you have to get there.',
+    },
   },
 
   // =====================================================

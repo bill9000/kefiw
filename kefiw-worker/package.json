@@ -1,0 +1,17 @@
+{
+  "name": "kefiw-worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "db:schema": "wrangler d1 execute kefiw-telemetry --file=schema.sql --remote",
+    "db:schema:local": "wrangler d1 execute kefiw-telemetry --file=schema.sql --local"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260101.0",
+    "typescript": "^5.4.0",
+    "wrangler": "^4.0.0"
+  }
+}

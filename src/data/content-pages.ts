@@ -1,7 +1,7 @@
 import type { FaqItem, ExampleBlock } from './tools';
 
 export type ContentKind = 'word-list' | 'guide' | 'tool-variant' | 'hub';
-export type ContentSection = 'word-tools' | 'guides' | 'calculators' | 'converters' | 'games';
+export type ContentSection = 'word-tools' | 'guides' | 'calculators' | 'converters' | 'games' | 'health' | 'logic';
 export type PageType = 'hub' | 'support' | 'list' | 'tool-variant';
 
 export interface ContentCta {
@@ -44,6 +44,28 @@ export interface ContentPageConfig {
   keyPoints?: string[];
   whenToUse?: WhenToUseItem[];
   faq: FaqItem[];
+  // ULH-01 aligned — renders as System Brief on primary articles
+  thresholds?: { cyan: string; gold: string; magenta: string };
+  pivotLink?: { toolId: string; note: string };
+  // SOP tone — Brutalist industrial styling for high-heat articles
+  toneProfile?: 'sop' | 'default';
+  formulaAnchor?: { caption: string; expression: string }; // rendered as JetBrains Mono code block
+  logicalGates?: string[]; // ordered decision gates inside SOP shell
+  // Inline live-context markers — tokens like {{lm:runway_months}} in typed fields get replaced
+  liveMetrics?: Array<{
+    token: string; // e.g. 'runway_months' — appears as {{lm:runway_months}} in typed text fields
+    metric: 'runway_months' | 'survival_efficiency' | 'cognitive_load' | 'willpower_pct' | 'peptide_concentration_mg_ml' | 'peptide_waste_pct' | 'peptide_potency_pct' | 'peptide_lean_ratio_pct';
+    fallback: string;
+    decimals?: number;
+    suffix?: string;
+    prefix?: string;
+  }>;
+  // Contextual pivot switch — replaces static pivotLink when defined
+  pivotSwitch?: {
+    critical: { toolId: string; note: string };
+    stable: { toolId: string; note: string };
+    fallback: { toolId: string; note: string };
+  };
   // cross-linking
   relatedIds?: string[];
   relatedLinks?: ContentCta[];
@@ -70,6 +92,7 @@ import { SUPPORT_WORD_FAMILIES } from './content/support-word-families';
 import { SUPPORT_TEXT_CLEANUP } from './content/support-text-cleanup';
 import { SUPPORT_EVERYDAY_CALCULATORS } from './content/support-everyday-calculators';
 import { SUPPORT_SHOPPING } from './content/support-shopping';
+import { SUPPORT_DECISIONS } from './content/support-decisions';
 import { SUPPORT_UNITS } from './content/support-units';
 import { SUPPORT_DAILY } from './content/support-daily';
 import { ARTICLES_WORD_GAMES } from './content/articles-word-games';
@@ -78,6 +101,16 @@ import { ARTICLES_CALC_EVERYDAY } from './content/articles-calc-everyday';
 import { ARTICLES_CALC_DECISIONS } from './content/articles-calc-decisions';
 import { ARTICLES_TEXT_TIME } from './content/articles-text-time';
 import { ARTICLES_CONVERTERS_GAMES } from './content/articles-converters-games';
+import { ARTICLES_DECISIONS_SURVIVAL } from './content/articles-decisions-survival';
+import { ARTICLES_DECISIONS_BUSINESS } from './content/articles-decisions-business';
+import { ARTICLES_DECISIONS_CASH } from './content/articles-decisions-cash';
+import { ARTICLES_DECISIONS_LIFE } from './content/articles-decisions-life';
+import { ARTICLES_HEALTH_METABOLIC } from './content/articles-health-metabolic';
+import { ARTICLES_HEALTH_PERFORMANCE } from './content/articles-health-performance';
+import { ARTICLES_HEALTH_PEPTIDE_PREP } from './content/articles-health-peptide-prep';
+import { ARTICLES_HEALTH_PEPTIDE_BIO } from './content/articles-health-peptide-bio';
+import { ARTICLES_TRIAD_SCENARIOS } from './content/articles-triad-scenarios';
+import { ARTICLES_VIBE_GAMES } from './content/articles-vibe-games';
 
 export const CONTENT_PAGES: ContentPageConfig[] = [
   ...CLUSTER_A,
@@ -90,6 +123,7 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
   ...SUPPORT_TEXT_CLEANUP,
   ...SUPPORT_EVERYDAY_CALCULATORS,
   ...SUPPORT_SHOPPING,
+  ...SUPPORT_DECISIONS,
   ...SUPPORT_UNITS,
   ...SUPPORT_DAILY,
   ...ARTICLES_WORD_GAMES,
@@ -98,6 +132,16 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
   ...ARTICLES_CALC_DECISIONS,
   ...ARTICLES_TEXT_TIME,
   ...ARTICLES_CONVERTERS_GAMES,
+  ...ARTICLES_DECISIONS_SURVIVAL,
+  ...ARTICLES_DECISIONS_BUSINESS,
+  ...ARTICLES_DECISIONS_CASH,
+  ...ARTICLES_DECISIONS_LIFE,
+  ...ARTICLES_HEALTH_METABOLIC,
+  ...ARTICLES_HEALTH_PERFORMANCE,
+  ...ARTICLES_HEALTH_PEPTIDE_PREP,
+  ...ARTICLES_HEALTH_PEPTIDE_BIO,
+  ...ARTICLES_TRIAD_SCENARIOS,
+  ...ARTICLES_VIBE_GAMES,
 ];
 
 export function contentHref(c: ContentPageConfig): string {
@@ -112,6 +156,10 @@ export function contentHref(c: ContentPageConfig): string {
       return `/converters/${c.slug}/`;
     case 'games':
       return `/games/${c.slug}/`;
+    case 'health':
+      return `/health/${c.slug}/`;
+    case 'logic':
+      return `/logic/${c.slug}/`;
   }
 }
 
@@ -129,6 +177,8 @@ export const CATEGORY_LABEL: Record<ContentSection, string> = {
   calculators: 'Calculators',
   converters: 'Converters',
   games: 'Games',
+  health: 'Health',
+  logic: 'Logic',
 };
 
 export function contentPagesBySection(section: ContentSection): ContentPageConfig[] {

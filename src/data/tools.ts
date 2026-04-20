@@ -1,4 +1,4 @@
-export type ToolCategory = 'word-tools' | 'converters' | 'calculators' | 'games';
+export type ToolCategory = 'word-tools' | 'converters' | 'calculators' | 'games' | 'health' | 'logic';
 
 export interface FaqItem {
   q: string;
@@ -8,6 +8,11 @@ export interface FaqItem {
 export interface ExampleBlock {
   title: string;
   body: string;
+}
+
+export interface FollowUp {
+  toolId: string;
+  cta: string;
 }
 
 export interface ToolConfig {
@@ -29,6 +34,7 @@ export interface ToolConfig {
   comingSoon?: boolean;
   clusterId?: string;
   outcomeLine?: string;
+  followUps?: FollowUp[];
 }
 
 export const CATEGORIES: Record<ToolCategory, { title: string; slug: string; blurb: string }> = {
@@ -51,6 +57,16 @@ export const CATEGORIES: Record<ToolCategory, { title: string; slug: string; blu
     title: 'Games',
     slug: 'games',
     blurb: 'Lightweight browser games — Sudoku and daily puzzles. No popups, no mid-game interstitials.',
+  },
+  health: {
+    title: 'Health',
+    slug: 'health',
+    blurb: 'Deterministic health calculators: BMR/TDEE, caffeine & alcohol half-life, sleep-cycle timing, and red-flag triage. Pure formulas, no AI, no ads.',
+  },
+  logic: {
+    title: 'Logic',
+    slug: 'logic',
+    blurb: 'Cognitive throughput monitors: signal-to-noise, context-switching tax, decision-fatigue load, and deep-work capacity. System Monitor for the brain.',
   },
 };
 
@@ -83,6 +99,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['anagram-solver', 'scrabble-helper', 'words-with-friends-helper', 'word-finder'],
     island: 'WordUnscrambler',
     usesWorker: true,
+    followUps: [
+      { toolId: 'anagram-solver', cta: 'Got one word? Now find every rearrangement of those letters.' },
+      { toolId: 'scrabble-helper', cta: 'Unscrambled the rack. Now score every play.' },
+    ],
   },
   {
     id: 'anagram-solver',
@@ -109,6 +129,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['word-unscrambler', 'scrabble-helper', 'word-finder'],
     island: 'AnagramSolver',
     usesWorker: true,
+    followUps: [
+      { toolId: 'word-unscrambler', cta: 'Want partial matches too? Unscramble for every sub-word.' },
+      { toolId: 'crossword-solver', cta: 'Clue has fixed positions? Switch to pattern-based search.' },
+    ],
   },
   {
     id: 'word-finder',
@@ -134,6 +158,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['scrabble-helper', 'words-with-friends-helper', 'word-unscrambler'],
     island: 'WordFinder',
     usesWorker: true,
+    followUps: [
+      { toolId: '5-letter-word-finder', cta: 'Narrow to 5 letters for Wordle-style patterns.' },
+      { toolId: 'scrabble-helper', cta: 'Got candidates? Score them on a real board.' },
+    ],
   },
   {
     id: '5-letter-word-finder',
@@ -160,6 +188,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['word-finder', '6-letter-word-finder', '7-letter-word-finder', 'scrabble-helper'],
     island: 'WordFinder',
     usesWorker: true,
+    followUps: [
+      { toolId: 'wordle-solver', cta: 'Stuck on Wordle? Feed in your greens and yellows.' },
+      { toolId: 'word-finder', cta: 'Need other lengths? Open the full letter search.' },
+    ],
   },
   {
     id: '6-letter-word-finder',
@@ -183,6 +215,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['word-finder', '5-letter-word-finder', '7-letter-word-finder', 'scrabble-helper'],
     island: 'WordFinder',
     usesWorker: true,
+    followUps: [
+      { toolId: 'anagram-solver', cta: 'Got the letters but no pattern? Anagram them instead.' },
+      { toolId: 'daily-anagram', cta: 'Warmed up on sixes? Try today\'s anagram puzzle.' },
+    ],
   },
   {
     id: '7-letter-word-finder',
@@ -207,6 +243,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['word-finder', '5-letter-word-finder', '6-letter-word-finder', 'scrabble-helper'],
     island: 'WordFinder',
     usesWorker: true,
+    followUps: [
+      { toolId: 'scrabble-helper', cta: 'Found a bingo? Score it on a real Scrabble rack.' },
+      { toolId: 'daily-unscramble', cta: 'Sharp on sevens? Take the daily unscramble challenge.' },
+    ],
   },
   {
     id: 'wordle-solver',
@@ -234,6 +274,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['5-letter-word-finder', 'anagram-solver', 'word-finder', 'hangman-solver'],
     island: 'WordleSolver',
     usesWorker: true,
+    followUps: [
+      { toolId: '5-letter-word-finder', cta: 'Want raw 5-letter patterns? Drop the Wordle constraints.' },
+      { toolId: 'vibecipher', cta: 'Love the guessing loop? Try the cipher version.' },
+    ],
   },
   {
     id: 'hangman-solver',
@@ -259,6 +303,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['wordle-solver', 'word-finder', '5-letter-word-finder'],
     island: 'HangmanSolver',
     usesWorker: true,
+    followUps: [
+      { toolId: 'wordle-solver', cta: 'Prefer positional clues? Switch to Wordle mode.' },
+      { toolId: 'word-finder', cta: 'Known letters but no positions? Use the letter-based finder.' },
+    ],
   },
   {
     id: 'crossword-solver',
@@ -284,6 +332,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['word-finder', '5-letter-word-finder', '6-letter-word-finder', '7-letter-word-finder'],
     island: 'WordFinder',
     usesWorker: true,
+    followUps: [
+      { toolId: 'pattern-solver', cta: 'Need a broader pattern match? Drop into raw regex.' },
+      { toolId: 'anagram-solver', cta: 'Clue looks like a jumble? Switch to anagram mode.' },
+    ],
   },
   {
     id: 'pattern-solver',
@@ -308,6 +360,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['crossword-solver', 'word-finder', 'wordle-solver'],
     island: 'WordFinder',
     usesWorker: true,
+    followUps: [
+      { toolId: 'crossword-solver', cta: 'Got a crossword clue? Use the clue-aware solver.' },
+      { toolId: 'word-finder', cta: 'Starting from letters instead of positions? Switch tools.' },
+    ],
   },
   {
     id: 'words-starting-with',
@@ -332,6 +388,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['words-ending-with', 'words-containing', 'word-finder'],
     island: 'WordsStartingWith',
     usesWorker: true,
+    followUps: [
+      { toolId: 'words-ending-with', cta: 'Flip the search — find words ending with a suffix.' },
+      { toolId: 'words-containing', cta: 'Just need the letters anywhere? Try substring search.' },
+    ],
   },
   {
     id: 'words-ending-with',
@@ -355,6 +415,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['words-starting-with', 'words-containing', 'word-finder'],
     island: 'WordsEndingWith',
     usesWorker: true,
+    followUps: [
+      { toolId: 'words-starting-with', cta: 'Flip it — find words with that prefix instead.' },
+      { toolId: 'rhyme-finder', cta: 'Writing verse? Same suffix, better rhyme coverage.' },
+    ],
   },
   {
     id: 'words-containing',
@@ -378,6 +442,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['words-starting-with', 'words-ending-with', 'word-finder'],
     island: 'WordsContaining',
     usesWorker: true,
+    followUps: [
+      { toolId: 'pattern-solver', cta: 'Need position-aware matching? Use the pattern solver.' },
+      { toolId: 'word-finder', cta: 'Got letters instead of a substring? Switch search modes.' },
+    ],
   },
   {
     id: 'scrabble-helper',
@@ -403,6 +471,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['words-with-friends-helper', 'word-unscrambler', 'anagram-solver'],
     island: 'ScrabbleHelper',
     usesWorker: true,
+    followUps: [
+      { toolId: 'words-with-friends-helper', cta: 'Playing WWF instead? Scores differ on a few tiles.' },
+      { toolId: 'word-unscrambler', cta: 'Just need the word list? Skip scoring and unscramble.' },
+    ],
   },
   {
     id: 'words-with-friends-helper',
@@ -426,6 +498,10 @@ export const TOOLS: ToolConfig[] = [
     relatedIds: ['scrabble-helper', 'word-unscrambler'],
     island: 'WwfHelper',
     usesWorker: true,
+    followUps: [
+      { toolId: 'scrabble-helper', cta: 'Playing Scrabble instead? Same rack, different tile values.' },
+      { toolId: 'word-finder', cta: 'Need longer candidates? Run a plain letter search.' },
+    ],
   },
   {
     id: 'rhyme-finder',
@@ -448,6 +524,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['syllable-counter', 'words-ending-with'],
     island: 'RhymeFinder',
+    followUps: [
+      { toolId: 'syllable-counter', cta: 'Rhyme found. Now check the syllable count matches.' },
+      { toolId: 'haiku-checker', cta: 'Writing haiku? Verify the 5-7-5 structure.' },
+    ],
   },
   {
     id: 'syllable-counter',
@@ -470,6 +550,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['word-counter', 'letter-counter', 'rhyme-finder'],
     island: 'SyllableCounter',
+    followUps: [
+      { toolId: 'haiku-checker', cta: 'Targeting haiku? Check 5-7-5 directly.' },
+      { toolId: 'rhyme-finder', cta: 'Syllables fit? Now lock the rhyme.' },
+    ],
   },
   {
     id: 'letter-counter',
@@ -487,6 +571,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['word-counter', 'syllable-counter', 'case-converter'],
     island: 'LetterCounter',
+    followUps: [
+      { toolId: 'word-counter', cta: 'Need word count too? Run the broader counter.' },
+      { toolId: 'case-converter', cta: 'Counting before a rewrite? Normalize the case first.' },
+    ],
   },
   {
     id: 'word-counter',
@@ -504,6 +592,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['letter-counter', 'syllable-counter', 'case-converter'],
     island: 'WordCounter',
+    followUps: [
+      { toolId: 'reading-time-calculator', cta: 'Got the count? See how long readers will take.' },
+      { toolId: 'letter-counter', cta: 'Hitting a character limit? Drop to letter precision.' },
+    ],
   },
   {
     id: 'reverse-text',
@@ -521,6 +613,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['case-converter', 'sort-lines', 'remove-duplicate-lines'],
     island: 'ReverseText',
+    followUps: [
+      { toolId: 'case-converter', cta: 'Reversed? Now flip the case too.' },
+      { toolId: 'sort-lines', cta: 'Working on a list? Sort the lines after reversing.' },
+    ],
   },
   {
     id: 'case-converter',
@@ -538,6 +634,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['reverse-text', 'word-counter', 'letter-counter'],
     island: 'CaseConverter',
+    followUps: [
+      { toolId: 'reverse-text', cta: 'Case fixed? Flip the text order next.' },
+      { toolId: 'sort-lines', cta: 'Normalized case? Now sort the list cleanly.' },
+    ],
   },
   {
     id: 'remove-duplicate-lines',
@@ -555,6 +655,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['sort-lines', 'reverse-text', 'case-converter'],
     island: 'RemoveDuplicateLines',
+    followUps: [
+      { toolId: 'sort-lines', cta: 'Duplicates gone. Now sort what remains.' },
+      { toolId: 'case-converter', cta: 'Hidden dupes from mixed case? Normalize first.' },
+    ],
   },
   {
     id: 'sort-lines',
@@ -572,6 +676,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['remove-duplicate-lines', 'reverse-text'],
     island: 'SortLines',
+    followUps: [
+      { toolId: 'remove-duplicate-lines', cta: 'Sorted? Now strip the duplicates.' },
+      { toolId: 'reverse-text', cta: 'Need reverse order? Flip the whole list.' },
+    ],
   },
   {
     id: 'haiku-checker',
@@ -596,6 +704,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['syllable-counter', 'word-counter', 'rhyme-finder'],
     island: 'HaikuChecker',
+    followUps: [
+      { toolId: 'syllable-counter', cta: 'Off by one? Count syllables line by line.' },
+      { toolId: 'rhyme-finder', cta: 'Structure solid? Add a closing rhyme.' },
+    ],
   },
 
   // ---------- CONVERTERS ----------
@@ -613,6 +725,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'How many decimal places?', a: 'Six by default. Adjustable.' }],
     relatedIds: ['weight-converter', 'area-converter', 'volume-converter'],
     island: 'LengthConverter',
+    followUps: [
+      { toolId: 'weight-converter', cta: 'Dimensions set. Now convert the weight too.' },
+      { toolId: 'volume-converter', cta: 'Need capacity instead of length? Switch to volume.' },
+    ],
   },
   {
     id: 'weight-converter',
@@ -628,6 +744,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'Is stone supported?', a: 'Yes. 1 stone = 14 pounds = 6.35029 kg.' }],
     relatedIds: ['length-converter', 'volume-converter'],
     island: 'WeightConverter',
+    followUps: [
+      { toolId: 'length-converter', cta: 'Shipping the same item? Convert the dimensions.' },
+      { toolId: 'volume-converter', cta: 'Selling by weight and volume? Do both sides.' },
+    ],
   },
   {
     id: 'temperature-converter',
@@ -643,6 +763,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'Is Rankine supported?', a: 'Yes.' }],
     relatedIds: ['length-converter', 'weight-converter'],
     island: 'TemperatureConverter',
+    followUps: [
+      { toolId: 'length-converter', cta: 'Recipe in Celsius? Convert the tray dimensions too.' },
+      { toolId: 'weight-converter', cta: 'Oven ready? Now convert the ingredient weights.' },
+    ],
   },
   {
     id: 'area-converter',
@@ -658,6 +782,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'Are US and Imperial acres the same?', a: 'Yes, within 0.0000004 — so yes for practical purposes.' }],
     relatedIds: ['length-converter', 'volume-converter'],
     island: 'AreaConverter',
+    followUps: [
+      { toolId: 'length-converter', cta: 'Got area? Convert the sides for fencing or flooring.' },
+      { toolId: 'volume-converter', cta: 'Stacking height too? Move to volume.' },
+    ],
   },
   {
     id: 'volume-converter',
@@ -673,6 +801,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'US or UK gallons?', a: 'Both, selectable.' }],
     relatedIds: ['weight-converter', 'length-converter'],
     island: 'VolumeConverter',
+    followUps: [
+      { toolId: 'weight-converter', cta: 'Liquid volume known? Convert to weight for shipping.' },
+      { toolId: 'length-converter', cta: 'Sizing a container? Convert the dimensions next.' },
+    ],
   },
   {
     id: 'speed-converter',
@@ -688,6 +820,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'What is a knot?', a: 'One nautical mile per hour. 1 knot = 1.852 km/h.' }],
     relatedIds: ['length-converter', 'time-converter'],
     island: 'SpeedConverter',
+    followUps: [
+      { toolId: 'time-converter', cta: 'Speed set. Now figure out how long the trip takes.' },
+      { toolId: 'length-converter', cta: 'Known speed, unknown distance? Convert units cleanly.' },
+    ],
   },
   {
     id: 'time-converter',
@@ -703,6 +839,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'Do months use 30 days?', a: 'Months use the average 30.4375 days. For exact month math use the date-difference calculator.' }],
     relatedIds: ['date-difference-calculator', 'age-calculator'],
     island: 'TimeConverter',
+    followUps: [
+      { toolId: 'date-difference-calculator', cta: 'Need days between dates instead of raw units? Switch tools.' },
+      { toolId: 'hours-calculator', cta: 'Working in hours? Add up the shifts directly.' },
+    ],
   },
 
   // ---------- CALCULATORS ----------
@@ -724,6 +864,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'Does it handle negative change?', a: 'Yes, returns a negative percent.' }],
     relatedIds: ['age-calculator', 'date-difference-calculator'],
     island: 'PercentageCalculator',
+    followUps: [
+      { toolId: 'percent-of-calculator', cta: 'Need X percent of Y directly? Use the dedicated tool.' },
+      { toolId: 'percent-change-calculator', cta: 'Comparing two numbers? Switch to percent change.' },
+    ],
   },
   {
     id: 'age-calculator',
@@ -739,6 +883,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'Does it account for leap years?', a: 'Yes.' }],
     relatedIds: ['date-difference-calculator', 'percentage-calculator'],
     island: 'AgeCalculator',
+    followUps: [
+      { toolId: 'age-on-date-calculator', cta: 'Need age on a future date? Shift the reference point.' },
+      { toolId: 'date-difference-calculator', cta: 'Want the gap between any two dates? Generalize the math.' },
+    ],
   },
   {
     id: 'date-difference-calculator',
@@ -754,6 +902,10 @@ export const TOOLS: ToolConfig[] = [
     faq: [{ q: 'Does it count the end date?', a: 'The total-days figure counts full days between the two dates; it does not include the end date itself.' }],
     relatedIds: ['age-calculator', 'time-converter'],
     island: 'DateDifferenceCalculator',
+    followUps: [
+      { toolId: 'age-calculator', cta: 'One of the dates is a birthday? Use the age tool.' },
+      { toolId: 'hours-calculator', cta: 'Need sub-day precision? Drop to hours.' },
+    ],
   },
   {
     id: 'average-calculator',
@@ -779,6 +931,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['percentage-calculator', 'ratio-calculator'],
     island: 'AverageCalculator',
+    followUps: [
+      { toolId: 'percentage-calculator', cta: 'Average known? Now express it as a percentage.' },
+      { toolId: 'ratio-calculator', cta: 'Comparing two averages? Switch to ratios.' },
+    ],
   },
   {
     id: 'discount-calculator',
@@ -804,6 +960,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['tip-calculator', 'percentage-calculator'],
     island: 'DiscountCalculator',
+    followUps: [
+      { toolId: 'tip-calculator', cta: 'Discount applied. Now figure out the tip on what\'s left.' },
+      { toolId: 'percent-of-calculator', cta: 'Want to see the raw percent-of math? Switch tools.' },
+    ],
   },
   {
     id: 'tip-calculator',
@@ -828,6 +988,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['discount-calculator', 'percentage-calculator'],
     island: 'TipCalculator',
+    followUps: [
+      { toolId: 'discount-calculator', cta: 'Using a coupon too? Apply the discount first.' },
+      { toolId: 'percentage-calculator', cta: 'Splitting odd percentages? Drop to the general tool.' },
+    ],
   },
   {
     id: 'hours-calculator',
@@ -852,6 +1016,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['date-difference-calculator', 'time-converter'],
     island: 'HoursCalculator',
+    followUps: [
+      { toolId: 'date-difference-calculator', cta: 'Spanning multiple days? Switch to the date tool.' },
+      { toolId: 'time-converter', cta: 'Need the total in minutes or seconds? Convert units.' },
+    ],
   },
   {
     id: 'reading-time-calculator',
@@ -876,6 +1044,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['word-counter', 'syllable-counter'],
     island: 'ReadingTimeCalculator',
+    followUps: [
+      { toolId: 'word-counter', cta: 'Trimming to a time target? Watch the word count.' },
+      { toolId: 'syllable-counter', cta: 'Reading aloud? Syllables beat words for timing.' },
+    ],
   },
   {
     id: 'ratio-calculator',
@@ -901,6 +1073,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['fraction-calculator', 'percentage-calculator'],
     island: 'RatioCalculator',
+    followUps: [
+      { toolId: 'fraction-calculator', cta: 'Need fraction form instead? Switch representations.' },
+      { toolId: 'percentage-calculator', cta: 'Ratio solved. Now express it as a percentage.' },
+    ],
   },
   {
     id: 'fraction-calculator',
@@ -926,6 +1102,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['ratio-calculator', 'percentage-calculator'],
     island: 'FractionCalculator',
+    followUps: [
+      { toolId: 'ratio-calculator', cta: 'Fractions work better as ratios here? Convert cleanly.' },
+      { toolId: 'percentage-calculator', cta: 'Fraction done. Now show it as a percent.' },
+    ],
   },
   {
     id: 'percent-of-calculator',
@@ -947,6 +1127,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['percentage-calculator', 'percent-change-calculator', 'discount-calculator'],
     island: 'PercentageCalculator',
+    followUps: [
+      { toolId: 'percent-change-calculator', cta: 'Comparing before and after? Switch to percent change.' },
+      { toolId: 'discount-calculator', cta: 'Shopping? Use the dedicated discount tool.' },
+    ],
   },
   {
     id: 'percent-change-calculator',
@@ -968,6 +1152,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['percentage-calculator', 'percent-of-calculator', 'discount-calculator'],
     island: 'PercentageCalculator',
+    followUps: [
+      { toolId: 'percent-of-calculator', cta: 'Need raw X percent of Y? Use the simpler tool.' },
+      { toolId: 'percentage-calculator', cta: 'Want the general-purpose calculator? Switch modes.' },
+    ],
   },
   {
     id: 'age-on-date-calculator',
@@ -989,6 +1177,821 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['age-calculator', 'date-difference-calculator'],
     island: 'AgeCalculator',
+    followUps: [
+      { toolId: 'age-calculator', cta: 'Just need age today? Use the standard calculator.' },
+      { toolId: 'date-difference-calculator', cta: 'Need the raw day gap? Drop the birthday framing.' },
+    ],
+  },
+  {
+    id: 'runway-zero',
+    category: 'calculators',
+    slug: 'runway-zero',
+    title: 'Runway Zero — Cash Runway to Bankruptcy',
+    h1: 'Runway Zero',
+    description: 'Calculate the exact month your cash runs out. Crisis toggle models a worst-case scenario with revenue zeroed.',
+    keywords: ['cash runway calculator', 'burn rate calculator', 'runway zero', 'bankruptcy date calculator', 'startup runway'],
+    intro: 'Enter cash on hand, monthly burn, and monthly revenue. The calculator projects cash balance month-by-month and pinpoints the exact Zero Date. Toggle Crisis mode to zero out revenue and model the worst-case shock.',
+    howTo: [
+      'Enter your current Cash Balance.',
+      'Enter your total Monthly Burn (all outflows).',
+      'Enter your Monthly Revenue (all inflows).',
+      'Runway = Cash ÷ (Burn − Revenue). Enable Crisis to reduce revenue to $0.',
+    ],
+    examples: [
+      { title: '$250k cash, $65k burn, $22k revenue', body: 'Net burn $43k/month → ~5.8 months runway. Zero date roughly 6 months out.' },
+      { title: 'Crisis mode on same inputs', body: 'Revenue drops to $0 → runway shortens to ~3.8 months (250k ÷ 65k).' },
+    ],
+    faq: [
+      { q: 'What counts as burn?', a: 'Every outflow: salaries, rent, infrastructure, marketing, taxes, contractors. If it leaves the bank each month, include it.' },
+      { q: 'What if revenue exceeds burn?', a: 'The calculator shows an Indefinite status. No runway zero exists at current pace.' },
+      { q: 'Is my data saved?', a: 'Yes — all inputs persist to localStorage on this device and nowhere else.' },
+    ],
+    relatedIds: ['shock-survival', 'savings-goal-calculator', 'break-even-calculator', 'cS-runway-zero-basics'],
+    island: 'RunwayZero',
+    followUps: [
+      { toolId: 'shock-survival', cta: 'Runway known. Now stress-test it — can you survive a shock expense?' },
+      { toolId: 'leak-detection', cta: 'Burn too high? Find the subscription leaks draining your runway.' },
+    ],
+  },
+  {
+    id: 'shock-survival',
+    category: 'calculators',
+    slug: 'shock-survival',
+    title: 'Shock Survival — Loan Buffer After an Emergency',
+    h1: 'Shock Survival',
+    description: 'How many months of debt service survive an unexpected shock expense. Critical warning under 3 months.',
+    keywords: ['shock survival calculator', 'emergency fund calculator', 'loan buffer calculator', 'debt survival window', 'unexpected expense calculator'],
+    intro: 'Given your savings, a recurring loan payment, and a one-time shock expense, the Survival Window shows how many months of debt service remain. A Survival Gauge tracks 0–12+ months with a critical warning state under 3.',
+    howTo: [
+      'Enter your total liquid Savings.',
+      'Enter your recurring Monthly Loan Payment.',
+      'Enter the Shock Expense (the one-time event you\'re stress-testing).',
+      'Survival = (Savings − Shock) ÷ Monthly Payment.',
+    ],
+    examples: [
+      { title: '$18k savings, $1,400/mo, $3,500 shock', body: '($18,000 − $3,500) ÷ $1,400 = ~10.4 months. Stable band.' },
+      { title: '$10k savings, $1,800/mo, $6,000 shock', body: '($10,000 − $6,000) ÷ $1,800 = ~2.2 months. Critical — under 3.' },
+    ],
+    faq: [
+      { q: 'Why 3 months as the critical threshold?', a: 'Under 3 months of debt service buffer is the conventional high-default-risk band. The gauge turns red and flags the warning state.' },
+      { q: 'Does this include income?', a: 'No — this is a pure buffer model. Assume the shock also cut off income; if income continues, add it to savings.' },
+    ],
+    relatedIds: ['runway-zero', 'savings-goal-calculator', 'mortgage-calculator', 'cS-shock-survival-basics'],
+    island: 'ShockSurvival',
+    followUps: [
+      { toolId: 'runway-zero', cta: 'Know your base runway first — then overlay the shock.' },
+      { toolId: 'bill-triage', cta: 'Shock landed? Decide which bills to pay first.' },
+    ],
+  },
+  {
+    id: 'horizon-point',
+    category: 'calculators',
+    slug: 'horizon-point',
+    title: 'Horizon Point — Buy vs Rent Break-Even',
+    h1: 'Horizon Point',
+    description: 'The exact year buying a home becomes cheaper than renting. Dual-line cumulative cost chart.',
+    keywords: ['buy vs rent calculator', 'horizon point', 'rent vs buy break-even', 'home ownership break-even', 'real estate decision calculator'],
+    intro: 'Monthly rent, home price, down payment, mortgage rate, maintenance, and appreciation feed a 30-year simulation. The chart overlays cumulative rent against net-of-equity ownership cost; the Horizon Point marks the break-even year.',
+    howTo: [
+      'Set Monthly Rent and Home Price.',
+      'Adjust Down Payment %, Interest Rate, Maintenance % of price/year, and expected Appreciation.',
+      'Ownership includes interest, property tax (~1.25%/yr), maintenance, down payment, and 3% closing.',
+      'The Horizon Point is where cumulative rent equals ownership cost minus equity built.',
+    ],
+    examples: [
+      { title: '$2,200 rent, $450k home, 20% down, 6.5%', body: 'Break-even near year 6–8 depending on appreciation and maintenance assumptions.' },
+      { title: 'No appreciation', body: 'Break-even slides out several years; in hot-rent markets it may still arrive before year 10.' },
+    ],
+    faq: [
+      { q: 'Why subtract equity from ownership cost?', a: 'Equity is real value you keep when selling — it offsets the cash out. Renting has no equivalent store of value.' },
+      { q: 'What if the horizon never arrives?', a: 'The verdict shows No Break-Even. At those inputs (often low appreciation + high rate), renting stays cheaper across the 30-year window.' },
+      { q: 'Is closing cost included?', a: 'Yes — ownership starts with a 3% closing cost added to the down payment at month 0.' },
+    ],
+    relatedIds: ['mortgage-calculator', 'mortgage-extra-payment-calculator', 'crossover-calculator', 'cS-horizon-point-basics'],
+    island: 'HorizonPoint',
+    followUps: [
+      { toolId: 'geo-arbitrage', cta: 'Renting wins locally? Try the math in a cheaper city.' },
+      { toolId: 'mortgage-extra-payment-calculator', cta: 'Buying wins? Model early payoff on the mortgage.' },
+    ],
+  },
+  {
+    id: 'crossover-calculator',
+    category: 'calculators',
+    slug: 'crossover-calculator',
+    title: 'The Crossover — Subscription vs Lifetime Purchase',
+    h1: 'The Crossover',
+    description: 'The exact month when a monthly subscription overtakes a one-time lifetime purchase. Opportunity-cost toggle included.',
+    keywords: ['subscription vs lifetime calculator', 'crossover calculator', 'subscription break-even', 'sass cost calculator', 'opportunity cost calculator'],
+    intro: 'Compare a recurring subscription against a one-time "lifetime" price. The crossover month is when cumulative subscription cost overtakes the lifetime price. Toggle Opportunity Cost to compound the lifetime sum at a chosen annual return.',
+    howTo: [
+      'Enter the Monthly Subscription fee and the one-time Lifetime Price.',
+      'Crossover = Lifetime ÷ Monthly.',
+      'Enable Opportunity Cost to model the lifetime sum invested at (default 5%) annually — the crossover shifts out.',
+      'Read the Verdict: "Buy if using for more than X months."',
+    ],
+    examples: [
+      { title: '$12/mo vs $299 lifetime', body: 'Crossover at ~25 months. Buy if you\'ll use it longer than ~2 years.' },
+      { title: 'Same inputs + 5% opportunity cost', body: 'Crossover shifts to ~27 months — the uninvested $299 would have grown meanwhile.' },
+    ],
+    faq: [
+      { q: 'Why include opportunity cost?', a: 'A lifetime purchase ties up cash that could have been invested. Modeling the alternative return pushes the crossover out.' },
+      { q: 'When should I favor the subscription?', a: 'If usage is uncertain, the software evolves quickly, or you\'d use it for fewer months than the crossover.' },
+    ],
+    relatedIds: ['horizon-point', 'break-even-calculator', 'mortgage-extra-payment-calculator', 'cS-crossover-basics'],
+    island: 'CrossoverCalc',
+    followUps: [
+      { toolId: 'leak-detection', cta: 'Subscription loses? Find every other leak draining you.' },
+      { toolId: 'horizon-point', cta: 'Recurring cost too high? Check rent vs. buy next.' },
+    ],
+  },
+  {
+    id: 'leap-date',
+    category: 'calculators',
+    slug: 'leap-date',
+    title: 'The Leap — Side-Hustle to Full-Time Date',
+    h1: 'The Leap',
+    description: 'The exact date a side-hustle can sustainably replace a primary salary, factoring self-employment tax and benefits loss.',
+    keywords: ['side hustle calculator', 'quit job calculator', 'self employment leap', 'career transition math'],
+    intro: 'Your net salary plus benefits is the bar. Your hustle revenue minus expenses, taxed at a 25% self-employment reserve, is the climber. Enable the Safety Buffer to require a 1.25× overshoot before leaping.',
+    howTo: [
+      'Enter Net Salary/month, Benefits Value/month, and Hustle Revenue now.',
+      'Set Expenses/month and expected Annual Growth %.',
+      'Toggle Safety Buffer if you want a margin above parity.',
+      'The Leap Date is when hustle net clears the target — compounding monthly.',
+    ],
+    examples: [
+      { title: '$6.5k salary + $800 benefits, $2.2k hustle @ 6%/yr', body: 'Leap in ~36 months without safety buffer; ~52 with 1.25× buffer.' },
+    ],
+    faq: [
+      { q: 'Why 25% self-employment tax?', a: 'Roughly self-employment tax + state + federal for mid-bracket earners. Adjust mentally if you are higher/lower.' },
+      { q: 'What about irregular income?', a: 'Use a 12-month trailing average of hustle revenue; do not pick the best month.' },
+    ],
+    relatedIds: ['runway-zero', 'minimum-viable-rate', 'sp500-check', 'cS-leap-date-basics'],
+    island: 'LeapDate',
+    followUps: [
+      { toolId: 'minimum-viable-rate', cta: 'Pick your leap date — now lock the hourly rate that covers life.' },
+      { toolId: 'runway-zero', cta: 'Plan the runway cushion you need for the transition months.' },
+    ],
+  },
+  {
+    id: 'hire-vs-automate',
+    category: 'calculators',
+    slug: 'hire-vs-automate',
+    title: 'Hire vs Automate — Labor Replacement Crossover',
+    h1: 'Hire vs Automate',
+    description: 'Should you hire a human at $X/hr or pay $Y/mo for a SaaS/automation stack? Efficiency bar comparison.',
+    keywords: ['hire vs automate', 'automation vs human', 'saas vs employee', 'operational scaling'],
+    intro: 'Compare hourly wage × monthly hours against the monthly tool stack plus amortized setup. Toggle Manager Overhead to add the 15–20% hidden tax you pay for supervising humans.',
+    howTo: [
+      'Enter Hourly Wage and Hours/Month for the hire.',
+      'Enter monthly Tool Stack cost and Setup Hours (amortized over 12 months).',
+      'Optional: enable Manager Overhead and adjust the %.',
+      'Verdict: the cheaper option wins, with cost-per-task shown for each.',
+    ],
+    examples: [
+      { title: '$25/hr × 40hrs vs $180/mo tools', body: 'Human $1,180/mo (with 18% overhead), automation ~$200/mo. Automate.' },
+    ],
+    faq: [
+      { q: 'Why include setup time for automation?', a: 'Tools are rarely plug-and-play. Setup hours amortized over 12 months approximate the real cost of getting them to work.' },
+      { q: 'What if the task is complex?', a: 'Automation typically wins on repetition, humans on judgment. Use the tool for volume work, not bespoke decisions.' },
+    ],
+    relatedIds: ['revenue-per-head', 'minimum-viable-rate', 'cloud-exit', 'cS-hire-vs-automate-basics'],
+    island: 'HireVsAutomate',
+    followUps: [
+      { toolId: 'revenue-per-head', cta: 'Headcount decision made. Now measure revenue per person.' },
+      { toolId: 'value-floor', cta: 'Building internal? Confirm the task clears your value floor.' },
+    ],
+  },
+  {
+    id: 'value-floor',
+    category: 'calculators',
+    slug: 'value-floor',
+    title: 'The Value Floor — Outsource vs DIY',
+    h1: 'The Value Floor',
+    description: 'Is your time worth more than the professional quote? Balance-scale verdict with DIY cost vs outsourcing.',
+    keywords: ['outsource vs diy calculator', 'opportunity cost calculator', 'value of time', 'delegation decision'],
+    intro: 'DIY cost = your hourly rate × hours required + parts. Compare against the pro quote. If the scale tips toward delegating, do. Use your productive hourly rate as the baseline — not minimum wage.',
+    howTo: [
+      'Enter Your Hourly Rate and Hours Required.',
+      'Enter Parts/Materials cost and the Professional Quote.',
+      'Read the balance scale: DIY or DELEGATE.',
+    ],
+    examples: [
+      { title: '$125/hr × 4hrs + $60 parts vs $300 quote', body: 'DIY = $560, quote = $300 → DELEGATE (saves $260 of your time).' },
+    ],
+    faq: [
+      { q: 'How do I set my hourly rate?', a: 'Use what you earn at your most productive — freelance rate, salary ÷ productive hours, or the revenue your business produces per hour of your focused work.' },
+      { q: 'Does this ignore learning value?', a: 'Yes — it is cost-only. If the DIY teaches you something valuable or reusable, adjust the verdict mentally.' },
+    ],
+    relatedIds: ['hire-vs-automate', 'minimum-viable-rate', 'sp500-check', 'cS-value-floor-basics'],
+    island: 'ValueFloor',
+    followUps: [
+      { toolId: 'hire-vs-automate', cta: 'Below floor? Decide between hiring it out or automating.' },
+      { toolId: 'cloud-exit', cta: 'Cloud costs below floor? Time to rebuild on-prem.' },
+    ],
+  },
+  {
+    id: 'cloud-exit',
+    category: 'calculators',
+    slug: 'cloud-exit',
+    title: 'The Cloud Exit — Managed vs Self-Hosted Crossover',
+    h1: 'The Cloud Exit',
+    description: 'When does a $2k cloud bill justify an $8k rack? Crossover math with depreciation, electricity, and uptime risk.',
+    keywords: ['self host vs cloud', 'cloud exit calculator', 'aws cost calculator', 'hardware vs saas'],
+    intro: 'Cumulative cloud cost vs cumulative self-host cost (hardware amortized + electricity + maintenance hours + uptime risk as a % of cloud). The crossover month is when self-hosting catches up.',
+    howTo: [
+      'Enter Cloud Monthly and Data Egress separately (egress is the silent killer).',
+      'Enter Hardware One-Time and Depreciation Months (usually 36).',
+      'Enter Electricity, Maint Hours/Month, Your Hourly Rate, and Uptime Risk %.',
+      'The Crossover Chart shows when self-hosting wins.',
+    ],
+    examples: [
+      { title: '$2k cloud + $250 egress vs $8k rack', body: 'Crossover at month 4–5 — self-hosting wins fast once egress is in the mix.' },
+    ],
+    faq: [
+      { q: 'Why include uptime risk?', a: 'Cloud buys you five-nines; self-hosting has inherent downtime. Treat it as a percentage of cloud spend you are "saving up for" outages.' },
+      { q: 'Does depreciation match real life?', a: '36 months is conservative for most server hardware. Use 48–60 for low-duty setups, 24 for high-wear or bleeding-edge kit.' },
+    ],
+    relatedIds: ['crossover-calculator', 'hire-vs-automate', 'sp500-check', 'cS-cloud-exit-basics'],
+    island: 'CloudExit',
+    followUps: [
+      { toolId: 'value-floor', cta: 'Exit payback known. Now set the floor for any rebuild.' },
+      { toolId: 'tech-debt-interest', cta: 'Leaving cloud? Measure the debt you\'re dragging along.' },
+    ],
+  },
+  {
+    id: 'minimum-viable-rate',
+    category: 'calculators',
+    slug: 'minimum-viable-rate',
+    title: 'Minimum Viable Rate — Freelancer Reality Check',
+    h1: 'Minimum Viable Rate',
+    description: 'The absolute minimum hourly rate to match a corporate salary after self-employment tax, benefits, and non-billable time.',
+    keywords: ['freelance hourly rate', 'minimum viable rate', 'mvr calculator', 'consultant rate', 'billable hours'],
+    intro: 'Annual need (salary + benefits + overhead) divided by effective billable hours (weeks × hours × utilization). Utilization is the hidden lever — at 60%, 40 weekly hours becomes 24 actually billable.',
+    howTo: [
+      'Enter Target Salary, Benefits Value, Business Overhead (all annual).',
+      'Enter Billable Weeks and Hours/Week.',
+      'Set Utilization % — the share of your time that is actually invoiced.',
+      'MVR = (salary + benefits + overhead) ÷ effective hours.',
+    ],
+    examples: [
+      { title: '$120k + $18k benefits + $9k overhead, 47w × 40h × 60%', body: 'MVR ≈ $130/hr. Anything less is a pay cut vs the W-2 equivalent.' },
+    ],
+    faq: [
+      { q: 'What should Utilization % be?', a: '50–70% is typical. New freelancers underestimate admin/sales time; veterans with a pipeline hit 75%+.' },
+      { q: 'Should I include business overhead?', a: 'Yes — tools, accounting, coworking, training. They are the cost of running yourself as a company.' },
+    ],
+    relatedIds: ['leap-date', 'value-floor', 'revenue-per-head', 'cS-minimum-viable-rate-basics'],
+    island: 'MinimumViableRate',
+    followUps: [
+      { toolId: 'gig-net-floor', cta: 'Got your rate? See what gig work really pays after mileage.' },
+      { toolId: 'leap-date', cta: 'Rate locked — when can you leap from side hustle to full time?' },
+    ],
+  },
+  {
+    id: 'sp500-check',
+    category: 'calculators',
+    slug: 'sp500-check',
+    title: 'S&P 500 Reality Check — Opportunity Cost Calculator',
+    h1: 'S&P 500 Reality Check',
+    description: 'What this $10k would be worth in 10, 20, or 30 years if invested instead. Compound-growth opportunity-cost filter.',
+    keywords: ['opportunity cost calculator', 'sp 500 calculator', 'compound growth', 'investment vs spending', 'future value'],
+    intro: 'Future value = principal × (1 + return)^years. The default 7% reflects long-run S&P 500 real returns. Raise to 15–20% to model a venture or leveraged business alternative. If the future value exceeds 5× the spend, the opportunity cost is high — the purchase must justify a big gap.',
+    howTo: [
+      'Enter the proposed Purchase/Investment amount.',
+      'Set Time Horizon in years.',
+      'Set Expected Return % (default 7, cap commonly 20 for venture).',
+      'Read the 10-, 20-, and 30-year future values plus the opportunity-cost delta.',
+    ],
+    examples: [
+      { title: '$10k at 7% for 20 years', body: 'Future value ≈ $38.7k — the "$10k purchase" has a ~$28.7k opportunity cost at that horizon.' },
+    ],
+    faq: [
+      { q: 'Why 7% as default?', a: 'Roughly the long-run real (inflation-adjusted) return of the S&P 500. Nominal returns are higher; use real for honest comparisons.' },
+      { q: 'Does this account for taxes?', a: 'No — pre-tax figures. In tax-advantaged accounts the numbers hold; in taxable accounts knock 15–25% off the future value.' },
+    ],
+    relatedIds: ['value-floor', 'crossover-calculator', 'horizon-point', 'cS-sp500-check-basics'],
+    island: 'SP500Check',
+    followUps: [
+      { toolId: 'minimum-viable-rate', cta: 'Business losing to index? Set the rate that beats it.' },
+      { toolId: 'upskill-payback', cta: 'Index winning? Maybe skills pay better than the business.' },
+    ],
+  },
+  {
+    id: 'tech-debt-interest',
+    category: 'calculators',
+    slug: 'tech-debt-interest',
+    title: 'Tech Debt Interest — Compounding Cost of a Hack',
+    h1: 'Tech Debt Interest',
+    description: 'Quantify the compounding hours to fix a shortcut as the codebase grows on top of it. Maintenance heatmap.',
+    keywords: ['technical debt calculator', 'tech debt interest', 'code velocity', 'refactor cost', 'engineering strategy'],
+    intro: 'Payoff hours = initial fix × (1 + effective growth)^months. Effective growth compounds with code velocity — more features landing on the hack accelerate the drag.',
+    howTo: [
+      'Enter Initial Fix Hours and Monthly Growth %.',
+      'Set Code Velocity — new features built on top per month.',
+      'Set how many months you plan to wait before paying it down.',
+      'The heatmap shades each month by maintenance burden band.',
+    ],
+    examples: [
+      { title: '6hr fix, 8%/mo growth, 18 months wait, velocity 5', body: 'Payoff ≈ 22hrs — almost 4× the original, with a red-band heatmap past month 12.' },
+    ],
+    faq: [
+      { q: 'What is a good growth rate?', a: '5–10%/mo for actively-developed modules; near 0 for stable utilities. High-churn areas compound fastest.' },
+      { q: 'Is this an exact estimate?', a: 'No — it is an order-of-magnitude tool to force the conversation about scheduling repayment.' },
+    ],
+    relatedIds: ['hire-vs-automate', 'revenue-per-head', 'crossover-calculator', 'cS-tech-debt-interest-basics'],
+    island: 'TechDebtInterest',
+    followUps: [
+      { toolId: 'hire-vs-automate', cta: 'Debt too steep? Decide hire, automate, or rebuild.' },
+      { toolId: 'revenue-per-head', cta: 'Interest compounding? Check if output per head is falling.' },
+    ],
+  },
+  {
+    id: 'revenue-per-head',
+    category: 'calculators',
+    slug: 'revenue-per-head',
+    title: 'Revenue per Head — Hiring Velocity Check',
+    h1: 'Revenue per Head',
+    description: 'Will the next hire raise profit-per-employee or add bloat? RPH delta with management tax and ramp-up penalty.',
+    keywords: ['revenue per employee', 'hiring decision calculator', 'profit per head', 'operational scaling'],
+    intro: 'Current RPH = revenue ÷ employees. Projected RPH accounts for the loaded cost of the new hire (salary × (1 + management tax)) and a ramp-up penalty at 50% productivity during the ramp window.',
+    howTo: [
+      'Enter Current Revenue and Current Employees.',
+      'Enter Projected Revenue after the hire.',
+      'Enter Hire Salary, Management Tax %, and Ramp-Up Months.',
+      'Verdict: HIRE / MARGINAL / BLOAT based on RPH delta.',
+    ],
+    examples: [
+      { title: '$1.2M/5 vs $1.6M/6 with $95k hire', body: 'Current RPH $240k, projected $260k → HIRE (loaded cost + ramp already included).' },
+    ],
+    faq: [
+      { q: 'Is RPH the right metric?', a: 'For service businesses, yes. For capital-heavy operations, pair with margin-per-head.' },
+      { q: 'What is Management Tax?', a: 'The 15–20% of a manager\'s time absorbed by each report — meetings, reviews, blockers. It is real and rarely modeled.' },
+    ],
+    relatedIds: ['hire-vs-automate', 'minimum-viable-rate', 'tech-debt-interest', 'cS-revenue-per-head-basics'],
+    island: 'RevenuePerHead',
+    followUps: [
+      { toolId: 'hire-vs-automate', cta: 'Ratio dropping? Stop hiring and automate instead.' },
+      { toolId: 'runway-zero', cta: 'Per-head falling? Recount the months of runway.' },
+    ],
+  },
+  {
+    id: 'calorie-optimizer',
+    category: 'calculators',
+    slug: 'calorie-optimizer',
+    title: 'Calorie-per-Dollar — Fuel Efficiency Optimizer',
+    h1: 'Calorie-per-Dollar',
+    description: 'Most calories per dollar spent — survival math for when the food budget is hard-capped.',
+    keywords: ['calorie per dollar', 'cheapest calories', 'food budget calculator', 'cost per calorie'],
+    intro: 'Calories ÷ price, ranked. The most brutal possible measure: how many calories of fuel does each item buy? Not a nutrition plan — a survival-window tool for when the grocery budget is the constraint.',
+    howTo: [
+      'Add items with Name, Price, and Calories (per package).',
+      'The tool ranks them by calories per dollar.',
+      'Use the best-ranked items as the survival base; layer variety on top if budget permits.',
+    ],
+    examples: [
+      { title: 'Rice vs fast food', body: '5lb rice at $6.50 = ~1,230 cal/$. A $12 fast-food combo at 1,100 cal = ~92 cal/$. 13× gap.' },
+    ],
+    faq: [
+      { q: 'Should I eat only the top of the list?', a: 'No — this is fuel math, not nutrition. Pair highest cal/$ with cheap protein and vegetables for a sustainable base.' },
+      { q: 'How accurate are calorie labels?', a: 'Within ~10%. Good enough for ranking decisions.' },
+    ],
+    relatedIds: ['bill-triage', 'gig-net-floor', 'vice-to-value', 'cS-calorie-optimizer-basics'],
+    island: 'CalorieOptimizer',
+    followUps: [
+      { toolId: 'bio-fuel', cta: 'Calories set. Now tune the macro fuel mix.' },
+      { toolId: 'fuel-partition', cta: 'Eating enough? Decide where the fuel actually goes.' },
+    ],
+  },
+  {
+    id: 'gig-net-floor',
+    category: 'calculators',
+    slug: 'gig-net-floor',
+    title: 'Gig Net Floor — Real Hourly After Mileage Cost',
+    h1: 'Gig Net Floor',
+    description: 'What DoorDash or Uber actually pays after IRS mileage depreciation — real hourly vs the minimum wage floor.',
+    keywords: ['gig worker pay calculator', 'doordash real pay', 'uber real hourly', 'mileage depreciation'],
+    intro: 'Operating cost = miles × $0.67 (2024 IRS standard rate — captures gas + maintenance + depreciation, not just gas). Real hourly = (gross − operating cost) ÷ hours. If real hourly is below federal or local minimum wage, you are trading car equity for app cash.',
+    howTo: [
+      'Enter Gross Pay for the shift, Miles Driven, and Hours Worked.',
+      'Set Gas Price and Local Minimum Wage for sanity checks.',
+      'The dial shows real hourly vs the minimum wage floor.',
+    ],
+    examples: [
+      { title: '$140 / 95mi / 6hr shift', body: 'Operating cost $63.65 → real profit $76.35 → $12.73/hr. Above federal min, below $15 local min.' },
+    ],
+    faq: [
+      { q: 'Why IRS $0.67 and not just gas?', a: 'Because your tires, oil, brakes, and the car itself all wear per mile. The IRS rate is the closest thing to a true per-mile cost.' },
+      { q: 'Does this count tips?', a: 'Include tips in Gross Pay. The tool doesn\'t distinguish sources.' },
+    ],
+    relatedIds: ['minimum-viable-rate', 'bill-triage', 'calorie-optimizer', 'cS-gig-net-floor-basics'],
+    island: 'GigNetFloor',
+    followUps: [
+      { toolId: 'minimum-viable-rate', cta: 'Gig net too low? Set the rate floor that actually covers your life.' },
+      { toolId: 'asset-liquidator', cta: 'Car eating your gig income? Run the liquidation math.' },
+    ],
+  },
+  {
+    id: 'bill-triage',
+    category: 'calculators',
+    slug: 'bill-triage',
+    title: 'Bill Triage — Emergency Payment Priority',
+    h1: 'Bill Triage',
+    description: 'When you can\'t pay everything, which bill first? Weighted ranking by service-cutoff risk and late-fee pain.',
+    keywords: ['bill prioritization', 'bill triage', 'emergency budgeting', 'which bill to pay first'],
+    intro: 'Score = (essential level × 10) + (late fee ÷ amount × 100). Essential level: 1 credit card, 2 internet, 3 car/rent, 4 water/electric. Higher essential = higher cutoff pain. High late-fee-ratio bills also rise.',
+    howTo: [
+      'Add each bill: Name, Amount, Late Fee, and Essential Level.',
+      'The stack ranks from MUST PAY at top to CAN WAIT at bottom.',
+      'Top item pulses if in the critical band.',
+    ],
+    examples: [
+      { title: 'Electric $180 fee $25 (lvl 4) vs Credit Card $250 fee $35 (lvl 1)', body: 'Electric scores 53.9 → MUST PAY first; credit card scores 24 → medium.' },
+    ],
+    faq: [
+      { q: 'What about credit score impact?', a: 'Credit card late fees ding credit; the score weights them via the fee-ratio component but does not distinguish score impact vs service cutoff.' },
+      { q: 'Can I customize Essential Levels?', a: 'Use the dropdown labels as categories — adjust the level to reflect how pain stacks for your situation.' },
+    ],
+    relatedIds: ['shock-survival', 'calorie-optimizer', 'gig-net-floor', 'cS-bill-triage-basics'],
+    island: 'BillTriage',
+    followUps: [
+      { toolId: 'default-optimizer', cta: 'Some bills lose. Decide which to default on first.' },
+      { toolId: 'shock-survival', cta: 'Triage done. Now rebuild the shock buffer.' },
+    ],
+  },
+  {
+    id: 'vice-to-value',
+    category: 'calculators',
+    slug: 'vice-to-value',
+    title: 'Vice to Value — Habit Cost to Goal Progress',
+    h1: 'Vice to Value',
+    description: 'Turn abstinence from a habit into dollars saved toward something you actually need.',
+    keywords: ['cost of habit calculator', 'quit smoking calculator', 'habit cost', 'savings from quitting'],
+    intro: 'Daily habit cost = (per occurrence × frequency per week) ÷ 7. Multiply by days abstained to get saved amount. The progress bar fills toward a named goal — replacement beats willpower.',
+    howTo: [
+      'Enter Cost per Vice and Times per Week.',
+      'Name the Goal and enter its cost.',
+      'Enter Days Abstained so far — progress fills the bar.',
+      'Read days remaining to fund the goal.',
+    ],
+    examples: [
+      { title: '$12/pack × 5/wk, goal = $180 boots', body: '$8.57/day. 14 days in → $120 saved, ~7 days left to goal.' },
+    ],
+    faq: [
+      { q: 'What counts as abstinence?', a: 'Days you would normally have spent but didn\'t. Partial days don\'t count; round down.' },
+      { q: 'Can I track multiple vices?', a: 'This tool tracks one at a time. Run separate instances for separate habits.' },
+    ],
+    relatedIds: ['bill-triage', 'calorie-optimizer', 'savings-goal-calculator', 'cS-vice-to-value-basics'],
+    island: 'ViceToValue',
+    followUps: [
+      { toolId: 'dopamine-minimum', cta: 'Vice priced. Now find the minimum dopamine dose you need.' },
+      { toolId: 'calorie-optimizer', cta: 'Calories from vice? Rebalance the daily fuel plan.' },
+    ],
+  },
+  {
+    id: 'time-to-human',
+    category: 'calculators',
+    slug: 'time-to-human',
+    title: 'Time to Human — Social ROI Calculator',
+    h1: 'Time to Human',
+    description: 'Weighed social ROI — does the connection payoff beat the transit, cost, and energy tax of leaving the house?',
+    keywords: ['social energy calculator', 'social battery', 'introvert calculator', 'social roi'],
+    intro: 'Vibe score = (connection × 10) ÷ (transit + cost + energy_tax). Energy tax grows as energy drops. Score ≥ 1.0 → GO; below → STAY. Built for the depressive dip where leaving the house feels impossible.',
+    howTo: [
+      'Rate your Energy (1-10) — low energy inflates the tax.',
+      'Enter Transit minutes and Cost in dollars.',
+      'Rate Connection Intensity — how much you actually like these people (1-10).',
+      'Read the GO/STAY verdict and the battery gauge.',
+    ],
+    examples: [
+      { title: 'Low energy + far drive', body: 'Energy 3, transit 45, cost $25, connection 6 → score 0.36 → STAY.' },
+      { title: 'Close friend nearby', body: 'Energy 7, transit 10, cost $0, connection 9 → score 2.25 → GO.' },
+    ],
+    faq: [
+      { q: 'Is 1.0 the right threshold?', a: 'It\'s a calibrated midpoint. Below 1, the energy/money spend outweighs the connection value by formula. Tune it yourself — the point is deterministic.' },
+      { q: 'Does this trivialize mental health?', a: 'No — it removes the guilt cycle. The tool gives you permission to stay home when the numbers say the outing is a net cost.' },
+    ],
+    relatedIds: ['social-latency', 'dopamine-minimum', 'burnout-monitor', 'cS-time-to-human-basics'],
+    island: 'TimeToHuman',
+    followUps: [
+      { toolId: 'social-latency', cta: 'Time booked. Now check how fast you reply to loved ones.' },
+      { toolId: 'connection-check', cta: 'Hours logged? Audit whether the connection is actually deepening.' },
+    ],
+  },
+  {
+    id: 'dopamine-minimum',
+    category: 'calculators',
+    slug: 'dopamine-minimum',
+    title: 'Dopamine Minimum — The One Task Pivot',
+    h1: 'Dopamine Minimum',
+    description: 'Pick the ONE task with the best visibility-to-effort ratio when a full to-do list is too much to face.',
+    keywords: ['one thing calculator', 'depression productivity', 'minimum viable task', 'dopamine hack'],
+    intro: 'Momentum = visibility ÷ effort. Rank your tasks and the single highest-momentum one gets the glowing button. You do one thing. The rest waits. The compounded effect of one small visible win is usually enough to pivot the day.',
+    howTo: [
+      'List 3-10 candidate tasks.',
+      'Rate visibility (1-10) — how obviously done does it look?',
+      'Rate effort (1-10) — how much does it actually take?',
+      'The top of the rank is your one task. Do only that one.',
+    ],
+    examples: [
+      { title: 'Made bed beats deep clean', body: 'Make bed (vis 8, eff 2) = 4.0. Clean kitchen (vis 9, eff 9) = 1.0. Make bed wins today.' },
+    ],
+    faq: [
+      { q: 'What if I can\'t even pick one?', a: 'Pick any. Do it. The goal is to break activation energy, not to optimize.' },
+      { q: 'Does this mean I never clean the kitchen?', a: 'No — it means not today. Tomorrow, reshuffle. Clean kitchen climbs as smaller tasks fall off.' },
+    ],
+    relatedIds: ['time-to-human', 'burnout-monitor', 'social-latency', 'cS-dopamine-minimum-basics'],
+    island: 'DopamineMinimum',
+    followUps: [
+      { toolId: 'vice-to-value', cta: 'Baseline found. Now price the vice against a better use.' },
+      { toolId: 'focus-horizon', cta: 'Stimulation down? Watch deep-work capacity climb.' },
+    ],
+  },
+  {
+    id: 'trap-detector',
+    category: 'calculators',
+    slug: 'trap-detector',
+    title: 'Trap Detector — True APR of Payday Loans and Pawn Deals',
+    h1: 'Trap Detector',
+    description: 'Compute the true APR of a payday loan, pawn redemption, or cash advance — with a predatory heatmap from fair to extortionate.',
+    keywords: ['payday loan apr', 'true apr calculator', 'pawn shop cost', 'cash advance apr'],
+    intro: 'APR = (total cost ÷ principal) × (365 ÷ days) × 100. Credit-card baseline is ~29%. A $15 fee on $100 for 14 days is 391% APR. The Trap Detector makes the multiplier obvious.',
+    howTo: [
+      'Enter the loan amount and total fee.',
+      'Add interest rate (if any) and days until repayment.',
+      'Read the APR, cost-per-day, and how many times worse than a credit card.',
+    ],
+    examples: [
+      { title: 'Classic payday', body: '$100, $15 fee, 14 days → 391% APR → 13.5× CC.' },
+      { title: 'Pawn redemption', body: '$200 loan, $40 fee, 30 days → 244% APR → 8.4× CC.' },
+    ],
+    faq: [
+      { q: 'Is the Trap Detector advice?', a: 'No — it\'s math. APR bands are there so you can compare products honestly.' },
+      { q: 'What if I can\'t get a credit card?', a: 'The tool still tells you the true cost. Use that to bargain or find a friends-and-family rate.' },
+    ],
+    relatedIds: ['bill-triage', 'default-optimizer', 'liquid-value', 'cS-trap-detector-basics'],
+    island: 'TrapDetector',
+    followUps: [
+      { toolId: 'default-optimizer', cta: 'Trap exposed — triage which debts to default on first.' },
+      { toolId: 'bill-triage', cta: 'Cash tight? Triage every bill by survival tier.' },
+    ],
+  },
+  {
+    id: 'burnout-monitor',
+    category: 'calculators',
+    slug: 'burnout-monitor',
+    title: 'Burnout Monitor — Sleep vs Hustle Break-even',
+    h1: 'Burnout Monitor',
+    description: 'Effective hourly rate after cognitive decay from sleep loss — the point where staying up to work actually costs money.',
+    keywords: ['sleep deprivation calculator', 'cognitive decline sleep', 'overwork calculator', 'burnout math'],
+    intro: 'Cognitive multiplier by sleep: ≥8h = 100%, 7h = 95%, 6h = 85%, 5h = 72%, 4h = 60%, 3h = 48%, &lt;3h = 35%. Extra hours tonight cost you tomorrow\'s output. The fog overlay visualizes the degradation.',
+    howTo: [
+      'Enter sleep hours you\'ll actually get tonight.',
+      'Enter hours of extra work you\'d add by staying up.',
+      'Enter your normal hourly rate.',
+      'Read effective rate, gross tonight, tomorrow loss, and net.',
+    ],
+    examples: [
+      { title: '5h sleep, 3 extra hours, $30/hr', body: 'Cognitive 72% → effective $21.60/hr. Tomorrow loss ≈ $25. Gross tonight $90; net ≈ $65.' },
+    ],
+    faq: [
+      { q: 'Are the multipliers scientifically exact?', a: 'They approximate the research on sleep-restriction cognitive penalty. Individual variation is large — treat as directional.' },
+      { q: 'What if I can\'t sleep 8 hours?', a: 'Fewer extra hours. The monitor shows the tradeoff; you pick the floor you can live with.' },
+    ],
+    relatedIds: ['minimum-viable-rate', 'gig-net-floor', 'revenue-per-head', 'cS-burnout-monitor-basics'],
+    island: 'BurnoutMonitor',
+    followUps: [
+      { toolId: 'minimum-viable-rate', cta: 'Burning out? Set a rate that doesn\'t require the grind.' },
+      { toolId: 'rem-sync', cta: 'Gauge in the red? Sleep cycles are the first lever.' },
+    ],
+  },
+  {
+    id: 'bio-fuel',
+    category: 'calculators',
+    slug: 'bio-fuel',
+    title: 'Bio-Fuel Efficiency — Calories per Dollar with Days of Uptime',
+    h1: 'Bio-Fuel',
+    description: 'Rank food by kilocalories per dollar and convert grocery spend into days of biological uptime at a 2,000 kcal baseline.',
+    keywords: ['calorie per dollar', 'cheap food calculator', 'kcal per dollar', 'grocery efficiency'],
+    intro: 'Pillars plot kcal/$ per item. Rice, beans, peanut butter pulse green (efficient staples); ready-meals render in depleted magenta (luxury fuel). Total calories translate to days-of-uptime at the 2,000 kcal/day survival baseline.',
+    howTo: [
+      'Add food items with price, calories, and protein.',
+      'Read the efficiency pillars — taller green = more fuel per dollar.',
+      'Check total days-of-uptime against your budget.',
+    ],
+    examples: [
+      { title: 'Rice (5lb) for $6', body: '8,000 kcal ÷ $6 = 1,333 kcal/$ — 4.0 days of survival food for six bucks.' },
+      { title: 'Ready-meal for $8', body: '700 kcal ÷ $8 = 88 kcal/$ — 0.35 days of uptime. Luxury fuel.' },
+    ],
+    faq: [
+      { q: 'Is 2,000 kcal the right baseline?', a: 'It\'s the US dietary reference intake — a reasonable anchor for an adult. Adjust mentally for your own maintenance.' },
+      { q: 'What about protein and micronutrients?', a: 'Tool tracks protein-per-dollar as a secondary column. Beans and peanut butter top both metrics.' },
+    ],
+    relatedIds: ['calorie-optimizer', 'bill-triage', 'trap-detector', 'cS-bio-fuel-basics'],
+    island: 'BioFuel',
+    followUps: [
+      { toolId: 'calorie-optimizer', cta: 'Macros set. Now anchor the total calorie target.' },
+      { toolId: 'metabolic-floor', cta: 'Fuel plan drafted. Now check your metabolic floor.' },
+    ],
+  },
+  {
+    id: 'default-optimizer',
+    category: 'calculators',
+    slug: 'default-optimizer',
+    title: 'Strategic Default Optimizer — Triage Debt by Survival Tier',
+    h1: 'Default Optimizer',
+    description: 'When cash can\'t cover all bills — greedy-fill the life-support tier first, then assets, connectivity, unsecured. System-critical alert on unfunded tier-1.',
+    keywords: ['strategic default', 'bill prioritization', 'debt triage', 'which bills to skip'],
+    intro: 'Tier 1 = housing, electric, water (life support). Tier 2 = vehicle (asset retention). Tier 3 = internet/phone (connectivity). Tier 4 = unsecured (credit cards). Cash available fills top-down. Unpaid tier-1 flips the UI into System Critical.',
+    howTo: [
+      'Enter cash available this cycle.',
+      'List each bill with its tier and amount.',
+      'Read the PAY/SKIP verdict and the System Critical status.',
+    ],
+    examples: [
+      { title: '$600 cash, $1200 rent first', body: 'Tier 1 unfunded → System Critical. Raise cash, negotiate, or skip every tier-2+ bill.' },
+    ],
+    faq: [
+      { q: 'Is strategic default legal?', a: 'Yes — unsecured credit-card default carries credit damage but not jail. Consult a consumer-debt attorney for timing and exemptions.' },
+      { q: 'Why not pay smallest bills first?', a: 'Because a skipped $1,200 rent evicts you while a skipped $80 card costs a credit-score hit. Triage by damage potential.' },
+    ],
+    relatedIds: ['bill-triage', 'trap-detector', 'liquid-value', 'cS-default-optimizer-basics'],
+    island: 'DefaultOptimizer',
+    followUps: [
+      { toolId: 'bill-triage', cta: 'Long-term plan set — now triage this month\'s bills by survival tier.' },
+      { toolId: 'shock-survival', cta: 'Build the buffer that prevents the next forced default.' },
+    ],
+  },
+  {
+    id: 'asset-liquidator',
+    category: 'calculators',
+    slug: 'asset-liquidator',
+    title: 'Asset Liquidator — Gig Income vs Vehicle Depreciation',
+    h1: 'Asset Liquidator',
+    description: 'Dual-dial gig earnings vs net-worth impact using the IRS $0.67/mile standard rate — how much of the car you sold today.',
+    keywords: ['gig driver calculator', 'irs mileage', 'uber lyft doordash cost', 'real hourly gig'],
+    intro: 'Real profit = gross pay − (miles × $0.67). The IRS standard anchors full ownership cost: fuel, depreciation, insurance, tires, repairs. Dual-dial shows app earnings vs net-worth impact — many gigs look profitable but cannibalize the car.',
+    howTo: [
+      'Enter gross pay for the shift.',
+      'Enter miles driven.',
+      'Enter hours worked.',
+      'Read real profit, real hourly, and the net-worth impact dial.',
+    ],
+    examples: [
+      { title: '$220 gross, 180 miles, 8h', body: 'True cost $120.60. Real profit $99.40. Real hourly $12.42/hr. Net impact 45%.' },
+      { title: '$150 gross, 200 miles', body: 'True cost $134. Real profit $16. Net impact 11% — mostly liquidating.' },
+    ],
+    faq: [
+      { q: 'Can I use actual cost instead of IRS rate?', a: 'The IRS rate is a strong default. Track your own fuel + depreciation + maintenance and substitute if you prefer.' },
+      { q: 'How does this differ from Gig Net Floor?', a: 'Asset Liquidator frames the tradeoff as dual earnings/impact dials; Gig Net Floor checks real hourly against minimum wage. Same math, different view.' },
+    ],
+    relatedIds: ['gig-net-floor', 'minimum-viable-rate', 'time-poverty', 'cS-asset-liquidator-basics'],
+    island: 'AssetLiquidator',
+    followUps: [
+      { toolId: 'gig-net-floor', cta: 'Car eating income? See what gig work really nets.' },
+      { toolId: 'liquid-value', cta: 'Thinking of selling? Price the liquidation cleanly.' },
+    ],
+  },
+  {
+    id: 'social-latency',
+    category: 'calculators',
+    slug: 'social-latency',
+    title: 'Social Latency Engine — Connection ROI Gauge',
+    h1: 'Social Latency',
+    description: 'Pure-numerical social ROI = (intensity × 10) ÷ (energy + money). UPLINK ≥ 1.0, STANDBY below. Neural synchrony gauge, no advice layer.',
+    keywords: ['social roi', 'energy expenditure calculator', 'connection intensity', 'neural synchrony'],
+    intro: 'Minimal numerical variant of the social-ROI pattern. Three inputs, one gauge, one verdict — UPLINK or STANDBY. No copy, no motivation. Read the number and decide.',
+    howTo: [
+      'Enter energy expenditure (arbitrary units, 1-100).',
+      'Enter financial outlay ($).',
+      'Enter connection intensity (1-10).',
+      'ROI ≥ 1.0 → UPLINK.',
+    ],
+    examples: [
+      { title: 'Energy 40, money $25, intensity 7', body: 'ROI = 70 ÷ 65 = 1.08 → UPLINK.' },
+    ],
+    faq: [
+      { q: 'How does this differ from Time to Human?', a: 'Same underlying formula, stripped to pure numerical UI. Time to Human includes a social battery and a verbal verdict; Social Latency gives only the gauge.' },
+    ],
+    relatedIds: ['time-to-human', 'dopamine-minimum', 'burnout-monitor', 'cS-social-latency-basics'],
+    island: 'SocialLatency',
+    followUps: [
+      { toolId: 'connection-check', cta: 'Latency fixed? Now measure connection depth.' },
+      { toolId: 'time-to-human', cta: 'Replying faster? Book actual in-person time.' },
+    ],
+  },
+  {
+    id: 'vimes-utility',
+    category: 'calculators',
+    slug: 'vimes-utility',
+    title: 'Vimes Utility — Boots Theory Cost-per-Day',
+    h1: 'Vimes Utility',
+    description: 'Boots-theory math: cheap-vs-quality cost per day over a 5-year horizon, with an injustice-gap total.',
+    keywords: ['boots theory calculator', 'cost per day', 'cheap vs quality', 'vimes theory'],
+    intro: 'Cost per day = price ÷ (lifespan months × 30). Over 60 months, cheap items are bought ⌈60 ÷ life⌉ times. Injustice gap = cheap total − quality total. Timeline shows each cheap break as ✕, quality as one solid bar.',
+    howTo: [
+      'Enter cheap option price and lifespan (months).',
+      'Enter quality option price and lifespan.',
+      'Read per-day cost, total replacements, and injustice gap over 60 months.',
+    ],
+    examples: [
+      { title: '$30 boots, 4mo vs $180 boots, 60mo', body: 'Cheap: 15× buys = $450. Quality: 1× = $180. Gap $270. Cheap costs 2.5× more.' },
+    ],
+    faq: [
+      { q: 'Why 5 years?', a: 'It\'s long enough to expose the compounding but short enough to be realistic. Tweak mentally for longer-horizon items.' },
+      { q: 'What if the quality item also fails?', a: 'Lifespan input handles it. Enter realistic expectation, not marketing copy.' },
+    ],
+    relatedIds: ['crossover-calculator', 'horizon-point', 'break-even-calculator', 'cS-vimes-utility-basics'],
+    island: 'VimesUtility',
+    followUps: [
+      { toolId: 'crossover-calculator', cta: 'Cheap boots cost more? Confirm with the crossover math.' },
+      { toolId: 'horizon-point', cta: 'Thinking long horizon? Apply Vimes to rent vs. buy.' },
+    ],
+  },
+  {
+    id: 'time-poverty',
+    category: 'calculators',
+    slug: 'time-poverty',
+    title: 'Time Poverty Ratio — Effective Wage After Commute',
+    h1: 'Time Poverty',
+    description: 'Real hourly wage after transit time (uncompensated labor) and transit cost eat into shift earnings.',
+    keywords: ['commute calculator', 'real hourly wage', 'time poverty', 'effective wage'],
+    intro: 'Real wage = (hourly × shift − transit cost) ÷ (shift + transit hours). Transit is uncompensated labor — spreading earnings over it reveals the true rate. Time-leak chart shows 24-hour day shrinking to discretionary hours.',
+    howTo: [
+      'Enter hourly rate, shift hours, transit hours (round-trip), and transit cost.',
+      'Read effective wage and discretionary hours after 8h sleep + 2h prep.',
+    ],
+    examples: [
+      { title: '$18/hr, 8h shift, 2.5h transit, $12 cost', body: '($144 − $12) ÷ 10.5 = $12.57/hr real. 30% leak.' },
+    ],
+    faq: [
+      { q: 'Why assume 8h sleep and 2h prep?', a: 'A standard-enough baseline for feasibility math. Adjust mentally if you sleep less.' },
+      { q: 'Does this include tax?', a: 'No — pre-tax gross. Taxes shrink every wage proportionally; the ratio is unchanged.' },
+    ],
+    relatedIds: ['gig-net-floor', 'minimum-viable-rate', 'asset-liquidator', 'cS-time-poverty-basics'],
+    island: 'TimePoverty',
+    followUps: [
+      { toolId: 'gig-net-floor', cta: 'Time-poor? See what gig hours actually pay.' },
+      { toolId: 'minimum-viable-rate', cta: 'Hours bleeding out? Set a rate that respects them.' },
+    ],
+  },
+  {
+    id: 'liquid-value',
+    category: 'calculators',
+    slug: 'liquid-value',
+    title: 'Liquid Value — Sell-to-Cover-Fee Penalty Math',
+    h1: 'Liquid Value',
+    description: 'Should you sell an asset to avoid a late fee? Replacement penalty vs fee avoided — equity loss meter.',
+    keywords: ['pawn calculator', 'sell asset calculator', 'replacement penalty', 'late fee math'],
+    intro: 'Penalty = replacement cost later − resale value today. Net = late fee − penalty. If penalty &gt; late fee, selling is a loss trade. Ratio &lt; 1× is defensible; ≥1× is a high-penalty liquidation — only for Tier-1 survival.',
+    howTo: [
+      'Enter today\'s resale value (pawn, Facebook Marketplace, etc).',
+      'Enter replacement cost when you buy it back later.',
+      'Enter the late fee you\'re trying to avoid.',
+      'Read net outcome and penalty ratio.',
+    ],
+    examples: [
+      { title: '$120 resale, $300 replacement, $50 fee', body: 'Penalty $180. Net = 50 − 180 = −$130. High penalty, 3.6× ratio.' },
+    ],
+    faq: [
+      { q: 'What if the fee is a shutoff?', a: 'Override the math — shutoff is tier-1 and may justify a high-penalty sale. The tool quantifies the cost you accept.' },
+      { q: 'Does this cover pawn interest?', a: 'Replacement cost should include pawn-shop redemption fee + interest to be complete.' },
+    ],
+    relatedIds: ['default-optimizer', 'trap-detector', 'bill-triage', 'cS-liquid-value-basics'],
+    island: 'LiquidValue',
+    followUps: [
+      { toolId: 'default-optimizer', cta: 'Cash thin? Decide which debts to default on first.' },
+      { toolId: 'asset-liquidator', cta: 'Value priced. Now run the liquidation math.' },
+    ],
+  },
+  {
+    id: 'stability-coefficient',
+    category: 'calculators',
+    slug: 'stability-coefficient',
+    title: 'Stability Coefficient — Rent Premium for Mental Silence',
+    h1: 'Stability Coefficient',
+    description: 'What percent of your labor pays for the sanity premium of living alone vs with a roommate? Peace-vs-capital slider.',
+    keywords: ['rent calculator roommate', 'cost of living alone', 'sanity premium', 'peace vs capital'],
+    intro: 'Premium = rent alone − rent with roommate. Peaceful days = 30 − monthly conflicts (roommate scenario). Labor % = premium ÷ monthly income. Under 10% green, under 20% amber, above = magenta.',
+    howTo: [
+      'Enter rent with roommate and rent alone.',
+      'Estimate monthly conflict events.',
+      'Enter monthly income.',
+      'Read sanity premium, % of labor, and cost per peaceful day.',
+    ],
+    examples: [
+      { title: '$700 vs $1400 rent, 4 conflicts, $3200 income', body: 'Premium $700 = 21.9% of labor. 6.6 days/month working for silence.' },
+    ],
+    faq: [
+      { q: 'What counts as a conflict event?', a: 'Any argument, confrontation, or boundary violation that cost you real energy. Be honest.' },
+      { q: 'Is 10% green arbitrary?', a: 'It\'s a sane threshold for the sanity premium — under 10% of labor is absorbable; over 20% eats your runway.' },
+    ],
+    relatedIds: ['minimum-viable-rate', 'time-poverty', 'revenue-per-head', 'cS-stability-coefficient-basics'],
+    island: 'StabilityCoefficient',
+    followUps: [
+      { toolId: 'horizon-point', cta: 'Stable enough to buy? Confirm with the horizon math.' },
+      { toolId: 'minimum-viable-rate', cta: 'Income unstable? Set the rate floor that protects you.' },
+    ],
   },
   {
     id: 'break-even-calculator',
@@ -1015,6 +2018,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['markup-margin-calculator', 'percentage-calculator', 'percent-of-calculator'],
     island: 'BreakEvenCalculator',
+    followUps: [
+      { toolId: 'markup-margin-calculator', cta: 'Break-even found. Now set the margin that funds growth.' },
+      { toolId: 'runway-zero', cta: 'Know the break-even. Now count how many months you have.' },
+    ],
   },
   {
     id: 'markup-margin-calculator',
@@ -1040,6 +2047,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['break-even-calculator', 'percentage-calculator', 'discount-calculator'],
     island: 'MarkupMarginCalculator',
+    followUps: [
+      { toolId: 'break-even-calculator', cta: 'Margin set. Now find the volume that clears fixed costs.' },
+      { toolId: 'discount-calculator', cta: 'Running a sale? See what survives the discount.' },
+    ],
   },
   {
     id: 'mortgage-calculator',
@@ -1066,6 +2077,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['mortgage-extra-payment-calculator', 'break-even-calculator', 'percentage-calculator'],
     island: 'MortgageCalculator',
+    followUps: [
+      { toolId: 'mortgage-extra-payment-calculator', cta: 'Payment known. Now see what extra principal really saves.' },
+      { toolId: 'horizon-point', cta: 'Rent vs. buy still open? Run the breakeven horizon.' },
+    ],
   },
   {
     id: 'mortgage-extra-payment-calculator',
@@ -1092,6 +2107,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['mortgage-calculator', 'break-even-calculator', 'percentage-calculator'],
     island: 'MortgageExtraPaymentCalculator',
+    followUps: [
+      { toolId: 'mortgage-calculator', cta: 'Curious about the base payment? Start from the standard calc.' },
+      { toolId: 'savings-goal-calculator', cta: 'Extra cash flowing? Direct it to a savings target instead.' },
+    ],
   },
   {
     id: 'markup-calculator',
@@ -1117,6 +2136,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['margin-calculator', 'markup-margin-calculator', 'break-even-calculator'],
     island: 'MarkupCalculator',
+    followUps: [
+      { toolId: 'margin-calculator', cta: 'Markup set. Now verify the margin it produces.' },
+      { toolId: 'break-even-calculator', cta: 'Pricing locked. Now find the volume to break even.' },
+    ],
   },
   {
     id: 'margin-calculator',
@@ -1142,6 +2165,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['markup-calculator', 'markup-margin-calculator', 'break-even-calculator'],
     island: 'MarginCalculator',
+    followUps: [
+      { toolId: 'markup-calculator', cta: 'Margin locked. Now back out the matching markup.' },
+      { toolId: 'break-even-calculator', cta: 'Margin set. Now solve for break-even volume.' },
+    ],
   },
   {
     id: 'savings-goal-calculator',
@@ -1168,9 +2195,79 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['break-even-calculator', 'mortgage-calculator', 'percentage-calculator'],
     island: 'SavingsGoalCalculator',
+    followUps: [
+      { toolId: 'shock-survival', cta: 'Saving for a goal? First confirm your shock buffer.' },
+      { toolId: 'mortgage-calculator', cta: 'Goal is a house? Model the mortgage next.' },
+    ],
   },
 
   // ---------- GAMES ----------
+  {
+    id: 'vibematch',
+    category: 'games',
+    slug: 'vibematch',
+    title: 'VibeMatch — Neural Synchrony Memory Grid',
+    h1: 'VibeMatch',
+    description: 'A cyberpunk memory game with a twist: every 8 misses the system re-indexes and swaps two hidden nodes. Sync every pair in the lowest time.',
+    keywords: ['vibematch', 'memory match game', 'concentration card game', 'neural memory puzzle', 'cyberpunk matching game'],
+    intro: 'A grid of face-down Data Nodes hides pairs of tech icons. Flip two at a time — matches stay online, mismatches flip back. But this is no ordinary memory game: every 8 misses the system re-indexes, swapping two hidden nodes with a glitchy shake. Chase 100% synchronization at the lowest Neural Latency.',
+    howTo: [
+      'Tap a tile to flip it. Tap a second tile to pair-check. Matches stay online and pulse green; mismatches flip back after ~0.5s.',
+      'The clock starts on your first flip. Latency is shown live in the HUD.',
+      'Every 8 misses, watch for the Neural Re-Index: two hidden tiles swap positions with a magenta shake.',
+      'Clear every pair to reach 100% sync. Your fastest run per grid size is saved.',
+    ],
+    examples: [
+      { title: '4×4 — Entry', body: '8 pairs of tech icons. Solvable in under 30 seconds with a clean run.' },
+      { title: '6×6 — Pro', body: '18 pairs fill the grid. More misses mean more glitches — memory of positions becomes unreliable.' },
+      { title: 'Re-Index', body: 'On miss #8, #16, #24 … two random face-down tiles swap. Any assumption about their positions is invalidated.' },
+    ],
+    faq: [
+      { q: 'How does the Neural Glitch pick which tiles to swap?', a: 'Two hidden tiles are chosen at random from the currently face-down unmatched pool. Matched tiles are never touched.' },
+      { q: 'Can I click three tiles in quick succession?', a: 'No — the board locks between the second flip and the pair resolution, so only two cards are ever face-up at once.' },
+      { q: 'What\'s saved?', a: 'The fastest completion time per grid size (4×4 and 6×6) and lifetime wins — all in localStorage on this device.' },
+      { q: 'Which icons appear?', a: 'A pool of 18 tech icons — Cpu, Zap, Shield, Atom, Binary, Database, Eye, Fingerprint, Terminal, Wifi, Cloud, Lock, Bolt, Radar, Rocket, Satellite, Server, Globe — shuffled fresh each game.' },
+    ],
+    relatedIds: ['vibecircuit', 'vibecrypt', 'vibehex', 'vibepath'],
+    island: 'VibeMatch',
+    followUps: [
+      { toolId: 'vibecircuit', cta: 'Match mastered. Now complete the circuit.' },
+      { toolId: 'vibehex', cta: 'Feel the grid? Try the hex variant.' },
+    ],
+  },
+  {
+    id: 'vibecircuit',
+    category: 'games',
+    slug: 'vibecircuit',
+    title: 'VibeCircuit — Neural Patch-Panel Wire Puzzle',
+    h1: 'VibeCircuit',
+    description: 'Wire each pair of glowing LEDs on a neon motherboard. Lines cannot cross; fill every cell for a Perfect Vibe win.',
+    keywords: ['vibecircuit', 'flow free alternative', 'pipe connect puzzle', 'neural patch panel game', 'wire routing puzzle'],
+    intro: 'A dark circuitry grid scatters pairs of colored LED nodes. Drag from one LED to its twin to lay a thick neon wire — but lines cannot cross. Drag through an existing wire and it short-circuits, retracting that color. Connect every pair to optimize the board; fill every cell for a Perfect Vibe.',
+    howTo: [
+      'Tap a glowing LED node and drag toward its matching pair. The wire renders in real time as you move.',
+      'To edit an existing wire, tap anywhere along it and drag — the path is truncated at that point.',
+      'Drag across another color\'s wire and it short-circuits: that color retracts back to the cut.',
+      'Connect every pair to complete the circuit. Fill every single cell for a Perfect Vibe.',
+    ],
+    examples: [
+      { title: 'Short circuit', body: 'Drag cyan through a magenta wire. Magenta resets back to where the cut happened; cyan continues.' },
+      { title: 'Edit mid-path', body: 'Tap the middle of a connected wire and drag a new route. The tail is discarded and replaced.' },
+      { title: 'Perfect Vibe', body: 'Every pair connected AND every cell occupied. The Grid Fill meter hits 100% and the System Initialized banner pulses.' },
+    ],
+    faq: [
+      { q: 'Are lines allowed to overlap?', a: 'No. Wires cannot cross or share a cell. Dragging into another color\'s wire resets that color back to the cut point.' },
+      { q: 'Do I have to fill every cell?', a: 'No — connecting all pairs counts as a circuit optimized. Filling every cell earns a separate Perfect Vibe count.' },
+      { q: 'Can I move through another color\'s LED?', a: 'No. Foreign nodes are solid obstacles; only the matching node can accept a wire.' },
+      { q: 'Is progress saved?', a: 'Lifetime Circuits Optimized and Perfect Vibe counts persist to localStorage on this device.' },
+    ],
+    relatedIds: ['vibecrypt', 'vibehex', 'vibepath', 'vibecalc'],
+    island: 'VibeCircuit',
+    followUps: [
+      { toolId: 'vibematch', cta: 'Circuit closed. Rotate back to the match classic.' },
+      { toolId: 'vibepath', cta: 'Circuits easy? Upgrade to path-finding.' },
+    ],
+  },
   {
     id: 'vibecrypt',
     category: 'games',
@@ -1200,6 +2297,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibehex', 'vibecontext', 'vibepath', 'vibecalc'],
     island: 'VibeCrypt',
+    followUps: [
+      { toolId: 'vibecipher', cta: 'Crypt cracked. Now break the full cipher.' },
+      { toolId: 'vibecalc', cta: 'Warm brain? Switch to the math puzzle.' },
+    ],
   },
   {
     id: 'vibehex',
@@ -1229,6 +2330,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibecontext', 'vibepath', 'vibecalc', 'vibetwist', 'vibelink'],
     island: 'VibeHex',
+    followUps: [
+      { toolId: 'vibecrosser', cta: 'Hex solved. Try crossing the grid next.' },
+      { toolId: 'vibelink', cta: 'Love the geometry? Link the nodes instead.' },
+    ],
   },
   {
     id: 'vibecontext',
@@ -1257,6 +2362,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibehex', 'vibepath', 'vibecalc', 'vibetwist'],
     island: 'VibeContext',
+    followUps: [
+      { toolId: 'vibepath', cta: 'Context clear. Now chart the path through it.' },
+      { toolId: 'vibelink', cta: 'See the pattern? Now link everything together.' },
+    ],
   },
   {
     id: 'vibepath',
@@ -1284,6 +2393,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibecalc', 'vibepair', 'vibetwist', 'vibelink', 'vibecrosser'],
     island: 'VibePath',
+    followUps: [
+      { toolId: 'vibecontext', cta: 'Path charted. Step back for the bigger context.' },
+      { toolId: 'vibelink', cta: 'Flowing? Switch to pure link puzzles.' },
+    ],
   },
   {
     id: 'vibecalc',
@@ -1312,6 +2425,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibepair', 'vibetwist', 'vibelink', 'vibeglobe'],
     island: 'VibeCalc',
+    followUps: [
+      { toolId: 'vibecrypt', cta: 'Numbers solved. Now decrypt the symbols.' },
+      { toolId: 'vibematch', cta: 'Brain warm? Switch to pattern matching.' },
+    ],
   },
   {
     id: 'vibepair',
@@ -1341,6 +2458,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibetwist', 'vibelink', 'vibecrosser', 'vibedrop'],
     island: 'VibePair',
+    followUps: [
+      { toolId: 'vibelink', cta: 'Pairs matched. Scale up to full link chains.' },
+      { toolId: 'vibecontext', cta: 'Pairs easy? Widen to full context puzzles.' },
+    ],
   },
   {
     id: 'vibetwist',
@@ -1368,6 +2489,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibelink', 'vibedrop', 'vibeshift', 'word-unscrambler'],
     island: 'VibeTwist',
+    followUps: [
+      { toolId: 'vibecipher', cta: 'Twist untwisted. Now break the cipher.' },
+      { toolId: 'vibedrop', cta: 'Love the rotation? Try the falling-piece variant.' },
+    ],
   },
   {
     id: 'vibelink',
@@ -1395,6 +2520,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibeglobe', 'vibecrosser', 'vibedrop', 'vibeshift'],
     island: 'VibeLink',
+    followUps: [
+      { toolId: 'vibepath', cta: 'Linked up. Now chart the path.' },
+      { toolId: 'vibecontext', cta: 'Connections clear? Zoom out for the context.' },
+    ],
   },
   {
     id: 'vibeglobe',
@@ -1422,6 +2551,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibecrosser', 'vibedrop', 'vibeshift', 'vibecipher'],
     island: 'VibeGlobe',
+    followUps: [
+      { toolId: 'vibecontext', cta: 'Globe solved. Dive into context puzzles next.' },
+      { toolId: 'vibepair', cta: 'Geography down. Try shape pairs.' },
+    ],
   },
   {
     id: 'vibecrosser',
@@ -1449,6 +2582,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibedrop', 'vibeshift', 'vibecipher', 'word-finder'],
     island: 'VibeCrosser',
+    followUps: [
+      { toolId: 'vibedrop', cta: 'Crossed the grid? Now catch the falling pieces.' },
+      { toolId: 'vibeshift', cta: 'Love the flow? Shift the pieces next.' },
+    ],
   },
   {
     id: 'vibedrop',
@@ -1476,6 +2613,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibeshift', 'vibecipher', 'word-finder', 'word-unscrambler'],
     island: 'VibeDrop',
+    followUps: [
+      { toolId: 'vibetwist', cta: 'Dropped cleanly? Twist the shape next round.' },
+      { toolId: 'vibecrosser', cta: 'Want the horizontal variant? Try the crosser.' },
+    ],
   },
   {
     id: 'vibeshift',
@@ -1503,6 +2644,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['vibecipher', 'daily-word', 'word-unscrambler', 'word-finder'],
     island: 'VibeShift',
+    followUps: [
+      { toolId: 'vibetwist', cta: 'Shifted the grid. Now twist the pieces.' },
+      { toolId: 'vibecipher', cta: 'Brain primed? Break a cipher next.' },
+    ],
   },
   {
     id: 'vibecipher',
@@ -1530,6 +2675,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['daily-word', 'wordle-solver', 'word-unscrambler', '5-letter-word-finder'],
     island: 'VibeCipher',
+    followUps: [
+      { toolId: 'wordle-solver', cta: 'Love letter puzzles? Wordle has the same loop.' },
+      { toolId: 'vibetwist', cta: 'Cipher cracked. Twist the grid next.' },
+    ],
   },
   {
     id: 'sudoku',
@@ -1552,6 +2701,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['daily-word'],
     island: 'Sudoku',
+    followUps: [
+      { toolId: 'sudoku-medium', cta: 'Warmed up? Step up to medium.' },
+      { toolId: 'daily-word', cta: 'Want a word puzzle instead? Try today\'s daily.' },
+    ],
   },
   {
     id: 'daily-word',
@@ -1577,6 +2730,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['daily-anagram', 'daily-unscramble', 'word-unscrambler'],
     island: 'DailyAnagram',
+    followUps: [
+      { toolId: 'daily-anagram', cta: 'Finished today\'s word? Take the anagram too.' },
+      { toolId: 'vibecipher', cta: 'Loved the word loop? Try the cipher version.' },
+    ],
   },
   {
     id: 'daily-anagram',
@@ -1601,6 +2758,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['daily-word', 'daily-unscramble', 'anagram-solver'],
     island: 'DailyAnagram',
+    followUps: [
+      { toolId: 'daily-unscramble', cta: 'Anagram solved. Now the unscramble.' },
+      { toolId: 'anagram-solver', cta: 'Stuck? The full solver can help.' },
+    ],
   },
   {
     id: 'daily-unscramble',
@@ -1625,6 +2786,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['daily-word', 'daily-anagram', 'word-unscrambler'],
     island: 'DailyAnagram',
+    followUps: [
+      { toolId: 'daily-anagram', cta: 'Unscrambled. Take the anagram next.' },
+      { toolId: 'word-unscrambler', cta: 'Want unlimited rounds? Use the full solver.' },
+    ],
   },
   {
     id: 'sudoku-easy',
@@ -1647,6 +2812,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['sudoku', 'sudoku-medium', 'sudoku-hard'],
     island: 'Sudoku',
+    followUps: [
+      { toolId: 'sudoku-medium', cta: 'Easy solved. Ready for medium?' },
+      { toolId: 'daily-word', cta: 'Need a break from numbers? Swap to words.' },
+    ],
   },
   {
     id: 'sudoku-medium',
@@ -1669,6 +2838,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['sudoku', 'sudoku-easy', 'sudoku-hard'],
     island: 'Sudoku',
+    followUps: [
+      { toolId: 'sudoku-hard', cta: 'Medium clean? Step up to hard.' },
+      { toolId: 'vibematch', cta: 'Want a different logic puzzle? Try pattern matching.' },
+    ],
   },
   {
     id: 'sudoku-hard',
@@ -1691,6 +2864,10 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['sudoku', 'sudoku-medium', 'sudoku-expert'],
     island: 'Sudoku',
+    followUps: [
+      { toolId: 'sudoku-expert', cta: 'Hard done? Only expert remains.' },
+      { toolId: 'vibecircuit', cta: 'Need a palate cleanser? Close some circuits.' },
+    ],
   },
   {
     id: 'sudoku-expert',
@@ -1713,6 +2890,1267 @@ export const TOOLS: ToolConfig[] = [
     ],
     relatedIds: ['sudoku', 'sudoku-hard', 'sudoku-medium'],
     island: 'Sudoku',
+    followUps: [
+      { toolId: 'sudoku-hard', cta: 'Expert too much? Drop back to hard.' },
+      { toolId: 'vibecrypt', cta: 'Want encrypted logic? Crack the crypt.' },
+    ],
+  },
+
+  // ---------- HEALTH ----------
+  {
+    id: 'metabolic-floor',
+    category: 'health',
+    slug: 'metabolic-floor',
+    title: 'Metabolic Floor — BMR / TDEE Calculator | Kefiw',
+    h1: 'Metabolic Floor · BMR / TDEE',
+    description: 'Calculate your Basal Metabolic Rate and Total Daily Energy Expenditure using Mifflin-St Jeor. Power-consumption view with cut / maintain / bulk zones.',
+    keywords: ['BMR calculator', 'TDEE calculator', 'Mifflin-St Jeor', 'daily calorie needs', 'maintenance calories'],
+    intro: 'The minimum kcal your chassis burns at standby (BMR), and the total expenditure (TDEE) once you layer activity. Mifflin-St Jeor is the current gold-standard regression for resting metabolism — more accurate than Harris-Benedict by ~5%.',
+    howTo: [
+      'Enter sex, age, weight, and height.',
+      'Pick an activity multiplier — sedentary is actually sedentary (desk + no formal exercise).',
+      'Read Standby (BMR) and Active Load (TDEE).',
+      'Use Cut / Maintain / Bulk zones for calorie targets against your goal.',
+    ],
+    examples: [
+      { title: '35y male · 80 kg · 180 cm · moderate', body: 'BMR ≈ 1800 kcal · TDEE ≈ 2790 kcal · Cut 2290 · Bulk 3090.' },
+    ],
+    faq: [
+      { q: 'Why Mifflin-St Jeor instead of Harris-Benedict?', a: 'Mifflin-St Jeor (1990) fits modern populations better — Harris-Benedict (1919) systematically over-estimates BMR for sedentary people.' },
+      { q: 'How accurate is TDEE?', a: '±10–15% vs doubly-labelled water. The activity multiplier is the biggest source of error — most people over-estimate their activity level.' },
+    ],
+    relatedIds: ['fuel-partition', 'kinetic-expenditure', 'substance-decay'],
+    island: 'MetabolicFloor',
+    followUps: [
+      { toolId: 'fuel-partition', cta: 'Floor known. Now decide how fuel splits across goals.' },
+      { toolId: 'kinetic-expenditure', cta: 'Base set. Add the movement calories on top.' },
+    ],
+  },
+  {
+    id: 'substance-decay',
+    category: 'health',
+    slug: 'substance-decay',
+    title: 'Substance Decay — Caffeine & Alcohol Half-Life | Kefiw',
+    h1: 'Substance Decay · Pharmacokinetic',
+    description: 'Plot the half-life decay of caffeine or alcohol. See when the dose drops below the jitter threshold and the sleep-interference threshold.',
+    keywords: ['caffeine half life', 'alcohol half life', 'pharmacokinetic calculator', 'when caffeine wears off'],
+    intro: 'Caffeine half-life ≈ 5 h, alcohol ≈ 1.5 h (elimination, not BAC decline). Plots the exponential decay curve so you can see when the dose crosses the jitter line and the sleep-interference line.',
+    howTo: [
+      'Pick caffeine or alcohol.',
+      'Enter dose and hours since consumption.',
+      'The decay curve shows remaining mass; dashed lines mark jitter + sleep thresholds.',
+    ],
+    examples: [
+      { title: '200 mg coffee at 2pm', body: '~100 mg remaining at 7pm · ~50 mg at midnight — still above sleep-interference threshold.' },
+    ],
+    faq: [
+      { q: 'Why does caffeine feel worn off before it decays?', a: 'Subjective alertness tracks the first half-life; residual caffeine still binds adenosine receptors and disrupts REM sleep for 6+ hours.' },
+      { q: 'Is alcohol decay linear?', a: 'Ethanol elimination is zero-order (constant rate) once enzymes are saturated — roughly 10 g/h. For BAC over time, use Impairment Coefficient.' },
+    ],
+    relatedIds: ['impairment-bac', 'rem-sync', 'cessation-ladder'],
+    island: 'SubstanceDecay',
+    followUps: [
+      { toolId: 'impairment-bac', cta: 'Half-life plotted. Now check the impairment curve.' },
+      { toolId: 'rem-sync', cta: 'Still in your system at bedtime? Model the sleep hit.' },
+    ],
+  },
+  {
+    id: 'rem-sync',
+    category: 'health',
+    slug: 'rem-sync',
+    title: 'REM-Sync — Sleep Cycle Calculator | Kefiw',
+    h1: 'REM-Sync · Sleep Cycles',
+    description: 'Find the optimal bedtime or wake time based on 90-minute sleep cycles. Wake at the end of a cycle, not the middle.',
+    keywords: ['sleep cycle calculator', 'when should I sleep', 'best wake time', '90 minute sleep'],
+    intro: 'A full sleep cycle runs ~90 minutes. Waking at the end of a cycle (light NREM) feels rested; waking mid-REM or deep NREM feels groggy. Five to six cycles is the performance target.',
+    howTo: [
+      'Pick mode — wake at a target time, sleep at a target clock time, or sleep now.',
+      'The tool lists 3–7 cycle windows with recommended bedtimes or wake times.',
+      'Optimal windows (5 or 6 cycles) glow cyan.',
+    ],
+    examples: [
+      { title: 'Wake at 6:30 AM', body: 'Optimal sleep: 9:36 PM (6 cycles) or 11:06 PM (5 cycles). Add ~14 min sleep latency.' },
+    ],
+    faq: [
+      { q: 'Does cycle length vary?', a: 'Yes — 75 to 110 minutes, individual and age-dependent. 90 min is the population mean used by most sleep studies.' },
+      { q: 'What if I can\'t sleep 5+ cycles?', a: 'End on a full cycle. Three complete cycles (4.5 h) feels better than four partial ones (5 h cut mid-REM).' },
+    ],
+    relatedIds: ['substance-decay', 'metabolic-floor', 'heart-rate-zones'],
+    island: 'RemSync',
+    followUps: [
+      { toolId: 'substance-decay', cta: 'Sleep poor? Check what\'s still in your bloodstream.' },
+      { toolId: 'burnout-monitor', cta: 'REM broken? Burnout is the downstream result.' },
+    ],
+  },
+  {
+    id: 'medical-triage',
+    category: 'health',
+    slug: 'medical-triage',
+    title: 'Medical Triage — ER vs Urgent Care vs Home | Kefiw',
+    h1: 'Medical Triage · Red-Flag Router',
+    description: 'Three-tier triage routing for common symptoms. Flags red symptoms to ER, amber to urgent care, green to self-care. Hard-coded heuristic only — not a diagnosis.',
+    keywords: ['ER or urgent care', 'should I go to the ER', 'medical triage', 'red flag symptoms'],
+    intro: 'Picks between ER, urgent care, and self-care based on published red-flag lists. Checks universal killers first (chest pain + arm radiation, FAST stroke signs, unresponsive, cyanosis) then symptom-specific flags.',
+    howTo: [
+      'Pick primary symptom.',
+      'Check any red-flag boxes that apply.',
+      'Verdict: Level 1 (ER now), Level 2 (urgent care today), or Level 3 (self-care acceptable).',
+    ],
+    examples: [
+      { title: 'Chest pain + arm radiation', body: 'Verdict: Level 1. Call emergency services. Do not drive yourself.' },
+    ],
+    faq: [
+      { q: 'Is this a diagnosis?', a: 'No. It is a routing heuristic based on published red-flag lists. It can miss atypical presentations. If unsure, call the nurse line or emergency services.' },
+      { q: 'Why the ultra-conservative defaults?', a: 'False-negative cost (missed MI, stroke, sepsis) is orders of magnitude higher than false-positive cost (unnecessary ER trip).' },
+    ],
+    relatedIds: ['impairment-bac', 'cessation-ladder', 'hydraulic-integrity'],
+    island: 'MedicalTriage',
+    followUps: [
+      { toolId: 'impairment-bac', cta: 'Substance in play? Check impairment before you move.' },
+      { toolId: 'hydraulic-integrity', cta: 'Stable enough? Now check your hydration status.' },
+    ],
+  },
+  {
+    id: 'impairment-bac',
+    category: 'health',
+    slug: 'impairment-bac',
+    title: 'Impairment Coefficient — BAC Calculator (Widmark) | Kefiw',
+    h1: 'Impairment Coefficient · Widmark BAC',
+    description: 'Blood alcohol estimate via Widmark equation. Gauge shows legal-limit marker and clear-to-operate time. Hard-coded estimate only — not legal evidence.',
+    keywords: ['BAC calculator', 'Widmark formula', 'blood alcohol calculator', 'when will I be sober'],
+    intro: 'Widmark (1932) remains the forensic standard: BAC = (alcohol_g / (weight_g × r)) × 100 − β × t. r ≈ 0.68 male / 0.55 female, β ≈ 0.015 %/h. Real BAC varies with food, drug interactions, and individual enzyme efficiency.',
+    howTo: [
+      'Enter gender, weight, drinks, and grams alcohol per drink (~14 g = US standard).',
+      'Enter hours since first drink.',
+      'Gauge shows current BAC against the 0.08 legal limit; sidebar shows clear-to-operate time.',
+    ],
+    examples: [
+      { title: '180 lb male · 3 drinks · 1.5 h', body: 'BAC ≈ 0.044 · clear in ~3 h. Below 0.08 — not below impairment threshold.' },
+    ],
+    faq: [
+      { q: 'Is this admissible in court?', a: 'No. Widmark-based estimates have well-documented ±30% error and are not legal evidence anywhere. Breathalyzer or blood draw is the only admissible measurement.' },
+      { q: 'Why does my BAC feel higher than the estimate?', a: 'Empty stomach, medication interactions, sleep deprivation, and female physiology (lower ADH) all push real BAC above Widmark.' },
+    ],
+    relatedIds: ['substance-decay', 'medical-triage', 'hydraulic-integrity'],
+    island: 'ImpairmentBac',
+    followUps: [
+      { toolId: 'substance-decay', cta: 'BAC known. Now project the clearance curve.' },
+      { toolId: 'medical-triage', cta: 'Concerned about symptoms? Run the triage.' },
+    ],
+  },
+  {
+    id: 'structural-density',
+    category: 'health',
+    slug: 'structural-density',
+    title: 'Structural Density — Body Fat Calculator (US Navy) | Kefiw',
+    h1: 'Structural Density · Body Fat %',
+    description: 'Estimate body fat percentage via the US Navy circumference method. Tape-measure formula accurate to ±3-4% vs DEXA.',
+    keywords: ['body fat calculator', 'US Navy body fat', 'circumference method', 'tape measure body fat'],
+    intro: 'The Navy developed this formula in the 1980s as a field substitute for underwater weighing. Logarithmic regression of neck, waist, and (for women) hip circumferences against height. Validated ±3-4% vs DEXA — better than BMI, worse than a scan.',
+    howTo: [
+      'Measure neck (below larynx), waist (narrowest point), and hip (widest, women only).',
+      'Pick units and gender.',
+      'Read body-fat % and classification band.',
+    ],
+    examples: [
+      { title: '70 in · neck 15 · waist 34 · male', body: 'BF ≈ 17.4% · Fit band. Strip fat by tightening waist − neck delta.' },
+    ],
+    faq: [
+      { q: 'Why waist − neck?', a: 'The Navy formula models total body volume as head + neck (lean) + trunk + limbs. Waist − neck (men) and waist + hip − neck (women) proxy trunk fat.' },
+      { q: 'Is it accurate for athletes?', a: 'Less so. Muscular necks under-count fat; deep-trained cores inflate waist slightly. Accept ±5% for trained populations.' },
+    ],
+    relatedIds: ['metabolic-incline', 'metabolic-floor', 'fuel-partition'],
+    island: 'StructuralDensity',
+    followUps: [
+      { toolId: 'metabolic-incline', cta: 'Bones set. Now track the metabolic slope.' },
+      { toolId: 'fuel-partition', cta: 'Density needs protein? Partition fuel accordingly.' },
+    ],
+  },
+  {
+    id: 'hydraulic-integrity',
+    category: 'health',
+    slug: 'hydraulic-integrity',
+    title: 'Hydraulic Integrity — Hydration Calculator | Kefiw',
+    h1: 'Hydraulic Integrity · Coolant Load',
+    description: 'Daily water requirement anchored to body mass and activity. Coolant-tank visualisation with pressure status.',
+    keywords: ['hydration calculator', 'daily water needs', 'how much water should I drink', 'dehydration calculator'],
+    intro: 'Required fluid ≈ weight × 0.5 oz + activity × 0.4 oz — the simple rule-of-thumb that survives the ACSM literature. Not medical. Kidney-impaired and endurance athletes need individualized targets.',
+    howTo: [
+      'Enter weight (lbs), today\'s active minutes, and current intake (oz).',
+      'Tank fills to current intake; colour encodes pressure (green Stable / gold Guarded / magenta Low).',
+      'Read the deficit and close it before the next training window.',
+    ],
+    examples: [
+      { title: '180 lb · 30 min activity · 32 oz', body: 'Required ≈ 102 oz · current 32 · Low pressure. Deficit 70 oz.' },
+    ],
+    faq: [
+      { q: 'Does coffee count?', a: 'Yes — caffeinated drinks hydrate on net despite being diuretic. Alcohol does not.' },
+      { q: 'Is 8 × 8 a real rule?', a: 'No. The "8 glasses" number has no scientific origin. Anchor to body mass and activity instead.' },
+    ],
+    relatedIds: ['ion-balance', 'thermal-failure', 'kinetic-expenditure'],
+    island: 'HydraulicIntegrity',
+    followUps: [
+      { toolId: 'ion-balance', cta: 'Hydration set. Now balance the electrolytes.' },
+      { toolId: 'thermal-failure', cta: 'In the heat? Model the thermal failure point.' },
+    ],
+  },
+  {
+    id: 'cessation-ladder',
+    category: 'health',
+    slug: 'cessation-ladder',
+    title: 'Cessation Decay Ladder — Nicotine Clearance | Kefiw',
+    h1: 'Cessation Decay Ladder',
+    description: 'Plot cotinine decay and system-recovery milestones after the last cigarette. 16-hour half-life; baseline at ~72 hours.',
+    keywords: ['nicotine half life', 'cotinine clearance', 'quit smoking timeline', 'how long to quit smoking'],
+    intro: 'Nicotine itself has a 2h half-life; its metabolite cotinine clears at 16h. Detox progress plus CDC-derived system milestones (heart rate, CO, cilia, withdrawal) shows exactly what recovers on what schedule.',
+    howTo: [
+      'Enter hours since last cigarette.',
+      'Progress bar shows % baseline; milestones light up as you pass them.',
+      'Baseline recovery reads the hours to 95% cleared.',
+    ],
+    examples: [
+      { title: '24 hours clean', body: '~64% metabolites cleared · heart rate normalised · CO halved. 48 h away from cilia recovery start.' },
+    ],
+    faq: [
+      { q: 'Does vaping have the same timeline?', a: 'Nicotine pharmacokinetics are identical. Combustion-specific markers (CO, tar) don\'t apply.' },
+      { q: 'When do cravings stop?', a: 'Acute withdrawal peaks days 1–3, resolves by day 14. Situational triggers persist for months.' },
+    ],
+    relatedIds: ['substance-decay', 'medical-triage', 'impairment-bac'],
+    island: 'CessationLadder',
+    followUps: [
+      { toolId: 'substance-decay', cta: 'Cessation planned. Project the clearance timeline.' },
+      { toolId: 'vice-to-value', cta: 'Quitting soon? Price the vice against what\'s next.' },
+    ],
+  },
+  {
+    id: 'max-load-capacity',
+    category: 'health',
+    slug: 'max-load-capacity',
+    title: 'Max Load Capacity — Brzycki 1RM Calculator | Kefiw',
+    h1: 'Max Load Capacity · Brzycki 1RM',
+    description: 'Estimate one-rep maximum from a sub-max set using the Brzycki formula. Recovery / Hypertrophy / Strength zones.',
+    keywords: ['1RM calculator', 'Brzycki formula', 'one rep max calculator', 'strength training zones'],
+    intro: 'Brzycki (1993) is the most accurate sub-max 1RM estimator in the 1–10 rep range: 1RM = weight × 36 / (37 − reps). Training percentages flow from the estimate — 60% recovery, 75% hypertrophy, 85% strength.',
+    howTo: [
+      'Enter the weight you lifted and the reps you completed (≤ 10 for accuracy).',
+      'Read estimated 1RM and the three training-zone loads.',
+      'Re-test every 4–6 weeks at the same rep count.',
+    ],
+    examples: [
+      { title: '225 lb × 5 reps', body: '1RM ≈ 253 lb · recovery 152 · hypertrophy 190 · strength 215.' },
+    ],
+    faq: [
+      { q: 'Why cap at 10 reps?', a: 'Above 10, endurance starts to dominate strength and Brzycki systematically under-estimates 1RM. Use a different formula (Epley, Lombardi) or a true 3-rep-max test.' },
+      { q: 'Is testing actual 1RM worth the risk?', a: 'Rarely. Structural injury risk rises sharply above 85% for untrained lifters. Estimates from a well-executed 3–5 rep set are within 3%.' },
+    ],
+    relatedIds: ['strength-efficiency', 'heart-rate-zones', 'anabolic-trigger'],
+    island: 'MaxLoadCapacity',
+    followUps: [
+      { toolId: 'strength-efficiency', cta: 'Max known. Now measure rep efficiency.' },
+      { toolId: 'anabolic-trigger', cta: 'Load set. Check the growth signal you\'re triggering.' },
+    ],
+  },
+  {
+    id: 'strength-efficiency',
+    category: 'health',
+    slug: 'strength-efficiency',
+    title: 'Strength-to-Weight Efficiency — Wilks Calculator | Kefiw',
+    h1: 'Strength-to-Weight Efficiency · Wilks',
+    description: 'Wilks coefficient — the powerlifting gold-standard for comparing lifters across bodyweight classes.',
+    keywords: ['Wilks calculator', 'relative strength calculator', 'powerlifting score', 'strength to weight ratio'],
+    intro: 'Wilks (2020 update) normalises absolute load against bodyweight via a 5th-order polynomial. A 150 lb Wilks 400 scores identically to a 250 lb Wilks 400 — the relative power is the same.',
+    howTo: [
+      'Enter gender, bodyweight, and total lifted (powerlifting total or single-lift).',
+      'Read Wilks coefficient and rank band.',
+    ],
+    examples: [
+      { title: '180 lb male · 315 lb squat', body: 'Wilks ≈ 104 · Intermediate band. Upgrade by raising the lift — ratios above 2× bodyweight enter Advanced territory.' },
+    ],
+    faq: [
+      { q: 'Wilks or DOTS?', a: 'Wilks 2020 is the current IPF-adjacent standard. DOTS is competing for adoption. Both normalise the same way; numerical outputs differ.' },
+      { q: 'Why a 5th-order polynomial?', a: 'Strength scales sub-linearly with bodyweight (the "square-cube law" applied to muscle cross-section). Polynomial captures the non-linearity across all competitive weight classes.' },
+    ],
+    relatedIds: ['max-load-capacity', 'anabolic-trigger', 'fuel-partition'],
+    island: 'StrengthEfficiency',
+    followUps: [
+      { toolId: 'max-load-capacity', cta: 'Efficiency good? Now test the ceiling.' },
+      { toolId: 'anabolic-trigger', cta: 'Reps dialed. Verify the hypertrophy signal.' },
+    ],
+  },
+  {
+    id: 'heart-rate-zones',
+    category: 'health',
+    slug: 'heart-rate-zones',
+    title: 'Operational Heart Rate Zones — Karvonen Calculator | Kefiw',
+    h1: 'Operational Heart Rate Zones · Karvonen',
+    description: 'Calculate the five training zones using Karvonen (heart-rate reserve) method. More accurate than %HRmax alone.',
+    keywords: ['Karvonen calculator', 'heart rate zones', 'target heart rate', 'training zones'],
+    intro: 'Karvonen factors resting heart rate into zone calculation: zone_bpm = (HRmax − HRrest) × intensity + HRrest. More personalised than flat %HRmax — a fit person\'s resting HR is lower, so their zones shift up.',
+    howTo: [
+      'Measure resting HR first thing in the morning (average over 3 days).',
+      'Enter age and resting HR.',
+      'Read the five zones with BPM ranges and physiological purpose.',
+    ],
+    examples: [
+      { title: '35y · resting 62', body: 'HRmax 185 · HRR 123. Z2 aerobic 136–148 · Z4 threshold 160–173.' },
+    ],
+    faq: [
+      { q: 'Is 220 − age accurate?', a: 'Population estimate with ±10 bpm standard deviation. Lab test (VO₂max or field test) is more accurate.' },
+      { q: 'Which zone burns the most fat?', a: 'Z2 burns highest % fat; Z3-4 burn more total calories (and still substantial fat grams). Pure "fat-burning zone" framing misleads.' },
+    ],
+    relatedIds: ['kinetic-expenditure', 'max-load-capacity', 'rem-sync'],
+    island: 'HeartRateZones',
+    followUps: [
+      { toolId: 'kinetic-expenditure', cta: 'Zones set. Now count the calories burned.' },
+      { toolId: 'rem-sync', cta: 'Pushing hard? Check sleep recovers the system.' },
+    ],
+  },
+  {
+    id: 'kinetic-expenditure',
+    category: 'health',
+    slug: 'kinetic-expenditure',
+    title: 'Kinetic Expenditure — MET Calorie Calculator | Kefiw',
+    h1: 'Kinetic Expenditure · MET',
+    description: 'Calories burned per activity using the MET (Metabolic Equivalent of Task) method from the Compendium of Physical Activities.',
+    keywords: ['MET calculator', 'calories burned calculator', 'exercise calorie calculator', 'running calories'],
+    intro: 'MET × 3.5 × weight_kg / 200 × minutes. MET values from Ainsworth\'s Compendium of Physical Activities (2011) — the academic reference underneath every fitness tracker\'s calorie number.',
+    howTo: [
+      'Pick activity and enter duration.',
+      'Read kcal for this session, kcal/h sustained, and junk-food equivalents.',
+    ],
+    examples: [
+      { title: '180 lb · 30 min running · 9.8 MET', body: '≈ 400 kcal session · 800 kcal/h · 0.71 Big Macs burned.' },
+    ],
+    faq: [
+      { q: 'How accurate is MET?', a: '±15% vs indirect calorimetry. Individual mechanical efficiency is the largest source of error.' },
+      { q: 'Do fitness trackers use MET?', a: 'Under the hood, yes — plus accelerometer data for intensity modulation.' },
+    ],
+    relatedIds: ['metabolic-floor', 'heart-rate-zones', 'fuel-partition'],
+    island: 'KineticExpenditure',
+    followUps: [
+      { toolId: 'heart-rate-zones', cta: 'Burn total known. Now tune the zone mix.' },
+      { toolId: 'metabolic-floor', cta: 'Expenditure up? Recheck your metabolic floor.' },
+    ],
+  },
+  {
+    id: 'fuel-partition',
+    category: 'health',
+    slug: 'fuel-partition',
+    title: 'Fuel Partitioning — Macro Calculator | Kefiw',
+    h1: 'Fuel Partitioning · Macros',
+    description: 'Daily protein, fat, and carb targets anchored to bodyweight and training goal. Protein-first, fat floor second, carbs fill.',
+    keywords: ['macro calculator', 'protein calculator', 'IIFYM calculator', 'macronutrient calculator'],
+    intro: 'Protein anchored at 1.8–2.2 g/kg by training state; fat floor at 0.8–1.2 g/kg for hormonal health; carbs fill the remaining kcal budget. Pairs with Metabolic Floor for TDEE anchor.',
+    howTo: [
+      'Enter weight and pick cut / maintain / bulk.',
+      'Optionally override kcal with a custom target.',
+      'Read grams per macro and the kcal split visual.',
+    ],
+    examples: [
+      { title: '180 lb · maintain', body: 'kcal 2700 · P 147 g · F 82 g · C 345 g.' },
+    ],
+    faq: [
+      { q: 'Why anchor protein first?', a: 'Protein is the only essential macro with demonstrated body-composition effects independent of kcal. Fat is essential for endocrine function. Carbs are discretionary energy.' },
+      { q: 'Is 2 g/kg too much protein?', a: 'No. Meta-analyses (Morton 2018) show 1.6 g/kg saturates MPS; higher doses are neutral. Upper-bound safety supported to 3.5 g/kg for renal-healthy adults.' },
+    ],
+    relatedIds: ['metabolic-floor', 'anabolic-trigger', 'bio-fuel'],
+    island: 'FuelPartition',
+    followUps: [
+      { toolId: 'metabolic-floor', cta: 'Partition set. Now confirm the floor it sits on.' },
+      { toolId: 'anabolic-trigger', cta: 'Protein allocated? Check the growth signal.' },
+    ],
+  },
+  {
+    id: 'metabolic-incline',
+    category: 'health',
+    slug: 'metabolic-incline',
+    title: 'Metabolic Incline — Waist-to-Height Calculator | Kefiw',
+    h1: 'Metabolic Incline · Waist-to-Height',
+    description: 'Waist-to-height ratio — better predictor of cardiometabolic risk than BMI. "Keep your waist under half your height."',
+    keywords: ['waist to height ratio', 'WHtR calculator', 'metabolic risk calculator', 'visceral fat calculator'],
+    intro: 'WHtR flags central adiposity — the fat depot that drives insulin resistance and cardiovascular risk. Ashwell (2012) meta-analysis: WHtR out-performs BMI across age, sex, and ethnicity for CV risk prediction.',
+    howTo: [
+      'Measure waist at narrowest point (typically just above navel for men, narrowest torso point for women).',
+      'Enter waist and height in matching units.',
+      'Read ratio and risk band.',
+    ],
+    examples: [
+      { title: '34 in waist · 70 in height', body: 'WHtR 0.486 · Low-risk band. Cross 0.5 = threshold for elevated CV risk.' },
+    ],
+    faq: [
+      { q: 'Why not BMI?', a: 'BMI can\'t tell muscle from fat or subcutaneous from visceral. A 180 lb bodybuilder and a 180 lb office worker have identical BMI and very different risk profiles.' },
+      { q: 'What waist measurement is correct?', a: 'Narrowest natural waist, at the end of a normal exhale. Don\'t suck in.' },
+    ],
+    relatedIds: ['structural-density', 'metabolic-floor', 'fuel-partition'],
+    island: 'MetabolicIncline',
+    followUps: [
+      { toolId: 'structural-density', cta: 'Incline mapped. Now verify bone stays dense.' },
+      { toolId: 'metabolic-floor', cta: 'Slope clear? Reset the floor it rides on.' },
+    ],
+  },
+  {
+    id: 'ion-balance',
+    category: 'health',
+    slug: 'ion-balance',
+    title: 'Ion Balance — Electrolyte Loss Calculator | Kefiw',
+    h1: 'Ion Balance · Electrolyte Loss',
+    description: 'Sodium, potassium, chloride, and magnesium lost through sweat over a training session. Replacement targets for endurance events.',
+    keywords: ['electrolyte calculator', 'sweat sodium loss', 'hydration calculator', 'endurance nutrition'],
+    intro: 'Sweat ion concentration from ACSM/Maughan: ~800 mg Na⁺, 200 mg K⁺, 1000 mg Cl⁻, 20 mg Mg²⁺ per litre. Individual variation is 2-3×. Heavy salt-sweaters lose 1500+ mg Na⁺/L and need aggressive replacement.',
+    howTo: [
+      'Enter duration, intensity, and sweat rate (weigh before/after a training block to calibrate).',
+      'Read total fluid + each ion lost.',
+      'Replace 125–150% of fluid and match ion loss to prevent hyponatremia in 4h+ events.',
+    ],
+    examples: [
+      { title: '2 h · hard · 1.0 L/h', body: 'Fluid 2.6 L · Na⁺ 2080 mg · K⁺ 520 mg. Replace with electrolyte mix, not plain water.' },
+    ],
+    faq: [
+      { q: 'Is plain water fine for a 1-hour workout?', a: 'Yes. Ion replacement matters above 90 minutes or in heavy heat.' },
+      { q: 'Is salt tablets the answer?', a: 'For salty sweaters doing 4h+, yes. Below that, balanced food post-workout is sufficient.' },
+    ],
+    relatedIds: ['hydraulic-integrity', 'thermal-failure', 'kinetic-expenditure'],
+    island: 'IonBalance',
+    followUps: [
+      { toolId: 'hydraulic-integrity', cta: 'Electrolytes fixed? Confirm hydration holds.' },
+      { toolId: 'thermal-failure', cta: 'Working in heat? Model the thermal limit next.' },
+    ],
+  },
+  {
+    id: 'anabolic-trigger',
+    category: 'health',
+    slug: 'anabolic-trigger',
+    title: 'Anabolic Trigger — Protein Bolus Calculator | Kefiw',
+    h1: 'Anabolic Trigger · MPS Bolus',
+    description: 'Per-meal protein dose that maximises muscle protein synthesis. 0.25-0.40 g/kg per feeding, 1.6-2.2 g/kg daily.',
+    keywords: ['protein bolus calculator', 'muscle protein synthesis calculator', 'protein per meal', 'MPS calculator'],
+    intro: 'Muscle protein synthesis saturates at 0.25–0.40 g/kg per meal (Morton 2018). Exceeding that per-bolus adds no MPS; spacing bolus intake across 3–5 meals outperforms front-loading.',
+    howTo: [
+      'Enter weight, meals per day, and training state.',
+      'Read per-meal bolus, daily floor, and total via your meal count.',
+      'If the total falls below the daily floor, add a meal or raise bolus size.',
+    ],
+    examples: [
+      { title: '180 lb · serious · 4 meals', body: 'Per-meal 33 g · daily 163 g · via 4 meals 131 g — deficit. Add a fifth meal or up bolus to 40 g.' },
+    ],
+    faq: [
+      { q: 'Does kind of protein matter?', a: 'Leucine content does — 2–3 g leucine per bolus saturates mTOR. Whey > egg > soy > wheat by leucine density.' },
+      { q: 'Can I front-load all my protein?', a: 'Single 120 g bolus activates MPS no more than 40 g. Spread doses across meals.' },
+    ],
+    relatedIds: ['fuel-partition', 'max-load-capacity', 'strength-efficiency'],
+    island: 'AnabolicTrigger',
+    followUps: [
+      { toolId: 'fuel-partition', cta: 'Trigger set. Now partition the fuel to feed it.' },
+      { toolId: 'strength-efficiency', cta: 'Signal firing? Verify efficient rep output.' },
+    ],
+  },
+  {
+    id: 'uv-exposure',
+    category: 'health',
+    slug: 'uv-exposure',
+    title: 'UV Exposure Delta — Burn Time Calculator | Kefiw',
+    h1: 'UV Exposure Delta · Fitzpatrick MED',
+    description: 'Minutes to a Minimum Erythemal Dose by Fitzpatrick skin type and UV Index. Protected time via SPF.',
+    keywords: ['UV index calculator', 'burn time calculator', 'Fitzpatrick skin type', 'SPF calculator'],
+    intro: 'Minimum Erythemal Dose (MED) varies by Fitzpatrick type — type I burns at 200 J/m², type VI at 1000 J/m². At UV Index 1 ≈ 25 mW/m² erythemally weighted, burn_min = MED / (UVI × 1.5).',
+    howTo: [
+      'Enter current UV index (from weather), pick skin type, enter SPF applied.',
+      'Read unprotected burn time and the SPF-multiplied protected window.',
+    ],
+    examples: [
+      { title: 'UV 7 · Type II · SPF 30', body: 'Unprotected 24 min to MED · protected 12 h — if you reapply every 2 h.' },
+    ],
+    faq: [
+      { q: 'Does SPF really multiply burn time?', a: 'In lab conditions (2 mg/cm² application). Real-world application delivers ¼ to ½ of labeled SPF. Reapply every 2 h.' },
+      { q: 'Is tan cumulative?', a: 'MED resets overnight. Melanin buildup (tanning) does push MED slightly over weeks — but at the cost of DNA damage.' },
+    ],
+    relatedIds: ['thermal-failure', 'insulation-logic', 'medical-triage'],
+    island: 'UvExposure',
+    followUps: [
+      { toolId: 'thermal-failure', cta: 'Sun dosed. Now model the heat failure point.' },
+      { toolId: 'insulation-logic', cta: 'Outdoors long? Layer for the temperature swing.' },
+    ],
+  },
+  {
+    id: 'co2-cognitive-tax',
+    category: 'health',
+    slug: 'co2-cognitive-tax',
+    title: 'CO₂ Cognitive Tax — Indoor Air Calculator | Kefiw',
+    h1: 'CO₂ Cognitive Tax',
+    description: 'Indoor CO₂ ppm to cognitive decline mapping. 1400 ppm halves strategic decision-making performance.',
+    keywords: ['CO2 calculator', 'indoor air quality', 'ventilation calculator', 'cognitive performance CO2'],
+    intro: 'Satish 2012 and Allen 2016 established a dose-response: at 1000 ppm, strategic thinking drops ~15%; at 1400 ppm, 50%; at 2500, 75%. ASHRAE indoor target: ≤ 1000 ppm. Most offices and bedrooms hit 1200–2500 without mechanical ventilation.',
+    howTo: [
+      'Read CO₂ from a monitor (outdoor baseline ~420 ppm).',
+      'Read cognitive decline, status band, and action.',
+      'Open a window or vacate above 1500 ppm for sustained cognitive work.',
+    ],
+    examples: [
+      { title: '1000 ppm (typical bedroom at dawn)', body: 'Cognitive decline ~15% · Elevated band · ventilate.' },
+    ],
+    faq: [
+      { q: 'Why does CO₂ affect cognition?', a: 'Mechanism still debated — likely cerebral vasoconstriction and acid-base shift, not hypoxia. Effect reverses within minutes of ventilation.' },
+      { q: 'What about outdoor CO₂?', a: '420 ppm globally, rising ~2 ppm/year. Indoor ppm = outdoor + occupancy load ÷ ventilation rate.' },
+    ],
+    relatedIds: ['thermal-failure', 'rem-sync', 'medical-triage'],
+    island: 'Co2CognitiveTax',
+    followUps: [
+      { toolId: 'focus-horizon', cta: 'Room stale? Deep-work capacity collapses with CO2.' },
+      { toolId: 'thermal-failure', cta: 'Ventilation poor? Check thermal limits too.' },
+    ],
+  },
+  {
+    id: 'thermal-failure',
+    category: 'health',
+    slug: 'thermal-failure',
+    title: 'Thermal Failure — WBGT Heat Stress Calculator | Kefiw',
+    h1: 'Thermal Failure · WBGT',
+    description: 'Wet-bulb globe temperature — the heat-stress index used by OSHA, ACGIH, and military for work/rest cycle decisions.',
+    keywords: ['WBGT calculator', 'heat stress index', 'heat illness risk', 'wet bulb temperature'],
+    intro: 'Heat kills through evaporative failure, not raw temperature. WBGT = 0.7·Tw + 0.2·Tg + 0.1·Td (outdoor) captures humidity (wet-bulb), radiant load (globe), and air temp (dry). Wet-bulb > 35°C = fundamental limit of human thermoregulation.',
+    howTo: [
+      'Enter wet-bulb, globe, and dry-bulb temps in °F or °C.',
+      'Toggle direct-sun if outdoors.',
+      'Read WBGT and the ACGIH status band (nominal / moderate / high / extreme / fatal-risk).',
+    ],
+    examples: [
+      { title: 'Tw 75 · Tg 85 · Td 88 · sun', body: 'WBGT 26.1 °C · Nominal. Moderate band begins at 27 °C.' },
+    ],
+    faq: [
+      { q: 'Why wet-bulb and not heat index?', a: 'WBGT handles radiant and direct-sun load; heat index is dry + humidity only. WBGT is the ISO 7243 and ACGIH TLV standard.' },
+      { q: 'What happens at wet-bulb 35°C?', a: 'Evaporative cooling fails — skin can\'t shed heat faster than metabolism generates it. Fatal within hours regardless of hydration, shade, or fitness.' },
+    ],
+    relatedIds: ['insulation-logic', 'ion-balance', 'hydraulic-integrity'],
+    island: 'ThermalFailure',
+    followUps: [
+      { toolId: 'ion-balance', cta: 'Heat risk high? Balance electrolytes first.' },
+      { toolId: 'insulation-logic', cta: 'Cold side? Work the insulation math.' },
+    ],
+  },
+  {
+    id: 'insulation-logic',
+    category: 'health',
+    slug: 'insulation-logic',
+    title: 'Insulation Logic — Clothing Clo Calculator | Kefiw',
+    h1: 'Insulation Logic · Clo Units',
+    description: 'Required clothing insulation in clo units for air temperature and activity level. Suggested garment stack.',
+    keywords: ['clo calculator', 'cold weather clothing', 'insulation calculator', 'what to wear outside'],
+    intro: 'Clo = (33°C − Ta) / (8 × met). 1 clo ≈ business suit. Higher activity generates more metabolic heat, lowering required insulation. Cold under-dressed bodies divert bio-fuel from muscle to thermogenesis — pairs with Kinetic Expenditure.',
+    howTo: [
+      'Enter air temperature and activity state.',
+      'Read required clo; the suggested garment stack greedy-packs layers to meet the target.',
+    ],
+    examples: [
+      { title: '40 °F · brisk hike', body: 'Required 0.7 clo · stack: fleece mid-layer + thermal base.' },
+    ],
+    faq: [
+      { q: 'What is 1 clo exactly?', a: '0.155 m²·K/W — the insulation of a 1950s business suit at rest in 21 °C, 50% RH, no wind.' },
+      { q: 'Why lower clo at higher activity?', a: 'Metabolic heat production rises with met, so the body needs less external insulation. Runners over-dress and dump heat.' },
+    ],
+    relatedIds: ['thermal-failure', 'kinetic-expenditure', 'bio-fuel'],
+    island: 'InsulationLogic',
+    followUps: [
+      { toolId: 'thermal-failure', cta: 'Layered up. Now verify the heat ceiling.' },
+      { toolId: 'uv-exposure', cta: 'Long outdoors? Model the UV dose too.' },
+    ],
+  },
+
+  // ---------- LOGIC · COGNITIVE THROUGHPUT ----------
+  {
+    id: 'signal-to-noise',
+    category: 'logic',
+    slug: 'signal-to-noise',
+    title: 'Signal-to-Noise Ratio — Content Throughput Calculator | Kefiw',
+    h1: 'Signal-to-Noise · Content Throughput',
+    description: 'Measure how much of your daily information intake converts into actionable decisions. Throughput-pipe visual with clogged / flowing state.',
+    keywords: ['signal to noise', 'information efficiency', 'content throughput', 'digital waste', 'distraction calculator'],
+    intro: 'You consume hours of content. Most of it produces zero decisions. This meter divides minutes of input by actionable insights — below 10% the pipe is clogged, you are in a distraction loop, not research.',
+    howTo: [
+      'Enter minutes of content consumed today (news, social, video, reading).',
+      'Enter the number of decisions or actions that actually changed because of it.',
+      'Efficiency = (insights / (minutes × 0.1)) × 100 — baseline 6 min per insight.',
+      'Below 10% = distraction loop · 10–40% = research · 40%+ = action-ready throughput.',
+    ],
+    examples: [
+      { title: '120 min consumed · 2 insights', body: 'Efficiency 16.7% · Information_Gathering · 100 min categorised as digital waste.' },
+      { title: '60 min consumed · 6 insights', body: 'Efficiency 100% · Action_Ready · converting input to decisions cleanly.' },
+    ],
+    faq: [
+      { q: 'What counts as an "insight"?', a: 'Something that changed a decision, opinion, or action. Feeling informed is not an insight — feeling informed is the noise that masks a clogged pipe.' },
+      { q: 'Why the 6 min baseline?', a: 'Rough median across studies of information-to-action latency in knowledge work. Adjust downward if you operate in a high-signal environment (research, finance).' },
+    ],
+    relatedIds: ['task-switching', 'decision-fatigue', 'focus-horizon'],
+    island: 'SignalToNoise',
+    followUps: [
+      { toolId: 'task-switching', cta: 'Noise high? Count the context switches stealing focus.' },
+      { toolId: 'focus-horizon', cta: 'Signal clear? Measure how long you can hold it.' },
+    ],
+  },
+  {
+    id: 'task-switching',
+    category: 'logic',
+    slug: 'task-switching',
+    title: 'Task Switching Tax — Context Overhead Calculator | Kefiw',
+    h1: 'Task Switching Tax · Context Overhead',
+    description: 'Calculate the hours per day you lose to juggling concurrent projects. Each additional context costs 20% of remaining capacity — CPU-usage view.',
+    keywords: ['task switching cost', 'context switching', 'multitasking calculator', 'focus loss', 'cognitive overhead'],
+    intro: 'Switching between contexts compounds. One task = 100%. Two = 80%. Three = 64%. By the fifth concurrent project, only 41% of your hours survive the overhead. This meter shows the CPU split between user process and system overhead.',
+    howTo: [
+      'Enter number of distinct concurrent contexts (projects, clients, channels).',
+      'Enter workday hours.',
+      'Retention = 0.80^(n−1). Loss = 1 − retention. Multiply by workday hours.',
+      'When OVERHEAD ≥ 45% you are running the OS, not the application.',
+    ],
+    examples: [
+      { title: 'n = 4 · 8h day', body: 'Retention 51.2% · Effective 4.1h · Switching tax 3.9h.' },
+      { title: 'n = 2 · 8h day', body: 'Retention 80% · Effective 6.4h · Switching tax 1.6h.' },
+    ],
+    faq: [
+      { q: 'Why 20% per task?', a: 'Rough heuristic from Weinberg (1992) and reproduced in several attention-research reviews. Exact percentage is domain-dependent but the geometric-decay shape is consistent.' },
+      { q: 'Does batching help?', a: 'Massively. Consolidating 5 contexts into 2 time-boxed windows recovers ~40% of your day — which is why time-blocking works and Slack doesn\'t.' },
+    ],
+    relatedIds: ['signal-to-noise', 'decision-fatigue', 'focus-horizon'],
+    island: 'TaskSwitchingTax',
+    followUps: [
+      { toolId: 'focus-horizon', cta: 'Fewer switches? Now measure your deep-work capacity.' },
+      { toolId: 'decision-fatigue', cta: 'Context overhead has a hidden cost: willpower.' },
+    ],
+  },
+  {
+    id: 'decision-fatigue',
+    category: 'logic',
+    slug: 'decision-fatigue',
+    title: 'Decision Fatigue — Willpower Battery Calculator | Kefiw',
+    h1: 'Decision Fatigue · Willpower Battery',
+    description: 'Model remaining willpower across the day. Every decision draws from the same finite reserve — trivial × 1, moderate × 5, heavy × 10.',
+    keywords: ['decision fatigue calculator', 'willpower calculator', 'cognitive load', 'ego depletion', 'decision overload'],
+    intro: 'Willpower is finite and shared across every decision you make. Trivial choices (what to eat, what to wear) drain the same reservoir as heavy ones (strategy, conflict). This battery gauge tracks the drain — when it dips below 20% you stop deciding and start defaulting.',
+    howTo: [
+      'Count the trivial, moderate, and heavy decisions made so far today.',
+      'Willpower = 100 − Σ(count × weight). Trivial ×1, Moderate ×5, Heavy ×10.',
+      'Above 75% = Full_Charge · 15–45% = Low_Reserve · below 15% = Depleted.',
+      'Batch trivial choices (meal prep, uniform wardrobe) to protect heavy-decision capacity.',
+    ],
+    examples: [
+      { title: '10 trivial · 4 moderate · 1 heavy', body: 'Drain 40 · Willpower 60 · Drawing_Down — avoid stacking more heavy calls.' },
+      { title: '20 trivial · 8 moderate · 2 heavy', body: 'Drain 80 · Willpower 20 · Low_Reserve — you are in decision debt.' },
+    ],
+    faq: [
+      { q: 'Is decision fatigue real?', a: 'The underlying ego-depletion model has been challenged by replication failures. The practical pattern — late-day choices get worse — is well-supported. Treat this as a useful heuristic, not settled neuroscience.' },
+      { q: 'How do I restore willpower?', a: 'Glucose, sleep, and time off-task. A nap, a meal, or a walk will recover more than "pushing through" ever will.' },
+    ],
+    relatedIds: ['trap-detector', 'task-switching', 'focus-horizon'],
+    island: 'DecisionFatigue',
+    followUps: [
+      { toolId: 'focus-horizon', cta: 'Willpower burning? Your deep-work window is closing too.' },
+      { toolId: 'task-switching', cta: 'Decisions cost willpower — switches cost time. Audit both.' },
+    ],
+  },
+  {
+    id: 'focus-horizon',
+    category: 'logic',
+    slug: 'focus-horizon',
+    title: 'Deep Work Capacity — Focus Decay Calculator | Kefiw',
+    h1: 'Deep Work Capacity · Focus Horizon',
+    description: 'Exponential decay model of focus quality. e^(−0.01×min) half-life ≈ 69 minutes — the horizon shows how long until quality drops below usable.',
+    keywords: ['deep work calculator', 'focus decay', 'attention span', 'flow state', 'pomodoro length'],
+    intro: 'Focus is not steady — it decays exponentially from the moment you start. Quality = 100 × e^(−0.01 × min), floor at 0. Half-life ≈ 69 min. After that every additional unit of time delivers half the output. The tail is where you make typos and bugs.',
+    howTo: [
+      'Enter minutes of continuous focused work so far.',
+      'Quality = 100 × e^(−0.01 × min), capped at 0.',
+      'Above 70% = Peak_Focus · 15–40% = Decaying · below 3% = Focus_Collapse.',
+      'Horizon shows time left before quality drops below 15% — take the break at that marker, not after.',
+    ],
+    examples: [
+      { title: '45 min into a session', body: 'Quality 63.8% · Sustained_Focus · ~145 min left before collapse.' },
+      { title: '180 min unbroken', body: 'Quality 16.5% · Decaying_Focus · grinding on fumes — a 20-min break recovers more than pushing.' },
+    ],
+    faq: [
+      { q: 'Does everyone decay at the same rate?', a: 'No. λ varies by person, sleep, and task difficulty. 0.01/min is a rough baseline — adjust mentally if you know yours is flatter or steeper.' },
+      { q: 'Why cap at 0?', a: 'Exponential decay never reaches 0 mathematically, but focus quality below ~3% is operationally dead. The cap prevents misleading "2% focus" readouts that suggest you are still working.' },
+    ],
+    relatedIds: ['task-switching', 'decision-fatigue', 'signal-to-noise'],
+    island: 'DeepWorkCapacity',
+    followUps: [
+      { toolId: 'task-switching', cta: 'Focus collapsing? Kill context switches first.' },
+      { toolId: 'decision-fatigue', cta: 'Quality tanked? Check your decision budget.' },
+    ],
+  },
+
+  // ---------- LOGIC · LOGISTICAL MOBILITY ----------
+  {
+    id: 'geo-arbitrage',
+    category: 'logic',
+    slug: 'geo-arbitrage',
+    title: 'Geographic Arbitrage — Migration Break-Even Calculator | Kefiw',
+    h1: 'Geographic Arbitrage · Migration Horizon',
+    description: 'Calculate the break-even month for a move. Monthly gain = (income − cost) at destination minus origin. Horizon visual with plane marker.',
+    keywords: ['geographic arbitrage calculator', 'should I move calculator', 'relocation break even', 'cost of living comparison'],
+    intro: 'Moving is a one-time expense that pays back in monthly surplus gains. Break-even = move cost / monthly gain. If you won\'t stay past break-even, the move is a bet against yourself. This tool plots the plane along a 36-month horizon.',
+    howTo: [
+      'Enter monthly income and cost at both locations, plus one-time move cost.',
+      'Monthly gain = (income − cost)·there − (income − cost)·here.',
+      'Break-even = move cost / monthly gain. Negative gain = no break-even, ever.',
+      'Under 6 months = fast · 6–18 = reasonable · 18+ = only if you commit to staying.',
+    ],
+    examples: [
+      { title: '$6000/$4500 here · $5500/$2800 there · $6000 move', body: 'Monthly gain $1200 · Break-even 5.0 months · Fast_Payback.' },
+      { title: 'Equal surpluses · $6000 move', body: 'Monthly gain $0 · No break-even · the move is pure optionality cost.' },
+    ],
+    faq: [
+      { q: 'What about taxes and visas?', a: 'Roll them into cost-there. Tax differential is often the biggest line item — factor in effective rate, not marginal.' },
+      { q: 'Does this handle remote work?', a: 'Yes — keep income flat, drop cost-there to the new location, move cost to one-time relocation. The classic "remote to cheaper city" case.' },
+    ],
+    relatedIds: ['upskill-payback', 'leak-detection', 'runway-zero'],
+    island: 'GeoArbitrage',
+    followUps: [
+      { toolId: 'horizon-point', cta: 'Move decided? Rent vs. buy in the new city next.' },
+      { toolId: 'runway-zero', cta: 'Project how the relocation stretches your runway.' },
+    ],
+  },
+  {
+    id: 'upskill-payback',
+    category: 'logic',
+    slug: 'upskill-payback',
+    title: 'Upskill ROI — Bootcamp Payback Calculator | Kefiw',
+    h1: 'Upskill ROI · Investment Recovery',
+    description: 'Calculate the true payback window on a course or bootcamp, including opportunity cost of study hours. Recovery progress bar with 24-month reference.',
+    keywords: ['upskill ROI calculator', 'bootcamp payback', 'course ROI', 'is a bootcamp worth it', 'education investment calculator'],
+    intro: 'Every "free" course costs your hourly rate × study hours. Payback = (course + opportunity cost) / monthly salary lift. Under 18 months is a solid investment; over 36 months depends on whether the skill holds value that long.',
+    howTo: [
+      'Enter course cost, total study hours, your current hourly wage, and expected monthly salary lift.',
+      'Opportunity cost = study_hours × hourly_wage.',
+      'Payback = (course + opportunity cost) / monthly lift.',
+      'Under 6 months = alpha bet · 6–18 = solid · 36+ = slow · no lift = negative ROI.',
+    ],
+    examples: [
+      { title: '$1500 course · 120h · $35/h · $400 lift', body: 'Opportunity cost $4200 · Total $5700 · Payback 14.3 mo · Solid_Investment.' },
+      { title: '$0 course · 200h · $50/h · $100 lift', body: 'Opportunity cost $10000 · Payback 100 mo · Negative_ROI — find a cheaper path.' },
+    ],
+    faq: [
+      { q: 'Is study time really opportunity cost?', a: 'If you could have billed those hours, yes. If you studied during idle time you would have wasted anyway, no. Be honest with yourself.' },
+      { q: 'What about non-salary returns?', a: 'Skills can unlock optionality, network, and work quality — real but hard to price. This tool captures the financial floor; everything above is bonus.' },
+    ],
+    relatedIds: ['geo-arbitrage', 'leak-detection', 'minimum-viable-rate'],
+    island: 'UpskillRoi',
+    followUps: [
+      { toolId: 'sp500-check', cta: 'Skills pay off? Check the opportunity cost against the index.' },
+      { toolId: 'leap-date', cta: 'Payback clear? Now pick the date to leap.' },
+    ],
+  },
+  {
+    id: 'leak-detection',
+    category: 'logic',
+    slug: 'leak-detection',
+    title: 'Subscription Purge — Leak Detection Calculator | Kefiw',
+    h1: 'Subscription Purge · Leak Detection',
+    description: 'List every recurring subscription, see the monthly bleed and the 10-year lifetime cost. Sinking-ship visual with drip animations. Pipes recovery into Runway Zero.',
+    keywords: ['subscription audit', 'cancel subscriptions', 'recurring charges calculator', 'subscription cost', 'lifetime subscription cost'],
+    intro: 'Subscriptions compound silently — $15/mo looks small until you see $1800 over ten years. This tool stacks your lines, sums the monthly bleed, and projects the 5- and 10-year lifetime cost. Every dollar cut here extends the runway on the Runway Zero calculator.',
+    howTo: [
+      'Add every active subscription (streaming, cloud, apps, memberships) with monthly cost.',
+      'Monthly bleed = Σ(line). Lifetime = monthly × 12 × years.',
+      'Under $25/mo = minimal · $75–150 = serious · $300+ = taking on water.',
+      'Pipe monthly recovery into the Runway Zero calculator — every $50 cut extends the bankruptcy date by weeks.',
+    ],
+    examples: [
+      { title: '5 typical subs @ $12/mo avg', body: 'Monthly $60 · Annual $720 · 5-year $3600 · 10-year $7200 · Moderate_Drain.' },
+      { title: '15 subs @ $20/mo avg', body: 'Monthly $300 · 10-year $36000 · Hull_Breach — kill the bottom half now.' },
+    ],
+    faq: [
+      { q: 'What about annual plans?', a: 'Divide by 12 and enter as monthly. The math is the same; the psychology is different — annual feels cheaper but compounds identically.' },
+      { q: 'Why the 10-year projection?', a: 'Without inflation adjustment it\'s conservative. The real 10-year cost is worse once prices creep, which most subscriptions do annually.' },
+    ],
+    relatedIds: ['runway-zero', 'geo-arbitrage', 'upskill-payback'],
+    island: 'SubPurge',
+    followUps: [
+      { toolId: 'runway-zero', cta: 'Subscriptions trimmed? Recalculate your runway.' },
+      { toolId: 'crossover-calculator', cta: 'Keeping a sub? Find the lifetime-purchase crossover.' },
+    ],
+  },
+  {
+    id: 'connection-check',
+    category: 'logic',
+    slug: 'connection-check',
+    title: 'Social Utility — Relationship ROI Calculator | Kefiw',
+    h1: 'Social Utility · Balance of Connection',
+    description: 'Weigh support and positive energy against conflict and drain. Balance-scale visual with tilt indicator. Signals pattern, not judgement.',
+    keywords: ['relationship ROI', 'social utility calculator', 'toxic relationship test', 'relationship audit', 'friendship calculator'],
+    intro: 'Not every relationship needs to be net-positive — but the sum of your relationships must be, or you run at a deficit. This tool weighs the credit side (support + positive energy) against the debit side (conflict + drain) on a visual balance.',
+    howTo: [
+      'Rate four dimensions 0–10: support given, positive energy, conflict cost, energy drain.',
+      'Utility ratio = (support + positive) / (conflict + drain).',
+      'Above 3 = high-yield · 1–1.5 = break-even · below 0.5 = parasitic.',
+      'Use it to flag patterns — then decide whether to adjust frequency, have a hard conversation, or create distance.',
+    ],
+    examples: [
+      { title: 'Support 5 · positive 6 · conflict 3 · drain 2', body: 'Credit 11 · Debit 5 · Ratio 2.20 · Healthy_Surplus.' },
+      { title: 'Support 2 · positive 3 · conflict 6 · drain 7', body: 'Credit 5 · Debit 13 · Ratio 0.38 · Parasitic.' },
+    ],
+    faq: [
+      { q: 'Isn\'t this transactional and cold?', a: 'It\'s a mirror, not a verdict. The point is to surface patterns you\'ve been ignoring — not to grade anyone. The feeling of resisting this exercise often tells you more than the numbers.' },
+      { q: 'Does a low score mean I should end the relationship?', a: 'No. It means something is worth addressing. Distance, boundaries, and honest conversation all work before total removal — most relationships can be repaired or rebalanced if you actually try.' },
+    ],
+    relatedIds: ['social-latency', 'stability-coefficient', 'decision-fatigue'],
+    island: 'SocialUtility',
+    followUps: [
+      { toolId: 'social-latency', cta: 'Connection thin? Your reply latency may be the cause.' },
+      { toolId: 'time-to-human', cta: 'Deepening relationships? Book real face-time.' },
+    ],
+  },
+
+  // ---------- PEPTIDE ----------
+  {
+    id: 'peptide-recon',
+    category: 'health',
+    slug: 'peptide-recon',
+    title: 'Peptide Reconstitution — BAC Water + Vial Mass | Kefiw',
+    h1: 'Peptide Reconstitution · BAC Water + Vial Mass',
+    description: 'Reconstitute lyophilized peptide vials. Enter vial mass (mg) and BAC water volume (mL) — get final concentration (mg/mL) and U-100 syringe unit map.',
+    keywords: ['peptide reconstitution calculator', 'BAC water mg/mL', 'vial mass to concentration', 'U-100 peptide dosing', 'semaglutide reconstitution', 'tirzepatide mixing'],
+    intro: 'Concentration = vial mass ÷ BAC water volume. Output is mg/mL, which then scales to a U-100 insulin syringe at 100 units = 1 mL. Volumetric math — no clinical advice.',
+    howTo: [
+      'Enter peptide mass in mg (label value of the vial).',
+      'Enter BAC water added in mL (typical: 1–3 mL).',
+      'Read concentration (mg/mL) and the U-100 unit map for common target doses.',
+      'Pipe the concentration straight into the GLP-1 Dosage tool for syringe draw.',
+    ],
+    examples: [
+      { title: 'Semaglutide 5 mg · 2 mL BAC', body: 'Concentration 2.5 mg/mL · 0.25 mg dose = 10 units · 0.5 mg dose = 20 units.' },
+      { title: 'Tirzepatide 10 mg · 2 mL BAC', body: 'Concentration 5 mg/mL · 2.5 mg dose = 5 units · 5 mg dose = 10 units.' },
+    ],
+    faq: [
+      { q: 'How much BAC water should I use?', a: 'More water = lower concentration = easier to draw low doses. 2 mL is the default for 5 mg semaglutide vials; 3 mL gives a more forgiving unit-per-dose ratio.' },
+      { q: 'Is BAC water the same as sterile water?', a: 'No. Bacteriostatic water contains 0.9% benzyl alcohol which inhibits microbial growth over the 28-day use-life. Sterile water is single-use only.' },
+    ],
+    relatedIds: ['glp-units', 'mcg-per-unit', 'syringe-waste'],
+    island: 'peptide/PeptideRecon',
+    followUps: [
+      { toolId: 'glp-units', cta: 'Reconstitution done. Now draw the exact unit.' },
+      { toolId: 'mcg-per-unit', cta: 'Want the full dose table? Use the unit lookup.' },
+    ],
+  },
+  {
+    id: 'glp-units',
+    category: 'health',
+    slug: 'glp-units',
+    title: 'GLP-1 Dosage & Syringe Units — U-100 Draw | Kefiw',
+    h1: 'GLP-1 Dosage · U-100 Syringe Units',
+    description: 'Convert a target peptide dose (mg or mcg) into U-100 insulin syringe units given a known vial concentration. Pipe-reads from the reconstitution tool.',
+    keywords: ['GLP-1 syringe units', 'semaglutide units calculator', 'tirzepatide dose to units', 'U-100 insulin syringe draw'],
+    intro: 'Units = (dose mg ÷ concentration mg/mL) × 100. Pulls concentration forward from Peptide Reconstitution — or enter it directly.',
+    howTo: [
+      'Enter concentration (mg/mL) or pipe it from the Reconstitution tool.',
+      'Enter target dose in mg or mcg.',
+      'Read U-100 syringe units — the mark to draw to on a standard insulin pin.',
+      'Cross-check against the Titration Roadmap for weekly escalation.',
+    ],
+    examples: [
+      { title: 'Semaglutide 2.5 mg/mL · 0.25 mg dose', body: 'Draw 10 units on a U-100 pin.' },
+      { title: 'Tirzepatide 5 mg/mL · 7.5 mg dose', body: 'Draw 15 units on a U-100 pin.' },
+    ],
+    faq: [
+      { q: 'What if my concentration isn\'t mg/mL?', a: 'Convert first. 1 mg/mL = 1000 mcg/mL. The unit math is identical; only the label changes.' },
+      { q: 'Does the syringe size matter?', a: 'Only U-100 insulin syringes map 100 units = 1 mL. U-40 and tuberculin syringes use different scales and will over- or under-dose.' },
+    ],
+    relatedIds: ['peptide-recon', 'mcg-per-unit', 'syringe-waste'],
+    island: 'peptide/GLPUnits',
+    followUps: [
+      { toolId: 'titration-escalation', cta: 'Dose known. Plan the weekly step-up.' },
+      { toolId: 'syringe-waste', cta: 'Each draw loses dead-space volume. See the annual cost.' },
+    ],
+  },
+  {
+    id: 'mcg-per-unit',
+    category: 'health',
+    slug: 'mcg-per-unit',
+    title: 'mcg per Unit Lookup — U-100 Dose Table | Kefiw',
+    h1: 'mcg per Unit · U-100 Dose Table',
+    description: 'Given vial mass and BAC water volume, generate a full mcg-per-unit table for U-100 syringes. Reference card for every common dose step.',
+    keywords: ['mcg per unit table', 'peptide dose chart', 'U-100 unit conversion', 'semaglutide mcg per unit'],
+    intro: 'mcg/unit = (mass mg × 1000) ÷ (BAC mL × 100). Printable lookup for the vial you have in hand.',
+    howTo: [
+      'Enter vial mass (mg) and BAC water (mL).',
+      'Read mcg-per-unit and a generated dose table from 1–50 units.',
+      'Print or screenshot as a fridge reference.',
+    ],
+    examples: [
+      { title: 'BPC-157 5 mg · 5 mL BAC', body: '10 mcg/unit · 25 units = 250 mcg · 50 units = 500 mcg.' },
+      { title: 'Retatrutide 10 mg · 2 mL BAC', body: '50 mcg/unit · 4 units = 200 mcg · 10 units = 500 mcg.' },
+    ],
+    faq: [
+      { q: 'Why mcg per unit instead of mg?', a: 'Most research peptide doses sit in the 100–1000 mcg range. mg resolution is too coarse and leads to decimal errors on insulin syringes.' },
+      { q: 'Is the table still valid after weeks in the fridge?', a: 'Concentration doesn\'t change, but peptide degrades. Check Peptide Degradation for residual-activity estimates past day 28.' },
+    ],
+    relatedIds: ['peptide-recon', 'glp-units', 'peptide-degradation'],
+    island: 'peptide/McgPerUnit',
+    followUps: [
+      { toolId: 'glp-units', cta: 'Table ready. Convert a single dose now.' },
+      { toolId: 'peptide-degradation', cta: 'Long-term storage? Estimate shelf-life decay.' },
+    ],
+  },
+  {
+    id: 'syringe-waste',
+    category: 'health',
+    slug: 'syringe-waste',
+    title: 'Syringe Dead-Space Waste Budget — Annual $ Loss | Kefiw',
+    h1: 'Syringe Dead-Space Waste · Annual $ Budget',
+    description: 'Every syringe retains dead-space volume after the plunger bottoms out. Calculate annual peptide loss in mg and dollars across a year of weekly injections.',
+    keywords: ['syringe dead space waste', 'insulin syringe waste volume', 'peptide waste calculator', 'low dead space syringe'],
+    intro: 'Standard U-100 pins retain ~0.07 mL dead-space; low-dead-space ~0.01 mL. Waste = dead-space × concentration × injections per year.',
+    howTo: [
+      'Enter concentration (mg/mL), injections per year, and syringe dead-space (mL).',
+      'Enter peptide cost per mg for the dollar view.',
+      'Read mg wasted + annual dollar loss.',
+      'Compare standard vs low-dead-space pins to quantify the upgrade.',
+    ],
+    examples: [
+      { title: 'Tirzepatide 5 mg/mL · 52 inj · 0.07 mL pin · $20/mg', body: '18.2 mg wasted · $364 annual loss. LDS pin cuts it to $52.' },
+    ],
+    faq: [
+      { q: 'Is dead-space really that bad?', a: 'On a 2-unit draw with a 0.07 mL dead-space pin, you retain 3× your dose. On a 20-unit draw it\'s a 3% loss. Small doses are disproportionately affected.' },
+      { q: 'Are low-dead-space syringes worth it?', a: 'At typical peptide prices, LDS pins pay back within 2–3 months of weekly use.' },
+    ],
+    relatedIds: ['glp-units', 'peptide-recon', 'vendor-roi'],
+    island: 'peptide/SyringeWaste',
+    followUps: [
+      { toolId: 'vendor-roi', cta: 'Waste priced. Compare vendors on cost-per-dose.' },
+    ],
+  },
+  {
+    id: 'titration-escalation',
+    category: 'health',
+    slug: 'titration-escalation',
+    title: 'Titration Roadmap — GLP-1 Step-Up Schedule | Kefiw',
+    h1: 'Titration Roadmap · GLP-1 Step-Up',
+    description: 'Weekly dose escalation schedule for semaglutide and tirzepatide. Start low, step up every 4 weeks, hold at tolerance. Unit-mapped to your vial concentration.',
+    keywords: ['GLP-1 titration schedule', 'semaglutide dose escalation', 'tirzepatide titration', 'weekly peptide step-up'],
+    intro: 'Standard escalation: 4 weeks per step, hold if side-effects, step down if intolerable. Mapped to syringe units using your current concentration.',
+    howTo: [
+      'Pick semaglutide or tirzepatide.',
+      'Enter current concentration (mg/mL) from reconstitution.',
+      'Read the 24-week roadmap: week, mg target, units to draw.',
+      'Mark hold-weeks when side-effects spike — don\'t force the step.',
+    ],
+    examples: [
+      { title: 'Semaglutide · 2.5 mg/mL · standard escalation', body: 'Wk1-4: 0.25 mg (10u) · Wk5-8: 0.5 mg (20u) · Wk9-12: 1.0 mg (40u) · Wk13+: 1.7–2.4 mg.' },
+    ],
+    faq: [
+      { q: 'What if nausea is brutal at a step?', a: 'Hold the step another 2–4 weeks. Tolerance builds; forcing escalation does not accelerate weight loss and frequently causes dropout.' },
+      { q: 'Can I skip steps?', a: 'No. GI tolerance builds sequentially. Skipping triples dropout rate in trial data.' },
+    ],
+    relatedIds: ['glp-units', 'peptide-inventory', 'weight-trajectory'],
+    island: 'peptide/Titration',
+    followUps: [
+      { toolId: 'peptide-inventory', cta: 'Schedule set. Forecast when vials run out.' },
+      { toolId: 'weight-trajectory', cta: 'Track actual loss against the clinical curve.' },
+    ],
+  },
+  {
+    id: 'peptide-inventory',
+    category: 'health',
+    slug: 'peptide-inventory',
+    title: 'Peptide Inventory Burn-Rate — Empty-Date Predictor | Kefiw',
+    h1: 'Peptide Inventory · Burn-Rate & Empty Date',
+    description: 'Forecast when your current vial stash runs out. Enter vials on hand, mg per vial, weekly dose — get the empty-date and reorder trigger.',
+    keywords: ['peptide inventory calculator', 'vial burn rate', 'semaglutide reorder date', 'peptide supply forecast'],
+    intro: 'Weeks of supply = (vials × mg/vial) ÷ weekly mg. Reorder when weeks-remaining drops below lead-time.',
+    howTo: [
+      'Enter vials on hand and mg per vial.',
+      'Enter weekly dose in mg.',
+      'Enter vendor lead-time in days.',
+      'Read weeks of supply, empty-date, and the trigger date to reorder.',
+    ],
+    examples: [
+      { title: '4 vials × 5 mg · 1 mg/week · 14-day lead', body: '20 weeks supply · reorder at week 18 · empty at week 20.' },
+    ],
+    faq: [
+      { q: 'Does the 28-day BAC life cap supply?', a: 'Yes — once reconstituted, count 28 days per vial. Keep unreconstituted vials frozen to preserve shelf-life separately.' },
+      { q: 'Should I buffer for lost shipments?', a: 'Add one vial of buffer if your vendor has historical delays. Running out forces a hard cessation which interrupts titration.' },
+    ],
+    relatedIds: ['titration-escalation', 'vendor-roi', 'peptide-degradation'],
+    island: 'peptide/VialBurn',
+    followUps: [
+      { toolId: 'vendor-roi', cta: 'Reorder window open. Compare vendor cost-per-dose.' },
+    ],
+  },
+  {
+    id: 'peptide-half-life',
+    category: 'health',
+    slug: 'peptide-half-life',
+    title: 'Peptide Half-Life Decay — Stacking & Steady-State | Kefiw',
+    h1: 'Peptide Half-Life · Stacking & Steady-State',
+    description: 'Model serum peptide decay across repeat doses. N(t) = N0 × 0.5^(t/h). Steady-state accumulation with weekly GLP-1s takes ~5 half-lives.',
+    keywords: ['peptide half life calculator', 'semaglutide steady state', 'GLP-1 accumulation', 'peptide decay curve'],
+    intro: 'Single-dose decay: N(t) = N₀ · 0.5^(t/h). Repeat-dose steady-state reached at ~5 half-lives. Semaglutide h ≈ 168 h, tirzepatide ≈ 120 h.',
+    howTo: [
+      'Enter peptide half-life (hours).',
+      'Enter dose (mg) and dosing interval (days).',
+      'Read the decay curve, cumulative load, and steady-state week.',
+    ],
+    examples: [
+      { title: 'Semaglutide · h=168h · 1 mg/week', body: 'Steady-state ~week 5 · peak load ~3.2× single-dose.' },
+    ],
+    faq: [
+      { q: 'Why does steady-state matter?', a: 'Side-effects and efficacy both track steady-state, not single-dose peak. Titration schedules exist because you keep accumulating for weeks after the dose change.' },
+      { q: 'Does this apply to BPC-157 or TB-500?', a: 'Short-half-life research peptides don\'t accumulate meaningfully between daily doses. The math holds but steady-state is reached within days.' },
+    ],
+    relatedIds: ['peptide-stack', 'peptide-degradation', 'titration-escalation'],
+    island: 'peptide/HalfLifeDecay',
+    followUps: [
+      { toolId: 'peptide-stack', cta: 'Running multiples? Check stack interaction.' },
+    ],
+  },
+  {
+    id: 'mass-purity-filter',
+    category: 'health',
+    slug: 'mass-purity-filter',
+    title: 'Mass-Purity Correction — HPLC Content Adjustment | Kefiw',
+    h1: 'Mass-Purity Correction · HPLC Content',
+    description: 'Correct labelled vial mass for HPLC purity and peptide content. True peptide mg = label mg × purity% × content%.',
+    keywords: ['peptide purity correction', 'HPLC content adjustment', 'peptide salt content', 'true peptide mass'],
+    intro: 'Labelled mass overstates active peptide. True mg = label × purity × peptide-content-factor. A 10 mg / 95% / 85%-content vial delivers 8.08 mg active.',
+    howTo: [
+      'Enter label mass (mg).',
+      'Enter HPLC purity (%) — from COA.',
+      'Enter peptide content factor (%) — accounts for salt and counter-ions.',
+      'Read true active mass and the corrected concentration.',
+    ],
+    examples: [
+      { title: '10 mg label · 98% purity · 85% content', body: 'True active: 8.33 mg · Effective concentration 20% lower than label.' },
+    ],
+    faq: [
+      { q: 'Where do I find purity and content?', a: 'Vendor Certificate of Analysis (COA). Purity from HPLC; peptide content from nitrogen analysis or calculated from salt form.' },
+      { q: 'Is vendor-stated purity reliable?', a: 'Third-party tested vendors are reliable. In-house-only numbers vary widely. Pay for a COA that names the testing lab.' },
+    ],
+    relatedIds: ['salt-correction', 'peptide-recon', 'vendor-roi'],
+    island: 'peptide/PurityCorrection',
+    followUps: [
+      { toolId: 'salt-correction', cta: 'Salt form matters. Apply the TFA/acetate factor.' },
+    ],
+  },
+  {
+    id: 'peptide-stack',
+    category: 'health',
+    slug: 'peptide-stack',
+    title: 'Multi-Peptide Stack — Co-Reconstitution Math | Kefiw',
+    h1: 'Peptide Stack · Co-Reconstitution',
+    description: 'Planning a multi-peptide stack in one vial or one injection session? Compute combined concentrations, unit draws, and volume totals.',
+    keywords: ['peptide stack calculator', 'multi peptide blend', 'co-reconstitution math', 'peptide combo dosing'],
+    intro: 'Co-reconstitution: add multiple peptides to shared BAC volume, compute per-peptide mg/mL, and map each to unit draws on a single syringe.',
+    howTo: [
+      'Add each peptide: mass (mg) and target dose (mg or mcg).',
+      'Enter shared BAC water volume.',
+      'Read per-peptide concentration and required syringe units for a single combined draw.',
+    ],
+    examples: [
+      { title: 'BPC-157 5 mg + TB-500 5 mg · 3 mL BAC', body: 'Each at 1.67 mg/mL · 250 mcg of each = 15 units combined.' },
+    ],
+    faq: [
+      { q: 'Can all peptides be co-reconstituted?', a: 'Most research peptides co-dissolve in BAC water. Check vendor stability data; a few require acidic or basic diluents that conflict.' },
+      { q: 'Does stacking change half-life?', a: 'No — each peptide decays independently per its own half-life. Use the Half-Life tool for each separately.' },
+    ],
+    relatedIds: ['peptide-recon', 'peptide-half-life', 'solubility-limit'],
+    island: 'peptide/PeptideStack',
+    followUps: [
+      { toolId: 'solubility-limit', cta: 'Check BAC can hold all the mass in solution.' },
+    ],
+  },
+  {
+    id: 'salt-correction',
+    category: 'health',
+    slug: 'salt-correction',
+    title: 'Salt Factor Correction — TFA vs Acetate | Kefiw',
+    h1: 'Salt Factor · TFA vs Acetate',
+    description: 'Peptides ship as TFA, acetate, or free-base salts. Salt factor shifts active peptide mass by 5–15%. Apply the correction before dosing.',
+    keywords: ['peptide salt factor', 'TFA correction', 'acetate salt peptide', 'peptide free base conversion'],
+    intro: 'Salt mass inflates label mass. Active = label × (1 − salt fraction). TFA typically 10–15%, acetate 5–10%, free-base 0%.',
+    howTo: [
+      'Enter label mass (mg).',
+      'Pick salt form (TFA / acetate / free-base) or enter custom salt fraction.',
+      'Read corrected active peptide mass.',
+    ],
+    examples: [
+      { title: '10 mg · TFA salt (12%)', body: 'Active peptide: 8.8 mg · 12% of label is TFA counter-ion.' },
+    ],
+    faq: [
+      { q: 'Which salt is best?', a: 'Acetate is cleaner physiologically. TFA is cheaper to synthesize but leaves trace residues. Free-base is rare and usually more expensive.' },
+      { q: 'Is the salt factor on the COA?', a: 'Usually listed as "net peptide content" or "salt content". If absent, assume TFA 12% for research-grade.' },
+    ],
+    relatedIds: ['mass-purity-filter', 'peptide-recon', 'vendor-roi'],
+    island: 'peptide/SaltCorrection',
+    followUps: [
+      { toolId: 'mass-purity-filter', cta: 'Stack purity on top for the full correction.' },
+    ],
+  },
+  {
+    id: 'sarcopenia-guard',
+    category: 'health',
+    slug: 'sarcopenia-guard',
+    title: 'Sarcopenia Guard — Lean-Mass Loss Ratio | Kefiw',
+    h1: 'Sarcopenia Guard · Lean-Mass Loss Ratio',
+    description: 'GLP-1 weight loss includes 25–40% lean mass by default. Enter weight and body-comp changes — get lean-mass-loss ratio with a magenta flag if > 30%.',
+    keywords: ['GLP-1 muscle loss', 'sarcopenia calculator', 'lean mass loss ratio', 'semaglutide muscle wasting'],
+    intro: 'Lean-mass-loss ratio = kg lean lost ÷ kg total lost. Above 0.30 is a magenta flag — you\'re bleeding muscle faster than trials average.',
+    howTo: [
+      'Enter starting weight and starting lean mass (DEXA / BIA).',
+      'Enter current weight and current lean mass.',
+      'Read total loss, lean loss, and the ratio.',
+      'Above 0.30 = magenta flag. Add resistance training and raise protein to 1.6–2.2 g/kg.',
+    ],
+    examples: [
+      { title: '100 → 90 kg total · 70 → 64 kg lean', body: 'Total loss 10 kg · Lean loss 6 kg · Ratio 0.60 · MAGENTA — severe sarcopenia trajectory.' },
+    ],
+    faq: [
+      { q: 'Is some lean loss unavoidable?', a: 'Yes. Trial averages sit at 0.25–0.40 lean-loss ratio. Resistance training + adequate protein pushes it toward 0.15; absence pushes it toward 0.50.' },
+      { q: 'What counts as lean mass?', a: 'Fat-free mass: muscle, organs, bone, water. DEXA separates it properly. BIA is noisy — trust the trend, not single readings.' },
+    ],
+    relatedIds: ['weight-trajectory', 'metabolic-floor', 'fuel-partition'],
+    island: 'peptide/Sarcopenia',
+    followUps: [
+      { toolId: 'metabolic-floor', cta: 'Lean mass bleeding. Check your floor.' },
+      { toolId: 'weight-trajectory', cta: 'Compare total loss vs the clinical curve.' },
+    ],
+  },
+  {
+    id: 'weight-trajectory',
+    category: 'health',
+    slug: 'weight-trajectory',
+    title: 'Weight Loss Trajectory — Clinical Curve vs Actual | Kefiw',
+    h1: 'Weight Trajectory · Clinical vs Actual',
+    description: 'Overlay your weekly weight against STEP / SURMOUNT trial mean curves. See if you\'re tracking, lagging, or outperforming expected loss.',
+    keywords: ['semaglutide weight loss curve', 'tirzepatide trajectory', 'STEP trial comparison', 'GLP-1 weight tracking'],
+    intro: 'Plots your actual loss against the trial mean ± 1 SD for semaglutide (STEP) or tirzepatide (SURMOUNT). Tracks week-by-week deviation.',
+    howTo: [
+      'Pick semaglutide or tirzepatide.',
+      'Enter starting weight and weekly weight readings.',
+      'Read your deviation from trial mean — on-curve, lagging, or outperforming.',
+    ],
+    examples: [
+      { title: 'Semaglutide · start 100 kg · week 12 at 92 kg', body: 'Trial mean at week 12: 93.5 kg. You are 1.5 kg ahead of curve.' },
+    ],
+    faq: [
+      { q: 'What if I plateau?', a: 'Plateaus at week 8–12 and 20–28 are expected even in trials. Persistent 4-week flat weight at maximum dose suggests true tolerance ceiling.' },
+      { q: 'Why compare to trials?', a: 'Anchors expectation. Most "disappointment" with GLP-1s is actually trial-average performance interpreted as failure.' },
+    ],
+    relatedIds: ['sarcopenia-guard', 'titration-escalation', 'metabolic-floor'],
+    island: 'peptide/Trajectory',
+    followUps: [
+      { toolId: 'sarcopenia-guard', cta: 'Losing fast? Check lean-mass cost.' },
+    ],
+  },
+  {
+    id: 'peptide-degradation',
+    category: 'health',
+    slug: 'peptide-degradation',
+    title: 'Peptide Degradation — Thermal Decay & Shelf-Life | Kefiw',
+    h1: 'Peptide Degradation · Thermal Decay',
+    description: 'Reconstituted peptides degrade via Arrhenius kinetics. Enter storage temp and days — get residual activity %. Magenta flag below 80%.',
+    keywords: ['peptide shelf life', 'reconstituted peptide degradation', 'peptide storage temperature', 'BAC water stability'],
+    intro: 'Degradation roughly doubles per 10°C rise (Q10 ≈ 2). Fridge 4°C ≈ 28-day viability; room temp 22°C ≈ 7 days. Residual activity below 80% = magenta flag.',
+    howTo: [
+      'Enter peptide (sets the reference rate).',
+      'Enter storage temperature (°C) and days elapsed.',
+      'Read estimated residual activity %.',
+      'Below 80% = magenta flag — discard or up-dose to compensate.',
+    ],
+    examples: [
+      { title: 'Semaglutide · 4°C · 30 days', body: 'Residual activity ~92% — still within usable range.' },
+      { title: 'BPC-157 · 22°C · 14 days', body: 'Residual activity ~68% · MAGENTA — discard or refrigerate immediately.' },
+    ],
+    faq: [
+      { q: 'Why does BAC help?', a: 'Benzyl alcohol suppresses microbial growth, not chemical degradation. Peptide still decays — BAC just keeps it sterile while decaying.' },
+      { q: 'Can I freeze reconstituted peptide?', a: 'Generally no — freeze-thaw cycles denature most peptides. Keep unreconstituted vials frozen; refrigerate only after BAC water is added.' },
+    ],
+    relatedIds: ['substance-decay', 'titration-escalation', 'peptide-inventory'],
+    island: 'peptide/Degradation',
+    followUps: [
+      { toolId: 'peptide-inventory', cta: 'Activity low. Reforecast your empty-date.' },
+    ],
+  },
+  {
+    id: 'vendor-roi',
+    category: 'health',
+    slug: 'vendor-roi',
+    title: 'Vendor Cost-per-Dose — Peptide ROI | Kefiw',
+    h1: 'Vendor ROI · Cost per Dose',
+    description: 'Normalize vendor prices to cost-per-mg and cost-per-dose. Factor shipping, purity, and salt content for a true ROI comparison.',
+    keywords: ['peptide vendor comparison', 'cost per mg calculator', 'peptide ROI', 'best peptide price'],
+    intro: 'Cost-per-active-mg = (price + shipping) ÷ (label mg × purity × content). Cost-per-dose = cost-per-mg × dose mg.',
+    howTo: [
+      'Enter vendor A and B: price, shipping, mg per vial, purity, salt content.',
+      'Enter your target dose.',
+      'Read cost-per-active-mg and cost-per-dose for each vendor.',
+      'Lowest sticker price rarely wins after purity correction.',
+    ],
+    examples: [
+      { title: 'Vendor A $180/10mg · 95% pure · 85% content vs Vendor B $160/10mg · 88% pure · 80% content', body: 'A: $22.28/mg active · B: $22.73/mg active — A wins despite higher sticker.' },
+    ],
+    faq: [
+      { q: 'Is purity worth paying for?', a: 'Yes. 10% purity gap costs 10% more active mass and raises contaminant exposure. The premium vendor usually wins on adjusted cost.' },
+      { q: 'What about shipping and customs?', a: 'Include shipping in price. Customs holds are a separate risk — factor the expected loss rate for cross-border orders.' },
+    ],
+    relatedIds: ['mass-purity-filter', 'salt-correction', 'peptide-inventory'],
+    island: 'peptide/VendorROI',
+    followUps: [
+      { toolId: 'peptide-inventory', cta: 'Vendor picked. Forecast the reorder cycle.' },
+    ],
+  },
+  {
+    id: 'solubility-limit',
+    category: 'health',
+    slug: 'solubility-limit',
+    title: 'Solubility Limit — BAC Capacity Check | Kefiw',
+    h1: 'Solubility Limit · BAC Capacity',
+    description: 'BAC water holds finite peptide mass in solution. Exceeding the limit causes precipitate and uneven dosing. Check capacity before stacking.',
+    keywords: ['peptide solubility calculator', 'BAC water capacity', 'peptide precipitate', 'max concentration peptide'],
+    intro: 'Most research peptides solubilize to 10–20 mg/mL in BAC water. Above that, precipitate forms — visible cloudiness signals uneven dose concentration.',
+    howTo: [
+      'Enter total peptide mass (mg) — sum across stack.',
+      'Enter BAC volume (mL).',
+      'Read concentration and margin vs the 10 mg/mL conservative limit.',
+      'Above the limit — add BAC, split vials, or switch to a higher-solubility diluent.',
+    ],
+    examples: [
+      { title: '30 mg combined stack · 2 mL BAC', body: '15 mg/mL · margin 5 mg/mL over conservative limit. Add 1 mL BAC or split.' },
+    ],
+    faq: [
+      { q: 'How do I know if precipitate formed?', a: 'Visible cloudiness or flakes after gentle swirl. Clear solution = soluble; hazy = exceeded limit or incompatible diluent.' },
+      { q: 'Does temperature help?', a: 'Marginally. Room-temp BAC dissolves slightly better than fridge-cold. Don\'t heat — most peptides denature above 40°C.' },
+    ],
+    relatedIds: ['peptide-recon', 'peptide-stack', 'salt-correction'],
+    island: 'peptide/Solubility',
+    followUps: [
+      { toolId: 'peptide-stack', cta: 'Capacity OK. Build the stack math.' },
+    ],
+  },
+  {
+    id: 'travel-planner',
+    category: 'health',
+    slug: 'travel-planner',
+    title: 'Peptide Travel Planner — Packing Manifest | Kefiw',
+    h1: 'Peptide Travel Planner · Packing Manifest',
+    description: 'Generate a travel manifest: vials needed, cold-chain hours, syringe count, sharps disposal plan. For trips spanning one or more dose cycles.',
+    keywords: ['peptide travel', 'GLP-1 airport', 'insulin syringe TSA', 'peptide cold chain travel'],
+    intro: 'Manifest = (trip days ÷ dose interval) + 1 buffer dose. Cold-chain hours = trip duration. Syringe count = doses × 1.2 safety margin.',
+    howTo: [
+      'Enter trip length in days and dose interval.',
+      'Enter vial concentration and dose mg.',
+      'Read manifest: vials, syringes, alcohol swabs, cold-chain duration needed.',
+      'Print as carry-on declaration sheet.',
+    ],
+    examples: [
+      { title: '14-day trip · weekly dose · 2 mL vial', body: 'Pack 1 vial + 1 buffer · 3 syringes · 6 swabs · 336 h cold-chain (insulated bag + ice packs).' },
+    ],
+    faq: [
+      { q: 'Can I fly with peptides and syringes?', a: 'Yes, in carry-on with original labeling where possible. TSA allows medication syringes with the prescription medication. International rules vary — research destination country in advance.' },
+      { q: 'Cold-chain for long-haul?', a: 'Insulated pouch with frozen gel packs holds 4–8°C for 24–36 h. For longer trips use a portable mini-fridge at destination; don\'t rely on hotel mini-bars (often unrefrigerated).' },
+    ],
+    relatedIds: ['peptide-inventory', 'peptide-degradation', 'syringe-waste'],
+    island: 'peptide/TravelPlanner',
+    followUps: [
+      { toolId: 'peptide-degradation', cta: 'Cold-chain risk? Check thermal decay math.' },
+    ],
   },
 ];
 
@@ -1773,6 +4211,35 @@ const TOOL_CLUSTER_MAP: Record<string, string> = {
   'markup-calculator': 'shopping',
   'margin-calculator': 'shopping',
   'savings-goal-calculator': 'shopping',
+  // decisions (survival, break-even, tradeoffs, labor value)
+  'runway-zero': 'shopping',
+  'shock-survival': 'shopping',
+  'horizon-point': 'shopping',
+  'crossover-calculator': 'shopping',
+  'leap-date': 'shopping',
+  'hire-vs-automate': 'shopping',
+  'value-floor': 'shopping',
+  'cloud-exit': 'shopping',
+  'minimum-viable-rate': 'shopping',
+  'sp500-check': 'shopping',
+  'tech-debt-interest': 'shopping',
+  'revenue-per-head': 'shopping',
+  'calorie-optimizer': 'shopping',
+  'gig-net-floor': 'shopping',
+  'bill-triage': 'shopping',
+  'vice-to-value': 'shopping',
+  'time-to-human': 'shopping',
+  'dopamine-minimum': 'shopping',
+  'trap-detector': 'shopping',
+  'burnout-monitor': 'shopping',
+  'bio-fuel': 'shopping',
+  'default-optimizer': 'shopping',
+  'asset-liquidator': 'shopping',
+  'social-latency': 'shopping',
+  'vimes-utility': 'shopping',
+  'time-poverty': 'shopping',
+  'liquid-value': 'shopping',
+  'stability-coefficient': 'shopping',
   // unit conversion
   'length-converter': 'units',
   'weight-converter': 'units',
@@ -1782,6 +4249,8 @@ const TOOL_CLUSTER_MAP: Record<string, string> = {
   'speed-converter': 'units',
   'time-converter': 'units',
   // daily / games
+  'vibematch': 'daily',
+  'vibecircuit': 'daily',
   'vibecrypt': 'daily',
   'vibehex': 'daily',
   'vibecontext': 'daily',
@@ -1803,6 +4272,41 @@ const TOOL_CLUSTER_MAP: Record<string, string> = {
   'sudoku-medium': 'daily',
   'sudoku-hard': 'daily',
   'sudoku-expert': 'daily',
+  // health · biological maintenance
+  'metabolic-floor': 'bio-maintenance',
+  'substance-decay': 'bio-maintenance',
+  'rem-sync': 'bio-maintenance',
+  'medical-triage': 'bio-maintenance',
+  // health · body composition
+  'impairment-bac': 'body-composition',
+  'structural-density': 'body-composition',
+  'hydraulic-integrity': 'body-composition',
+  'cessation-ladder': 'body-composition',
+  // health · structural output
+  'max-load-capacity': 'structural-output',
+  'strength-efficiency': 'structural-output',
+  'heart-rate-zones': 'structural-output',
+  'kinetic-expenditure': 'structural-output',
+  // health · bio-chemical logistics
+  'fuel-partition': 'bio-logistics',
+  'metabolic-incline': 'bio-logistics',
+  'ion-balance': 'bio-logistics',
+  'anabolic-trigger': 'bio-logistics',
+  // health · environmental stressors
+  'uv-exposure': 'environmental-stressors',
+  'co2-cognitive-tax': 'environmental-stressors',
+  'thermal-failure': 'environmental-stressors',
+  'insulation-logic': 'environmental-stressors',
+  // logic · cognitive throughput
+  'signal-to-noise': 'cognitive-throughput',
+  'task-switching': 'cognitive-throughput',
+  'decision-fatigue': 'cognitive-throughput',
+  'focus-horizon': 'cognitive-throughput',
+  // logic · logistical mobility
+  'geo-arbitrage': 'logistical-mobility',
+  'upskill-payback': 'logistical-mobility',
+  'leak-detection': 'logistical-mobility',
+  'connection-check': 'logistical-mobility',
 };
 
 for (const t of TOOLS) {
@@ -1864,6 +4368,36 @@ const TOOL_OUTCOME_LINES: Record<string, string> = {
   'volume-converter': 'Litres, gallons (US + UK), cups, millilitres.',
   'speed-converter': 'mph, km/h, m/s, knots — one tool.',
   'time-converter': 'Seconds, minutes, hours, days, weeks, years.',
+  'runway-zero': 'Exact month your cash hits zero — with a Crisis toggle that zeros revenue.',
+  'shock-survival': 'Months of fixed debt service that survive a one-time shock expense.',
+  'horizon-point': 'The exact year buying a home overtakes renting on cumulative cost.',
+  'crossover-calculator': 'The month a monthly subscription becomes more expensive than the lifetime buy.',
+  'leap-date': 'The date your side hustle sustainably replaces salary + benefits.',
+  'hire-vs-automate': 'Human hourly vs tool-stack monthly — efficiency-bar verdict with manager overhead.',
+  'value-floor': 'Outsource or DIY? Balance-scale verdict from your hourly rate + hours + parts vs the quote.',
+  'cloud-exit': 'When the cumulative cloud bill overtakes an owned rack — with depreciation and egress.',
+  'minimum-viable-rate': 'Minimum freelance hourly to match a corporate salary after invisible costs.',
+  'sp500-check': 'What this spend would be worth in 10, 20, 30 years at market returns.',
+  'tech-debt-interest': 'Compounding hours to fix a shortcut — maintenance heatmap across the wait window.',
+  'revenue-per-head': 'Will the next hire raise profit per employee or add bloat? RPH delta verdict.',
+  'calorie-optimizer': 'Most calories per dollar — ranked, brutal, survival math.',
+  'gig-net-floor': 'Your real hourly after IRS mileage cost — minimum wage sanity check.',
+  'bill-triage': 'Rank bills by essentiality + late-fee pain when you can\'t pay everything.',
+  'vice-to-value': 'Turn days abstained from a habit into dollar progress toward a named goal.',
+  'time-to-human': 'Vibe score for leaving the house — connection × 10 ÷ (transit + cost + energy tax).',
+  'dopamine-minimum': 'The ONE task with the best visibility-to-effort ratio when a full list feels impossible.',
+  'trap-detector': 'True APR of a payday loan or pawn deal — and how many times worse than a credit card.',
+  'burnout-monitor': 'Effective hourly rate after cognitive decay — when staying up actually costs money.',
+  'bio-fuel': 'Kilocalories per dollar ranked — and how many days of biological uptime that spend buys.',
+  'default-optimizer': 'Greedy-fill cash across four survival tiers; flashes System Critical if life-support goes unfunded.',
+  'asset-liquidator': 'Dual-dial gig earnings vs IRS-anchored net-worth impact — how much of the car you sold today.',
+  'social-latency': 'Pure-numerical connection ROI gauge — UPLINK or STANDBY, no advice layer.',
+  'vimes-utility': 'Boots Theory cost-per-day with 5-year injustice gap — cheap break, quality last.',
+  'time-poverty': 'Real wage after transit time and cost eat into shift earnings.',
+  'liquid-value': 'Sell-to-cover-fee math — when the replacement penalty swallows the fee you avoided.',
+  'stability-coefficient': 'Rent premium for mental silence, as a share of labor — green / amber / magenta bands.',
+  'vibematch': 'Neural synchrony — flip pairs of tech-icon nodes; every 8 misses the system re-indexes and swaps two hidden tiles. Fastest sync wins.',
+  'vibecircuit': 'Neural patch-panel — drag neon wires from each LED to its twin without crossing another net; fill every cell for a Perfect Vibe.',
   'vibecrypt': 'Terminal cryptogram — a famous quote hides behind a random substitution cipher; use frequency analysis and Brute Force to decrypt it.',
   'vibehex': 'Cyberpunk hive — 6 neon-blue letters + gold core, build 4+ letter words with the core, hunt the pangram; rank from Novice to Vibe Master.',
   'vibecontext': 'Semantic guessing — a curated warmth map rates each guess 1-1000; climb the signal bar from Frozen to Scorching to lock the target.',
@@ -1885,6 +4419,34 @@ const TOOL_OUTCOME_LINES: Record<string, string> = {
   'sudoku-medium': 'Mid-difficulty Sudoku requiring candidate notation.',
   'sudoku-hard': 'Advanced Sudoku with X-wing and chain techniques needed.',
   'sudoku-expert': 'Top difficulty — advanced logic or careful trial-and-error.',
+  'metabolic-floor': 'Your chassis idle draw (BMR) and full-load TDEE, plus cut / maintain / bulk zones.',
+  'substance-decay': 'Plot caffeine or alcohol half-life decay against jitter and sleep thresholds.',
+  'rem-sync': 'Sleep or wake at the end of a 90-min cycle, not mid-REM.',
+  'medical-triage': 'Three-tier red-flag router: ER, urgent care, or self-care — no diagnosis.',
+  'impairment-bac': 'Widmark BAC gauge with clear-to-operate countdown — estimate only, never legal evidence.',
+  'structural-density': 'US Navy body fat from tape-measure circumferences — ±3–4% vs DEXA.',
+  'hydraulic-integrity': 'Daily fluid requirement anchored to mass and activity — coolant-tank read.',
+  'cessation-ladder': 'Cotinine decay and system-recovery milestones since last cigarette.',
+  'max-load-capacity': 'Brzycki 1RM estimate plus recovery / hypertrophy / strength loads.',
+  'strength-efficiency': 'Wilks coefficient — compare relative power across bodyweight classes.',
+  'heart-rate-zones': 'Karvonen zones using HR reserve — more accurate than flat %HRmax.',
+  'kinetic-expenditure': 'MET-based calorie burn for 15 common activities, with junk-food equivalents.',
+  'fuel-partition': 'Protein-first, fat floor, carb fill — daily macro split by training goal.',
+  'metabolic-incline': 'Waist-to-height ratio — better CV risk predictor than BMI.',
+  'ion-balance': 'Sodium, potassium, chloride, magnesium lost through sweat over a session.',
+  'anabolic-trigger': 'Per-meal protein bolus that saturates MPS — 0.25–0.40 g/kg.',
+  'uv-exposure': 'Burn time by Fitzpatrick skin type, UV index, and applied SPF.',
+  'co2-cognitive-tax': 'Indoor CO₂ ppm mapped to cognitive decline — vent or vacate above 1500.',
+  'thermal-failure': 'WBGT heat-stress index — the ACGIH work/rest cycle standard.',
+  'insulation-logic': 'Required clo for air temp + activity; greedy garment-stack suggestion.',
+  'signal-to-noise': 'Minutes-consumed vs actionable-insights — flags distraction loops below 10%.',
+  'task-switching': 'CPU overhead of concurrent projects · 0.80^(n−1) retention curve.',
+  'decision-fatigue': 'Willpower battery drained by weighted choices — trivial ×1, moderate ×5, heavy ×10.',
+  'focus-horizon': 'Exponential focus decay, e^(−0.01×min) · half-life ≈ 69 min · floor at 0.',
+  'geo-arbitrage': 'Break-even month for relocating · monthly surplus delta vs one-time move cost.',
+  'upskill-payback': 'True course ROI including study-hour opportunity cost · 1- and 3-year net.',
+  'leak-detection': 'Subscription bleed · monthly, annual, 5- and 10-year lifetime cost.',
+  'connection-check': 'Support + positive weighed against conflict + drain — utility ratio with balance tilt.',
 };
 
 for (const t of TOOLS) {

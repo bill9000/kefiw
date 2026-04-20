@@ -3,34 +3,91 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ToolCard from '~/components/ToolCard.astro';
 import { TOOLS_BY_ID, type ToolConfig } from '~/data/tools';
+import { DECISION_CLUSTERS } from '~/data/decision-clusters';
 
 interface Pillar {
+  roman: string;
   title: string;
+  tagline: string;
   blurb: string;
   tools: ToolConfig[];
 }
 
-const rawPillars: Array<{ title: string; blurb: string; toolIds: string[] }> = [
+const rawPillars: Array<{ roman: string; title: string; tagline: string; blurb: string; toolIds: string[] }> = [
   {
-    title: 'Break-even points',
-    blurb: 'When does a purchase, project, or product start paying for itself? Find the exact crossover.',
-    toolIds: ['break-even-calculator', 'mortgage-extra-payment-calculator'],
+    roman: 'I',
+    title: 'Strategic Capital',
+    tagline: 'The VC / Owner Suite',
+    blurb: 'High-level management of entities, investments, and long-term equity. Runway, break-even year, opportunity cost, and the salary-replacement line.',
+    toolIds: [
+      'runway-zero',
+      'shock-survival',
+      'horizon-point',
+      'sp500-check',
+      'leap-date',
+      'break-even-calculator',
+      'minimum-viable-rate',
+      'savings-goal-calculator',
+      'mortgage-calculator',
+      'mortgage-extra-payment-calculator',
+    ],
   },
   {
-    title: 'Tradeoffs',
-    blurb: 'Compare scenarios side-by-side — more rate vs shorter term, bigger contribution vs longer horizon.',
-    toolIds: ['mortgage-calculator', 'markup-calculator', 'margin-calculator'],
+    roman: 'II',
+    title: 'Operational Scaling',
+    tagline: 'The Builder Suite',
+    blurb: 'Efficiency of labor, infrastructure, and technical debt. Subscription vs lifetime, self-host vs managed, hire vs automate, DIY vs outsource.',
+    toolIds: [
+      'crossover-calculator',
+      'cloud-exit',
+      'hire-vs-automate',
+      'tech-debt-interest',
+      'value-floor',
+      'revenue-per-head',
+      'markup-margin-calculator',
+      'markup-calculator',
+      'margin-calculator',
+    ],
   },
   {
-    title: 'Runway to a goal',
-    blurb: 'How long until the target is hit at the current pace — and what shortens the path.',
-    toolIds: ['savings-goal-calculator'],
+    roman: 'III',
+    title: 'Scarcity Triage',
+    tagline: 'The Survival Suite',
+    blurb: 'Hard-mode reality of short cash, unemployment, and crisis. Calorie-per-dollar, bill priority, payday-loan APR, boots theory, and time poverty.',
+    toolIds: [
+      'bio-fuel',
+      'bill-triage',
+      'gig-net-floor',
+      'vimes-utility',
+      'trap-detector',
+      'time-poverty',
+      'calorie-optimizer',
+      'default-optimizer',
+      'liquid-value',
+      'asset-liquidator',
+    ],
+  },
+  {
+    roman: 'IV',
+    title: 'Biological Maintenance',
+    tagline: 'The Human Suite',
+    blurb: 'Human-capital cost of health, social, and mental state. Social-connection energy tax, sleep vs cognition, rent-alone premium, dopamine triage.',
+    toolIds: [
+      'social-latency',
+      'dopamine-minimum',
+      'stability-coefficient',
+      'burnout-monitor',
+      'time-to-human',
+      'vice-to-value',
+    ],
   },
 ];
 
 const pillars: Pillar[] = rawPillars
   .map((p) => ({
+    roman: p.roman,
     title: p.title,
+    tagline: p.tagline,
     blurb: p.blurb,
     tools: p.toolIds
       .map((id) => TOOLS_BY_ID[id])
@@ -44,23 +101,22 @@ const crumbs = [
 ];
 ---
 <BaseLayout
-  title="Decisions — Deterministic Tools for Tradeoffs, Runway & Break-even | Kefiw"
-  description="Deterministic calculators that model tradeoffs, runway, break-even points, and survival windows. No AI, just math — inputs map to outputs, every time."
+  title="Decisions — Deterministic Financial Triage | Kefiw"
+  description="Deterministic calculators organized into four industrial pillars: Strategic Capital, Operational Scaling, Scarcity Triage, and Biological Maintenance. Closed-form math, no AI, no probabilistic guesses."
   canonical="/decisions/"
-  keywords={['decision calculators', 'break-even calculator', 'tradeoff tools', 'runway calculator', 'deterministic']}
+  keywords={['decision calculators', 'deterministic financial triage', 'break-even calculator', 'runway calculator', 'bio-fuel efficiency', 'vimes theorem calculator', 'trap detector']}
 >
   <Breadcrumb crumbs={crumbs} />
   <article class="container-wide py-6">
     <header class="mb-8 max-w-3xl">
-      <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">New section</p>
+      <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Deterministic Financial Triage</p>
       <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Decisions</h1>
       <p class="mt-3 text-lg text-slate-700">
-        Deterministic tools that model tradeoffs, runway, break-even points, and survival windows.
+        A deterministic toolkit for high-stakes logic, sorted into four industrial pillars.
       </p>
       <p class="mt-2 text-slate-600">
-        Every result comes from a closed-form formula or a bounded simulation you can verify by hand.
-        No AI layer, no probabilistic guesses — same inputs, same outputs, every time. Designed for the
-        moment you need to decide and show your work.
+        Every result is a closed-form formula or bounded simulation you can verify by hand.
+        No AI layer, no probabilistic guesses — same inputs, same outputs, every time.
       </p>
     </header>
 
@@ -74,8 +130,7 @@ const crumbs = [
       <div class="rounded-lg border border-slate-200 bg-white p-4">
         <div class="text-sm font-semibold text-slate-900">How it works</div>
         <p class="mt-1 text-sm text-slate-600">
-          Math is explicit: contribution margins, amortization, compound growth. Every number is
-          traceable.
+          Math is explicit: contribution margins, amortization, compound growth. Every number is traceable.
         </p>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white p-4">
@@ -86,24 +141,61 @@ const crumbs = [
       </div>
     </section>
 
+    <section class="mb-10 rounded-lg border border-emerald-200 bg-emerald-50 p-5">
+      <h2 class="text-lg font-semibold text-emerald-900">Curated decision clusters</h2>
+      <p class="mt-1 text-sm text-emerald-900/80">
+        Four SEO-anchored guide bundles that cross-link the tools most often used together.
+      </p>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {DECISION_CLUSTERS.map((c) => (
+          <li>
+            <a
+              href={`/decisions/clusters/${c.slug}/`}
+              class="block rounded-md border border-emerald-200 bg-white p-3 hover:border-emerald-500 hover:bg-emerald-50"
+            >
+              <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                Cluster {c.letter} — {c.pillar}
+              </div>
+              <div class="mt-1 text-sm font-semibold text-slate-900">{c.h1}</div>
+              <div class="mt-0.5 text-xs text-slate-600">{c.subhead}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
     {pillars.map((p) => (
-      <section class="mb-8">
-        <h2 class="text-xl font-semibold">{p.title}</h2>
+      <section class="mb-10">
+        <div class="flex items-baseline gap-3">
+          <span class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Pillar {p.roman}</span>
+          <h2 class="text-xl font-semibold">{p.title}</h2>
+          <span class="text-xs text-slate-500">— {p.tagline}</span>
+        </div>
         <p class="mt-1 max-w-3xl text-sm text-slate-600">{p.blurb}</p>
         <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {p.tools.map((t) => <ToolCard tool={t} />)}
         </div>
+        {p.roman === 'IV' && (
+          <div class="mt-4 rounded-lg border border-cyan-200 bg-cyan-50 p-4">
+            <div class="text-sm font-semibold text-cyan-900">Extended biological suite</div>
+            <p class="mt-1 text-sm text-cyan-900/80">
+              The human-capital tools above handle the decision layer — social ROI, stability cost, burnout math.
+              For the deterministic biology underneath (BMR, BAC, 1RM, WBGT, WHtR, protein bolus, CO₂ cognitive tax),
+              see the full <a href="/health/" class="font-semibold underline hover:text-cyan-700">Health suite</a> — 20 instruments across 5 sub-systems.
+            </p>
+          </div>
+        )}
       </section>
     ))}
 
     <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-5">
-      <h2 class="text-lg font-semibold text-slate-900">Coming to Decisions</h2>
-      <ul class="mt-2 list-disc pl-6 text-sm text-slate-700">
-        <li>Cash runway — months of operation at current burn</li>
-        <li>Loan survival window — how long savings last under an unexpected expense</li>
-        <li>Buy-vs-rent break-even horizon</li>
-        <li>Subscription cost crossover vs one-time purchase</li>
-      </ul>
+      <h2 class="text-lg font-semibold text-slate-900">About the Decisions suite</h2>
+      <p class="mt-2 text-sm text-slate-700">
+        Four industrial pillars map to four decision horizons: Strategic Capital (runway, equity, salary replacement),
+        Operational Scaling (infrastructure, technical debt, build-vs-buy), Scarcity Triage (cash-short survival math),
+        and Biological Maintenance (human-capital costs that don't show up on the bank statement).
+        Each tool is a closed-form formula or bounded simulation — inputs persist locally in your browser, nothing is sent to a server.
+      </p>
     </section>
   </article>
 </BaseLayout>
