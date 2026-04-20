@@ -1,0 +1,58 @@
+{
+  "disclosures": [
+    {
+      "identifier": "kfw_sid",
+      "type": "cookie",
+      "maxAgeSeconds": 2592000,
+      "cookieRefresh": true,
+      "domains": ["kefiw.com"],
+      "purposes": [1, 9]
+    },
+    {
+      "identifier": "kfw_consent",
+      "type": "web",
+      "maxAgeSeconds": 34128000,
+      "cookieRefresh": false,
+      "domains": ["kefiw.com"],
+      "purposes": [1]
+    },
+    {
+      "identifier": "kfw_region",
+      "type": "web",
+      "maxAgeSeconds": 34128000,
+      "cookieRefresh": false,
+      "domains": ["kefiw.com"],
+      "purposes": [1]
+    },
+    {
+      "identifier": "kfw_context",
+      "type": "web",
+      "maxAgeSeconds": 34128000,
+      "cookieRefresh": false,
+      "domains": ["kefiw.com"],
+      "purposes": [1]
+    },
+    {
+      "identifier": "kfw-bridge-metrics",
+      "type": "web",
+      "maxAgeSeconds": 34128000,
+      "cookieRefresh": false,
+      "domains": ["kefiw.com"],
+      "purposes": [1]
+    },
+    {
+      "identifier": "kfw-tool-state-*",
+      "type": "web",
+      "maxAgeSeconds": 34128000,
+      "cookieRefresh": false,
+      "domains": ["kefiw.com"],
+      "purposes": [1]
+    }
+  ],
+  "domains": [
+    {
+      "domain": "kefiw.com",
+      "firstParty": true
+    }
+  ]
+}
