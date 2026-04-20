@@ -49,7 +49,7 @@ const DEFAULT_STATE: State = {
 
 type Status = 'Nominal' | 'Guarded' | 'Critical';
 
-export default function VialBurn() {
+export default function ReagentInventory() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);

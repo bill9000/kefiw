@@ -54,7 +54,7 @@ export interface ContentPageConfig {
   // Inline live-context markers — tokens like {{lm:runway_months}} in typed fields get replaced
   liveMetrics?: Array<{
     token: string; // e.g. 'runway_months' — appears as {{lm:runway_months}} in typed text fields
-    metric: 'runway_months' | 'survival_efficiency' | 'cognitive_load' | 'willpower_pct' | 'peptide_concentration_mg_ml' | 'peptide_waste_pct' | 'peptide_potency_pct' | 'peptide_lean_ratio_pct';
+    metric: 'runway_months' | 'survival_efficiency' | 'cognitive_load' | 'willpower_pct' | 'reagent_concentration_mg_ml' | 'reagent_waste_pct' | 'reagent_potency_pct' | 'mass_loss_pct';
     fallback: string;
     decimals?: number;
     suffix?: string;

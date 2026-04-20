@@ -12,3 +12,18 @@
 /decisions            /finance/                301
 /decisions/           /finance/                301
 /decisions/clusters/* /finance/clusters/:splat 301
+
+# Neutral Cut (Apr 2026) — AdSense policy insulation
+/health/peptide-recon/        /health/reagent-recon/         301
+/health/sarcopenia-guard/     /health/mass-retention-guard/  301
+/health/titration-escalation/ /health/titrate-vector/        301
+/health/peptide-degradation/  /health/vector-decay/          301
+/health/glp-units/            /health/reagent-dispense/      301
+/health/mcg-per-unit/         /health/reagent-mcg-ratio/     301
+/health/syringe-waste/        /health/transfer-loss/         301
+/health/peptide-inventory/    /health/reagent-inventory/     301
+/health/peptide-half-life/    /health/reagent-half-life/     301
+/health/mass-purity-filter/   /health/reagent-purity/        301
+/health/peptide-stack/        /health/reagent-stack/         301
+/health/weight-trajectory/    /health/mass-trajectory/       301
+/health/vendor-roi/           /health/vendor-yield/          301

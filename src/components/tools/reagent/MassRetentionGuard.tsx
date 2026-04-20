@@ -20,7 +20,7 @@ const DEFAULT_STATE: State = {
 
 type Status = 'Nominal' | 'Guarded' | 'Critical';
 
-export default function Sarcopenia() {
+export default function MassRetentionGuard() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
@@ -64,8 +64,8 @@ export default function Sarcopenia() {
 
   useEffect(() => {
     if (!hydrated || !verified || calc.err) return;
-    writeMetric('peptide_lean_ratio_pct', calc.leanRatioPct);
-    writeFlag('peptide_sarcopenia_critical', calc.status === 'Critical');
+    writeMetric('mass_loss_pct', calc.leanRatioPct);
+    writeFlag('mass_retention_critical', calc.status === 'Critical');
   }, [calc, verified, hydrated]);
 
   const statusColor = calc.status === 'Critical' ? MAGENTA : calc.status === 'Guarded' ? GOLD : CYAN;

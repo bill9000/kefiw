@@ -40,7 +40,7 @@ function interp(curve: Array<[number, number]>, x: number): number {
   return 0;
 }
 
-export default function Trajectory() {
+export default function MassTrajectory() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);

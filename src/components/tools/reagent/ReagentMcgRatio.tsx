@@ -10,7 +10,7 @@ const STORAGE = 'peptide-mcg-per-unit-v1';
 interface State { concMgMl: string; useBridge: boolean; }
 const DEFAULT_STATE: State = { concMgMl: '2.5', useBridge: true };
 
-export default function McgPerUnit() {
+export default function ReagentMcgRatio() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -24,7 +24,7 @@ export default function McgPerUnit() {
   useEffect(() => { setVerified(false); }, [state.concMgMl, state.useBridge]);
 
   useEffect(() => {
-    const sync = () => setBridgeConc(readDashboard().metrics.peptide_concentration_mg_ml);
+    const sync = () => setBridgeConc(readDashboard().metrics.reagent_concentration_mg_ml);
     sync();
     return subscribeDashboard(sync);
   }, []);

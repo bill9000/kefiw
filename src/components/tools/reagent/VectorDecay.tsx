@@ -25,7 +25,7 @@ const TEMP_META: Record<TempKey, { label: string; degC: number; lossRate: number
 
 const FRIDGE_RATE = TEMP_META['fridge-4c'].lossRate;
 
-export default function Degradation() {
+export default function VectorDecay() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -71,8 +71,8 @@ export default function Degradation() {
 
   useEffect(() => {
     if (!hydrated || !verified || calc.err) return;
-    writeMetric('peptide_potency_pct', calc.potencyPct);
-    writeFlag('peptide_degradation_critical', calc.status === 'Critical');
+    writeMetric('reagent_potency_pct', calc.potencyPct);
+    writeFlag('reagent_decay_critical', calc.status === 'Critical');
   }, [calc, verified, hydrated]);
 
   const markerX = useMemo(() => {

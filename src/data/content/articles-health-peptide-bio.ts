@@ -33,9 +33,9 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       { title: 'Semaglutide hold week 13', body: 'GI tolerance failed at 1.0 mg. Hold 4 more weeks, then step to 1.7 mg at week 17. Schedule shifts 4 weeks right, endpoint unchanged.' },
     ],
     whenToUse: [
-      { toolId: 'titration-escalation', note: 'Before every weekly injection — confirm the dose matches the calendar.' },
+      { toolId: 'titrate-vector', note: 'Before every weekly injection — confirm the dose matches the calendar.' },
     ],
-    relatedIds: ['titration-escalation', 'glp-units', 'peptide-inventory'],
+    relatedIds: ['titrate-vector', 'reagent-dispense', 'reagent-inventory'],
     faq: [
       { q: 'Why 4-week steps and not 2?', a: 'GI adaptation (nausea, gastroparesis signals) needs ~3 weeks to stabilize. 4 weeks is the clinical floor used in STEP and SURMOUNT trials. Faster steps correlate with drop-out.' },
       { q: 'What if I miss a dose?', a: 'If under 2 days late, inject and resume schedule. If 3+ days late, skip and restart the week counter from the last confirmed dose. Do not double up.' },
@@ -58,12 +58,12 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'If tolerance failed last step, hold not advance. Log the hold week.',
     ],
     liveMetrics: [
-      { token: 'conc', metric: 'peptide_concentration_mg_ml', fallback: 'no concentration set', decimals: 2, suffix: ' mg/mL' },
+      { token: 'conc', metric: 'reagent_concentration_mg_ml', fallback: 'no concentration set', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'glp-units', note: 'Unit math unclear. Lock the U-100 conversion before injecting.' },
-      stable: { toolId: 'weight-trajectory', note: 'Schedule locked. Track actual loss against clinical curve.' },
-      fallback: { toolId: 'peptide-inventory', note: 'Confirm vial runway covers the full ramp.' },
+      critical: { toolId: 'reagent-dispense', note: 'Unit math unclear. Lock the U-100 conversion before injecting.' },
+      stable: { toolId: 'mass-trajectory', note: 'Schedule locked. Track actual loss against clinical curve.' },
+      fallback: { toolId: 'reagent-inventory', note: 'Confirm vial runway covers the full ramp.' },
     },
   },
 
@@ -99,9 +99,9 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       { title: 'Tirzepatide stack, 15 mg + 5 mg pen at 7.5 mg/wk', body: 'Combined 20 mg ÷ 7.5 = 2 full doses + 5 mg residue. days_remaining = 14. Next vial must arrive day 7.' },
     ],
     whenToUse: [
-      { toolId: 'peptide-inventory', note: 'Every week at injection — log remaining volume, confirm empty date.' },
+      { toolId: 'reagent-inventory', note: 'Every week at injection — log remaining volume, confirm empty date.' },
     ],
-    relatedIds: ['peptide-inventory', 'titration-escalation', 'vendor-roi'],
+    relatedIds: ['reagent-inventory', 'titrate-vector', 'vendor-yield'],
     faq: [
       { q: 'What about degraded potency — does the vial still count full?', a: 'No. Run Peptide Degradation first. If retained potency is 85%, effective mass = total_mg × 0.85. The empty date moves left accordingly.' },
       { q: 'How do I handle dead volume?', a: 'Subtract 0.02 mL per vial from usable volume. On 3 mL vials at 2 mg/mL, that is ~0.04 mg lost — one extra dose every ~25 vials.' },
@@ -123,11 +123,11 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'If reorder_date ≤ today, place the order before the next injection.',
     ],
     liveMetrics: [
-      { token: 'waste', metric: 'peptide_waste_pct', fallback: 'no waste logged', decimals: 1, suffix: '%' },
+      { token: 'waste', metric: 'reagent_waste_pct', fallback: 'no waste logged', decimals: 1, suffix: '%' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'vendor-roi', note: 'Empty window close. Compare vendors on cost-per-dose before emergency reorder.' },
-      stable: { toolId: 'titration-escalation', note: 'Inventory covers the ramp. Confirm next dose step.' },
+      critical: { toolId: 'vendor-yield', note: 'Empty window close. Compare vendors on cost-per-dose before emergency reorder.' },
+      stable: { toolId: 'titrate-vector', note: 'Inventory covers the ramp. Confirm next dose step.' },
       fallback: { toolId: 'travel-planner', note: 'Trip coming up? Pre-allocate vials for transit.' },
     },
   },
@@ -164,9 +164,9 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       { title: '500 mcg dose comparison', body: 'At $0.0087/mcg: cost_per_dose = 500 × $0.0087 = $4.35. At $0.0106/mcg: $5.30. Over a 16-week titration: ~$15 gap.' },
     ],
     whenToUse: [
-      { toolId: 'vendor-roi', note: 'Before every reorder — vendors rotate prices weekly.' },
+      { toolId: 'vendor-yield', note: 'Before every reorder — vendors rotate prices weekly.' },
     ],
-    relatedIds: ['vendor-roi', 'peptide-inventory', 'mass-purity-filter'],
+    relatedIds: ['vendor-yield', 'reagent-inventory', 'reagent-purity'],
     faq: [
       { q: 'Should I factor in test-kit cost?', a: 'Yes. Third-party testing ($15-30 per kit) is a fixed cost per vendor trial. Amortize over expected purchase volume — first order shows high cost, subsequent orders dilute it.' },
       { q: 'What about bacteriostatic water separately?', a: 'If bundled, include in total. If separate, add to shipping. A vendor cheaper on mg but missing BAC water may cost more once reconstitution supplies are priced in.' },
@@ -188,11 +188,11 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'Verify empty_date from Peptide Inventory before bulk discount trigger.',
     ],
     liveMetrics: [
-      { token: 'waste', metric: 'peptide_waste_pct', fallback: 'no waste logged', decimals: 1, suffix: '%' },
+      { token: 'waste', metric: 'reagent_waste_pct', fallback: 'no waste logged', decimals: 1, suffix: '%' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'syringe-waste', note: 'Cost-per-dose high? Waste may be the driver, not vendor price.' },
-      stable: { toolId: 'peptide-inventory', note: 'Vendor ranked. Confirm reorder volume matches empty_date.' },
+      critical: { toolId: 'transfer-loss', note: 'Cost-per-dose high? Waste may be the driver, not vendor price.' },
+      stable: { toolId: 'reagent-inventory', note: 'Vendor ranked. Confirm reorder volume matches empty_date.' },
       fallback: { toolId: 'travel-planner', note: 'Travel incoming? Vendor choice may depend on shipping address.' },
     },
   },
@@ -231,7 +231,7 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
     whenToUse: [
       { toolId: 'travel-planner', note: '7 days before departure — gives time to reorder if vial count short.' },
     ],
-    relatedIds: ['travel-planner', 'peptide-inventory', 'solubility-limit'],
+    relatedIds: ['travel-planner', 'reagent-inventory', 'solubility-limit'],
     faq: [
       { q: 'Do I reconstitute before travel or on arrival?', a: 'Lyophilized vials survive ambient transit better. Reconstitute on arrival unless the trip starts mid-dose cycle — then the current vial travels reconstituted in insulated cold pack.' },
       { q: 'What about flying with syringes?', a: 'U-100 insulin syringes are TSA-permitted with prescription labeling. Pack in carry-on; checked baggage freezes on long-haul.' },
@@ -253,12 +253,12 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'Plan cold chain: insulated pack out, refrigeration confirmed at destination.',
     ],
     liveMetrics: [
-      { token: 'conc', metric: 'peptide_concentration_mg_ml', fallback: 'no concentration set', decimals: 2, suffix: ' mg/mL' },
+      { token: 'conc', metric: 'reagent_concentration_mg_ml', fallback: 'no concentration set', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'peptide-inventory', note: 'Vial shortfall for trip. Reorder before departure window closes.' },
+      critical: { toolId: 'reagent-inventory', note: 'Vial shortfall for trip. Reorder before departure window closes.' },
       stable: { toolId: 'solubility-limit', note: 'Concentration fine? Verify solubility at travel temperature.' },
-      fallback: { toolId: 'peptide-stack', note: 'Multi-peptide travel — verify stack compatibility at new injection rhythm.' },
+      fallback: { toolId: 'reagent-stack', note: 'Multi-peptide travel — verify stack compatibility at new injection rhythm.' },
     },
   },
 
@@ -294,9 +294,9 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       { title: 'Tirzepatide missed week 3, h = 120 hr / 5 days', body: 'Scheduled 5 mg. At 14 days post-last-dose: residual = 5 × 0.5^(14/5) = 0.72 mg. Less than 15% of dose — real gap.' },
     ],
     whenToUse: [
-      { toolId: 'peptide-half-life', note: 'After any missed or delayed dose — confirm current residual before resuming schedule.' },
+      { toolId: 'reagent-half-life', note: 'After any missed or delayed dose — confirm current residual before resuming schedule.' },
     ],
-    relatedIds: ['peptide-half-life', 'peptide-stack', 'titration-escalation'],
+    relatedIds: ['reagent-half-life', 'reagent-stack', 'titrate-vector'],
     faq: [
       { q: 'Why 4.3 half-lives for steady state?', a: '2^4.3 ≈ 20, meaning residual from the first dose is ~5% — clinically negligible. 4-5 half-lives is the standard PK convention.' },
       { q: 'Does this model absorption or just elimination?', a: 'Elimination only. Absorption (Tmax ~1-3 days for semaglutide) is a separate curve. For weekly peptides the absorption tail blurs into the elimination start — the decay approximation is clinically adequate.' },
@@ -319,12 +319,12 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'If 2+ doses missed, residual < 10% — treat as restart, not continuation.',
     ],
     liveMetrics: [
-      { token: 'conc', metric: 'peptide_concentration_mg_ml', fallback: 'no concentration set', decimals: 2, suffix: ' mg/mL' },
+      { token: 'conc', metric: 'reagent_concentration_mg_ml', fallback: 'no concentration set', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'titration-escalation', note: 'Residual gap detected. Restart titration from last confirmed stable dose.' },
-      stable: { toolId: 'glp-units', note: 'PK stable. Confirm U-100 unit conversion for next dose.' },
-      fallback: { toolId: 'sarcopenia-guard', note: 'PK is fine; check whether body composition is tracking.' },
+      critical: { toolId: 'titrate-vector', note: 'Residual gap detected. Restart titration from last confirmed stable dose.' },
+      stable: { toolId: 'reagent-dispense', note: 'PK stable. Confirm U-100 unit conversion for next dose.' },
+      fallback: { toolId: 'mass-retention-guard', note: 'PK is fine; check whether body composition is tracking.' },
     },
   },
 
@@ -360,9 +360,9 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       { title: 'Plateau edge: −5 kg total, −1.25 kg lean', body: 'lean_ratio = 25%. Exact threshold. Flag fires; treat as critical until next measurement disproves.' },
     ],
     whenToUse: [
-      { toolId: 'sarcopenia-guard', note: 'Every 8 weeks during active titration — DEXA or calibrated BIA.' },
+      { toolId: 'mass-retention-guard', note: 'Every 8 weeks during active titration — DEXA or calibrated BIA.' },
     ],
-    relatedIds: ['sarcopenia-guard', 'weight-trajectory', 'metabolic-floor'],
+    relatedIds: ['mass-retention-guard', 'mass-trajectory', 'metabolic-floor'],
     faq: [
       { q: 'What if my lean measurement includes water shifts?', a: 'GLP-1 causes initial water loss — first 4 weeks artificially inflate lean drop. Baseline the measurement after week 4, not at start.' },
       { q: 'Is 15% lean loss okay?', a: 'Below 20% is acceptable on any cut, GLP-1 or not. Under 10% is excellent and usually indicates adequate protein + resistance training.' },
@@ -385,11 +385,11 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'Before next titration step: audit protein g/kg, resistance training frequency, deficit size.',
     ],
     liveMetrics: [
-      { token: 'lean', metric: 'peptide_lean_ratio_pct', fallback: 'no lean ratio set', decimals: 1, suffix: '%' },
+      { token: 'lean', metric: 'mass_loss_pct', fallback: 'no lean ratio set', decimals: 1, suffix: '%' },
     ],
     pivotSwitch: {
       critical: { toolId: 'metabolic-floor', note: 'Lean mass bleeding — check the floor. Deficit may be below safe metabolic floor.' },
-      stable: { toolId: 'weight-trajectory', note: 'Composition intact. Track actual loss against clinical curve.' },
+      stable: { toolId: 'mass-trajectory', note: 'Composition intact. Track actual loss against clinical curve.' },
       fallback: { toolId: 'fuel-partition', note: 'Audit macro split. Low protein is usually the upstream cause.' },
     },
   },
@@ -426,9 +426,9 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       { title: 'Semaglutide week 40, actual −4.5%', body: 'STEP at w40 ≈ 11.2%. delta = −6.7% — material lag. Audit injection adherence and dose confirmation.' },
     ],
     whenToUse: [
-      { toolId: 'weight-trajectory', note: 'Every 4 weeks — log weight, compute delta against trial curve.' },
+      { toolId: 'mass-trajectory', note: 'Every 4 weeks — log weight, compute delta against trial curve.' },
     ],
-    relatedIds: ['weight-trajectory', 'titration-escalation', 'sarcopenia-guard'],
+    relatedIds: ['mass-trajectory', 'titrate-vector', 'mass-retention-guard'],
     faq: [
       { q: 'What if I started below BMI 30?', a: 'Trial populations were BMI 30+. Lower starting BMI typically loses less total percent — expect 60-80% of trial curve. Adjust expectations, do not abandon comparison.' },
       { q: 'Linear interpolation seems crude — why not nonlinear?', a: 'STEP and SURMOUNT curves are near-linear from week 8 to week 60. Pre-week-8 is steeper (titration ramp-in); post-week-60 is flattening (plateau). Linear is clinically adequate within the middle range.' },
@@ -450,11 +450,11 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'If magenta, run Sarcopenia Guard and Titration Escalation before adjusting dose.',
     ],
     liveMetrics: [
-      { token: 'lean', metric: 'peptide_lean_ratio_pct', fallback: 'no lean ratio set', decimals: 1, suffix: '%' },
+      { token: 'lean', metric: 'mass_loss_pct', fallback: 'no lean ratio set', decimals: 1, suffix: '%' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'sarcopenia-guard', note: 'Runaway loss or non-response. Check composition before touching titration.' },
-      stable: { toolId: 'titration-escalation', note: 'Trajectory clean. Confirm next step on schedule.' },
+      critical: { toolId: 'mass-retention-guard', note: 'Runaway loss or non-response. Check composition before touching titration.' },
+      stable: { toolId: 'titrate-vector', note: 'Trajectory clean. Confirm next step on schedule.' },
       fallback: { toolId: 'metabolic-floor', note: 'Lag detected? Deficit may be under-powered or over-powered.' },
     },
   },
@@ -491,9 +491,9 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       { title: 'Lyophilized, 48h hot car', body: 'k_hot = 0.025/hr. potency = 100 × exp(−0.025 × 48) = 30.12%. Discard — dose math on this vial is garbage.' },
     ],
     whenToUse: [
-      { toolId: 'peptide-degradation', note: 'After any cold-chain break — transit, power outage, forgotten on counter.' },
+      { toolId: 'vector-decay', note: 'After any cold-chain break — transit, power outage, forgotten on counter.' },
     ],
-    relatedIds: ['peptide-degradation', 'peptide-recon', 'peptide-inventory'],
+    relatedIds: ['vector-decay', 'reagent-recon', 'reagent-inventory'],
     faq: [
       { q: 'Is this calibrated to semaglutide specifically?', a: 'The rate constants are a simplified mid-range applicable to most therapeutic peptides. Semaglutide-specific stability data from Novo Nordisk supports the lyophilized-fridge rate; reconstituted and elevated temps extrapolate Arrhenius behavior. Treat as an estimate, not FDA-grade.' },
       { q: 'Why 85% as the critical threshold?', a: 'Clinical PK tolerance is ±15% for dose-response consistency. Below 85% retained potency, the effective dose drifts outside the therapeutic band — titration math silently fails.' },
@@ -516,11 +516,11 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
       'If potency < 85, write peptide_degradation_critical flag — ULH-01 pulses Magenta. Discard or discount effective mass.',
     ],
     liveMetrics: [
-      { token: 'potency', metric: 'peptide_potency_pct', fallback: 'no potency logged', decimals: 1, suffix: '%' },
+      { token: 'potency', metric: 'reagent_potency_pct', fallback: 'no potency logged', decimals: 1, suffix: '%' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'peptide-inventory', note: 'Potency shot — plan replacement. Empty date just moved left.' },
-      stable: { toolId: 'peptide-recon', note: 'Vial intact. Verify reconstitution concentration for next draw.' },
+      critical: { toolId: 'reagent-inventory', note: 'Potency shot — plan replacement. Empty date just moved left.' },
+      stable: { toolId: 'reagent-recon', note: 'Vial intact. Verify reconstitution concentration for next draw.' },
       fallback: { toolId: 'travel-planner', note: 'Cold-chain risk ahead? Plan insulated transport.' },
     },
   },

@@ -10,7 +10,7 @@ const STORAGE = 'peptide-recon-v1';
 interface State { vialMass: string; bacVolume: string; }
 const DEFAULT_STATE: State = { vialMass: '5', bacVolume: '2' };
 
-export default function PeptideRecon() {
+export default function ReagentRecon() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -32,7 +32,7 @@ export default function PeptideRecon() {
 
   useEffect(() => {
     if (!hydrated || !verified || calc.err) return;
-    writeMetric('peptide_concentration_mg_ml', calc.concMgMl);
+    writeMetric('reagent_concentration_mg_ml', calc.concMgMl);
   }, [calc.concMgMl, calc.err, verified, hydrated]);
 
   const vialFillPct = Math.min(100, (calc.vol / 10) * 100);

@@ -24,7 +24,7 @@ const DEFAULT_STATE: State = {
   criticalPct: '10',
 };
 
-export default function SyringeWaste() {
+export default function TransferLoss() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -82,8 +82,8 @@ export default function SyringeWaste() {
   useEffect(() => {
     if (!hydrated || !verified || 'err' in calc && calc.err) return;
     if ('annualWastePct' in calc) {
-      writeMetric('peptide_waste_pct', calc.annualWastePct);
-      writeFlag('peptide_waste_critical', calc.critical);
+      writeMetric('reagent_waste_pct', calc.annualWastePct);
+      writeFlag('reagent_waste_critical', calc.critical);
     }
   }, [calc, verified, hydrated]);
 

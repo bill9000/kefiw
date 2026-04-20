@@ -38,7 +38,7 @@ interface Calc {
   valid: boolean;
 }
 
-export default function VendorROI() {
+export default function VendorYield() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
   const [verified, setVerified] = useState(false);

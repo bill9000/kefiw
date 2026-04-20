@@ -20,7 +20,7 @@ const DEFAULT_STATE: State = {
   bacVolumeMl: '2',
 };
 
-export default function PurityCorrection() {
+export default function ReagentPurity() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);

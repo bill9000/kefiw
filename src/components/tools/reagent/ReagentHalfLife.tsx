@@ -22,7 +22,7 @@ const DEFAULT_STATE: State = {
 
 interface Point { t: number; c: number; }
 
-export default function HalfLifeDecay() {
+export default function ReagentHalfLife() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);

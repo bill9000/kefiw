@@ -45,16 +45,16 @@ function pathCategory(path: string): string {
 
 function getNudge(path: string, s: DashboardState): string | null {
   const cat = pathCategory(path);
-  const { runway_months, cognitive_load, survival_efficiency, peptide_potency_pct, peptide_lean_ratio_pct } = s.metrics;
-  const { peptide_sarcopenia_critical, peptide_degradation_critical, peptide_waste_critical } = s.flags;
+  const { runway_months, cognitive_load, survival_efficiency, reagent_potency_pct, mass_loss_pct } = s.metrics;
+  const { mass_retention_critical, reagent_decay_critical, reagent_waste_critical } = s.flags;
 
-  if (peptide_sarcopenia_critical) {
-    return `Sarcopenia CRITICAL: ${(peptide_lean_ratio_pct ?? 0).toFixed(1)}% lean loss — increase protein + resistance training before next dose.`;
+  if (mass_retention_critical) {
+    return `Sarcopenia CRITICAL: ${(mass_loss_pct ?? 0).toFixed(1)}% lean loss — increase protein + resistance training before next dose.`;
   }
-  if (peptide_degradation_critical) {
-    return `Potency CRITICAL: ${(peptide_potency_pct ?? 0).toFixed(1)}% retained — discard reconstituted vial, replan inventory.`;
+  if (reagent_decay_critical) {
+    return `Potency CRITICAL: ${(reagent_potency_pct ?? 0).toFixed(1)}% retained — discard reconstituted vial, replan inventory.`;
   }
-  if (peptide_waste_critical) {
+  if (reagent_waste_critical) {
     return 'Waste budget EXCEEDED — switch to low-dead-space syringes or reduce draw count.';
   }
 
@@ -129,13 +129,13 @@ export default function SystemTray() {
   const r = state.metrics.runway_months;
   const cl = state.metrics.cognitive_load;
   const bio = state.metrics.survival_efficiency;
-  const potency = state.metrics.peptide_potency_pct;
-  const leanRatio = state.metrics.peptide_lean_ratio_pct;
-  const wastePct = state.metrics.peptide_waste_pct;
+  const potency = state.metrics.reagent_potency_pct;
+  const leanRatio = state.metrics.mass_loss_pct;
+  const wastePct = state.metrics.reagent_waste_pct;
   const peptideFlagCrit =
-    state.flags.peptide_sarcopenia_critical ||
-    state.flags.peptide_degradation_critical ||
-    state.flags.peptide_waste_critical;
+    state.flags.mass_retention_critical ||
+    state.flags.reagent_decay_critical ||
+    state.flags.reagent_waste_critical;
   const hasPeptide = potency !== undefined || leanRatio !== undefined || wastePct !== undefined || !!peptideFlagCrit;
   const peptideVal = peptideFlagCrit
     ? 'CRIT'

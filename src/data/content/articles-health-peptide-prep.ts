@@ -33,9 +33,9 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       { title: '5 mg BPC-157 + 5 mL BAC', body: 'concentration = 1.00 mg/mL. 500 mcg dose = 0.5 mL = 50 units. Clean decimal, low math risk.' },
     ],
     whenToUse: [
-      { toolId: 'peptide-recon', note: 'Run immediately after adding BAC water to a new vial. Log concentration to the vial label.' },
+      { toolId: 'reagent-recon', note: 'Run immediately after adding BAC water to a new vial. Log concentration to the vial label.' },
     ],
-    relatedIds: ['peptide-recon', 'glp-units', 'mcg-per-unit'],
+    relatedIds: ['reagent-recon', 'reagent-dispense', 'reagent-mcg-ratio'],
     faq: [
       { q: 'Does the peptide mass itself add volume?', a: 'No — lyophilized peptide mass is negligible relative to BAC volume at the scales used. Treat BAC volume as total solution volume.' },
       { q: 'What if the vendor vial is under-filled?', a: 'Vendor mass is assumed label-accurate. Run Mass Purity Filter (MPF-1) if you suspect under-fill — it reweights effective dose without re-reconstituting.' },
@@ -58,12 +58,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'Pipe concentration forward to DSE-1 and CNV-1. Never re-derive manually.',
     ],
     liveMetrics: [
-      { token: 'concentration', metric: 'peptide_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
+      { token: 'concentration', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'sarcopenia-guard', note: 'Concentration anchored — pivot to lean-mass guardrails before titrating higher.' },
-      stable: { toolId: 'glp-units', note: 'Concentration locked. Convert target dose to U-100 units.' },
-      fallback: { toolId: 'mcg-per-unit', note: 'Operator prefers mcg thinking? Route to MCG-per-Unit for the conversion.' },
+      critical: { toolId: 'mass-retention-guard', note: 'Concentration anchored — pivot to lean-mass guardrails before titrating higher.' },
+      stable: { toolId: 'reagent-dispense', note: 'Concentration locked. Convert target dose to U-100 units.' },
+      fallback: { toolId: 'reagent-mcg-ratio', note: 'Operator prefers mcg thinking? Route to MCG-per-Unit for the conversion.' },
     },
   },
 
@@ -99,9 +99,9 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       { title: 'CJC-1295 2 mg + Ipamorelin 5 mg / 3 mL BAC', body: 'concA = 0.67 mg/mL, concB = 1.67 mg/mL. 0.30 mL = 0.20 mg + 0.50 mg. 30 units, 2.5:1 mass ratio locked in.' },
     ],
     whenToUse: [
-      { toolId: 'peptide-stack', note: 'Run before any dual-compound reconstitution. Confirm ratio is fixed and solubility limits are not exceeded.' },
+      { toolId: 'reagent-stack', note: 'Run before any dual-compound reconstitution. Confirm ratio is fixed and solubility limits are not exceeded.' },
     ],
-    relatedIds: ['peptide-stack', 'peptide-recon', 'solubility-limit'],
+    relatedIds: ['reagent-stack', 'reagent-recon', 'solubility-limit'],
     faq: [
       { q: 'Can I stack three peptides?', a: 'Math extends to N compounds: concN = MN / V. Practical limits are solubility sum and stability interactions, not the arithmetic.' },
       { q: 'What if I want to change the ratio mid-vial?', a: 'You cannot. Shared volume fixes the ratio. Either finish the vial or reconstitute separately. Plan the stack before adding BAC.' },
@@ -124,11 +124,11 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'For each draw, derive (draw_mg_A, draw_mg_B, draw_units) from draw_volume_ml.',
     ],
     liveMetrics: [
-      { token: 'concentration', metric: 'peptide_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
+      { token: 'concentration', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'syringe-waste', note: 'Stacking doubles the cost of dead space. Quantify leakage before committing to a stacked vial.' },
-      stable: { toolId: 'glp-units', note: 'Stack locked. Convert target draw to U-100 units for the insulin syringe.' },
+      critical: { toolId: 'transfer-loss', note: 'Stacking doubles the cost of dead space. Quantify leakage before committing to a stacked vial.' },
+      stable: { toolId: 'reagent-dispense', note: 'Stack locked. Convert target draw to U-100 units for the insulin syringe.' },
       fallback: { toolId: 'solubility-limit', note: 'Solubility budget unclear — run SOL-1 before reconstituting the stack.' },
     },
   },
@@ -167,7 +167,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     whenToUse: [
       { toolId: 'salt-correction', note: 'Run before PRC-1 on any vial whose COA lists a TFA or acetate salt form.' },
     ],
-    relatedIds: ['salt-correction', 'peptide-recon', 'mass-purity-filter'],
+    relatedIds: ['salt-correction', 'reagent-recon', 'reagent-purity'],
     faq: [
       { q: 'Where do I find peptide content percentage?', a: 'Vendor COA, usually listed as "peptide content" or "net peptide". If absent, assume TFA 76% for research chemicals — better to under-dose than over-dose by a salt factor.' },
       { q: 'Does the salt form affect bioactivity?', a: 'Not at typical scales. The correction is purely mass accounting — the peptide molecule itself behaves identically once in solution.' },
@@ -190,12 +190,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'Log both label_mass and actual_mass on the vial; dose from actual only.',
     ],
     liveMetrics: [
-      { token: 'concentration', metric: 'peptide_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
+      { token: 'concentration', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'peptide-recon', note: 'Mass corrected — immediately pipe actual_mass into PRC-1 for true concentration.' },
-      stable: { toolId: 'glp-units', note: 'Corrected concentration clean — convert dose to U-100 units.' },
-      fallback: { toolId: 'mass-purity-filter', note: 'Purity also suspect? Stack MPF-1 on top of salt correction.' },
+      critical: { toolId: 'reagent-recon', note: 'Mass corrected — immediately pipe actual_mass into PRC-1 for true concentration.' },
+      stable: { toolId: 'reagent-dispense', note: 'Corrected concentration clean — convert dose to U-100 units.' },
+      fallback: { toolId: 'reagent-purity', note: 'Purity also suspect? Stack MPF-1 on top of salt correction.' },
     },
   },
 
@@ -233,7 +233,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     whenToUse: [
       { toolId: 'solubility-limit', note: 'Run before PRC-1 any time planned concentration approaches published maxima — especially with stacked vials.' },
     ],
-    relatedIds: ['solubility-limit', 'peptide-recon', 'peptide-stack'],
+    relatedIds: ['solubility-limit', 'reagent-recon', 'reagent-stack'],
     faq: [
       { q: 'Where do solubility maxima come from?', a: 'Vendor COA is primary source. Published literature secondary. If neither exists, start at 2 mg/mL and observe — most research peptides clear that bar easily.' },
       { q: 'Does BAC vs plain water matter?', a: 'BAC (0.9% benzyl alcohol) has marginally lower solubility ceiling than plain sterile water for some peptides. Use the BAC number when specified.' },
@@ -256,12 +256,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'Re-verify with visual inspection: clear solution = pass; any cloudiness = fail.',
     ],
     liveMetrics: [
-      { token: 'concentration', metric: 'peptide_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
+      { token: 'concentration', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'peptide-recon', note: 'Add BAC to drop concentration below limit — then re-run PRC-1 with new volume.' },
-      stable: { toolId: 'peptide-stack', note: 'Headroom available — you can add a second compound if compatibility allows.' },
-      fallback: { toolId: 'mass-purity-filter', note: 'Concentration looks right but sludge appeared? Mass may be overstated — run MPF-1.' },
+      critical: { toolId: 'reagent-recon', note: 'Add BAC to drop concentration below limit — then re-run PRC-1 with new volume.' },
+      stable: { toolId: 'reagent-stack', note: 'Headroom available — you can add a second compound if compatibility allows.' },
+      fallback: { toolId: 'reagent-purity', note: 'Concentration looks right but sludge appeared? Mass may be overstated — run MPF-1.' },
     },
   },
 
@@ -297,9 +297,9 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       { title: '1.5 mg at 1.00 mg/mL — overflow case', body: 'volume = 1.50 mL = 150 units. Exceeds U-100 capacity. Reconstitute at 3.0 mg/mL instead → 50 units fits.' },
     ],
     whenToUse: [
-      { toolId: 'glp-units', note: 'Run after every PRC-1 reconstitution and whenever dose target changes.' },
+      { toolId: 'reagent-dispense', note: 'Run after every PRC-1 reconstitution and whenever dose target changes.' },
     ],
-    relatedIds: ['glp-units', 'peptide-recon', 'mcg-per-unit'],
+    relatedIds: ['reagent-dispense', 'reagent-recon', 'reagent-mcg-ratio'],
     faq: [
       { q: 'What about U-40 or U-500 syringes?', a: 'DSE-1 assumes U-100 convention (1 unit = 0.01 mL). Other syringe scales change the multiplier — do not use this tool with non-U-100 hardware.' },
       { q: 'Can I draw fractional units?', a: 'The smallest reliable graduation on a U-100 insulin syringe is 1 unit. Fractional draws are guesswork; adjust concentration or dose to land on whole units.' },
@@ -322,12 +322,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'Record units on dose-log next to date and vial ID.',
     ],
     liveMetrics: [
-      { token: 'conc', metric: 'peptide_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
+      { token: 'conc', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'peptide-recon', note: 'Dose exceeds syringe — reconstitute stronger. Return to PRC-1 with lower BAC volume.' },
-      stable: { toolId: 'mcg-per-unit', note: 'Units computed clean. Cross-check with mcg-per-unit for operator sanity.' },
-      fallback: { toolId: 'titration-escalation', note: 'Units look right but dose target is unclear? Run TIT-1 to set the escalation schedule.' },
+      critical: { toolId: 'reagent-recon', note: 'Dose exceeds syringe — reconstitute stronger. Return to PRC-1 with lower BAC volume.' },
+      stable: { toolId: 'reagent-mcg-ratio', note: 'Units computed clean. Cross-check with mcg-per-unit for operator sanity.' },
+      fallback: { toolId: 'titrate-vector', note: 'Units look right but dose target is unclear? Run TIT-1 to set the escalation schedule.' },
     },
   },
 
@@ -363,9 +363,9 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       { title: 'Concentration 0.50 mg/mL', body: 'mcg_per_unit = 0.50 × 10 = 5 mcg/unit. 100 mcg dose = 20 units. Dilute but still within U-100.' },
     ],
     whenToUse: [
-      { toolId: 'mcg-per-unit', note: 'Run alongside PRC-1 for any peptide prescribed in mcg rather than mg.' },
+      { toolId: 'reagent-mcg-ratio', note: 'Run alongside PRC-1 for any peptide prescribed in mcg rather than mg.' },
     ],
-    relatedIds: ['mcg-per-unit', 'glp-units', 'peptide-recon'],
+    relatedIds: ['reagent-mcg-ratio', 'reagent-dispense', 'reagent-recon'],
     faq: [
       { q: 'Why multiply by 10?', a: 'Because (mg/mL × 1000 mcg/mg) × (0.01 mL/unit) = mg/mL × 10. The 100 cancels from the 1000/100 collapse.' },
       { q: 'Does this work for any syringe?', a: 'Only U-100. Other scales (U-40, U-500) break the × 10 shortcut. This tool assumes U-100 throughout.' },
@@ -388,12 +388,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'Record mcg_per_unit on vial label next to mg/mL concentration.',
     ],
     liveMetrics: [
-      { token: 'concentration', metric: 'peptide_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
+      { token: 'concentration', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'glp-units', note: 'mcg_per_unit set — cross-verify against DSE-1 units output before dosing.' },
-      stable: { toolId: 'peptide-recon', note: 'mcg clean — return to PRC-1 if concentration needs adjustment.' },
-      fallback: { toolId: 'titration-escalation', note: 'Unit scale clear but schedule unclear? Run TIT-1 for the escalation path.' },
+      critical: { toolId: 'reagent-dispense', note: 'mcg_per_unit set — cross-verify against DSE-1 units output before dosing.' },
+      stable: { toolId: 'reagent-recon', note: 'mcg clean — return to PRC-1 if concentration needs adjustment.' },
+      fallback: { toolId: 'titrate-vector', note: 'Unit scale clear but schedule unclear? Run TIT-1 for the escalation path.' },
     },
   },
 
@@ -429,9 +429,9 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       { title: 'Daily dosing, 0.07 mL dead space, 5.00 mg/mL, 365 draws', body: 'waste = 0.35 mg/draw × 365 = 127.75 mg/yr. At $40/mg, $5,110 annual leak. Upgrade to LDS is non-optional.' },
     ],
     whenToUse: [
-      { toolId: 'syringe-waste', note: 'Run before committing to a syringe supplier and after any concentration change from PRC-1.' },
+      { toolId: 'transfer-loss', note: 'Run before committing to a syringe supplier and after any concentration change from PRC-1.' },
     ],
-    relatedIds: ['syringe-waste', 'glp-units', 'peptide-recon'],
+    relatedIds: ['transfer-loss', 'reagent-dispense', 'reagent-recon'],
     faq: [
       { q: 'How do I measure dead space?', a: 'Vendor spec or weigh-in-water method: weigh syringe empty, full, and post-expulsion. Difference = dead space. Typical ranges: 0.07 mL standard, 0.02 mL LDS, 0.005 mL ultra-LDS.' },
       { q: 'What counts as "annual vial cost"?', a: 'Total $ spent on the peptide per year — vials purchased × price. SDS-1 compares total leak cost against this budget.' },
@@ -454,12 +454,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'Compare to annual vial budget. If > 8%, route to LDS syringe upgrade.',
     ],
     liveMetrics: [
-      { token: 'waste', metric: 'peptide_waste_pct', fallback: 'no waste logged', decimals: 1, suffix: '%' },
+      { token: 'waste', metric: 'reagent_waste_pct', fallback: 'no waste logged', decimals: 1, suffix: '%' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'vendor-roi', note: 'Leak exceeds budget — compute vendor-ROI on LDS syringe upgrade and alternate suppliers.' },
-      stable: { toolId: 'glp-units', note: 'Waste inside budget — return to DSE-1 for standard dose conversion.' },
-      fallback: { toolId: 'peptide-inventory', note: 'Waste unclear because stock unclear? Run inventory first.' },
+      critical: { toolId: 'vendor-yield', note: 'Leak exceeds budget — compute vendor-ROI on LDS syringe upgrade and alternate suppliers.' },
+      stable: { toolId: 'reagent-dispense', note: 'Waste inside budget — return to DSE-1 for standard dose conversion.' },
+      fallback: { toolId: 'reagent-inventory', note: 'Waste unclear because stock unclear? Run inventory first.' },
     },
   },
 
@@ -495,9 +495,9 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       { title: '5 mg label, no HPLC data', body: 'Treat as 90%: effective = 4.50 mg. Demand COA with HPLC on next order or switch vendors.' },
     ],
     whenToUse: [
-      { toolId: 'mass-purity-filter', note: 'Run after SCF-1 and before PRC-1 on any new vial whose COA lists HPLC purity.' },
+      { toolId: 'reagent-purity', note: 'Run after SCF-1 and before PRC-1 on any new vial whose COA lists HPLC purity.' },
     ],
-    relatedIds: ['mass-purity-filter', 'peptide-recon', 'salt-correction'],
+    relatedIds: ['reagent-purity', 'reagent-recon', 'salt-correction'],
     faq: [
       { q: 'Is HPLC purity the same as peptide content?', a: 'No. Peptide content (SCF-1) strips counter-ion salt mass. HPLC purity strips other peptide impurities and truncated sequences. Apply both — they multiply.' },
       { q: 'What if COA shows 99.5% but the vial is cloudy?', a: 'Purity is not solubility. High purity can still sludge if reconstituted above SOL-1 limit. Run both checks.' },
@@ -520,11 +520,11 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'If purity < 90% or absent, halt — do not dose; request chromatogram.',
     ],
     liveMetrics: [
-      { token: 'concentration', metric: 'peptide_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
+      { token: 'concentration', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'peptide-recon', note: 'Effective mass computed — immediately feed into PRC-1 for true concentration.' },
-      stable: { toolId: 'glp-units', note: 'Purity clean — dose conversion via DSE-1 is trustworthy.' },
+      critical: { toolId: 'reagent-recon', note: 'Effective mass computed — immediately feed into PRC-1 for true concentration.' },
+      stable: { toolId: 'reagent-dispense', note: 'Purity clean — dose conversion via DSE-1 is trustworthy.' },
       fallback: { toolId: 'salt-correction', note: 'Purity adjusted but salt correction still pending? Run SCF-1 upstream.' },
     },
   },

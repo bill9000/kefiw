@@ -11,10 +11,10 @@ export interface DashboardMetrics {
   cognitive_load?: CognitiveLoad;
   willpower_pct?: number;
   // Peptide suite — Biological Vitals alongside Financial Runway.
-  peptide_concentration_mg_ml?: number;
-  peptide_waste_pct?: number;
-  peptide_potency_pct?: number;      // DEG-1 retained potency after thermal exposure
-  peptide_lean_ratio_pct?: number;   // SAR-1 lean-mass loss ratio
+  reagent_concentration_mg_ml?: number;
+  reagent_waste_pct?: number;
+  reagent_potency_pct?: number;      // DEG-1 retained potency after thermal exposure
+  mass_loss_pct?: number;            // SAR-1 lean-mass loss ratio
 }
 
 export interface DashboardFlags {
@@ -22,9 +22,9 @@ export interface DashboardFlags {
   decision_fatigue?: boolean;
   low_bio_fuel?: boolean;
   // Peptide suite — critical flags pulse the ULH-01 System Tray Magenta.
-  peptide_waste_critical?: boolean;      // SDS-1: annual leakage > budget
-  peptide_sarcopenia_critical?: boolean; // SAR-1: lean loss ratio >= 25%
-  peptide_degradation_critical?: boolean;// DEG-1: retained potency < 85%
+  reagent_waste_critical?: boolean;      // SDS-1: annual leakage > budget
+  mass_retention_critical?: boolean;     // SAR-1: lean loss ratio >= 25%
+  reagent_decay_critical?: boolean;      // DEG-1: retained potency < 85%
 }
 
 export interface DashboardState {
@@ -104,9 +104,9 @@ export function getSystemHealth(s: DashboardState = readRaw()): SystemHealth {
 
   const critical =
     s.flags.critical_runway === true ||
-    s.flags.peptide_waste_critical === true ||
-    s.flags.peptide_sarcopenia_critical === true ||
-    s.flags.peptide_degradation_critical === true ||
+    s.flags.reagent_waste_critical === true ||
+    s.flags.mass_retention_critical === true ||
+    s.flags.reagent_decay_critical === true ||
     (s.metrics.runway_months !== undefined && s.metrics.runway_months < 3) ||
     (s.metrics.survival_efficiency !== undefined && s.metrics.survival_efficiency < 30);
   if (critical) return 'critical';

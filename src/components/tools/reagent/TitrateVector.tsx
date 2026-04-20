@@ -49,7 +49,7 @@ const DEFAULT_STATE: State = {
 
 interface StageRow { week: number; dose: number; startDate: string; }
 
-export default function Titration() {
+export default function TitrateVector() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState<boolean>(false);
   const [verified, setVerified] = useState<boolean>(false);
