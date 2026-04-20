@@ -3717,20 +3717,20 @@ export const TOOLS: ToolConfig[] = [
     title: 'Reagent Reconstitution — BAC Water + Vial Mass | Kefiw',
     h1: 'Reagent Reconstitution · BAC Water + Vial Mass',
     description: 'Reconstitute lyophilized reagent vials. Enter vial mass (mg) and BAC water volume (mL) — get final concentration (mg/mL) and U-100 syringe unit map.',
-    keywords: ['reagent reconstitution calculator', 'BAC water mg/mL', 'vial mass to concentration', 'U-100 reagent administration', 'semaglutide reconstitution', 'tirzepatide mixing'],
+    keywords: ['reagent reconstitution calculator', 'BAC water mg/mL', 'vial mass to concentration', 'U-100 reagent administration', 'vial concentration math'],
     intro: 'Concentration = vial mass ÷ BAC water volume. Output is mg/mL, which then scales to a U-100 insulin syringe at 100 units = 1 mL. Volumetric math — no clinical advice.',
     howTo: [
       'Enter reagent mass in mg (label value of the vial).',
       'Enter BAC water added in mL (typical: 1–3 mL).',
       'Read concentration (mg/mL) and the U-100 unit map for common target administrations.',
-      'Pipe the concentration straight into the GLP-1 Administration tool for syringe draw.',
+      'Pipe the concentration straight into the Reagent Administration tool for syringe draw.',
     ],
     examples: [
-      { title: 'Semaglutide 5 mg · 2 mL BAC', body: 'Concentration 2.5 mg/mL · 0.25 mg administration = 10 units · 0.5 mg administration = 20 units.' },
-      { title: 'Tirzepatide 10 mg · 2 mL BAC', body: 'Concentration 5 mg/mL · 2.5 mg administration = 5 units · 5 mg administration = 10 units.' },
+      { title: 'Reagent-A 5 mg · 2 mL BAC', body: 'Concentration 2.5 mg/mL · 0.25 mg administration = 10 units · 0.5 mg administration = 20 units.' },
+      { title: 'Reagent-B 10 mg · 2 mL BAC', body: 'Concentration 5 mg/mL · 2.5 mg administration = 5 units · 5 mg administration = 10 units.' },
     ],
     faq: [
-      { q: 'How much BAC water should I use?', a: 'More water = lower concentration = easier to draw low administrations. 2 mL is the default for 5 mg semaglutide vials; 3 mL gives a more forgiving unit-per-administration ratio.' },
+      { q: 'How much BAC water should I use?', a: 'More water = lower concentration = easier to draw low administrations. 2 mL is the default for 5 mg reagent vials; 3 mL gives a more forgiving unit-per-administration ratio.' },
       { q: 'Is BAC water the same as sterile water?', a: 'No. Bacteriostatic water contains 0.9% benzyl alcohol which inhibits microbial growth over the 28-day use-life. Sterile water is single-use only.' },
     ],
     relatedIds: ['reagent-dispense', 'reagent-mcg-ratio', 'transfer-loss'],
@@ -3744,10 +3744,10 @@ export const TOOLS: ToolConfig[] = [
     id: 'reagent-dispense',
     category: 'health',
     slug: 'reagent-dispense',
-    title: 'GLP-1 Administration & Syringe Units — U-100 Draw | Kefiw',
-    h1: 'GLP-1 Administration · U-100 Syringe Units',
+    title: 'Reagent Administration & Syringe Units — U-100 Draw | Kefiw',
+    h1: 'Reagent Administration · U-100 Syringe Units',
     description: 'Convert a target reagent administration (mg or mcg) into U-100 insulin syringe units given a known vial concentration. Pipe-reads from the reconstitution tool.',
-    keywords: ['GLP-1 syringe units', 'semaglutide units calculator', 'tirzepatide administration to units', 'U-100 insulin syringe draw'],
+    keywords: ['reagent syringe units', 'receptor agonist units calculator', 'administration to units', 'U-100 insulin syringe draw'],
     intro: 'Units = (amount mg ÷ concentration mg/mL) × 100. Pulls concentration forward from Reagent Reconstitution — or enter it directly.',
     howTo: [
       'Enter concentration (mg/mL) or pipe it from the Reconstitution tool.',
@@ -3756,8 +3756,8 @@ export const TOOLS: ToolConfig[] = [
       'Cross-check against the Titration Roadmap for weekly escalation.',
     ],
     examples: [
-      { title: 'Semaglutide 2.5 mg/mL · 0.25 mg administration', body: 'Draw 10 units on a U-100 pin.' },
-      { title: 'Tirzepatide 5 mg/mL · 7.5 mg administration', body: 'Draw 15 units on a U-100 pin.' },
+      { title: 'Reagent-A 2.5 mg/mL · 0.25 mg administration', body: 'Draw 10 units on a U-100 pin.' },
+      { title: 'Reagent-B 5 mg/mL · 7.5 mg administration', body: 'Draw 15 units on a U-100 pin.' },
     ],
     faq: [
       { q: 'What if my concentration isn\'t mg/mL?', a: 'Convert first. 1 mg/mL = 1000 mcg/mL. The unit math is identical; only the label changes.' },
@@ -3777,7 +3777,7 @@ export const TOOLS: ToolConfig[] = [
     title: 'mcg per Unit Lookup — U-100 Administration Table | Kefiw',
     h1: 'mcg per Unit · U-100 Administration Table',
     description: 'Given vial mass and BAC water volume, generate a full mcg-per-unit table for U-100 syringes. Reference card for every common administration step.',
-    keywords: ['mcg per unit table', 'reagent administration chart', 'U-100 unit conversion', 'semaglutide mcg per unit'],
+    keywords: ['mcg per unit table', 'reagent administration chart', 'U-100 unit conversion', 'reagent mcg per unit'],
     intro: 'mcg/unit = (mass mg × 1000) ÷ (BAC mL × 100). Printable lookup for the vial you have in hand.',
     howTo: [
       'Enter vial mass (mg) and BAC water (mL).',
@@ -3785,8 +3785,8 @@ export const TOOLS: ToolConfig[] = [
       'Print or screenshot as a fridge reference.',
     ],
     examples: [
-      { title: 'BPC-157 5 mg · 5 mL BAC', body: '10 mcg/unit · 25 units = 250 mcg · 50 units = 500 mcg.' },
-      { title: 'Retatrutide 10 mg · 2 mL BAC', body: '50 mcg/unit · 4 units = 200 mcg · 10 units = 500 mcg.' },
+      { title: 'Reagent-E 5 mg · 5 mL BAC', body: '10 mcg/unit · 25 units = 250 mcg · 50 units = 500 mcg.' },
+      { title: 'Reagent-C 10 mg · 2 mL BAC', body: '50 mcg/unit · 4 units = 200 mcg · 10 units = 500 mcg.' },
     ],
     faq: [
       { q: 'Why mcg per unit instead of mg?', a: 'Most research reagent administrations sit in the 100–1000 mcg range. mg resolution is too coarse and leads to decimal errors on insulin syringes.' },
@@ -3815,7 +3815,7 @@ export const TOOLS: ToolConfig[] = [
       'Compare standard vs low-dead-space pins to quantify the upgrade.',
     ],
     examples: [
-      { title: 'Tirzepatide 5 mg/mL · 52 inj · 0.07 mL pin · $20/mg', body: '18.2 mg wasted · $364 annual loss. LDS pin cuts it to $52.' },
+      { title: 'Reagent-B 5 mg/mL · 52 inj · 0.07 mL pin · $20/mg', body: '18.2 mg wasted · $364 annual loss. LDS pin cuts it to $52.' },
     ],
     faq: [
       { q: 'Is dead-space really that bad?', a: 'On a 2-unit draw with a 0.07 mL dead-space pin, you retain 3× your administration. On a 20-unit draw it\'s a 3% loss. Small administrations are disproportionately affected.' },
@@ -3831,19 +3831,19 @@ export const TOOLS: ToolConfig[] = [
     id: 'titrate-vector',
     category: 'health',
     slug: 'titrate-vector',
-    title: 'Titration Roadmap — GLP-1 Step-Up Schedule | Kefiw',
-    h1: 'Titration Roadmap · GLP-1 Step-Up',
-    description: 'Weekly administration escalation schedule for semaglutide and tirzepatide. Start low, step up every 4 weeks, hold at tolerance. Unit-mapped to your vial concentration.',
-    keywords: ['GLP-1 titration schedule', 'semaglutide administration escalation', 'tirzepatide titration', 'weekly reagent step-up'],
+    title: 'Titration Roadmap — Receptor Agonist Step-Up Schedule | Kefiw',
+    h1: 'Titration Roadmap · Receptor Agonist Step-Up',
+    description: 'Weekly administration escalation schedule for reagent-A and reagent-B. Start low, step up every 4 weeks, hold at tolerance. Unit-mapped to your vial concentration.',
+    keywords: ['receptor agonist titration schedule', 'reagent-A administration escalation', 'reagent-B titration', 'weekly reagent step-up'],
     intro: 'Standard escalation: 4 weeks per step, hold if side-effects, step down if intolerable. Mapped to syringe units using your current concentration.',
     howTo: [
-      'Pick semaglutide or tirzepatide.',
+      'Pick reagent-A or reagent-B.',
       'Enter current concentration (mg/mL) from reconstitution.',
       'Read the 24-week roadmap: week, mg target, units to draw.',
       'Mark hold-weeks when side-effects spike — don\'t force the step.',
     ],
     examples: [
-      { title: 'Semaglutide · 2.5 mg/mL · standard escalation', body: 'Wk1-4: 0.25 mg (10u) · Wk5-8: 0.5 mg (20u) · Wk9-12: 1.0 mg (40u) · Wk13+: 1.7–2.4 mg.' },
+      { title: 'Reagent-A · 2.5 mg/mL · standard escalation', body: 'Wk1-4: 0.25 mg (10u) · Wk5-8: 0.5 mg (20u) · Wk9-12: 1.0 mg (40u) · Wk13+: 1.7–2.4 mg.' },
     ],
     faq: [
       { q: 'What if nausea is brutal at a step?', a: 'Hold the step another 2–4 weeks. Tolerance builds; forcing escalation does not accelerate weight loss and frequently causes dropout.' },
@@ -3863,7 +3863,7 @@ export const TOOLS: ToolConfig[] = [
     title: 'Reagent Inventory Burn-Rate — Empty-Date Predictor | Kefiw',
     h1: 'Reagent Inventory · Burn-Rate & Empty Date',
     description: 'Forecast when your current vial stash runs out. Enter vials on hand, mg per vial, weekly administration — get the empty-date and reorder trigger.',
-    keywords: ['reagent inventory calculator', 'vial burn rate', 'semaglutide reorder date', 'reagent supply forecast'],
+    keywords: ['reagent inventory calculator', 'vial burn rate', 'reagent reorder date', 'reagent supply forecast'],
     intro: 'Weeks of supply = (vials × mg/vial) ÷ weekly mg. Reorder when weeks-remaining drops below lead-time.',
     howTo: [
       'Enter vials on hand and mg per vial.',
@@ -3890,20 +3890,20 @@ export const TOOLS: ToolConfig[] = [
     slug: 'reagent-half-life',
     title: 'Reagent Half-Life Decay — Stacking & Steady-State | Kefiw',
     h1: 'Reagent Half-Life · Stacking & Steady-State',
-    description: 'Model serum reagent decay across repeat administrations. N(t) = N0 × 0.5^(t/h). Steady-state accumulation with weekly GLP-1s takes ~5 half-lives.',
-    keywords: ['reagent half life calculator', 'semaglutide steady state', 'GLP-1 accumulation', 'reagent decay curve'],
-    intro: 'Single-administration decay: N(t) = N₀ · 0.5^(t/h). Repeat-administration steady-state reached at ~5 half-lives. Semaglutide h ≈ 168 h, tirzepatide ≈ 120 h.',
+    description: 'Model serum reagent decay across repeat administrations. N(t) = N0 × 0.5^(t/h). Steady-state accumulation with weekly receptor agonists takes ~5 half-lives.',
+    keywords: ['reagent half life calculator', 'reagent steady state', 'receptor agonist accumulation', 'reagent decay curve'],
+    intro: 'Single-administration decay: N(t) = N₀ · 0.5^(t/h). Repeat-administration steady-state reached at ~5 half-lives. Reagent-A h ≈ 168 h, reagent-B ≈ 120 h.',
     howTo: [
       'Enter reagent half-life (hours).',
       'Enter administration (mg) and administration interval (days).',
       'Read the decay curve, cumulative load, and steady-state week.',
     ],
     examples: [
-      { title: 'Semaglutide · h=168h · 1 mg/week', body: 'Steady-state ~week 5 · peak load ~3.2× single-administration.' },
+      { title: 'Reagent-A · h=168h · 1 mg/week', body: 'Steady-state ~week 5 · peak load ~3.2× single-administration.' },
     ],
     faq: [
       { q: 'Why does steady-state matter?', a: 'Side-effects and efficacy both track steady-state, not single-administration peak. Titration schedules exist because you keep accumulating for weeks after the administration change.' },
-      { q: 'Does this apply to BPC-157 or TB-500?', a: 'Short-half-life research reagents don\'t accumulate meaningfully between daily administrations. The math holds but steady-state is reached within days.' },
+      { q: 'Does this apply to Reagent-E or Reagent-F?', a: 'Short-half-life research reagents don\'t accumulate meaningfully between daily administrations. The math holds but steady-state is reached within days.' },
     ],
     relatedIds: ['reagent-stack', 'vector-decay', 'titrate-vector'],
     island: 'reagent/ReagentHalfLife',
@@ -3954,7 +3954,7 @@ export const TOOLS: ToolConfig[] = [
       'Read per-reagent concentration and required syringe units for a single combined draw.',
     ],
     examples: [
-      { title: 'BPC-157 5 mg + TB-500 5 mg · 3 mL BAC', body: 'Each at 1.67 mg/mL · 250 mcg of each = 15 units combined.' },
+      { title: 'Reagent-E 5 mg + Reagent-F 5 mg · 3 mL BAC', body: 'Each at 1.67 mg/mL · 250 mcg of each = 15 units combined.' },
     ],
     faq: [
       { q: 'Can all reagents be co-reconstituted?', a: 'Most research reagents co-dissolve in BAC water. Check vendor stability data; a few require acidic or basic diluents that conflict.' },
@@ -3999,8 +3999,8 @@ export const TOOLS: ToolConfig[] = [
     slug: 'mass-retention-guard',
     title: 'Mass Retention Guard — Lean-Mass Loss Ratio | Kefiw',
     h1: 'Mass Retention Guard · Lean-Mass Loss Ratio',
-    description: 'GLP-1 weight loss includes 25–40% lean mass by default. Enter weight and body-comp changes — get lean-mass-loss ratio with a magenta flag if > 30%.',
-    keywords: ['GLP-1 muscle loss', 'lean-mass loss calculator', 'lean mass loss ratio', 'semaglutide muscle wasting'],
+    description: 'Receptor-agonist weight loss includes 25–40% lean mass by default. Enter weight and body-comp changes — get lean-mass-loss ratio with a magenta flag if > 30%.',
+    keywords: ['receptor agonist muscle loss', 'lean-mass loss calculator', 'lean mass loss ratio', 'reagent muscle wasting'],
     intro: 'Lean-mass-loss ratio = kg lean lost ÷ kg total lost. Above 0.30 is a magenta flag — you\'re bleeding muscle faster than trials average.',
     howTo: [
       'Enter starting weight and starting lean mass (DEXA / BIA).',
@@ -4029,19 +4029,19 @@ export const TOOLS: ToolConfig[] = [
     title: 'Weight Loss Trajectory — Clinical Curve vs Actual | Kefiw',
     h1: 'Weight Trajectory · Clinical vs Actual',
     description: 'Overlay your weekly weight against STEP / SURMOUNT trial mean curves. See if you\'re tracking, lagging, or outperforming expected loss.',
-    keywords: ['semaglutide weight loss curve', 'tirzepatide trajectory', 'STEP trial comparison', 'GLP-1 weight tracking'],
-    intro: 'Plots your actual loss against the trial mean ± 1 SD for semaglutide (STEP) or tirzepatide (SURMOUNT). Tracks week-by-week deviation.',
+    keywords: ['reagent-A weight loss curve', 'reagent-B trajectory', 'STEP trial comparison', 'receptor agonist weight tracking'],
+    intro: 'Plots your actual loss against the trial mean ± 1 SD for reagent-A (STEP) or reagent-B (SURMOUNT). Tracks week-by-week deviation.',
     howTo: [
-      'Pick semaglutide or tirzepatide.',
+      'Pick reagent-A or reagent-B.',
       'Enter starting weight and weekly weight readings.',
       'Read your deviation from trial mean — on-curve, lagging, or outperforming.',
     ],
     examples: [
-      { title: 'Semaglutide · start 100 kg · week 12 at 92 kg', body: 'Trial mean at week 12: 93.5 kg. You are 1.5 kg ahead of curve.' },
+      { title: 'Reagent-A · start 100 kg · week 12 at 92 kg', body: 'Trial mean at week 12: 93.5 kg. You are 1.5 kg ahead of curve.' },
     ],
     faq: [
       { q: 'What if I plateau?', a: 'Plateaus at week 8–12 and 20–28 are expected even in trials. Persistent 4-week flat weight at maximum administration suggests true tolerance ceiling.' },
-      { q: 'Why compare to trials?', a: 'Anchors expectation. Most "disappointment" with GLP-1s is actually trial-average performance interpreted as failure.' },
+      { q: 'Why compare to trials?', a: 'Anchors expectation. Most "disappointment" with receptor agonists is actually trial-average performance interpreted as failure.' },
     ],
     relatedIds: ['mass-retention-guard', 'titrate-vector', 'metabolic-floor'],
     island: 'reagent/MassTrajectory',
@@ -4065,8 +4065,8 @@ export const TOOLS: ToolConfig[] = [
       'Below 80% = magenta flag — discard or increase administration to compensate.',
     ],
     examples: [
-      { title: 'Semaglutide · 4°C · 30 days', body: 'Residual activity ~92% — still within usable range.' },
-      { title: 'BPC-157 · 22°C · 14 days', body: 'Residual activity ~68% · MAGENTA — discard or refrigerate immediately.' },
+      { title: 'Reagent-A · 4°C · 30 days', body: 'Residual activity ~92% — still within usable range.' },
+      { title: 'Reagent-E · 22°C · 14 days', body: 'Residual activity ~68% · MAGENTA — discard or refrigerate immediately.' },
     ],
     faq: [
       { q: 'Why does BAC help?', a: 'Benzyl alcohol suppresses microbial growth, not chemical degradation. The reagent still decays — BAC just keeps it sterile while decaying.' },
@@ -4141,7 +4141,7 @@ export const TOOLS: ToolConfig[] = [
     title: 'Reagent Travel Planner — Packing Manifest | Kefiw',
     h1: 'Reagent Travel Planner · Packing Manifest',
     description: 'Generate a travel manifest: vials needed, cold-chain hours, syringe count, sharps disposal plan. For trips spanning one or more administration cycles.',
-    keywords: ['reagent travel', 'GLP-1 airport', 'insulin syringe TSA', 'reagent cold chain travel'],
+    keywords: ['reagent travel', 'reagent airport packing', 'insulin syringe TSA', 'reagent cold chain travel'],
     intro: 'Manifest = (trip days ÷ administration interval) + 1 buffer administration. Cold-chain hours = trip duration. Syringe count = administrations × 1.2 safety margin.',
     howTo: [
       'Enter trip length in days and administration interval.',

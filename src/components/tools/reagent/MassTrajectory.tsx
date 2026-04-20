@@ -6,11 +6,11 @@ import {
 
 const STORAGE = 'peptide-trajectory-v1';
 
-type Med = 'semaglutide' | 'tirzepatide';
+type Med = 'reagent-A' | 'reagent-B';
 
 const CURVES: Record<Med, Array<[number, number]>> = {
-  semaglutide: [[0, 0], [4, 2], [8, 4], [16, 7], [28, 11], [40, 13], [52, 14], [68, 15]],
-  tirzepatide: [[0, 0], [4, 2.5], [8, 5], [16, 9], [28, 14], [40, 17], [52, 19], [72, 20]],
+  'reagent-A': [[0, 0], [4, 2], [8, 4], [16, 7], [28, 11], [40, 13], [52, 14], [68, 15]],
+  'reagent-B': [[0, 0], [4, 2.5], [8, 5], [16, 9], [28, 14], [40, 17], [52, 19], [72, 20]],
 };
 
 interface State {
@@ -20,7 +20,7 @@ interface State {
   medication: Med;
 }
 const DEFAULT_STATE: State = {
-  startWeightKg: '100', currentWeightKg: '92', weeksElapsed: '12', medication: 'semaglutide',
+  startWeightKg: '100', currentWeightKg: '92', weeksElapsed: '12', medication: 'reagent-A',
 };
 
 type Status = 'Ahead' | 'On-track' | 'Behind';
@@ -46,7 +46,15 @@ export default function MassTrajectory() {
   const [verified, setVerified] = useState<boolean>(false);
 
   useEffect(() => {
-    try { const r = localStorage.getItem(STORAGE); if (r) setState({ ...DEFAULT_STATE, ...(JSON.parse(r) as State) }); } catch {}
+    try {
+      const r = localStorage.getItem(STORAGE);
+      if (r) {
+        const parsed = JSON.parse(r) as Partial<State>;
+        const next = { ...DEFAULT_STATE, ...parsed };
+        if (!CURVES[next.medication]) next.medication = DEFAULT_STATE.medication;
+        setState(next);
+      }
+    } catch {}
     setHydrated(true);
   }, []);
   useEffect(() => { if (hydrated) localStorage.setItem(STORAGE, JSON.stringify(state)); }, [state, hydrated]);
@@ -96,7 +104,7 @@ export default function MassTrajectory() {
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>TRJ-1 · WEIGHT LOSS TRAJECTORY</div>
-        <div style={{ fontSize: 11, color: DIM }}>Actual progress vs clinical-trial curve · semaglutide / tirzepatide</div>
+        <div style={{ fontSize: 11, color: DIM }}>Actual progress vs clinical-trial curve · reagent-A / reagent-B</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', marginBottom: '0.75rem' }}>
@@ -120,7 +128,7 @@ export default function MassTrajectory() {
       <div style={{ marginBottom: '1rem' }}>
         <div style={{ fontSize: 12, color: DIM, marginBottom: 4 }}>Medication</div>
         <div style={{ display: 'flex', gap: 6 }}>
-          {(['semaglutide', 'tirzepatide'] as Med[]).map((m) => (
+          {(['reagent-A', 'reagent-B'] as Med[]).map((m) => (
             <button key={m} type="button" onClick={() => setState({ ...state, medication: m })} style={{
               padding: '6px 12px', fontSize: 11, borderRadius: 6, cursor: 'pointer',
               background: state.medication === m ? 'rgba(34,211,238,0.15)' : '#0b1120',
@@ -199,7 +207,7 @@ export default function MassTrajectory() {
       )}
 
       <div style={disclaimerStyle()}>
-        Arithmetic only. Not medical advice. Clinical curves approximate STEP (semaglutide) and SURMOUNT (tirzepatide) trial averages — individual response varies widely. Research/education only.
+        Arithmetic only. Not medical advice. Clinical curves approximate STEP (reagent-A) and SURMOUNT (reagent-B) trial averages — individual response varies widely. Research/education only.
       </div>
     </div>
   );

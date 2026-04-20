@@ -16,6 +16,9 @@ const FLAGGED = [
   { term: 'peptide', re: /peptide/gi },
   { term: 'sarcopenia', re: /sarcopenia/gi },
   { term: 'dose', re: /\bdose\b|\bdoses\b|\bdosing\b|\bdosage\b/gi },
+  // Drug/compound brand names — AdSense policy-sensitive.
+  { term: 'drug-brand', re: /\bsemaglutide\b|\btirzepatide\b|\bretatrutide\b|\bcagrilintide\b|\bBPC-?157\b|\bTB-?500\b|\bCJC-?1295\b|\bipamorelin\b|\btesamorelin\b|\bMOTS-?c\b|\bAOD-?9604\b|\bGHK-?Cu\b|\bmelanotan\b/gi },
+  { term: 'glp-1', re: /\bGLP-1\b/gi },
 ];
 
 function walk(dir) {

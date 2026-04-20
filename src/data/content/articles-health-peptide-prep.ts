@@ -25,12 +25,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'U-100 relation: 1 unit = 0.01 mL. So units_per_mg = 100 / concentration_mg_ml.',
       'BAC water volume is the operator choice, not the vial label. 5 mg reagent + 2 mL water = 2.5 mg/mL; same vial + 5 mL water = 1 mg/mL.',
       'Precision matters to 2 decimals. 2.50 mg/mL vs 2.47 mg/mL is a 1.2% administration error that compounds across a vial.',
-      'Pipe this concentration to GLP-1 Units (DSE-1) and MCG-per-Unit (CNV-1). Do not re-derive downstream.',
+      'Pipe this concentration to Reagent Units (DSE-1) and MCG-per-Unit (CNV-1). Do not re-derive downstream.',
     ],
     examples: [
-      { title: '5 mg semaglutide + 2 mL BAC', body: 'concentration = 5 / 2 = 2.50 mg/mL. units_per_mg = 100 / 2.50 = 40 units/mg. A 0.25 mg administration = 10 units on a U-100 syringe.' },
-      { title: '10 mg retatrutide + 4 mL BAC', body: 'concentration = 10 / 4 = 2.50 mg/mL. Same ratio, larger total volume — 40 administrations of 0.25 mg instead of 20.' },
-      { title: '5 mg BPC-157 + 5 mL BAC', body: 'concentration = 1.00 mg/mL. 500 mcg administration = 0.5 mL = 50 units. Clean decimal, low math risk.' },
+      { title: '5 mg reagent-A + 2 mL BAC', body: 'concentration = 5 / 2 = 2.50 mg/mL. units_per_mg = 100 / 2.50 = 40 units/mg. A 0.25 mg administration = 10 units on a U-100 syringe.' },
+      { title: '10 mg reagent-C + 4 mL BAC', body: 'concentration = 10 / 4 = 2.50 mg/mL. Same ratio, larger total volume — 40 administrations of 0.25 mg instead of 20.' },
+      { title: '5 mg reagent-E + 5 mL BAC', body: 'concentration = 1.00 mg/mL. 500 mcg administration = 0.5 mL = 50 units. Clean decimal, low math risk.' },
     ],
     whenToUse: [
       { toolId: 'reagent-recon', note: 'Run immediately after adding BAC water to a new vial. Log concentration to the vial label.' },
@@ -94,9 +94,9 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'Dead space in syringe wastes both reagents simultaneously. Log loss per draw on both sides.',
     ],
     examples: [
-      { title: 'BPC-157 5 mg + TB-500 5 mg / 5 mL BAC', body: 'concA = 1.00 mg/mL, concB = 1.00 mg/mL. 0.25 mL draw = 0.25 mg of each. 25 units on U-100.' },
-      { title: 'Semaglutide 5 mg + Cagrilintide 10 mg / 4 mL BAC', body: 'concA = 1.25 mg/mL, concB = 2.50 mg/mL. 0.20 mL draw = 0.25 mg sema + 0.50 mg cagri. 20 units delivers the fixed stack ratio.' },
-      { title: 'CJC-1295 2 mg + Ipamorelin 5 mg / 3 mL BAC', body: 'concA = 0.67 mg/mL, concB = 1.67 mg/mL. 0.30 mL = 0.20 mg + 0.50 mg. 30 units, 2.5:1 mass ratio locked in.' },
+      { title: 'Reagent-E 5 mg + Reagent-F 5 mg / 5 mL BAC', body: 'concA = 1.00 mg/mL, concB = 1.00 mg/mL. 0.25 mL draw = 0.25 mg of each. 25 units on U-100.' },
+      { title: 'Reagent-A 5 mg + Reagent-D 10 mg / 4 mL BAC', body: 'concA = 1.25 mg/mL, concB = 2.50 mg/mL. 0.20 mL draw = 0.25 mg A + 0.50 mg D. 20 units delivers the fixed stack ratio.' },
+      { title: 'Reagent-G 2 mg + Reagent-H 5 mg / 3 mL BAC', body: 'concA = 0.67 mg/mL, concB = 1.67 mg/mL. 0.30 mL = 0.20 mg + 0.50 mg. 30 units, 2.5:1 mass ratio locked in.' },
     ],
     whenToUse: [
       { toolId: 'reagent-stack', note: 'Run before any dual-compound reconstitution. Confirm ratio is fixed and solubility limits are not exceeded.' },
@@ -215,7 +215,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     h1: 'What Solubility Limit Calculates',
     subhead: 'Whether the planned concentration stays below the reagent\'s BAC-water solubility maximum.',
     outcomeLine: 'SOL-1 answers one question: will this reagent fully dissolve in this volume, or sludge at the bottom of the vial?',
-    description: 'SOL-1 compares planned concentration against reagent-specific solubility maximum (reagent-A ~10, reagent-B ~20 mg/mL). Sludge means uneven administration.',
+    description: 'SOL-1 compares planned concentration against reagent-specific solubility maximum (reagent-A ~10, reagent-C ~20 mg/mL). Sludge means uneven administration.',
     keywords: ['reagent solubility limit', 'bac water solubility', 'reagent sludge', 'reagent solubility', 'reagent dissolution'],
     intro: 'Reagents dissolve up to a hard maximum — beyond that, solid sits in the vial and draws deliver unpredictable mass. Current working concentration: {{lm:concentration}}. SOL-1 catches the problem before reconstitution, not after you draw a clump.',
     keyPoints: [
@@ -282,7 +282,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     subhead: 'The U-100 insulin-syringe unit count that delivers a target mg administration at a given concentration.',
     outcomeLine: 'DSE-1 answers one question: how many units on the U-100 syringe deliver this mg administration at this concentration?',
     description: 'DSE-1 converts a mg administration to U-100 units via volume_ml = dose_mg / concentration_mg_ml, then units = volume × 100. Verifies against syringe capacity.',
-    keywords: ['glp-1 administration units', 'u-100 insulin syringe conversion', 'mg to units reagent', 'semaglutide unit calculator', 'tirzepatide administration'],
+    keywords: ['reagent administration units', 'u-100 insulin syringe conversion', 'mg to units reagent', 'reagent-A unit calculator', 'reagent-B administration'],
     intro: 'Reagent administrations are prescribed in mg but drawn in units. A U-100 syringe holds 100 units in 1 mL — period. Current working concentration: {{lm:conc}}. Get the conversion wrong and you either cap out the syringe mid-draw or deliver a fractional administration.',
     keyPoints: [
       'Formula: volume_ml = dose_mg / concentration_mg_ml, then units = volume_ml × 100.',
@@ -292,8 +292,8 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       'If administration exceeds syringe, your concentration is too low — reconstitute stronger, do not split draws.',
     ],
     examples: [
-      { title: '0.25 mg semaglutide at 2.50 mg/mL', body: 'volume = 0.25 / 2.50 = 0.10 mL. units = 0.10 × 100 = 10 units. Fits easily on U-100.' },
-      { title: '2.5 mg tirzepatide at 5.00 mg/mL', body: 'volume = 2.5 / 5.00 = 0.50 mL. units = 50. Half-syringe draw.' },
+      { title: '0.25 mg reagent-A at 2.50 mg/mL', body: 'volume = 0.25 / 2.50 = 0.10 mL. units = 0.10 × 100 = 10 units. Fits easily on U-100.' },
+      { title: '2.5 mg reagent-B at 5.00 mg/mL', body: 'volume = 2.5 / 5.00 = 0.50 mL. units = 50. Half-syringe draw.' },
       { title: '1.5 mg at 1.00 mg/mL — overflow case', body: 'volume = 1.50 mL = 150 units. Exceeds U-100 capacity. Reconstitute at 3.0 mg/mL instead → 50 units fits.' },
     ],
     whenToUse: [
@@ -348,13 +348,13 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     subhead: 'The micrograms of reagent delivered by a single U-100 insulin-syringe unit.',
     outcomeLine: 'CNV-1 answers one question: at this concentration, how many mcg of reagent are in each U-100 unit?',
     description: 'CNV-1 converts concentration to mcg per unit: mcg_per_unit = concentration × 10. U-100 convention means 1 unit = 0.01 mL.',
-    keywords: ['mcg per unit reagent', 'u-100 mcg conversion', 'reagent administration in micrograms', 'insulin syringe mcg', 'bpc-157 units'],
-    intro: 'GLP-1 administration thinks in mg; growth-hormone and healing reagents think in mcg. Same U-100 syringe, different mental unit. Current working concentration: {{lm:concentration}}. CNV-1 converts once and locks the operator into a consistent scale.',
+    keywords: ['mcg per unit reagent', 'u-100 mcg conversion', 'reagent administration in micrograms', 'insulin syringe mcg', 'reagent unit conversion'],
+    intro: 'Receptor-agonist administration thinks in mg; short-peptide healing reagents think in mcg. Same U-100 syringe, different mental unit. Current working concentration: {{lm:concentration}}. CNV-1 converts once and locks the operator into a consistent scale.',
     keyPoints: [
       'Formula: mcg_per_unit = (concentration_mg_ml × 1000) / 100 = concentration × 10.',
       'U-100 convention: 1 unit = 0.01 mL. 1 mg = 1000 mcg. Clean decimal collapse.',
       'Working concentration {{lm:concentration}} drives the multiplier directly — no secondary lookup needed.',
-      'Typical use: BPC-157, TB-500, CJC-1295, Ipamorelin, Tesamorelin — administered in 100–500 mcg ranges.',
+      'Typical use: Reagent-E, Reagent-F, Reagent-G, Reagent-H, Reagent-I — administered in 100–500 mcg ranges.',
       'Pipe output back to DSE-1 as a sanity check: target_mcg ÷ mcg_per_unit should match DSE-1 units output.',
     ],
     examples: [
@@ -372,7 +372,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
       { q: 'Should I think in mcg or units when administering?', a: 'Whichever the reagent is prescribed in. CNV-1 lets you translate in either direction without recomputing from concentration each time.' },
     ],
     thresholds: {
-      cyan: 'mcg_per_unit lands 5–50 — typical BPC/TB/healing range, clean administration.',
+      cyan: 'mcg_per_unit lands 5–50 — typical short-peptide healing range, clean administration.',
       gold: 'mcg_per_unit < 5 or > 50 — dilute or concentrated edge; verify draw volume.',
       magenta: 'mcg_per_unit undefined or mismatched with DSE-1 output — stop; re-verify concentration.',
     },

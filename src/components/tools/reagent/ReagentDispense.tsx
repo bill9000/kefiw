@@ -58,7 +58,7 @@ export default function ReagentDispense() {
   return (
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
-        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>GDS-1 · GLP-1 Administration · Syringe Units</div>
+        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>GDS-1 · Reagent Administration · Syringe Units</div>
         <div style={{ fontSize: 11, color: DIM }}>U-100 insulin-syringe unit draw from mg amount + concentration</div>
       </div>
 
@@ -66,7 +66,7 @@ export default function ReagentDispense() {
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>Target amount (mg)</div>
           <input inputMode="decimal" value={state.doseMg} onChange={(e) => setState({ ...state, doseMg: e.target.value })} style={inputStyle} />
-          <div style={dimHint}>semaglutide 0.25 / 0.5 / 1.0 / 1.7 / 2.4 · tirzepatide 2.5 / 5 / 7.5 / 10 / 12.5 / 15</div>
+          <div style={dimHint}>reagent-A 0.25 / 0.5 / 1.0 / 1.7 / 2.4 · reagent-B 2.5 / 5 / 7.5 / 10 / 12.5 / 15</div>
         </label>
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>Concentration (mg/mL){calc.bridgeLive ? <span style={{ color: CYAN, marginLeft: 6 }}>· LIVE from PRC-1</span> : null}</div>

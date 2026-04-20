@@ -13,7 +13,7 @@ interface State {
   nameB: string;
   bacVolumeMl: string;
 }
-const DEFAULT_STATE: State = { massA: '5', massB: '10', nameA: 'BPC-157', nameB: 'TB-500', bacVolumeMl: '3' };
+const DEFAULT_STATE: State = { massA: '5', massB: '10', nameA: 'Reagent-E', nameB: 'Reagent-F', bacVolumeMl: '3' };
 const DRAWS: number[] = [5, 10, 15, 20, 25];
 
 export default function ReagentStack() {
