@@ -78,7 +78,7 @@ export default function MassRetentionGuard() {
   return (
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
-        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>SAR-1 · SARCOPENIA GUARD</div>
+        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>SAR-1 · MASS RETENTION GUARD</div>
         <div style={{ fontSize: 11, color: DIM }}>Lean-mass share of total weight loss · wasting-risk gauge</div>
       </div>
 
@@ -129,7 +129,7 @@ export default function MassRetentionGuard() {
           {verified ? (
             <>
               <div style={{ ...panelStyle, borderColor: statusColor, display: 'grid', gap: '0.75rem', gridTemplateColumns: '220px 1fr', alignItems: 'center' }}>
-                <svg width={220} height={140} viewBox="0 0 220 140" aria-label="Sarcopenia risk gauge">
+                <svg width={220} height={140} viewBox="0 0 220 140" aria-label="Lean-mass loss risk gauge">
                   <path d={`M 30 110 A 80 80 0 0 1 190 110`} fill="none" stroke={CYAN} strokeWidth={10} opacity={0.35} />
                   <path d={`M 30 110 A 80 80 0 0 1 110 30`} fill="none" stroke={CYAN} strokeWidth={10} opacity={0.75} />
                   <path d={`M 110 30 A 80 80 0 0 1 150 41`} fill="none" stroke={GOLD} strokeWidth={10} opacity={0.85} />
@@ -154,7 +154,7 @@ export default function MassRetentionGuard() {
                 <div style={{ ...panelStyle, borderColor: MAGENTA, marginTop: '0.75rem' }}>
                   <div style={{ color: MAGENTA, fontSize: 12, fontWeight: 700 }}>▸ CRITICAL · MUSCLE WASTING RISK</div>
                   <div style={{ fontSize: 11, marginTop: 4 }}>
-                    Review protein intake + resistance training before continuing dose.
+                    Review protein intake + resistance training before continuing administration.
                   </div>
                 </div>
               )}

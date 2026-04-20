@@ -48,9 +48,9 @@ export default function SaltCorrection() {
     const dose = Math.max(0, parseNum(state.targetDoseMg));
     let err = '';
     if (vol <= 0) err = 'BAC volume must be greater than 0 mL';
-    else if (pct <= 0 || pct > 100) err = 'Peptide content must be between 1% and 100%';
+    else if (pct <= 0 || pct > 100) err = 'Reagent content must be between 1% and 100%';
     else if (labelMass <= 0) err = 'Labeled mass must be greater than 0 mg';
-    else if (dose <= 0) err = 'Target dose must be greater than 0 mg';
+    else if (dose <= 0) err = 'Target amount must be greater than 0 mg';
 
     const actualMass = labelMass * (pct / 100);
     const concNaive = vol > 0 ? labelMass / vol : 0;
@@ -81,7 +81,7 @@ export default function SaltCorrection() {
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>SALT-1 · TFA / ACETATE SALT FACTOR</div>
-        <div style={{ fontSize: 11, color: DIM }}>Actual peptide content vs labeled mass · corrected draw units</div>
+        <div style={{ fontSize: 11, color: DIM }}>Actual reagent content vs labeled mass · corrected draw units</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: '1fr 1fr 1fr', marginBottom: '0.75rem' }}>
@@ -96,9 +96,9 @@ export default function SaltCorrection() {
           <div style={dimHint}>reconstitution volume</div>
         </label>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Target dose (mg)</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Target amount (mg)</div>
           <input inputMode="decimal" value={state.targetDoseMg} onChange={(e) => setState({ ...state, targetDoseMg: e.target.value })} style={inputStyle} />
-          <div style={dimHint}>per-injection dose</div>
+          <div style={dimHint}>per-administration amount</div>
         </label>
       </div>
 
@@ -117,7 +117,7 @@ export default function SaltCorrection() {
           </div>
         </div>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Peptide content (%)</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Reagent content (%)</div>
           <input inputMode="decimal" value={state.peptideContentPct} onChange={(e) => setState({ ...state, peptideContentPct: e.target.value, saltType: 'Custom' })} style={inputStyle} />
           <div style={dimHint}>TFA ≈ 76% · Acetate ≈ 89% · Free-base = 100%</div>
         </label>
@@ -135,7 +135,7 @@ export default function SaltCorrection() {
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '0.5rem 0.75rem', background: verified ? 'rgba(34,211,238,0.1)' : '#1e293b', border: `1px solid ${verified ? CYAN : BORDER}`, borderRadius: 6, marginBottom: '0.75rem', cursor: 'pointer', fontSize: 11 }}>
             <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} />
             <span style={{ color: verified ? CYAN : TEXT }}>
-              {verified ? '✓ INPUTS VERIFIED — reveal corrected draw' : 'Confirm salt form and target dose before display'}
+              {verified ? '✓ INPUTS VERIFIED — reveal corrected draw' : 'Confirm salt form and target amount before display'}
             </span>
           </label>
 
@@ -177,7 +177,7 @@ export default function SaltCorrection() {
       )}
 
       <div style={disclaimerStyle()}>
-        Arithmetic only. Not medical advice. Peptide content % varies by vendor and lot — use the CoA figure when available. Research/compounding contexts only.
+        Arithmetic only. Not medical advice. Reagent content % varies by vendor and lot — use the CoA figure when available. Research/compounding contexts only.
       </div>
     </div>
   );

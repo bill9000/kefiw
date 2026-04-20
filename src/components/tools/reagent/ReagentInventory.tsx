@@ -67,7 +67,7 @@ export default function ReagentInventory() {
     const interval = Math.max(0, parseNum(state.injectionIntervalDays));
     const lead = Math.max(0, parseNum(state.leadTimeDays));
     let err = '';
-    if (dose <= 0) err = 'Dose must be greater than 0 mg.';
+    if (dose <= 0) err = 'Amount must be greater than 0 mg.';
     else if (interval <= 0) err = 'Injection interval must be greater than 0 days.';
     else if (mass <= 0) err = 'Total mass must be greater than 0 mg.';
     else if (!state.startDate) err = 'Enter a valid start date.';
@@ -110,7 +110,7 @@ export default function ReagentInventory() {
             <div style={dimHint}>stock on hand</div>
           </label>
           <label style={labelStyle}>
-            <div style={{ color: DIM, marginBottom: 4 }}>Dose (mg)</div>
+            <div style={{ color: DIM, marginBottom: 4 }}>Amount (mg)</div>
             <input inputMode="decimal" value={state.doseMg} onChange={(e) => setState({ ...state, doseMg: e.target.value })} style={inputStyle} />
             <div style={dimHint}>per injection</div>
           </label>
@@ -169,7 +169,7 @@ export default function ReagentInventory() {
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '0.5rem 0.75rem', background: verified ? 'rgba(34,211,238,0.1)' : '#1e293b', border: `1px solid ${verified ? CYAN : BORDER}`, borderRadius: 6, marginBottom: '0.75rem', cursor: 'pointer', fontSize: 11 }}>
             <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} />
             <span style={{ color: verified ? CYAN : TEXT }}>
-              {verified ? '✓ INPUTS VERIFIED — reveal burn-rate' : 'Confirm stock + dose cadence before display'}
+              {verified ? '✓ INPUTS VERIFIED — reveal burn-rate' : 'Confirm stock + administration cadence before display'}
             </span>
           </label>
 
@@ -195,7 +195,7 @@ export default function ReagentInventory() {
                 </div>
               </div>
               <div style={{ fontSize: 10, color: DIM, marginTop: 8 }}>
-                {calc.dosesRemaining} doses · {calc.daysRemaining} days from start · {calc.elapsedDays} days elapsed
+                {calc.dosesRemaining} administrations · {calc.daysRemaining} days from start · {calc.elapsedDays} days elapsed
               </div>
             </div>
           ) : (
@@ -209,7 +209,7 @@ export default function ReagentInventory() {
       )}
 
       <div style={disclaimerStyle()}>
-        Arithmetic only. Not medical advice. Inventory forecast assumes constant dose + interval. Research/compounding contexts only.
+        Arithmetic only. Not medical advice. Inventory forecast assumes constant administration + interval. Research/compounding contexts only.
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ export default function ReagentPurity() {
     let err = '';
     if (label <= 0) err = 'Label mass must be greater than 0 mg.';
     else if (vol <= 0) err = 'BAC volume must be greater than 0 mL.';
-    else if (target <= 0) err = 'Target dose must be greater than 0 mg.';
+    else if (target <= 0) err = 'Target amount must be greater than 0 mg.';
     else if (purity <= 0 || purity > 100) err = 'Purity must be between 0 and 100 %.';
     if (err) return { err, actualMass: 0, concAdj: 0, concNaive: 0, drawAdj: 0, drawNaive: 0, delta: 0 };
 
@@ -83,9 +83,9 @@ export default function ReagentPurity() {
           <div style={dimHint}>HPLC certificate</div>
         </label>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Target dose (mg)</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Target amount (mg)</div>
           <input inputMode="decimal" value={state.targetDoseMg} onChange={(e) => setState({ ...state, targetDoseMg: e.target.value })} style={inputStyle} />
-          <div style={dimHint}>protocol dose</div>
+          <div style={dimHint}>protocol amount</div>
         </label>
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>BAC volume (mL)</div>

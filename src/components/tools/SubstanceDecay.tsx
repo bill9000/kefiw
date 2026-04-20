@@ -174,7 +174,7 @@ export default function SubstanceDecay() {
           </select>
         </label>
         <label style={{ fontSize: 12 }}>
-          <div style={{ color: COLOR_DIM, marginBottom: 4 }}>Dose ({profile.unit})</div>
+          <div style={{ color: COLOR_DIM, marginBottom: 4 }}>Administration ({profile.unit})</div>
           <input inputMode="decimal" value={state.dose} onChange={(e) => setState({ ...state, dose: e.target.value })} style={inputStyle} />
         </label>
         <label style={{ fontSize: 12 }}>

@@ -69,7 +69,7 @@ export default function TitrateVector() {
     const start = state.startDate;
     let err = '';
     if (!start || daysBetween('1970-01-01', start) === 0 && start !== '1970-01-01') err = 'Enter a valid start date (YYYY-MM-DD).';
-    if (!err && startDose <= 0) err = 'Start dose must be greater than 0 mg.';
+    if (!err && startDose <= 0) err = 'Start amount must be greater than 0 mg.';
     if (!err && totalW < stepW) err = 'Total weeks must be >= step length.';
     if (err) return { err, schedule: [] as StageRow[], totalMass: 0, currentStage: null as StageRow | null, nextStage: null as StageRow | null, maxDose: 0 };
 
@@ -127,14 +127,14 @@ export default function TitrateVector() {
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>TES-1 · Titration Roadmap</div>
-        <div style={{ fontSize: 11, color: DIM }}>weekly dose escalation schedule and cycle-mass forecast</div>
+        <div style={{ fontSize: 11, color: DIM }}>weekly administration escalation schedule and cycle-mass forecast</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', marginBottom: '1rem' }}>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Start dose (mg)</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Start amount (mg)</div>
           <input inputMode="decimal" value={state.startDoseMg} onChange={(e) => setState({ ...state, startDoseMg: e.target.value })} style={inputStyle} />
-          <div style={dimHint}>week 1 dose</div>
+          <div style={dimHint}>week 1 amount</div>
         </label>
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>Increment (mg)</div>
@@ -170,7 +170,7 @@ export default function TitrateVector() {
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '0.5rem 0.75rem', background: verified ? 'rgba(34,211,238,0.1)' : '#1e293b', border: `1px solid ${verified ? CYAN : BORDER}`, borderRadius: 6, marginBottom: '0.75rem', cursor: 'pointer', fontSize: 11 }}>
             <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} />
             <span style={{ color: verified ? CYAN : TEXT }}>
-              {verified ? '✓ INPUTS VERIFIED — reveal roadmap' : 'Confirm dose schedule before display'}
+              {verified ? '✓ INPUTS VERIFIED — reveal roadmap' : 'Confirm schedule before display'}
             </span>
           </label>
 
@@ -180,7 +180,7 @@ export default function TitrateVector() {
                 <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 4 }}>Current Stage</div>
                 <div style={{ fontSize: 13, color: TEXT, lineHeight: 1.6 }}>
                   Week <span style={{ color: CYAN, fontWeight: 700 }}>{currentWeekNum}</span>
-                  {' · '}Dose <span style={{ color: CYAN, fontWeight: 700 }}>{calc.currentStage ? calc.currentStage.dose.toFixed(2) : '—'}</span> mg
+                  {' · '}Amount <span style={{ color: CYAN, fontWeight: 700 }}>{calc.currentStage ? calc.currentStage.dose.toFixed(2) : '—'}</span> mg
                   {' · '}Next escalation: <span style={{ color: GOLD, fontWeight: 700 }}>{calc.nextStage ? calc.nextStage.startDate : 'cycle end'}</span>
                   {' · '}Total cycle mass: <span style={{ color: GOLD, fontWeight: 700 }}>{calc.totalMass.toFixed(2)}</span> mg
                 </div>

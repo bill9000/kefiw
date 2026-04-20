@@ -982,7 +982,7 @@ export const ARTICLES_HEALTH_METABOLIC: ContentPageConfig[] = [
     ],
     examples: [
       { title: 'CKD stage 3 adjustment', body: '180 lb patient, nephrologist-set protein 0.7 g/kg = 57 g daily. Standard athlete target (164 g) would be harmful. Fat and carb floors also may shift based on comorbidities.' },
-      { title: 'Elderly muscle preservation', body: '70-year-old, 150 lb, recovering from hip surgery. Target 1.5 g/kg = 102 g protein daily. Well above RDA (55 g); well below athlete range. Sarcopenia prevention.' },
+      { title: 'Elderly muscle preservation', body: '70-year-old, 150 lb, recovering from hip surgery. Target 1.5 g/kg = 102 g protein daily. Well above RDA (55 g); well below athlete range. Lean-mass preservation.' },
       { title: 'Marathon build week', body: '150 lb runner, 80 miles running for the week. Carbs 8 g/kg = 545 g on hardest training days. Protein stays at 1.6 g/kg (109 g). Fat drops to floor to make kcal room.' },
     ],
     whenToUse: [

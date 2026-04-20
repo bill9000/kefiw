@@ -69,7 +69,7 @@ export default function AnabolicTrigger() {
       <div style={{ ...panel, marginBottom: '1rem', borderColor: GOLD }}>
         <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Per-Meal Protein Bolus</div>
         <div style={{ fontSize: 36, color: GOLD, fontWeight: 700 }}>{calc.perMealG.toFixed(0)} g</div>
-        <div style={{ fontSize: 11, color: DIM, marginTop: 2 }}>Muscle protein synthesis saturates at this dose per feeding window</div>
+        <div style={{ fontSize: 11, color: DIM, marginTop: 2 }}>Muscle protein synthesis saturates at this bolus per feeding window</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', marginBottom: '1rem' }}>
@@ -84,12 +84,12 @@ export default function AnabolicTrigger() {
         <div style={{ ...panel, borderColor: deltaColor }}>
           <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Surplus / deficit</div>
           <div style={{ fontSize: 22, color: deltaColor, fontWeight: 700 }}>{calc.delta >= 0 ? '+' : ''}{calc.delta.toFixed(0)} g</div>
-          <div style={{ fontSize: 10, color: DIM }}>{calc.delta >= 0 ? 'Above floor' : 'Add a meal or increase dose'}</div>
+          <div style={{ fontSize: 10, color: DIM }}>{calc.delta >= 0 ? 'Above floor' : 'Add a meal or increase bolus'}</div>
         </div>
       </div>
 
       <div style={{ fontSize: 10, color: DIM, borderTop: `1px dashed ${BORDER}`, paddingTop: 10 }}>
-        Per-bolus target: 0.25–0.40 g/kg leucine-rich protein. Daily floor 1.0–2.0 g/kg by training stimulus. Doses above 0.40 g/kg per meal do not further activate MPS (Morton 2018).
+        Per-bolus target: 0.25–0.40 g/kg leucine-rich protein. Daily floor 1.0–2.0 g/kg by training stimulus. Boluses above 0.40 g/kg per meal do not further activate MPS (Morton 2018).
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ export default function ReagentRecon() {
   return (
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
-        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>PRC-1 · Peptide Reconstitution</div>
+        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>PRC-1 · Reagent Reconstitution</div>
         <div style={{ fontSize: 11, color: DIM }}>mg / mL concentration after BAC water addition</div>
       </div>
 
@@ -48,7 +48,7 @@ export default function ReagentRecon() {
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>Vial mass (mg)</div>
           <input inputMode="decimal" value={state.vialMass} onChange={(e) => setState({ ...state, vialMass: e.target.value })} style={inputStyle} />
-          <div style={dimHint}>lyophilized powder · label dose</div>
+          <div style={dimHint}>lyophilized powder · label amount</div>
         </label>
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>BAC water (mL)</div>
@@ -108,7 +108,7 @@ export default function ReagentRecon() {
       )}
 
       <div style={disclaimerStyle()}>
-        Arithmetic only. Not medical advice. Verify every input before drawing a dose. Research/compounding contexts only.
+        Arithmetic only. Not medical advice. Verify every input before drawing. Research/compounding contexts only.
       </div>
     </div>
   );

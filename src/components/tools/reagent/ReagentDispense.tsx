@@ -58,13 +58,13 @@ export default function ReagentDispense() {
   return (
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
-        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>GDS-1 · GLP-1 Dosage · Syringe Units</div>
-        <div style={{ fontSize: 11, color: DIM }}>U-100 insulin-syringe unit draw from mg dose + concentration</div>
+        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>GDS-1 · GLP-1 Administration · Syringe Units</div>
+        <div style={{ fontSize: 11, color: DIM }}>U-100 insulin-syringe unit draw from mg amount + concentration</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: '1fr 1fr', marginBottom: '0.75rem' }}>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Target dose (mg)</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Target amount (mg)</div>
           <input inputMode="decimal" value={state.doseMg} onChange={(e) => setState({ ...state, doseMg: e.target.value })} style={inputStyle} />
           <div style={dimHint}>semaglutide 0.25 / 0.5 / 1.0 / 1.7 / 2.4 · tirzepatide 2.5 / 5 / 7.5 / 10 / 12.5 / 15</div>
         </label>
@@ -98,7 +98,7 @@ export default function ReagentDispense() {
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '0.5rem 0.75rem', background: verified ? 'rgba(34,211,238,0.1)' : '#1e293b', border: `1px solid ${verified ? CYAN : BORDER}`, borderRadius: 6, marginBottom: '0.75rem', cursor: 'pointer', fontSize: 11 }}>
             <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} />
             <span style={{ color: verified ? CYAN : TEXT }}>
-              {verified ? '✓ INPUTS VERIFIED — reveal unit draw' : 'Confirm dose + concentration before display'}
+              {verified ? '✓ INPUTS VERIFIED — reveal unit draw' : 'Confirm amount + concentration before display'}
             </span>
           </label>
 
@@ -144,7 +144,7 @@ export default function ReagentDispense() {
                 <div style={{ ...panelStyle, borderColor: MAGENTA }}>
                   <div style={{ color: MAGENTA, fontSize: 12, fontWeight: 700 }}>▸ CRITICAL NUDGE</div>
                   <div style={{ fontSize: 11, marginTop: 4 }}>
-                    Dose exceeds single U-100 syringe capacity ({calc.unitsExact.toFixed(2)} units needed). Verify concentration — increase mg/mL or split into two injections.
+                    Amount exceeds single U-100 syringe capacity ({calc.unitsExact.toFixed(2)} units needed). Verify concentration — increase mg/mL or split into two injections.
                   </div>
                 </div>
               )}
@@ -160,7 +160,7 @@ export default function ReagentDispense() {
       )}
 
       <div style={disclaimerStyle()}>
-        Arithmetic only. Not medical advice. U-100 syringes read 100 units per 1 mL. Always verify concentration and dose before drawing. Research/compounding contexts only.
+        Arithmetic only. Not medical advice. U-100 syringes read 100 units per 1 mL. Always verify concentration and amount before drawing. Research/compounding contexts only.
       </div>
     </div>
   );

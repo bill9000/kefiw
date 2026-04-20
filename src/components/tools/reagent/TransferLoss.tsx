@@ -45,7 +45,7 @@ export default function TransferLoss() {
     const critPct = Math.max(0, parseNum(state.criticalPct));
 
     if (vol <= 0) return { err: 'BAC volume must be greater than 0 mL' } as const;
-    if (doses <= 0) return { err: 'Doses per vial must be greater than 0' } as const;
+    if (doses <= 0) return { err: 'Draws per vial must be greater than 0' } as const;
 
     const conc = mass / vol;
     const leakMg = leakMl * conc;
@@ -111,7 +111,7 @@ export default function TransferLoss() {
           <div style={dimHint}>landed cost</div>
         </label>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Doses per vial</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Draws per vial</div>
           <input inputMode="decimal" value={state.dosesPerVial} onChange={(e) => setState({ ...state, dosesPerVial: e.target.value })} style={inputStyle} />
           <div style={dimHint}>draws before empty</div>
         </label>

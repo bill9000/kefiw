@@ -32,7 +32,7 @@ export default function ReagentStack() {
     const mA = Math.max(0, parseNum(state.massA));
     const mB = Math.max(0, parseNum(state.massB));
     const vol = Math.max(0, parseNum(state.bacVolumeMl));
-    const err = vol <= 0 ? 'BAC volume must be greater than 0 mL' : (mA <= 0 && mB <= 0 ? 'At least one peptide mass must be greater than 0 mg' : '');
+    const err = vol <= 0 ? 'BAC volume must be greater than 0 mL' : (mA <= 0 && mB <= 0 ? 'At least one reagent mass must be greater than 0 mg' : '');
     const concA = err ? 0 : mA / vol;
     const concB = err ? 0 : mB / vol;
     const rows = DRAWS.map((u) => ({
@@ -46,13 +46,13 @@ export default function ReagentStack() {
   return (
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
-        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>STK-1 · MULTI-PEPTIDE STACK</div>
-        <div style={{ fontSize: 11, color: DIM }}>Co-reconstitution of two peptides in a single vial · per-unit dual draw</div>
+        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>STK-1 · MULTI-REAGENT STACK</div>
+        <div style={{ fontSize: 11, color: DIM }}>Co-reconstitution of two reagents in a single vial · per-unit dual draw</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr)) 120px', alignItems: 'center', marginBottom: '1rem' }}>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Peptide A label</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Reagent A label</div>
           <input value={state.nameA} onChange={(e) => setState({ ...state, nameA: e.target.value })} style={inputStyle} />
           <div style={dimHint}>name · for reference only</div>
         </label>
@@ -62,7 +62,7 @@ export default function ReagentStack() {
           <div style={dimHint}>lyophilized powder in vial</div>
         </label>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Peptide B label</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Reagent B label</div>
           <input value={state.nameB} onChange={(e) => setState({ ...state, nameB: e.target.value })} style={inputStyle} />
           <div style={dimHint}>name · for reference only</div>
         </label>
@@ -155,7 +155,7 @@ export default function ReagentStack() {
       )}
 
       <div style={disclaimerStyle()}>
-        Arithmetic only. Not medical advice. Co-reconstitution compatibility depends on peptide chemistry — verify stability before combining. Research/compounding contexts only.
+        Arithmetic only. Not medical advice. Co-reconstitution compatibility depends on reagent chemistry — verify stability before combining. Research/compounding contexts only.
       </div>
     </div>
   );

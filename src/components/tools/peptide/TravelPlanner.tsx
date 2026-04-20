@@ -21,9 +21,9 @@ interface State {
 const DEFAULT_STATE: State = {
   tripDays: '14',
   rows: [
-    { name: 'Semaglutide', doseMg: '0.5',  intervalDays: '7', concMgMl: '2.5' },
-    { name: 'BPC-157',     doseMg: '0.25', intervalDays: '1', concMgMl: '5' },
-    { name: '',            doseMg: '0',    intervalDays: '0', concMgMl: '0' },
+    { name: 'Reagent-A', doseMg: '0.5',  intervalDays: '7', concMgMl: '2.5' },
+    { name: 'Reagent-B', doseMg: '0.25', intervalDays: '1', concMgMl: '5' },
+    { name: '',          doseMg: '0',    intervalDays: '0', concMgMl: '0' },
   ],
 };
 
@@ -85,7 +85,7 @@ export default function TravelPlanner() {
     });
 
     const activeCalcs = calcs.filter((c) => c.active);
-    if (!err && activeCalcs.length === 0) err = 'Add at least one peptide with dose > 0 and interval > 0';
+    if (!err && activeCalcs.length === 0) err = 'Add at least one reagent with amount > 0 and interval > 0';
 
     const totalBacMl = activeCalcs.reduce((s, c) => s + c.totalVolMl, 0);
     const totalSyringes = activeCalcs.reduce((s, c) => s + c.syringesNeeded, 0) + 4;
@@ -110,7 +110,7 @@ export default function TravelPlanner() {
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>TRA-1 · Travel Logistics</div>
-        <div style={{ fontSize: 11, color: DIM }}>packing manifest · doses, vials, syringes, swabs, sharps</div>
+        <div style={{ fontSize: 11, color: DIM }}>packing manifest · draws, vials, syringes, swabs, sharps</div>
       </div>
 
       <div style={{ marginBottom: '0.75rem' }}>
@@ -123,7 +123,7 @@ export default function TravelPlanner() {
 
       <div style={{ display: 'grid', gap: 6, marginBottom: '1rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.8fr 0.9fr 0.9fr', gap: 6, fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          <div>Peptide</div><div>Dose (mg)</div><div>Interval (d)</div><div>Conc (mg/mL)</div>
+          <div>Reagent</div><div>Amount (mg)</div><div>Interval (d)</div><div>Conc (mg/mL)</div>
         </div>
         {state.rows.map((row, i) => (
           <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.8fr 0.9fr 0.9fr', gap: 6 }}>
@@ -147,7 +147,7 @@ export default function TravelPlanner() {
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '0.5rem 0.75rem', background: verified ? 'rgba(34,211,238,0.1)' : '#1e293b', border: `1px solid ${verified ? CYAN : BORDER}`, borderRadius: 6, marginBottom: '0.75rem', cursor: 'pointer', fontSize: 11 }}>
             <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} />
             <span style={{ color: verified ? CYAN : TEXT }}>
-              {verified ? '✓ INPUTS VERIFIED — reveal packing manifest' : 'Confirm trip + peptide rows before display'}
+              {verified ? '✓ INPUTS VERIFIED — reveal packing manifest' : 'Confirm trip + reagent rows before display'}
             </span>
           </label>
 
@@ -204,7 +204,7 @@ export default function TravelPlanner() {
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.7fr 0.9fr 0.9fr 0.9fr', gap: 6, fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 0 4px' }}>
-                <div>Peptide</div><div>Doses</div><div>Total mg</div><div>Total mL</div><div>Syringes</div>
+                <div>Reagent</div><div>Draws</div><div>Total mg</div><div>Total mL</div><div>Syringes</div>
               </div>
               {calcs.map((c, i) => (
                 <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.7fr 0.9fr 0.9fr 0.9fr', gap: 6, fontSize: 11, padding: '4px 0', borderTop: `1px dashed ${BORDER}`, opacity: c.active ? 1 : 0.4 }}>

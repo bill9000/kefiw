@@ -48,7 +48,7 @@ export default function ReagentMcgRatio() {
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>MCU-1 · mcg per Unit Lookup</div>
-        <div style={{ fontSize: 11, color: DIM }}>Sliding-rule dose table · U-100 syringe tick → micrograms</div>
+        <div style={{ fontSize: 11, color: DIM }}>Sliding-rule lookup table · U-100 syringe tick → micrograms</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: '1fr', marginBottom: '0.75rem' }}>
@@ -102,7 +102,7 @@ export default function ReagentMcgRatio() {
               </div>
 
               <div style={{ ...panelStyle }}>
-                <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 8 }}>Dose Lookup · Draw → mcg</div>
+                <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 8 }}>Unit Lookup · Draw → mcg</div>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                   <thead>
                     <tr style={{ color: DIM, borderBottom: `1px solid ${BORDER}` }}>

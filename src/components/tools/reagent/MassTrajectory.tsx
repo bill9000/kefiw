@@ -113,7 +113,7 @@ export default function MassTrajectory() {
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>Weeks elapsed</div>
           <input inputMode="decimal" value={state.weeksElapsed} onChange={(e) => setState({ ...state, weeksElapsed: e.target.value })} style={inputStyle} />
-          <div style={dimHint}>since first dose</div>
+          <div style={dimHint}>since first injection</div>
         </label>
       </div>
 

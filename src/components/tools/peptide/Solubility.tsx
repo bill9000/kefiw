@@ -6,25 +6,25 @@ import {
 
 const STORAGE = 'peptide-solubility-v1';
 
-type PeptideKey = 'BPC-157' | 'TB-500' | 'Semaglutide' | 'Tirzepatide' | 'Ipamorelin' | 'CJC-1295' | 'Retatrutide' | 'Custom';
+type ReagentKey = 'Reagent-A' | 'Reagent-B' | 'Reagent-C' | 'Reagent-D' | 'Reagent-E' | 'Reagent-F' | 'Reagent-G' | 'Custom';
 
-const LIMITS: Record<Exclude<PeptideKey, 'Custom'>, number> = {
-  'BPC-157': 10,
-  'TB-500': 15,
-  'Semaglutide': 20,
-  'Tirzepatide': 20,
-  'Ipamorelin': 15,
-  'CJC-1295': 10,
-  'Retatrutide': 20,
+const LIMITS: Record<Exclude<ReagentKey, 'Custom'>, number> = {
+  'Reagent-A': 10,
+  'Reagent-B': 15,
+  'Reagent-C': 20,
+  'Reagent-D': 20,
+  'Reagent-E': 15,
+  'Reagent-F': 10,
+  'Reagent-G': 20,
 };
 
 interface State {
-  peptide: PeptideKey;
+  reagent: ReagentKey;
   massMg: string;
   bacVolumeMl: string;
   customLimitMgMl: string;
 }
-const DEFAULT_STATE: State = { peptide: 'Semaglutide', massMg: '5', bacVolumeMl: '2', customLimitMgMl: '20' };
+const DEFAULT_STATE: State = { reagent: 'Reagent-C', massMg: '5', bacVolumeMl: '2', customLimitMgMl: '20' };
 
 export default function Solubility() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
@@ -36,19 +36,19 @@ export default function Solubility() {
     setHydrated(true);
   }, []);
   useEffect(() => { if (hydrated) localStorage.setItem(STORAGE, JSON.stringify(state)); }, [state, hydrated]);
-  useEffect(() => { setVerified(false); }, [state.peptide, state.massMg, state.bacVolumeMl, state.customLimitMgMl]);
+  useEffect(() => { setVerified(false); }, [state.reagent, state.massMg, state.bacVolumeMl, state.customLimitMgMl]);
 
   const calc = useMemo(() => {
     const mass = Math.max(0, parseNum(state.massMg));
     const vol = Math.max(0, parseNum(state.bacVolumeMl));
-    const limit = state.peptide === 'Custom'
+    const limit = state.reagent === 'Custom'
       ? Math.max(0, parseNum(state.customLimitMgMl))
-      : LIMITS[state.peptide];
+      : LIMITS[state.reagent];
 
     let err = '';
     if (vol <= 0) err = 'BAC water volume must be greater than 0 mL';
     else if (limit <= 0) err = 'Solubility limit must be greater than 0 mg/mL';
-    else if (mass <= 0) err = 'Peptide mass must be greater than 0 mg';
+    else if (mass <= 0) err = 'Reagent mass must be greater than 0 mg';
 
     const conc = err ? 0 : mass / vol;
     const pctOfLimit = err || limit <= 0 ? 0 : (conc / limit) * 100;
@@ -76,14 +76,14 @@ export default function Solubility() {
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>SOL-1 · Solubility Limit</div>
-        <div style={{ fontSize: 11, color: DIM }}>concentration vs peptide solubility ceiling · sludge-risk check</div>
+        <div style={{ fontSize: 11, color: DIM }}>concentration vs reagent solubility ceiling · sludge-risk check</div>
       </div>
 
-      <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: state.peptide === 'Custom' ? '1fr 1fr 1fr 1fr' : '1fr 1fr 1fr', marginBottom: '1rem' }}>
+      <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: state.reagent === 'Custom' ? '1fr 1fr 1fr 1fr' : '1fr 1fr 1fr', marginBottom: '1rem' }}>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Peptide</div>
-          <select value={state.peptide} onChange={(e) => setState({ ...state, peptide: e.target.value as PeptideKey })} style={inputStyle}>
-            {(Object.keys(LIMITS) as Array<Exclude<PeptideKey, 'Custom'>>).map((k) => (
+          <div style={{ color: DIM, marginBottom: 4 }}>Reagent</div>
+          <select value={state.reagent} onChange={(e) => setState({ ...state, reagent: e.target.value as ReagentKey })} style={inputStyle}>
+            {(Object.keys(LIMITS) as Array<Exclude<ReagentKey, 'Custom'>>).map((k) => (
               <option key={k} value={k}>{k} (~{LIMITS[k]} mg/mL)</option>
             ))}
             <option value="Custom">Custom</option>
@@ -93,14 +93,14 @@ export default function Solubility() {
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>Mass (mg)</div>
           <input inputMode="decimal" value={state.massMg} onChange={(e) => setState({ ...state, massMg: e.target.value })} style={inputStyle} />
-          <div style={dimHint}>lyophilized label dose</div>
+          <div style={dimHint}>lyophilized label mass</div>
         </label>
         <label style={labelStyle}>
           <div style={{ color: DIM, marginBottom: 4 }}>BAC water (mL)</div>
           <input inputMode="decimal" value={state.bacVolumeMl} onChange={(e) => setState({ ...state, bacVolumeMl: e.target.value })} style={inputStyle} />
           <div style={dimHint}>diluent volume</div>
         </label>
-        {state.peptide === 'Custom' && (
+        {state.reagent === 'Custom' && (
           <label style={labelStyle}>
             <div style={{ color: DIM, marginBottom: 4 }}>Custom limit (mg/mL)</div>
             <input inputMode="decimal" value={state.customLimitMgMl} onChange={(e) => setState({ ...state, customLimitMgMl: e.target.value })} style={inputStyle} />
@@ -121,7 +121,7 @@ export default function Solubility() {
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '0.5rem 0.75rem', background: verified ? 'rgba(34,211,238,0.1)' : '#1e293b', border: `1px solid ${verified ? CYAN : BORDER}`, borderRadius: 6, marginBottom: '0.75rem', cursor: 'pointer', fontSize: 11 }}>
             <input type="checkbox" checked={verified} onChange={(e) => setVerified(e.target.checked)} />
             <span style={{ color: verified ? CYAN : TEXT }}>
-              {verified ? '✓ INPUTS VERIFIED — reveal solubility status' : 'Confirm peptide + mass + BAC volume before display'}
+              {verified ? '✓ INPUTS VERIFIED — reveal solubility status' : 'Confirm reagent + mass + BAC volume before display'}
             </span>
           </label>
 

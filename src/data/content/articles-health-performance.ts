@@ -629,7 +629,7 @@ export const ARTICLES_HEALTH_PERFORMANCE: ContentPageConfig[] = [
       'Very large athletes (250+ lb): the per-kg formula can produce intimidating absolute numbers (200+ g/day) that are hard to eat cleanly. Use lower-bound 1.6 g/kg and fill carbs.',
     ],
     examples: [
-      { title: '65 years old · 180 lb · sarcopenia prevention', body: 'Per-meal target 38 g (not 32) due to anabolic resistance. 4 meals × 38 g = 152 g/day. Leucine-rich sources preferred.' },
+      { title: '65 years old · 180 lb · lean-mass preservation', body: 'Per-meal target 38 g (not 32) due to anabolic resistance. 4 meals × 38 g = 152 g/day. Leucine-rich sources preferred.' },
       { title: 'IF 16/8 · 2 meals', body: 'Daily 160 g split as 80/80. Each bolus well above saturation but fits the compressed window. Works; not optimal.' },
       { title: 'Aggressive cut · 180 lb', body: 'Target 200 g (2.5 g/kg) during a 1000-cal deficit. Upper-end protein preserves muscle in deficit — standard 140 g bleeds lean mass.' },
     ],

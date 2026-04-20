@@ -27,3 +27,18 @@
 /health/peptide-stack/        /health/reagent-stack/         301
 /health/weight-trajectory/    /health/mass-trajectory/       301
 /health/vendor-roi/           /health/vendor-yield/          301
+
+# Neutral Cut (Apr 2026) — /guides/ article slug renames
+/guides/what-is-peptide-recon/        /guides/what-is-reagent-recon/         301
+/guides/what-is-peptide-stack/        /guides/what-is-reagent-stack/         301
+/guides/what-is-glp-units/            /guides/what-is-reagent-dispense/      301
+/guides/what-is-mcg-per-unit/         /guides/what-is-reagent-mcg-ratio/     301
+/guides/what-is-syringe-waste/        /guides/what-is-transfer-loss/         301
+/guides/what-is-mass-purity-filter/   /guides/what-is-reagent-purity/        301
+/guides/what-is-titration-escalation/ /guides/what-is-titrate-vector/        301
+/guides/what-is-peptide-inventory/    /guides/what-is-reagent-inventory/     301
+/guides/what-is-vendor-roi/           /guides/what-is-vendor-yield/          301
+/guides/what-is-peptide-half-life/    /guides/what-is-reagent-half-life/     301
+/guides/what-is-sarcopenia-guard/     /guides/what-is-mass-retention-guard/  301
+/guides/what-is-weight-trajectory/    /guides/what-is-mass-trajectory/       301
+/guides/what-is-peptide-degradation/  /guides/what-is-vector-decay/          301
