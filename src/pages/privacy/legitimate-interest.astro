@@ -1,0 +1,95 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+const updated = '2026-04-20';
+---
+<BaseLayout
+  title="Legitimate Interest Assessment — Kefiw"
+  description="Kefiw's legitimate interest assessment (LIA) for TCF Purpose 9, Special Purpose 1, and Special Purpose 3, per IAB Europe Transparency & Consent Framework v2.3."
+  canonical="/privacy/legitimate-interest/"
+  keywords={['legitimate interest assessment', 'LIA', 'TCF 2.3', 'balancing test']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Legitimate Interest Assessment (LIA)</h1>
+    <p class="text-sm text-slate-500">Last updated: {updated}</p>
+
+    <p>Kefiw relies on <strong>Article 6(1)(f) GDPR — legitimate interest</strong> as the lawful basis for three narrowly scoped processing activities declared under the IAB Europe Transparency &amp; Consent Framework v2.3. This page publishes the balancing test required by the TCF Policies and by EDPB guidelines, in purpose-by-purpose form.</p>
+
+    <p>Kefiw does <em>not</em> rely on legitimate interest for any purpose involving personalised advertising, profiling, cross-device matching, content personalisation, or geolocation. Those purposes are either declared as requiring consent or marked <em>Not used</em>.</p>
+
+    <hr />
+
+    <h2>Purpose 9 — Understand audiences through statistics</h2>
+
+    <h3>1. Purpose test</h3>
+    <p>Kefiw logs aggregate counters (page view, impression, fill, unfill, click) keyed to an anonymous rolling session identifier to measure (a) which tools are used, (b) whether ad slots fill or fall back to the in-house placeholder, and (c) whether the site experiences abnormal traffic spikes. The statistics are used to prioritise tool development and to detect operational regressions.</p>
+
+    <h3>2. Necessity test</h3>
+    <p>The processing is necessary because there is no practical alternative that yields equivalent per-slot fill data. Server-side-only counters would omit client-side fill/viewability signals, and consent-gating the counters entirely would bias the measurement to the consented population only, defeating the purpose of operational monitoring.</p>
+
+    <h3>3. Balancing test</h3>
+    <ul>
+      <li><strong>Data minimisation:</strong> no user-typed tool values are ever included in telemetry payloads. No IP address, no user-agent string, no precise timestamp beyond the event is stored with the session record.</li>
+      <li><strong>Identifiability:</strong> the session identifier (<code>kfw_sid</code>) is a random UUID, rotated after 30 days of inactivity, not linkable to any account because Kefiw has no accounts.</li>
+      <li><strong>Reasonable expectation:</strong> users interacting with a free web tool reasonably expect the operator to measure whether the tool is used.</li>
+      <li><strong>Opt-out:</strong> users may clear <code>kfw_sid</code> from their browser at any time; users who select the Contextual-only or Pending protocol state cause telemetry to be disabled via <code>__KFW_TELEMETRY_DISABLED</code>.</li>
+    </ul>
+
+    <h3>4. Outcome</h3>
+    <p>The interests of Kefiw in operating a reliable measurement layer are not overridden by the limited and anonymised impact on data subjects. Legitimate interest is the correct lawful basis.</p>
+
+    <hr />
+
+    <h2>Special Purpose 1 — Ensure security, prevent and detect fraud, and fix errors</h2>
+
+    <h3>1. Purpose test</h3>
+    <p>Kefiw's edge infrastructure (Cloudflare) inspects request metadata — IP address, user agent, TLS fingerprint — to block bot traffic, credential-stuffing attempts, and denial-of-service patterns. Error reporting retains a transient copy of the HTTP request envelope for up to 24 hours for incident diagnosis.</p>
+
+    <h3>2. Necessity test</h3>
+    <p>A free, unauthenticated public web service is a standing target for automated abuse. Without edge-level fraud and anomaly detection the service cannot remain available to legitimate users. There is no less-intrusive alternative that delivers equivalent protection.</p>
+
+    <h3>3. Balancing test</h3>
+    <ul>
+      <li><strong>Data minimisation:</strong> only the network envelope is inspected; no request body content and no tool inputs are examined.</li>
+      <li><strong>Retention:</strong> fraud-detection logs are retained for 30 days. Error-diagnostic copies are retained for 24 hours.</li>
+      <li><strong>Reasonable expectation:</strong> all visitors reasonably expect a public site to defend itself against attack.</li>
+    </ul>
+
+    <h3>4. Outcome</h3>
+    <p>Processing is strictly proportionate to the security interest and does not override data-subject rights.</p>
+
+    <hr />
+
+    <h2>Special Purpose 3 — Save and communicate privacy choices</h2>
+
+    <h3>1. Purpose test</h3>
+    <p>The CMP stores the user's consent state (<code>pending</code> / <code>ltd</code> / <code>full</code>) in first-party browser storage and emits it to downstream vendors as a TCF 2.3 string plus a GPP 1.1 section string. This is the core operational function of the Consent Management Platform.</p>
+
+    <h3>2. Necessity test</h3>
+    <p>Recording a privacy choice is definitionally necessary to honour that choice on subsequent page loads. Without this, the CMP could not function and Kefiw could not serve any advertising lawfully in the EU/UK.</p>
+
+    <h3>3. Balancing test</h3>
+    <ul>
+      <li>The stored values record the user's own decision and are not used for any secondary purpose.</li>
+      <li>The user can overwrite or erase the stored choice at any time via the privacy anchor fixed to the bottom of every page.</li>
+      <li>TCF Policy explicitly contemplates this processing under Special Purpose 3; the European Data Protection Board has affirmed legitimate interest as appropriate for CMP consent records.</li>
+    </ul>
+
+    <h3>4. Outcome</h3>
+    <p>Processing is necessary and proportionate; legitimate interest is the correct basis.</p>
+
+    <hr />
+
+    <h2>Your right to object</h2>
+    <p>Under Article 21 GDPR you may object at any time to processing based on legitimate interest. To exercise this right:</p>
+    <ul>
+      <li>For Purpose 9 telemetry: select the <em>Contextual-only</em> or <em>Pending</em> state in the privacy anchor at the bottom of any page. Telemetry stops immediately.</li>
+      <li>For Special Purpose 1 security logs: contact us at the <a href="/contact/">contact form</a>; note that we cannot discontinue fraud detection for a specific visitor without simultaneously ceasing to serve them.</li>
+      <li>For Special Purpose 3 consent records: clear site data in your browser.</li>
+    </ul>
+
+    <h2>Review cadence</h2>
+    <p>This assessment is reviewed annually, or sooner if the scope of processing or governing guidance changes.</p>
+
+    <p class="text-sm text-slate-500 mt-8">Back to <a href="/privacy/">Privacy Policy</a>.</p>
+  </article>
+</BaseLayout>
