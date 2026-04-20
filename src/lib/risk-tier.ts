@@ -28,8 +28,8 @@ export function resolveCluster(pathname: string): ClusterInfo {
     return { cluster_id: '20', risk_tier: 'ltd' };
   }
 
-  // /decisions/* — Finance Cash Corridor
-  if (path.startsWith('/decisions/')) {
+  // /finance/* — Capital Corridor
+  if (path.startsWith('/finance/') || path === '/finance') {
     return { cluster_id: '10', risk_tier: 'full' };
   }
 
@@ -43,7 +43,7 @@ export function resolveCluster(pathname: string): ClusterInfo {
   if (path.startsWith('/games/'))      return { cluster_id: '40', risk_tier: 'standard' };
   if (path.startsWith('/logic/'))      return { cluster_id: '50', risk_tier: 'standard' };
   if (path.startsWith('/guides/'))     return { cluster_id: '60', risk_tier: 'standard' };
-  if (path.startsWith('/calculators/')) return { cluster_id: '70', risk_tier: 'full' };
+  if (path.startsWith('/calculators/')) return { cluster_id: '70', risk_tier: 'standard' };
   if (path.startsWith('/converters/')) return { cluster_id: '80', risk_tier: 'standard' };
 
   return { cluster_id: '00', risk_tier: 'standard' };
@@ -56,7 +56,7 @@ export function resolveToolId(pathname: string): string | null {
   const [section, slug] = parts;
   const validSections = new Set([
     'word-tools', 'games', 'calculators', 'converters',
-    'health', 'logic', 'guides', 'decisions',
+    'health', 'logic', 'guides', 'finance',
   ]);
   if (!validSections.has(section)) return null;
   return slug ?? null;

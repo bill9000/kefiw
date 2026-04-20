@@ -97,22 +97,22 @@ const pillars: Pillar[] = rawPillars
 
 const crumbs = [
   { href: '/', label: 'Home' },
-  { href: '/decisions/', label: 'Decisions' },
+  { href: '/finance/', label: 'Finance' },
 ];
 ---
 <BaseLayout
-  title="Decisions — Deterministic Financial Triage | Kefiw"
-  description="Deterministic calculators organized into four industrial pillars: Strategic Capital, Operational Scaling, Scarcity Triage, and Biological Maintenance. Closed-form math, no AI, no probabilistic guesses."
-  canonical="/decisions/"
-  keywords={['decision calculators', 'deterministic financial triage', 'break-even calculator', 'runway calculator', 'bio-fuel efficiency', 'vimes theorem calculator', 'trap detector']}
+  title="Finance — Capital Corridor | Kefiw"
+  description="Deterministic financial intelligence: runway, growth/burn horizons, crisis resilience, and lifetime crossovers. Four industrial pillars, closed-form math, no AI, no probabilistic guesses."
+  canonical="/finance/"
+  keywords={['finance calculators', 'capital corridor', 'runway calculator', 'break-even calculator', 'burn rate', 'shock survival', 'crossover calculator']}
 >
   <Breadcrumb crumbs={crumbs} />
   <article class="container-wide py-6">
     <header class="mb-8 max-w-3xl">
-      <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Deterministic Financial Triage</p>
-      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Decisions</h1>
+      <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Capital Corridor</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Finance</h1>
       <p class="mt-3 text-lg text-slate-700">
-        A deterministic toolkit for high-stakes logic, sorted into four industrial pillars.
+        A deterministic toolkit for high-stakes capital logic, sorted into four industrial pillars.
       </p>
       <p class="mt-2 text-slate-600">
         Every result is a closed-form formula or bounded simulation you can verify by hand.
@@ -136,7 +136,7 @@ const crumbs = [
       <div class="rounded-lg border border-slate-200 bg-white p-4">
         <div class="text-sm font-semibold text-slate-900">Why it matters</div>
         <p class="mt-1 text-sm text-slate-600">
-          Decisions deserve reproducible results — not an opaque answer you can't audit.
+          Capital decisions deserve reproducible results — not an opaque answer you can't audit.
         </p>
       </div>
     </section>
@@ -150,7 +150,7 @@ const crumbs = [
         {DECISION_CLUSTERS.map((c) => (
           <li>
             <a
-              href={`/decisions/clusters/${c.slug}/`}
+              href={`/finance/clusters/${c.slug}/`}
               class="block rounded-md border border-emerald-200 bg-white p-3 hover:border-emerald-500 hover:bg-emerald-50"
             >
               <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700">
@@ -189,9 +189,9 @@ const crumbs = [
     ))}
 
     <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-5">
-      <h2 class="text-lg font-semibold text-slate-900">About the Decisions suite</h2>
+      <h2 class="text-lg font-semibold text-slate-900">About the Finance suite</h2>
       <p class="mt-2 text-sm text-slate-700">
-        Four industrial pillars map to four decision horizons: Strategic Capital (runway, equity, salary replacement),
+        Four industrial pillars map to four capital horizons: Strategic Capital (runway, equity, salary replacement),
         Operational Scaling (infrastructure, technical debt, build-vs-buy), Scarcity Triage (cash-short survival math),
         and Biological Maintenance (human-capital costs that don't show up on the bank statement).
         Each tool is a closed-form formula or bounded simulation — inputs persist locally in your browser, nothing is sent to a server.

@@ -1,4 +1,4 @@
-export type ToolCategory = 'word-tools' | 'converters' | 'calculators' | 'games' | 'health' | 'logic';
+export type ToolCategory = 'word-tools' | 'converters' | 'calculators' | 'games' | 'health' | 'logic' | 'finance';
 
 export interface FaqItem {
   q: string;
@@ -35,6 +35,7 @@ export interface ToolConfig {
   clusterId?: string;
   outcomeLine?: string;
   followUps?: FollowUp[];
+  packetId?: string;
 }
 
 export const CATEGORIES: Record<ToolCategory, { title: string; slug: string; blurb: string }> = {
@@ -67,6 +68,11 @@ export const CATEGORIES: Record<ToolCategory, { title: string; slug: string; blu
     title: 'Logic',
     slug: 'logic',
     blurb: 'Cognitive throughput monitors: signal-to-noise, context-switching tax, decision-fatigue load, and deep-work capacity. System Monitor for the brain.',
+  },
+  finance: {
+    title: 'Finance',
+    slug: 'finance',
+    blurb: 'Capital Corridor: runway, growth/burn horizons, shock resilience, and lifetime-vs-subscription crossovers. Deterministic math, industrial SOPs, no financial advice.',
   },
 };
 
@@ -1184,7 +1190,8 @@ export const TOOLS: ToolConfig[] = [
   },
   {
     id: 'runway-zero',
-    category: 'calculators',
+    category: 'finance',
+    packetId: 'FNC-01',
     slug: 'runway-zero',
     title: 'Runway Zero — Cash Runway to Bankruptcy',
     h1: 'Runway Zero',
@@ -1215,7 +1222,8 @@ export const TOOLS: ToolConfig[] = [
   },
   {
     id: 'shock-survival',
-    category: 'calculators',
+    category: 'finance',
+    packetId: 'FNC-03',
     slug: 'shock-survival',
     title: 'Shock Survival — Loan Buffer After an Emergency',
     h1: 'Shock Survival',
@@ -1245,7 +1253,8 @@ export const TOOLS: ToolConfig[] = [
   },
   {
     id: 'horizon-point',
-    category: 'calculators',
+    category: 'finance',
+    packetId: 'FNC-02',
     slug: 'horizon-point',
     title: 'Horizon Point — Buy vs Rent Break-Even',
     h1: 'Horizon Point',
@@ -1276,7 +1285,8 @@ export const TOOLS: ToolConfig[] = [
   },
   {
     id: 'crossover-calculator',
-    category: 'calculators',
+    category: 'finance',
+    packetId: 'FNC-04',
     slug: 'crossover-calculator',
     title: 'The Crossover — Subscription vs Lifetime Purchase',
     h1: 'The Crossover',

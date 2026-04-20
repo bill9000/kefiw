@@ -1,3 +1,14 @@
 # Legacy / alternative paths
 /home / 301
 /index.html / 301
+
+# Finance Re-Org (Apr 2026) — /calculators/ → /finance/ for FNC-01..04
+/calculators/runway-zero/         /finance/runway-zero/         301
+/calculators/shock-survival/      /finance/shock-survival/      301
+/calculators/horizon-point/       /finance/horizon-point/       301
+/calculators/crossover-calculator/ /finance/crossover-calculator/ 301
+
+# Decisions hub → Finance hub (Topical Directory Authority)
+/decisions            /finance/                301
+/decisions/           /finance/                301
+/decisions/clusters/* /finance/clusters/:splat 301

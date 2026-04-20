@@ -38,7 +38,7 @@ function pathCategory(path: string): string {
   if (path.startsWith('/converters/')) return 'converters';
   if (path.startsWith('/health/')) return 'health';
   if (path.startsWith('/logic/')) return 'logic';
-  if (path.startsWith('/decisions/')) return 'decisions';
+  if (path.startsWith('/finance/')) return 'finance';
   if (path.startsWith('/guides/')) return 'guides';
   return 'home';
 }
@@ -71,7 +71,7 @@ function getNudge(path: string, s: DashboardState): string | null {
     return 'Cognitive load HIGH. Defer heavy decisions — fuel and sleep before strategy.';
   }
 
-  if (cat === 'decisions' && cognitive_load === 'high') {
+  if (cat === 'finance' && cognitive_load === 'high') {
     return 'Warning: deciding while depleted. Every choice now is 2× more likely to be a default.';
   }
 

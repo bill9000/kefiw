@@ -141,7 +141,7 @@ export default function SubPurge() {
       </div>
 
       <div style={{ fontSize: 11, color: CYAN, borderTop: `1px dashed ${BORDER}`, paddingTop: 10, marginTop: 12 }}>
-        → Pipe this monthly recovery into the <a href="/decisions/runway-zero/" style={{ color: CYAN, textDecoration: 'underline' }}>Runway Zero</a> calculator — every $50/mo cut extends your bankruptcy date by weeks.
+        → Pipe this monthly recovery into the <a href="/finance/runway-zero/" style={{ color: CYAN, textDecoration: 'underline' }}>Runway Zero</a> calculator — every $50/mo cut extends your bankruptcy date by weeks.
       </div>
       <div style={{ fontSize: 10, color: DIM, paddingTop: 6 }}>
         Monthly bleed = Σ(line_monthly). Lifetime = monthly × 12 × years. Subscriptions compound silently — the 10-year column is why.

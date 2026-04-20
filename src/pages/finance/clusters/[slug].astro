@@ -3,7 +3,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import FAQ from '~/components/FAQ.astro';
 import ToolCard from '~/components/ToolCard.astro';
-import AdSlot from '~/components/AdSlot.astro';
+import AdSlot from '~/components/ads/AdSlot.tsx';
 import { TOOLS_BY_ID } from '~/data/tools';
 import { contentPageById, contentHref, type ContentPageConfig } from '~/data/content-pages';
 import {
@@ -20,7 +20,7 @@ export async function getStaticPaths() {
 
 interface Props { cluster: DecisionCluster; }
 const { cluster } = Astro.props;
-const canonical = `/decisions/clusters/${cluster.slug}/`;
+const canonical = `/finance/clusters/${cluster.slug}/`;
 
 const tools = cluster.toolIds
   .map((id) => TOOLS_BY_ID[id])
@@ -34,7 +34,7 @@ const otherClusters = DECISION_CLUSTERS.filter((c) => c.slug !== cluster.slug);
 
 const crumbs = [
   { href: '/', label: 'Home' },
-  { href: '/decisions/', label: 'Decisions' },
+  { href: '/finance/', label: 'Finance' },
   { href: canonical, label: cluster.h1 },
 ];
 
@@ -59,7 +59,7 @@ const hubJsonLd = {
   <article class="container-wide py-6">
     <header class="mb-6 max-w-3xl">
       <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">
-        Decision Cluster {cluster.letter} — {cluster.pillar}
+        Capital Cluster {cluster.letter} — {cluster.pillar}
       </p>
       <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{cluster.h1}</h1>
       <p class="mt-2 text-lg text-slate-700">{cluster.subhead}</p>
@@ -80,7 +80,9 @@ const hubJsonLd = {
       </section>
     )}
 
-    <AdSlot slot="below-intro" />
+    <div class="my-6">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
 
     {tools.length > 0 && (
       <section aria-label="Tools in this cluster" class="mb-10">
@@ -107,15 +109,17 @@ const hubJsonLd = {
       </section>
     )}
 
-    <AdSlot slot="below-tool" />
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
 
     {otherClusters.length > 0 && (
-      <section aria-label="Other decision clusters" class="mt-10">
-        <h2 class="mb-3 text-xl font-semibold">Other decision clusters</h2>
+      <section aria-label="Other capital clusters" class="mt-10">
+        <h2 class="mb-3 text-xl font-semibold">Other capital clusters</h2>
         <ul class="grid gap-3 sm:grid-cols-2">
           {otherClusters.map((rc) => (
             <li>
-              <a href={`/decisions/clusters/${rc.slug}/`} class="block rounded-md border border-slate-200 p-3 hover:border-emerald-500 hover:bg-emerald-50">
+              <a href={`/finance/clusters/${rc.slug}/`} class="block rounded-md border border-slate-200 p-3 hover:border-emerald-500 hover:bg-emerald-50">
                 <div class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Cluster {rc.letter} — {rc.pillar}</div>
                 <div class="mt-1 text-sm font-semibold text-slate-900">{rc.h1}</div>
                 <div class="mt-0.5 text-xs text-slate-600">{rc.subhead}</div>
