@@ -1,5 +1,6 @@
-// TCF 2.2 CMP API stub — IAB TCF v2.2 shape without IAB registration yet.
+// TCF 2.3 CMP API stub — IAB TCF v2.3 shape without IAB registration yet.
 //
+// TCF 2.3 mandatory as of 2026-03-01; 2.2 retired 2026-02-28.
 // Spec: https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Framework
 //
 // Registers __tcfapi (parent frame) + __tcfapiLocator iframe so in-page
@@ -13,7 +14,7 @@
 
 import type { ConsentState, Region } from './consent';
 
-type TcfCommand = 'ping' | 'getTCData' | 'addEventListener' | 'removeEventListener';
+type TcfCommand = 'ping' | 'getTCData' | 'addEventListener' | 'removeEventListener' | 'getInAppTCData' | 'getVendorList';
 type EventStatus = 'tcloaded' | 'cmpuishown' | 'useractioncomplete';
 type CmpStatus = 'stub' | 'loading' | 'loaded' | 'error';
 
@@ -21,7 +22,7 @@ interface PingReturn {
   cmpLoaded: boolean;
   cmpStatus: CmpStatus;
   displayStatus: 'visible' | 'hidden' | 'disabled';
-  apiVersion: '2.2';
+  apiVersion: '2.3';
   cmpVersion: number;
   cmpId: number;
   gvlVersion?: number;
@@ -60,13 +61,14 @@ declare global {
   }
 }
 
-// Purposes the site actually uses (AdSense). Enumerated by TCF GVL:
+// Purposes the site actually uses (AdSense). Enumerated by TCF GVL v3:
 //   1 = Store and access information on a device
 //   3 = Personalised ads profile
 //   4 = Personalised ads
 //   7 = Measure ad performance
 //   9 = Market research
 //  10 = Develop and improve products
+//  11 = (TCF 2.3) Use limited data to select content — declared off by default
 const AD_PURPOSES = [1, 3, 4, 7, 9, 10];
 
 // AdSense/Google Ads IAB vendor IDs (GVL v3):
@@ -75,7 +77,8 @@ const AD_VENDORS = [755];
 
 const PLACEHOLDER_CMP_ID = 0;
 const CMP_VERSION = 1;
-const TCF_POLICY_VERSION = 4;
+const TCF_POLICY_VERSION = 5; // TCF 2.3 / Policy v2024
+const GVL_VERSION = 3;
 const PUBLISHER_CC = 'AA';
 
 const listeners = new Map<number, TcfCallback>();
@@ -150,9 +153,10 @@ function buildPing(): PingReturn {
     cmpLoaded: cmpStatus === 'loaded',
     cmpStatus,
     displayStatus: 'hidden',
-    apiVersion: '2.2',
+    apiVersion: '2.3',
     cmpVersion: CMP_VERSION,
     cmpId: PLACEHOLDER_CMP_ID,
+    gvlVersion: GVL_VERSION,
     tcfPolicyVersion: TCF_POLICY_VERSION,
   };
 }
@@ -195,6 +199,7 @@ function invokeTcfApi(command: TcfCommand, _version: number, callback: TcfCallba
       callback(buildPing(), true);
       return;
     case 'getTCData':
+    case 'getInAppTCData':
       callback(buildTCData(currentState, currentRegion, 'tcloaded'), true);
       return;
     case 'addEventListener': {
@@ -209,6 +214,9 @@ function invokeTcfApi(command: TcfCommand, _version: number, callback: TcfCallba
       callback(null, existed);
       return;
     }
+    case 'getVendorList':
+      callback(null, false);
+      return;
     default:
       callback(null, false);
   }

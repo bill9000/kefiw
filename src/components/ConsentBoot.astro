@@ -1,8 +1,8 @@
 ---
-// ConsentBoot — inline head script that registers __tcfapi and __gppapi
-// STUBS synchronously so AdSense / third parties find them on first query.
-// The stubs buffer calls; src/lib/consent.ts drains the queue when the
-// full CMP state machine boots.
+// ConsentBoot — inline head script that registers __tcfapi (TCF 2.3) and
+// __gppapi (GPP 1.1) STUBS synchronously so AdSense / third parties find
+// them on first query. The stubs buffer calls; src/lib/consent.ts drains
+// the queue when the full CMP state machine boots.
 //
 // Must be injected BEFORE <AdSenseScript />.
 ---
@@ -21,10 +21,11 @@
               cmpLoaded: false,
               cmpStatus: 'stub',
               displayStatus: 'hidden',
-              apiVersion: '2.2',
+              apiVersion: '2.3',
               cmpVersion: 1,
               cmpId: 0,
-              tcfPolicyVersion: 4,
+              gvlVersion: 3,
+              tcfPolicyVersion: 5,
             },
             true
           );
