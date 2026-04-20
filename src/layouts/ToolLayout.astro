@@ -6,7 +6,7 @@ import RelatedTools from '~/components/RelatedTools.astro';
 import StartHere from '~/components/StartHere.astro';
 import ToolTips from '~/components/ToolTips.astro';
 import FollowUpTools from '~/components/FollowUpTools.astro';
-import AdSlot from '~/components/AdSlot.astro';
+import AdSlot from '~/components/ads/AdSlot.tsx';
 import type { ToolConfig } from '~/data/tools';
 import { CATEGORIES, toolHref } from '~/data/tools';
 import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
@@ -54,13 +54,17 @@ const webAppJsonLd = {
       <StartHere tool={tool} />
     </header>
 
-    <AdSlot slot="below-intro" />
+    <div class="my-6">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
 
     <section aria-label="Tool" class="mb-8">
       <slot />
     </section>
 
-    <AdSlot slot="below-tool" />
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
 
     <section class="prose-tool max-w-3xl">
       <h2>How to use</h2>
@@ -77,9 +81,22 @@ const webAppJsonLd = {
       ))}
     </section>
 
+    <div class="my-6">
+      <AdSlot client:idle zoneId="EPSILON" />
+    </div>
+
     <FollowUpTools tool={tool} />
     <FAQ items={tool.faq} />
     <ToolTips tool={tool} />
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="ZETA" />
+    </div>
+
     <RelatedTools tool={tool} />
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
   </article>
 </BaseLayout>

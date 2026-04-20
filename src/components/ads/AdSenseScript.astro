@@ -1,0 +1,14 @@
+---
+// AdSense loader — renders only when PUBLIC_ADSENSE_PUBLISHER_ID is set.
+// Injects the adsbygoogle loader script once per page.
+// Include in BaseLayout.astro <head> slot.
+const publisherId = import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID as string | undefined;
+---
+{publisherId && (
+  <script
+    is:inline
+    async
+    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${publisherId}`}
+    crossorigin="anonymous"
+  />
+)}

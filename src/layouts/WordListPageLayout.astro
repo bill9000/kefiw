@@ -2,7 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import FAQ from '~/components/FAQ.astro';
-import AdSlot from '~/components/AdSlot.astro';
+import AdSlot from '~/components/ads/AdSlot.tsx';
 import type { ContentPageConfig } from '~/data/content-pages';
 import { TOOLS_BY_ID, toolHref } from '~/data/tools';
 
@@ -28,6 +28,8 @@ const crumbs = [
 
 const LIST_GROUP_THRESHOLD = 80;
 const DISPLAY_CAP = 3000;
+const MODULO_N = 20;
+const MODULO_MIN_LEN = 100;
 
 const lengths = new Set(words.map((w) => w.length));
 const groupByLength = !config.flatList && words.length > LIST_GROUP_THRESHOLD && lengths.size > 1;
@@ -42,6 +44,15 @@ if (groupByLength) {
 const wordLengths = Object.keys(wordsByLength)
   .map(Number)
   .sort((a, b) => a - b);
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+const flatChunks = !groupByLength && displayWords.length >= MODULO_MIN_LEN
+  ? chunk(displayWords, MODULO_N)
+  : null;
 
 const derivedRelated = (config.relatedIds ?? [])
   .map((id) => TOOLS_BY_ID[id])
@@ -105,7 +116,9 @@ const showCtaRow = !!config.primaryCta || secondaryCtas.length > 0;
       </section>
     )}
 
-    <AdSlot slot="below-intro" />
+    <div class="my-6">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
 
     <section aria-label="Word list" class="mb-10">
       <h2 class="mb-3 text-xl font-semibold">
@@ -137,6 +150,19 @@ const showCtaRow = !!config.primaryCta || secondaryCtas.length > 0;
             </details>
           ))}
         </div>
+      ) : flatChunks ? (
+        <div class="space-y-3">
+          {flatChunks.map((group, i) => (
+            <>
+              <ul class="flex flex-wrap gap-1.5 font-mono text-sm">
+                {group.map((w) => <li class="chip">{w}</li>)}
+              </ul>
+              {i < flatChunks.length - 1 && (
+                <AdSlot client:idle zoneId="GAMMA" format="banner" />
+              )}
+            </>
+          ))}
+        </div>
       ) : (
         <ul class="flex flex-wrap gap-1.5 font-mono text-sm">
           {displayWords.map((w) => <li class="chip">{w}</li>)}
@@ -144,7 +170,9 @@ const showCtaRow = !!config.primaryCta || secondaryCtas.length > 0;
       )}
     </section>
 
-    <AdSlot slot="below-tool" />
+    <div class="my-6">
+      <AdSlot client:idle zoneId="EPSILON" />
+    </div>
 
     {(config.howTo?.length || config.examples?.length) && (
       <section class="prose-tool max-w-3xl">
