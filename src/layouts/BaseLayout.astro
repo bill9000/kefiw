@@ -5,6 +5,7 @@ import Footer from '~/components/Footer.astro';
 import SystemTray from '~/components/SystemTray.tsx';
 import ConsentAnchor from '~/components/ConsentAnchor.tsx';
 import AdSenseScript from '~/components/ads/AdSenseScript.astro';
+import ConsentBoot from '~/components/ConsentBoot.astro';
 
 interface Props {
   title: string;
@@ -59,6 +60,7 @@ const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string | und
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
     <slot name="head" />
+    <ConsentBoot />
     <AdSenseScript />
     {analyticsToken && (
       <script

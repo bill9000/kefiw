@@ -9,6 +9,8 @@
 // AdSlot reads __KFW_CONSENT at push time; anything !== 'full' → requestNonPersonalizedAds=1.
 
 import { track, disableTelemetry } from './telemetry';
+import { initTcf, updateTcf } from './tcf';
+import { initGpp, updateGpp } from './gpp';
 
 export type ConsentState = 'pending' | 'ltd' | 'full';
 export type Region = 'EU' | 'UK' | 'US' | 'ROW';
@@ -79,12 +81,19 @@ export async function initConsent(): Promise<void> {
   if (typeof window === 'undefined') return;
   const stored = read();
   if (stored) {
+    const region = readRegion() ?? 'ROW';
+    window.__KFW_REGION = region;
+    initTcf(stored, region);
+    initGpp(stored, region);
     setConsent(stored, { silent: true });
     return;
   }
   const region = await resolveRegion();
   window.__KFW_REGION = region;
-  setConsent(defaultForRegion(region), { silent: true });
+  const initial = defaultForRegion(region);
+  initTcf(initial, region);
+  initGpp(initial, region);
+  setConsent(initial, { silent: true });
 }
 
 interface SetOpts {
@@ -96,6 +105,10 @@ export function setConsent(state: ConsentState, opts: SetOpts = {}): void {
   const prev = window.__KFW_CONSENT;
   window.__KFW_CONSENT = state;
   write(state);
+
+  const region = (window.__KFW_REGION as Region) ?? 'ROW';
+  updateTcf(state, region);
+  updateGpp(state, region);
 
   if (opts.silent) {
     window.dispatchEvent(new CustomEvent('kfw:consent-change', { detail: { state, prev } }));
