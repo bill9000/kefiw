@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/scrub-guard.mjs",
     "build:og": "node scripts/build-og.mjs",
     "preview": "astro preview",
+    "pages:dev": "wrangler pages dev",
+    "pages:deploy": "wrangler pages deploy dist --project-name kefiw",
     "astro": "astro",
     "check": "astro check"
   },
@@ -20,6 +22,7 @@
     "lucide-react": "^1.8.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "resend": "^6.12.0",
     "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
@@ -27,6 +30,7 @@
     "@resvg/resvg-js": "^2.6.2",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "wrangler": "^4.83.0"
   }
 }
