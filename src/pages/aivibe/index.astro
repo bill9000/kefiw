@@ -1,0 +1,65 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+---
+<BaseLayout
+  title="AIvibe — Decision Core Access Request"
+  description="Request access to AIvibe, the decision-core companion to Kefiw's tool stack."
+  canonical="/aivibe/"
+  keywords={['aivibe', 'decision core', 'waitlist']}
+  noindex={true}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/aivibe/', label: 'AIvibe' }]} />
+
+  <article class="container-wide py-10">
+    <header class="mb-8 font-mono">
+      <div class="mb-2 text-[11px] uppercase tracking-[0.22em] text-[#22d3ee]">▸ KFW-BRIDGE // AIVIBE_CORE</div>
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl text-slate-900">
+        [AIVIBE // DECISION_CORE]
+      </h1>
+      <p class="mt-3 max-w-2xl text-base text-slate-700">
+        Kefiw calculates. AIvibe decides. Same industrial interface, same deterministic
+        discipline — applied to the choices your runway depends on.
+      </p>
+    </header>
+
+    <section
+      aria-label="Access request"
+      class="mb-10 max-w-2xl rounded-lg border border-slate-800 bg-slate-950 p-6 font-mono text-slate-200"
+    >
+      <div class="mb-4 text-[11px] uppercase tracking-[0.22em] text-[#facc15]">
+        ▸ ACCESS_PROTOCOL // LIMITED_COHORT
+      </div>
+      <p class="mb-4 text-sm text-slate-300">
+        Cohort intake is manual. Submit the request below; operators are onboarded
+        in batches keyed to current decision-core capacity.
+      </p>
+      <a
+        href="mailto:aivibe@kefiw.com?subject=AIvibe%20Access%20Request"
+        id="aivibe-cta"
+        class="inline-block rounded border border-[#22d3ee] px-4 py-2 text-sm text-[#22d3ee] no-underline hover:bg-[#22d3ee] hover:text-slate-950"
+      >
+        [INITIATE_REQUEST]
+      </a>
+    </section>
+
+    <section aria-label="Status" class="max-w-2xl font-mono text-xs text-slate-500">
+      <div>[CHANNEL_STATUS: ONLINE]</div>
+      <div>[QUEUE_POSITION: UNASSIGNED_UNTIL_REQUEST]</div>
+      <div class="mt-3">
+        <a href="/" class="text-slate-400 underline hover:text-slate-200">← Return to Kefiw</a>
+      </div>
+    </section>
+  </article>
+
+  <script>
+    import { track } from '~/lib/telemetry';
+    track({ event_type: 'modal_open', tool_id: 'aivibe' });
+    const cta = document.getElementById('aivibe-cta');
+    if (cta) {
+      cta.addEventListener('click', () => {
+        track({ event_type: 'click', tool_id: 'aivibe', zone_id: 'AIVIBE_CTA' });
+      });
+    }
+  </script>
+</BaseLayout>
