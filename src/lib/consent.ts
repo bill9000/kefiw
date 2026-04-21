@@ -1,16 +1,16 @@
-// Consent state machine — drives AdSlot LTD mode + Persistent Telemetry Bar.
+// Consent state machine — drives first-party telemetry gating.
+//
+// Ad consent is handled by Google's certified CMP (AdSense Privacy & Messaging).
+// This machine only governs our own Cloudflare Analytics + /worker/ telemetry.
 //
 // Three states:
-//   'pending' — hard-gate regions (EU/UK), no ads until user picks
-//   'ltd'     — contextual / non-personalized (default for US/ROW; EU/UK post-deny)
-//   'full'    — personalized targeting enabled
+//   'pending' — EU/UK default, telemetry off until user picks
+//   'ltd'     — US/ROW default, telemetry on, ad personalization off
+//   'full'    — telemetry on, ad personalization upgrade signal
 //
-// Public surface: window.__KFW_CONSENT (string) + CustomEvent 'kfw:consent-change'.
-// AdSlot reads __KFW_CONSENT at push time; anything !== 'full' → requestNonPersonalizedAds=1.
+// Public surface: window.__KFW_CONSENT + CustomEvent 'kfw:consent-change'.
 
 import { track, disableTelemetry } from './telemetry';
-import { initTcf, updateTcf } from './tcf';
-import { initGpp, updateGpp } from './gpp';
 
 export type ConsentState = 'pending' | 'ltd' | 'full';
 export type Region = 'EU' | 'UK' | 'US' | 'ROW';
@@ -83,16 +83,12 @@ export async function initConsent(): Promise<void> {
   if (stored) {
     const region = readRegion() ?? 'ROW';
     window.__KFW_REGION = region;
-    initTcf(stored, region);
-    initGpp(stored, region);
     setConsent(stored, { silent: true });
     return;
   }
   const region = await resolveRegion();
   window.__KFW_REGION = region;
   const initial = defaultForRegion(region);
-  initTcf(initial, region);
-  initGpp(initial, region);
   setConsent(initial, { silent: true });
 }
 
@@ -105,10 +101,6 @@ export function setConsent(state: ConsentState, opts: SetOpts = {}): void {
   const prev = window.__KFW_CONSENT;
   window.__KFW_CONSENT = state;
   write(state);
-
-  const region = (window.__KFW_REGION as Region) ?? 'ROW';
-  updateTcf(state, region);
-  updateGpp(state, region);
 
   if (opts.silent) {
     window.dispatchEvent(new CustomEvent('kfw:consent-change', { detail: { state, prev } }));

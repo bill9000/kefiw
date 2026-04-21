@@ -69,11 +69,10 @@ export default function AdSlot({
   const routeLtd = typeof window !== 'undefined' ? isLtdRoute() : false;
   const consent = typeof window !== 'undefined' ? getConsent() : 'ltd';
   const ltd = routeLtd || consent !== 'full';
-  const gated = consent === 'pending';
   const devMode = !PUBLISHER_ID || !slotId;
 
   useEffect(() => {
-    if (devMode || gated || typeof window === 'undefined') return;
+    if (devMode || typeof window === 'undefined') return;
 
     if (ltd && window.adsbygoogle) {
       window.adsbygoogle.requestNonPersonalizedAds = 1;
@@ -104,7 +103,7 @@ export default function AdSlot({
     }, 500);
 
     return () => clearInterval(fillCheck);
-  }, [zoneId, devMode, ltd, gated]);
+  }, [zoneId, devMode, ltd]);
 
   useEffect(() => {
     if (state !== 'filled' || viewableFiredRef.current) return;
@@ -161,15 +160,6 @@ export default function AdSlot({
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
   };
-
-  if (gated) {
-    return (
-      <div ref={shellRef} style={shellStyle} className={className} data-kfw-zone={zoneId}>
-        <div style={labelStyle}>[COMMERCIAL_DATA_FEED // KFW-ZONE-{zoneId}]</div>
-        <div style={stateTextStyle}>[ AWAITING_PROTOCOL_INPUT ]</div>
-      </div>
-    );
-  }
 
   if (devMode) {
     return (

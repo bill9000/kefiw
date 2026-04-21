@@ -6,7 +6,7 @@ const updated = '2026-04-20';
   title="Privacy Policy — Kefiw"
   description="Kefiw privacy policy. Contextual advertising by default, no personal account, tool inputs stay on your device."
   canonical="/privacy/"
-  keywords={['privacy policy', 'kefiw privacy', 'tcf 2.3', 'gpp', 'cmp']}
+  keywords={['privacy policy', 'kefiw privacy', 'google cmp', 'adsense consent']}
 >
   <article class="container-narrow py-10 prose-tool">
     <h1 class="text-3xl font-bold tracking-tight">Privacy Policy</h1>
@@ -20,26 +20,27 @@ const updated = '2026-04-20';
       <li>Health tools (<code>/health/*</code>) remain contextual-only regardless of your choice.</li>
     </ul>
 
-    <h2>Consent Management Platform (CMP)</h2>
-    <p>Kefiw operates a service-specific Consent Management Platform implementing the IAB Europe Transparency &amp; Consent Framework v2.3 and the IAB Global Privacy Platform v1.1. The CMP ID assigned by IAB Europe appears in consent strings emitted by this site; the CMP interface is the privacy anchor fixed to the bottom of every page.</p>
+    <h2>Consent Management</h2>
+    <p>Advertising consent on Kefiw is handled by Google's IAB Europe-certified Consent Management Platform (delivered by Google AdSense Privacy &amp; Messaging). In jurisdictions where consent is required (EEA, UK, Switzerland), Google's CMP banner is shown before personalised ads are served and emits the standard IAB TCF consent string on behalf of Kefiw.</p>
+    <p>Kefiw's own first-party privacy anchor (fixed to the bottom of every page) governs a separate, narrower choice: whether Kefiw may collect aggregate, non-advertising telemetry (Cloudflare Web Analytics plus anonymous impression/fill counters). These two controls are independent.</p>
     <p>Machine-readable disclosure of our on-device storage is published at <a href="/device-storage-disclosure.json">/device-storage-disclosure.json</a>.</p>
 
     <h2>Legal bases for processing</h2>
     <p>Kefiw itself relies on the following legal bases for the limited processing it performs:</p>
     <ul>
-      <li><strong>Purpose 1 — Store and/or access information on a device:</strong> consent.</li>
-      <li><strong>Purpose 9 — Understand audiences through statistics:</strong> legitimate interest (aggregate counters only).</li>
-      <li><strong>Special Purpose 1 — Security / fraud prevention:</strong> legitimate interest.</li>
-      <li><strong>Special Purpose 3 — Save and communicate privacy choices:</strong> legitimate interest.</li>
+      <li><strong>Store and/or access information on a device:</strong> consent (the first-party anchor, for telemetry storage).</li>
+      <li><strong>Understand audiences through statistics:</strong> legitimate interest (aggregate counters only).</li>
+      <li><strong>Security / fraud prevention:</strong> legitimate interest.</li>
+      <li><strong>Save and communicate privacy choices:</strong> legitimate interest.</li>
     </ul>
-    <p>All other TCF purposes (personalised advertising, profiling, cross-device matching, geolocation) are <em>not used</em> by Kefiw. Third-party advertising vendors (principally Google Advertising Products, IAB vendor ID 755) declare their own purposes and legal bases in the Global Vendor List.</p>
+    <p>Personalised advertising, profiling, cross-device matching and geolocation are <em>not used</em> by Kefiw directly. Google Advertising Products (IAB vendor ID 755) declares its own purposes and legal bases through its CMP and the IAB Global Vendor List.</p>
     <p>Our full <a href="/privacy/legitimate-interest/">Legitimate Interest Assessment (balancing test)</a> is published separately.</p>
 
     <h2>Cookies set by Kefiw</h2>
     <table>
       <thead><tr><th>Name</th><th>Purpose</th><th>Max age</th></tr></thead>
       <tbody>
-        <tr><td><code>kfw_sid</code></td><td>Anonymous session identifier for aggregate telemetry counts (TCF Purpose 1, 9)</td><td>30 days</td></tr>
+        <tr><td><code>kfw_sid</code></td><td>Anonymous session identifier for aggregate telemetry counts</td><td>30 days</td></tr>
       </tbody>
     </table>
 

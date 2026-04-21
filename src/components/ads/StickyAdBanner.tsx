@@ -4,7 +4,8 @@
 // - Shows on every cluster, including /health/* (LTD mode forces
 //   requestNonPersonalizedAds=1 there)
 // - Close button stores a dismiss timestamp; banner re-appears after 60s
-// - Hidden when consent is 'pending' (same rule as AdSlot)
+// - Ad consent is delegated to Google's CMP (AdSense Privacy & Messaging);
+//   our first-party consent state only governs LTD vs FULL personalization.
 // - Emits: ad_request, impression, viewable, fill, unfill, click, ad_close
 
 import { useEffect, useRef, useState } from 'react';
@@ -71,13 +72,12 @@ export default function StickyAdBanner(): JSX.Element | null {
   }, []);
 
   const consent = typeof window !== 'undefined' ? getConsent() : 'ltd';
-  const gated = consent === 'pending';
   const routeLtd = typeof window !== 'undefined' ? resolveCluster(window.location.pathname).risk_tier === 'ltd' : false;
   const ltd = routeLtd || consent !== 'full';
   const devMode = !PUBLISHER_ID || !SLOT_ID;
 
   useEffect(() => {
-    if (!mounted || !visible || gated || devMode || typeof window === 'undefined') return;
+    if (!mounted || !visible || devMode || typeof window === 'undefined') return;
 
     if (ltd && window.adsbygoogle) {
       window.adsbygoogle.requestNonPersonalizedAds = 1;
@@ -105,7 +105,7 @@ export default function StickyAdBanner(): JSX.Element | null {
       }
     }, 500);
     return () => clearInterval(fillCheck);
-  }, [mounted, visible, gated, devMode, ltd]);
+  }, [mounted, visible, devMode, ltd]);
 
   useEffect(() => {
     if (state !== 'filled' || viewableFiredRef.current) return;
@@ -130,7 +130,7 @@ export default function StickyAdBanner(): JSX.Element | null {
     return () => observer.disconnect();
   }, [state]);
 
-  if (!mounted || !visible || gated) return null;
+  if (!mounted || !visible) return null;
   if (state === 'unfilled' && !devMode) return null;
 
   const close = (): void => {
@@ -153,7 +153,6 @@ export default function StickyAdBanner(): JSX.Element | null {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
   };
 
   const labelStyle: React.CSSProperties = {
@@ -170,8 +169,8 @@ export default function StickyAdBanner(): JSX.Element | null {
 
   const closeBtn: React.CSSProperties = {
     position: 'absolute',
-    top: 2,
-    right: 4,
+    top: -10,
+    right: -6,
     width: 22,
     height: 22,
     padding: 0,
