@@ -37,7 +37,7 @@ const webAppJsonLd = {
   description={tool.description}
   canonical={toolHref(tool)}
   keywords={tool.keywords}
-  noindex={tool.comingSoon === true}
+  noindex={tool.comingSoon === true || tool.noindex === true}
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webAppJsonLd)} />
   <Breadcrumb crumbs={crumbs} />
