@@ -560,7 +560,7 @@ export const CLUSTERS: ClusterConfig[] = [
     ],
     faq: [
       { q: 'Why pair these four tools?', a: 'Each addresses a different axis of life logistics — geography, skill, spending, people. Together they cover the big "am I in the right configuration" decisions without overlapping scopes.' },
-      { q: 'How does this connect to the Decisions suite?', a: 'Subscription Purge pipes its monthly recovery into Runway Zero directly — cutting $50/mo extends your bankruptcy date by weeks. Upskill ROI complements Minimum Viable Rate. Geo Arbitrage pairs with Runway Zero for the "where should I live" calculation.' },
+      { q: 'How does this connect to the Finance suite?', a: 'Subscription Purge pipes its monthly recovery into Runway Zero directly — cutting $50/mo extends your bankruptcy date by weeks. Upskill ROI complements Minimum Viable Rate. Geo Arbitrage pairs with Runway Zero for the "where should I live" calculation.' },
     ],
     relatedClusterSlugs: ['cognitive-throughput'],
   },
