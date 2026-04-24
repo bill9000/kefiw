@@ -163,6 +163,72 @@ export default function ConsentAnchor(): JSX.Element | null {
   };
 
   // -------------------------------------------------------------------------
+  // EU/UK HARD-GATE MODAL — affirmative opt-in required (GDPR / UK GDPR).
+  // Shown instead of the compact bar when state is 'pending' and region is
+  // EU/UK. Both choices are equally prominent; no dismiss, no pre-check.
+  // -------------------------------------------------------------------------
+  if (view === 'bar' && state === 'pending' && isHardGate) {
+    return (
+      <>
+        <div style={modalBackdrop} aria-hidden="true" />
+        <div style={modalShell} role="dialog" aria-modal="true" aria-labelledby="kfw-consent-title">
+          <div style={modalBadgeRow}>
+            <span style={{ ...stamp, borderColor: STRONG_BORDER }} aria-hidden="true">KFW</span>
+            <span style={{ color: DIM, fontSize: 11, fontFamily: MONO_FONT }}>{region}</span>
+          </div>
+          <h2 id="kfw-consent-title" style={modalTitle}>
+            How should ads work on Kefiw?
+          </h2>
+          <p style={modalBody}>
+            Kefiw is free because we show ads. Before any ads load, please pick how they should be
+            chosen for you. You can change this any time from the privacy menu at the bottom-right.
+          </p>
+          <div style={modalOptions}>
+            <div style={modalOptionBlock}>
+              <div style={modalOptionTitle}>Personalized ads</div>
+              <div style={modalOptionDesc}>
+                Google uses anonymous signals (pages you visit, rough location) to show ads that
+                match your interests. More relevant ads, typically more revenue for the site.
+              </div>
+            </div>
+            <div style={modalOptionBlock}>
+              <div style={modalOptionTitle}>Contextual ads only</div>
+              <div style={modalOptionDesc}>
+                Ads are chosen based on the page you&rsquo;re reading right now — never your history
+                or profile. Less personalization, less data shared with Google.
+              </div>
+            </div>
+          </div>
+          <div style={modalButtonRow}>
+            <button
+              type="button"
+              style={modalBtnPrimary}
+              onClick={() => applyConsent('full')}
+              autoFocus
+            >
+              Enable personalized ads
+            </button>
+            <button
+              type="button"
+              style={modalBtnSecondary}
+              onClick={() => applyConsent('ltd')}
+            >
+              Contextual only
+            </button>
+          </div>
+          <p style={modalFootnote}>
+            Either choice keeps the site fully usable. No account needed. See our{' '}
+            <a href="/privacy/" style={{ color: BRAND, textDecoration: 'underline' }}>
+              privacy page
+            </a>{' '}
+            for details.
+          </p>
+        </div>
+      </>
+    );
+  }
+
+  // -------------------------------------------------------------------------
   // BAR
   // -------------------------------------------------------------------------
   if (view === 'bar') {
@@ -693,4 +759,126 @@ const btnDangerSmall: React.CSSProperties = {
   border: `1px solid #fecaca`,
   fontSize: 11,
   padding: '5px 10px',
+};
+
+// ---------------------------------------------------------------------------
+// EU/UK hard-gate modal — GDPR / UK GDPR affirmative opt-in.
+// ~40vh prominent overlay; both buttons equal size/weight; no dismiss.
+// ---------------------------------------------------------------------------
+
+const modalBackdrop: React.CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  background: 'rgba(15, 23, 42, 0.55)',
+  zIndex: 10000,
+};
+
+const modalShell: React.CSSProperties = {
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  zIndex: 10001,
+  width: 'min(92vw, 560px)',
+  minHeight: '40vh',
+  maxHeight: '85vh',
+  overflowY: 'auto',
+  background: BG,
+  color: TEXT,
+  border: `1px solid ${STRONG_BORDER}`,
+  borderRadius: 12,
+  boxShadow: '0 24px 60px rgba(15, 23, 42, 0.35)',
+  padding: '22px 24px',
+  fontFamily: SYS_FONT,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 14,
+};
+
+const modalBadgeRow: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+};
+
+const modalTitle: React.CSSProperties = {
+  margin: 0,
+  fontSize: 20,
+  fontWeight: 700,
+  color: TEXT,
+  lineHeight: 1.25,
+};
+
+const modalBody: React.CSSProperties = {
+  margin: 0,
+  fontSize: 14,
+  lineHeight: 1.55,
+  color: TEXT_2,
+};
+
+const modalOptions: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+  gap: 10,
+};
+
+const modalOptionBlock: React.CSSProperties = {
+  padding: 12,
+  border: `1px solid ${BORDER}`,
+  borderRadius: 8,
+  background: SUBTLE_BG,
+};
+
+const modalOptionTitle: React.CSSProperties = {
+  fontSize: 13,
+  fontWeight: 700,
+  color: TEXT,
+  marginBottom: 4,
+};
+
+const modalOptionDesc: React.CSSProperties = {
+  fontSize: 12.5,
+  lineHeight: 1.5,
+  color: TEXT_2,
+};
+
+const modalButtonRow: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: 10,
+  marginTop: 2,
+};
+
+// Equal prominence: same height, same weight, same border radius.
+// One filled blue, one outlined — both large and same size. No dark pattern.
+const modalBtnBase: React.CSSProperties = {
+  padding: '12px 14px',
+  fontFamily: SYS_FONT,
+  fontSize: 14,
+  fontWeight: 600,
+  cursor: 'pointer',
+  borderRadius: 8,
+  lineHeight: 1.2,
+  minHeight: 44,
+};
+
+const modalBtnPrimary: React.CSSProperties = {
+  ...modalBtnBase,
+  background: BRAND,
+  color: '#ffffff',
+  border: `1px solid ${BRAND}`,
+};
+
+const modalBtnSecondary: React.CSSProperties = {
+  ...modalBtnBase,
+  background: '#ffffff',
+  color: TEXT,
+  border: `1px solid ${STRONG_BORDER}`,
+};
+
+const modalFootnote: React.CSSProperties = {
+  margin: 0,
+  fontSize: 12,
+  lineHeight: 1.5,
+  color: DIM,
 };
