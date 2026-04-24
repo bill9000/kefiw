@@ -50,8 +50,8 @@ function writeRegion(region: Region): void {
 
 export function defaultForRegion(region: Region): ConsentState {
   // Hard-gate: EU/UK must affirmatively opt in → 'pending' until picked.
-  // Soft-anchor: US/ROW start at LTD with an upgrade CTA.
-  return region === 'EU' || region === 'UK' ? 'pending' : 'ltd';
+  // Soft-anchor: US/ROW start at 'full' (opt-out model); users can downgrade.
+  return region === 'EU' || region === 'UK' ? 'pending' : 'full';
 }
 
 export async function resolveRegion(): Promise<Region> {
