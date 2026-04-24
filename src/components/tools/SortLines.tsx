@@ -4,20 +4,43 @@ import { sortLines } from '~/lib/text';
 import type { SortMode } from '~/lib/text';
 import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
-const MODES: { id: SortMode; label: string }[] = [
+type ExtendedSortMode = SortMode | 'natural-asc' | 'natural-desc';
+
+const MODES: { id: ExtendedSortMode; label: string }[] = [
   { id: 'alpha-asc', label: 'A → Z' },
   { id: 'alpha-desc', label: 'Z → A' },
+  { id: 'natural-asc', label: 'Natural ↑' },
+  { id: 'natural-desc', label: 'Natural ↓' },
   { id: 'length-asc', label: 'Length ↑' },
   { id: 'length-desc', label: 'Length ↓' },
   { id: 'numeric-asc', label: 'Numeric ↑' },
   { id: 'numeric-desc', label: 'Numeric ↓' },
 ];
 
+// Natural sort uses Intl.Collator with `numeric: true` so 'item2' comes before
+// 'item10'. Standard across modern browsers.
+function naturalSort(lines: string[], caseSensitive: boolean, desc: boolean): string[] {
+  const coll = new Intl.Collator(undefined, {
+    numeric: true,
+    sensitivity: caseSensitive ? 'case' : 'base',
+  });
+  const sorted = [...lines].sort((a, b) => coll.compare(a, b));
+  return desc ? sorted.reverse() : sorted;
+}
+
 export default function SortLines() {
   const [text, setText] = useState('');
-  const [mode, setMode] = useState<SortMode>('alpha-asc');
+  const [mode, setMode] = useState<ExtendedSortMode>('alpha-asc');
   const [caseSensitive, setCaseSensitive] = useState(false);
-  const out = useMemo(() => sortLines(text, mode, caseSensitive), [text, mode, caseSensitive]);
+  const [removeEmpty, setRemoveEmpty] = useState(false);
+  const out = useMemo(() => {
+    const preLines = text.split('\n');
+    const filtered = removeEmpty ? preLines.filter((l) => l.trim() !== '') : preLines;
+    if (mode === 'natural-asc' || mode === 'natural-desc') {
+      return naturalSort(filtered, caseSensitive, mode === 'natural-desc').join('\n');
+    }
+    return sortLines(filtered.join('\n'), mode as SortMode, caseSensitive);
+  }, [text, mode, caseSensitive, removeEmpty]);
 
   return (
     <div className="space-y-3">
@@ -29,10 +52,16 @@ export default function SortLines() {
           </button>
         ))}
       </div>
-      <label className="flex items-center gap-2 text-sm">
-        <input type="checkbox" checked={caseSensitive} onChange={(e) => setCaseSensitive(e.target.checked)} />
-        Case-sensitive
-      </label>
+      <div className="flex flex-wrap gap-4">
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={caseSensitive} onChange={(e) => setCaseSensitive(e.target.checked)} />
+          Case-sensitive
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={removeEmpty} onChange={(e) => setRemoveEmpty(e.target.checked)} />
+          Remove empty lines
+        </label>
+      </div>
       <div>
         <label className="label" htmlFor="in">Input</label>
         <textarea id="in" className="input h-48 font-mono" value={text} onChange={(e) => setText(e.target.value)} placeholder="One line per item…" />

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import MathGame from '~/components/daily/MathGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/math/', label: 'Kefiw Math' },
+  { href: '/daily/math/convert/', label: 'Convert Sprint' },
+];
+---
+
+<BaseLayout
+  title="Convert Sprint — daily unit-conversion practice"
+  description="Ten rounds of unit conversion: miles to km, °F to °C, lbs to kg, and more. Tap the closest or type the exact. Fresh set at 4am ET."
+  canonical="/daily/math/convert/"
+  keywords={["unit conversion practice", "mental conversion game", "daily math game", "miles to km practice"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Convert Sprint</h1>
+      <p class="mt-1 text-slate-600">Mental unit conversion. Ten rounds. Fifteen seconds each.</p>
+    </header>
+
+    <MathGame client:only="react" gameId="math-convert" title="Convert Sprint" />
+  </article>
+</BaseLayout>

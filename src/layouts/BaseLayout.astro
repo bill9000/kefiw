@@ -14,6 +14,10 @@ interface Props {
   keywords?: string[];
   noindex?: boolean;
   ogImage?: string;
+  // Optional: used for og:title + twitter:title only. <title> stays as `title`.
+  // Set this to a Google Discover / social hook (emotion + promise). Falls back
+  // to `title` when not provided.
+  socialTitle?: string;
 }
 
 const {
@@ -24,7 +28,9 @@ const {
   keywords = [],
   noindex = false,
   ogImage = '/og-image.png',
+  socialTitle,
 } = Astro.props;
+const effectiveSocialTitle = socialTitle && socialTitle.length > 0 ? socialTitle : title;
 
 const siteUrl = Astro.site ?? new URL('https://kefiw.com');
 const canonicalUrl = new URL(canonical, siteUrl).toString();
@@ -42,7 +48,10 @@ const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string | und
     <meta name="description" content={description} />
     {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
     <link rel="canonical" href={canonicalUrl} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {noindex
+      ? <meta name="robots" content="noindex, nofollow, max-image-preview:large" />
+      : <meta name="robots" content="index, follow, max-image-preview:large" />
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/favicon.ico" sizes="32x32" />
     <link rel="mask-icon" href="/favicon.svg" color="#2666e1" />
@@ -53,7 +62,7 @@ const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string | und
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta property="og:type" content={ogType} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={effectiveSocialTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="Kefiw" />
@@ -63,7 +72,7 @@ const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string | und
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Kefiw — fast, free word tools, converters and calculators" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
+    <meta name="twitter:title" content={effectiveSocialTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
     <slot name="head" />

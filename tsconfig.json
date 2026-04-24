@@ -9,5 +9,9 @@
     }
   },
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "exclude": [
+    "dist",
+    "kefiw-worker",
+    "functions"
+  ]
 }

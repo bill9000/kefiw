@@ -13,6 +13,7 @@ export const CLUSTER_E: ContentPageConfig[] = [
     h1: 'Q Without U in Scrabble',
     subhead: 'The complete list of Q-words that do not need a U, and why they exist',
     description: 'Why some Q-words do not need a U, which ones to memorise, and how to use them for emergency Scrabble plays.',
+    discoverHeadline: 'The Scrabble Q words that score big without needing a U',
     keywords: ['q without u scrabble', 'q no u words', 'scrabble q words no u', 'qi qat faqir'],
     intro: 'Drawing a Q without a U is the classic Scrabble nightmare. This guide lists every legal Q-without-U word and explains why they exist.',
     faq: [
@@ -69,6 +70,7 @@ export const CLUSTER_E: ContentPageConfig[] = [
     h1: 'How to Use Scrabble Blanks',
     subhead: 'When to hold, when to play, and how to maximise the zero-point tile',
     description: 'Blank tiles score zero but can represent any letter. This guide covers when to play them for bingos, when to hold, and how to find the highest-value blank play.',
+    discoverHeadline: 'The Scrabble blank rule most players scored wrong for years',
     keywords: ['scrabble blanks', 'blank tile strategy', 'scrabble blank tiles', 'how to use blanks'],
     intro: 'Blanks are the most valuable tiles in Scrabble despite scoring zero points themselves. This guide explains the strategy around them.',
     faq: [
@@ -117,6 +119,7 @@ export const CLUSTER_E: ContentPageConfig[] = [
     h1: 'Scrabble Scoring Explained',
     subhead: 'Tile values, bonus squares, multipliers, and the bingo bonus',
     description: 'How Scrabble scoring works, including tile values, double/triple letter squares, double/triple word squares, and the 50-point bingo bonus.',
+    discoverHeadline: 'Why your Scrabble score keeps falling short of 200 a game',
     keywords: ['scrabble scoring', 'scrabble tile values', 'scrabble bonus squares', 'how scrabble scoring works'],
     intro: 'Scrabble scoring looks simple but has a few subtleties. Here is the full reference — tile values, bonus squares, and the 50-point bingo bonus.',
     faq: [
@@ -177,6 +180,7 @@ export const CLUSTER_E: ContentPageConfig[] = [
     h1: 'Scrabble Bingo Strategy',
     subhead: 'Rack management, prefix-suffix hooks, and spotting 7-letter plays',
     description: 'How to find and play bingos — the 7-letter plays that earn a 50-point bonus. Covers rack balance, prefix/suffix thinking, and common bingo stems.',
+    discoverHeadline: 'The tile habit that costs Scrabble players a 50-point bingo',
     keywords: ['scrabble bingo', 'how to find bingos', '7 letter scrabble', 'scrabble bingo strategy'],
     intro: 'A bingo is worth 50 points on top of the word score — the single biggest edge in Scrabble. This guide covers the habits and patterns that make bingos reliable.',
     faq: [
@@ -220,6 +224,7 @@ export const CLUSTER_E: ContentPageConfig[] = [
     h1: 'Wordle Strategy Guide',
     subhead: 'Best openers, narrowing technique, and endgame decisions',
     description: 'How to win Wordle in fewer guesses — choose openers that maximise information, narrow candidates efficiently, and know when to sacrifice a turn.',
+    discoverHeadline: 'The Wordle opener the top 1% of solvers use every morning',
     keywords: ['wordle strategy', 'best wordle opener', 'wordle tips', 'how to win wordle'],
     intro: 'Wordle rewards information, not lucky guesses. This guide covers openers, narrowing, and endgame play.',
     faq: [
@@ -270,6 +275,7 @@ export const CLUSTER_E: ContentPageConfig[] = [
     title: 'Crossword Pattern Search Tips — Using Wildcards to Solve Clues — Kefiw',
     h1: 'Crossword Pattern Search Tips',
     subhead: 'How to use pattern search to unstick hard crosswords',
+    discoverHeadline: 'The crossword wildcard trick that unsticks any blocked puzzle',
     description: 'Practical tips for using the pattern search to solve crosswords — letter positions, wildcards, and narrowing results.',
     keywords: ['crossword pattern search', 'crossword wildcard', 'crossword solver tips', 'pattern search crossword'],
     intro: 'Pattern search is the most powerful crossword-solving tool available. Here is how to use it without cheating yourself out of the puzzle.',
@@ -310,6 +316,7 @@ export const CLUSTER_E: ContentPageConfig[] = [
     h1: 'Perfect Rhymes vs Near Rhymes',
     subhead: 'How poets and songwriters use different kinds of rhyme',
     description: 'The difference between perfect rhymes, slant rhymes, eye rhymes, and near rhymes — with examples from poetry and song.',
+    discoverHeadline: 'The difference between perfect and near rhyme most poets miss',
     metaDescription: 'Learn the difference between perfect rhymes, near rhymes, slant rhymes, and eye rhymes, with practical tips for poems, lyrics, and revision.',
     keywords: ['perfect rhyme', 'near rhyme', 'slant rhyme', 'eye rhyme', 'rhyme types'],
     intro: 'Perfect rhymes create a clean sound match. Near rhymes loosen that match so a poem or lyric can sound more natural, surprising, or conversational. The craft is choosing the rhyme type that fits the line, not forcing every ending into the neatest possible pair.',
@@ -428,6 +435,7 @@ Good rhyme joins sound and meaning. Perfect rhyme gives closure. Near rhyme give
     h1: 'How to Count Syllables',
     subhead: 'The rules and the tricky cases',
     description: 'Practical rules for counting syllables, plus common edge cases like silent e, diphthongs, and the -tion suffix.',
+    discoverHeadline: 'The syllable-counting rule even published poets get wrong',
     metaDescription: 'Learn practical syllable-counting rules for words, lines, poems, lyrics, and haiku, including silent e, vowel groups, dialect differences, and tricky words.',
     keywords: ['count syllables', 'syllable rules', 'how to count syllables', 'syllable counting'],
     intro: 'Counting syllables means counting vowel sounds, not simply counting vowel letters. Most English words follow patterns that are easy to hear, but silent letters, diphthongs, names, loanwords, and dialect differences create real edge cases.',
@@ -549,6 +557,7 @@ For rhyming poems, count before and after choosing the rhyme. A perfect rhyme ca
     h1: 'Mastering 2-Letter Words',
     subhead: 'Why every competitive Scrabble player memorises all 100',
     description: 'The 2-letter Scrabble words — why they matter, how to learn them, and which ones beginners miss.',
+    discoverHeadline: 'The 2-letter Scrabble words serious players actually memorize',
     keywords: ['scrabble 2 letter words', 'two letter words scrabble', 'memorise 2 letter words', '2 letter word mastery'],
     intro: 'Mastering every valid 2-letter word is the fastest single way to raise a Scrabble rating. Here is why, and how to do it.',
     faq: [

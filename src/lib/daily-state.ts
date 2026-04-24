@@ -33,7 +33,34 @@ export interface SudokuProgress {
   finished: boolean;
 }
 
-export type GameProgress = HuntProgress | HiveProgress | SudokuProgress;
+export interface MathRoundLog {
+  mode: 'mcq' | 'typed';
+  guess: number;
+  correct: number;
+  timeUsedSec: number;
+  roundScore: number;
+}
+
+export interface MathProgress {
+  roundIndex: number;      // next round to play (0..10)
+  totalScore: number;
+  totalTimeSec: number;
+  log: MathRoundLog[];
+  finished: boolean;
+}
+
+// Verbal progress is intentionally free-form. Each game's wrapper saves
+// whatever it needs for resume — letter mappings, found words, selected
+// tiles, etc. `finished` and `startedAt` are the only required fields.
+export interface VerbalProgress {
+  startedAt: number;
+  finishedAt?: number;
+  finished: boolean;
+  // Game-specific state lives here; typed as unknown and cast in each wrapper.
+  state: Record<string, unknown>;
+}
+
+export type GameProgress = HuntProgress | HiveProgress | SudokuProgress | MathProgress | VerbalProgress;
 
 interface ProgressByGame {
   [gameId: string]: GameProgress;

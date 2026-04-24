@@ -49,6 +49,28 @@ const TOOL_FIELDS: Record<string, string> = {
   keywords: 'keywords',
 };
 
+// Writer sometimes ships rich example objects ({ title, input, settings,
+// expected_behavior, why_it_helps }) that don't match our ExampleBlock
+// schema (just { title, body }). Fold the extra fields into `body`.
+function adaptExamples(raw: unknown): unknown {
+  if (!Array.isArray(raw)) return raw;
+  return raw.map((ex) => {
+    if (!ex || typeof ex !== 'object') return ex;
+    const e = ex as Record<string, unknown>;
+    // Already in schema — keep as-is.
+    if (typeof e.body === 'string' && !e.input && !e.settings && !e.expected_behavior && !e.why_it_helps) {
+      return { title: e.title, body: e.body };
+    }
+    const parts: string[] = [];
+    if (typeof e.input === 'string' && e.input.trim()) parts.push(`Input: ${e.input}`);
+    if (typeof e.settings === 'string' && e.settings.trim()) parts.push(`Settings: ${e.settings}`);
+    if (typeof e.expected_behavior === 'string' && e.expected_behavior.trim()) parts.push(e.expected_behavior);
+    if (typeof e.why_it_helps === 'string' && e.why_it_helps.trim()) parts.push(`Why it helps: ${e.why_it_helps}`);
+    if (typeof e.body === 'string' && e.body.trim()) parts.unshift(e.body);
+    return { title: typeof e.title === 'string' ? e.title : 'Example', body: parts.join(' · ') };
+  });
+}
+
 function flattenSuggestedEnhancements(raw: unknown): string[] | undefined {
   if (!raw) return undefined;
   if (Array.isArray(raw)) {
@@ -76,7 +98,7 @@ function pickMapped(source: Record<string, unknown>, map: Record<string, string>
   const out: Record<string, unknown> = {};
   for (const [writerKey, ourKey] of Object.entries(map)) {
     if (source[writerKey] !== undefined && source[writerKey] !== null) {
-      out[ourKey] = source[writerKey];
+      out[ourKey] = ourKey === 'examples' ? adaptExamples(source[writerKey]) : source[writerKey];
     }
   }
   return out;

@@ -32,11 +32,24 @@ function gameBadge(result: GameResult | undefined): { label: string; tone: 'clea
   if (isCleared(result)) {
     if (result.gameId === 'hunt') return { label: `Solved in ${result.guesses}`, tone: 'cleared' };
     if (result.gameId === 'hive') return { label: `${result.points} pts`, tone: 'cleared' };
-    return { label: `${result.timeSec}s`, tone: 'cleared' };
+    if (result.gameId === 'sudoku') return { label: `${result.timeSec}s`, tone: 'cleared' };
+    // math-* and verbal-* both carry .score
+    return { label: `${result.score} pts`, tone: 'cleared' };
   }
   if (result.gameId === 'hive') return { label: `${result.points} pts — keep going`, tone: 'partial' };
   if (result.gameId === 'hunt') return { label: 'Did not solve', tone: 'partial' };
+  if ('score' in result) {
+    const threshold = result.gameId.startsWith('math-') ? 300 : 450;
+    return { label: `${result.score} pts — below ${threshold}`, tone: 'partial' };
+  }
   return { label: 'Unsolved', tone: 'partial' };
+}
+
+function gameHref(pipelineId: string, gameSlug: string): string {
+  // Pipelines route their games under a subpath; core lives at /daily/${slug}/.
+  if (pipelineId === 'math') return `/daily/math/${gameSlug}/`;
+  if (pipelineId === 'verbal') return `/daily/verbal/${gameSlug}/`;
+  return `/daily/${gameSlug}/`;
 }
 
 export default function DailyHub({ pipelines, games }: Props) {
@@ -170,7 +183,7 @@ export default function DailyHub({ pipelines, games }: Props) {
                 return (
                   <li key={gid}>
                     <a
-                      href={`/daily/${game.slug}/`}
+                      href={gameHref(pipeline.id, game.slug)}
                       className="block h-full rounded-md border border-slate-200 p-3 transition hover:border-brand-500 hover:bg-brand-50"
                     >
                       <div className="flex items-center justify-between">

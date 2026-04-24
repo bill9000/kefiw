@@ -30,6 +30,12 @@ export async function submitDailyScore(
       payload.tier = result.tier;
     } else if (result.gameId === 'sudoku') {
       payload.time_sec = result.timeSec;
+    } else if (result.gameId.startsWith('math-')) {
+      payload.points = result.score;         // stored in the existing `points` column
+      payload.time_sec = result.timeSec;     // total session time
+    } else if (result.gameId.startsWith('verbal-')) {
+      payload.points = result.score;
+      payload.time_sec = result.timeSec;
     }
     const body: Record<string, unknown> = {
       daily_date: dailyDate,
@@ -100,6 +106,34 @@ export async function fetchLeaderboard(
     );
     if (!res.ok) return [];
     const data = (await res.json()) as { results?: LeaderboardRow[] };
+    return data.results ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export interface PipelineLeaderboardRow {
+  handle: string | null;
+  total_score: number;
+  total_time_sec: number;
+  games_cleared: number;
+  submitted_at: number;
+}
+
+// Pipeline-level leaderboard: aggregates per-game scores across the pipeline's
+// games for a given day. Returns only devices that cleared every game.
+export async function fetchPipelineLeaderboard(
+  dailyDate: string,
+  pipelineId: string,
+  limit = 50
+): Promise<PipelineLeaderboardRow[]> {
+  if (!WORKER_URL) return [];
+  try {
+    const res = await fetch(
+      `${WORKER_URL}/daily/leaderboard/pipeline?date=${encodeURIComponent(dailyDate)}&pipeline=${encodeURIComponent(pipelineId)}&limit=${limit}`
+    );
+    if (!res.ok) return [];
+    const data = (await res.json()) as { results?: PipelineLeaderboardRow[] };
     return data.results ?? [];
   } catch {
     return [];

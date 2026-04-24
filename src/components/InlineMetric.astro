@@ -1,9 +1,18 @@
 ---
 import LiveMetric from './LiveMetric.tsx';
 
+// Must match the metric union in ContentPageConfig.liveMetrics (src/data/content-pages.ts).
 interface LmSpec {
   token: string;
-  metric: 'runway_months' | 'survival_efficiency' | 'cognitive_load' | 'willpower_pct';
+  metric:
+    | 'runway_months'
+    | 'survival_efficiency'
+    | 'cognitive_load'
+    | 'willpower_pct'
+    | 'reagent_concentration_mg_ml'
+    | 'reagent_waste_pct'
+    | 'reagent_potency_pct'
+    | 'mass_loss_pct';
   fallback: string;
   decimals?: number;
   suffix?: string;

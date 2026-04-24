@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import VerbalShift from '~/components/daily/VerbalShift.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/verbal/', label: 'Kefiw Verbal' },
+  { href: '/daily/verbal/shift/', label: 'Letter Shift' },
+];
+---
+
+<BaseLayout
+  title="Daily Letter Shift — align columns into real words"
+  description="Five columns of letters. Compose real words using one letter from each, in order. Fresh puzzle daily at 4am ET."
+  canonical="/daily/verbal/shift/"
+  keywords={["daily word puzzle", "letter column game", "typeshift puzzle", "daily verbal game"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Letter Shift</h1>
+      <p class="mt-1 text-slate-600">Type a word using one letter from each column, in order. Find all targets to clear.</p>
+    </header>
+
+    <VerbalShift client:only="react" />
+  </article>
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import VerbalLink from '~/components/daily/VerbalLink.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/verbal/', label: 'Kefiw Verbal' },
+  { href: '/daily/verbal/link/', label: 'Link Grid' },
+];
+---
+
+<BaseLayout
+  title="Daily Link Grid — group 16 tiles into 4 categories"
+  description="Sixteen tiles, four hidden categories. Find each group of four to solve. Four mistakes ends the run. Fresh puzzle daily at 4am ET."
+  canonical="/daily/verbal/link/"
+  keywords={["daily connections game", "tile grouping puzzle", "category word game", "daily word puzzle"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Link Grid</h1>
+      <p class="mt-1 text-slate-600">Select four tiles that share a category. Four mistakes ends the run.</p>
+    </header>
+
+    <VerbalLink client:only="react" />
+  </article>
+</BaseLayout>

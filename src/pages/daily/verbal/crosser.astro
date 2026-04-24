@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import VerbalCrosser from '~/components/daily/VerbalCrosser.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/verbal/', label: 'Kefiw Verbal' },
+  { href: '/daily/verbal/crosser/', label: 'Mini Crosser' },
+];
+---
+
+<BaseLayout
+  title="Daily Mini Crosser — small crossword from a letter pool"
+  description="Fill a mini-crossword grid using a handful of given letters. Overlapping words. Fresh puzzle daily at 4am ET."
+  canonical="/daily/verbal/crosser/"
+  keywords={["daily mini crossword", "small crossword puzzle", "letter pool crossword", "daily word game"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Mini Crosser</h1>
+      <p class="mt-1 text-slate-600">Tap a cell, pick a letter from the pool, and build overlapping words.</p>
+    </header>
+
+    <VerbalCrosser client:only="react" />
+  </article>
+</BaseLayout>

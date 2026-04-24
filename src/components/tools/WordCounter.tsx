@@ -38,6 +38,8 @@ export default function WordCounter() {
   const [scriptMode, setScriptMode] = useToolSetting<'off' | 'on'>('kefiw.mode.wordcount-script', 'off');
   const [scriptDuration, setScriptDuration] = useState<number>(2);
   const [scriptUnit, setScriptUnit] = useState<ScriptUnit>('min');
+  const [customTargetWords, setCustomTargetWords] = useState<number>(0);
+  const [customTargetChars, setCustomTargetChars] = useState<number>(0);
 
   const stats = useMemo(() => textStats(text), [text]);
 
@@ -241,6 +243,66 @@ export default function WordCounter() {
           </div>
         )}
       </div>
+
+      {/* Custom target — user-entered word/char limit for over/under feedback */}
+      {(text.length > 0 || customTargetWords > 0 || customTargetChars > 0) && (
+        <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm">
+          <div className="mb-2 font-semibold text-slate-800">Custom target</div>
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2">
+              <span className="text-slate-700">Target words</span>
+              <input
+                type="number"
+                min={0}
+                value={customTargetWords || ''}
+                onChange={(e) => setCustomTargetWords(Math.max(0, Number(e.target.value) || 0))}
+                className="input w-24"
+                placeholder="0"
+              />
+              {customTargetWords > 0 && (
+                <span className={`rounded px-2 py-0.5 text-xs font-semibold ${
+                  stats.words > customTargetWords ? 'bg-red-100 text-red-800'
+                    : stats.words === customTargetWords ? 'bg-emerald-100 text-emerald-800'
+                    : 'bg-amber-100 text-amber-800'
+                }`}>
+                  {stats.words > customTargetWords ? `${stats.words - customTargetWords} over`
+                    : stats.words === customTargetWords ? 'exact'
+                    : `${customTargetWords - stats.words} left`}
+                </span>
+              )}
+            </label>
+            <label className="flex items-center gap-2">
+              <span className="text-slate-700">Target chars</span>
+              <input
+                type="number"
+                min={0}
+                value={customTargetChars || ''}
+                onChange={(e) => setCustomTargetChars(Math.max(0, Number(e.target.value) || 0))}
+                className="input w-24"
+                placeholder="0"
+              />
+              {customTargetChars > 0 && (
+                <span className={`rounded px-2 py-0.5 text-xs font-semibold ${
+                  stats.characters > customTargetChars ? 'bg-red-100 text-red-800'
+                    : stats.characters === customTargetChars ? 'bg-emerald-100 text-emerald-800'
+                    : 'bg-amber-100 text-amber-800'
+                }`}>
+                  {stats.characters > customTargetChars ? `${stats.characters - customTargetChars} over`
+                    : stats.characters === customTargetChars ? 'exact'
+                    : `${customTargetChars - stats.characters} left`}
+                </span>
+              )}
+            </label>
+          </div>
+        </div>
+      )}
+
+      {/* Lack-of-spaces warning for text that looks like it's missing word breaks */}
+      {text.length > 40 && stats.words <= 2 && (
+        <div className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          <strong>Heads up:</strong> this text appears to lack spaces between words. Word count may be wrong. Add spaces or switch to the Letter Counter for per-character analysis.
+        </div>
+      )}
 
       {stats.words > 0 && (
         <div className="flex justify-end">

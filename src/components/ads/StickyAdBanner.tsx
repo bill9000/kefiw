@@ -86,7 +86,9 @@ export default function StickyAdBanner(): JSX.Element | null {
     }
 
     try {
-      (window.adsbygoogle = window.adsbygoogle ?? []).push({});
+      const ads = (window.adsbygoogle ?? []) as NonNullable<Window['adsbygoogle']>;
+      window.adsbygoogle = ads;
+      ads.push({} as Record<string, unknown>);
       track({ event_type: 'ad_request', zone_id: 'STICKY' });
     } catch {
       /* AdSense script not ready */

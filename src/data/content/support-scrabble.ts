@@ -14,6 +14,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'Which two-letter plays actually matter, and why.',
     outcomeLine: 'Memorise this shortlist and your hook-play score goes up immediately.',
     description: 'The highest-value 2-letter Scrabble words ranked by score and playability, with the ones most worth memorising first.',
+    discoverHeadline: 'The 10 two-letter Scrabble words that quietly win tight games',
     keywords: ['best 2 letter scrabble words', '2 letter scrabble words', 'top 2-letter scrabble'],
     intro: 'Two-letter words are the backbone of Scrabble scoring. Every hook play and parallel extension uses one. Learn the ones that score best and crop up most often.',
     keyPoints: [
@@ -52,6 +53,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'The three-letter words that win more games than the length suggests.',
     outcomeLine: 'Three-letter high scorers let you unload awkward tiles without opening the board.',
     description: 'The most valuable 3-letter Scrabble words — J, Q, X, Z plays plus the vowel-dumpers that save a tight rack.',
+    discoverHeadline: 'The 3-letter Scrabble words that outscore most 7-letter plays',
     keywords: ['best 3 letter scrabble words', '3 letter scrabble words', 'top 3-letter scrabble'],
     intro: 'Three-letter words are the workhorse length in Scrabble — long enough to hit two bonus squares, short enough to fit in tight board positions. The best ones combine a high-value tile with two easy letters.',
     keyPoints: [
@@ -90,6 +92,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'Same grid feeling, different tile values and bonus squares.',
     outcomeLine: 'Know the tile-value and bonus-layout differences and you stop mis-costing your plays.',
     description: 'The concrete scoring differences between Scrabble and Words With Friends — tile values, bonus squares, bingo bonus, and dictionary.',
+    discoverHeadline: 'Why Scrabble scores crash when you switch to Words With Friends',
     keywords: ['words with friends vs scrabble', 'wwf scoring', 'words with friends tile values'],
     intro: 'Words With Friends looks like Scrabble at a glance, but the tile values, bonus-square positions, and dictionary all differ. Plays that feel strong in one game can be mediocre in the other.',
     keyPoints: [
@@ -127,6 +130,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'The 7-letter words that actually come up — suffix-driven, vowel-balanced, high-probability.',
     outcomeLine: 'Learn the common stem-plus-suffix combinations and bingo rate goes from occasional to routine.',
     description: 'The 7-letter words most likely to materialise on your rack, organised by stem + suffix patterns.',
+    discoverHeadline: 'The 7-letter Scrabble bingos experts set up on turn two',
     keywords: ['best bingo words scrabble', '7 letter words scrabble', 'common bingo plays'],
     intro: 'A bingo (using all 7 tiles for a 50-point bonus) looks like magic but is mostly pattern recognition. Most bingos come from a short stem plus a common suffix — learn the stems, and the bingo finds you.',
     keyPoints: [
@@ -165,6 +169,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'The habits that let you spot a 50-point play when the board is tight.',
     outcomeLine: 'Keep a balanced rack, know your stems, and scan the board for hook squares — bingos appear more often than you think.',
     description: 'A practical process for finding bingo plays — rack balance, stem recognition, and board-scan technique.',
+    discoverHeadline: 'How top Scrabble players spot a 50-point bingo in ten seconds',
     keywords: ['find bingo plays scrabble', 'how to bingo scrabble', 'scrabble bingo technique'],
     intro: 'Finding a bingo is two problems stacked — first, having a rack that can form one; second, finding a place on the board it will fit. Good players manage both in parallel throughout the game.',
     keyPoints: [
@@ -203,6 +208,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'Where to dump the Z before a vowel problem traps you.',
     outcomeLine: 'Z is a 10-point tile — use it on short, bonus-adjacent plays and it pays for itself.',
     description: 'The most valuable Scrabble words containing Z, ranked by score and playability — 2, 3, and 4-letter options for tight board positions.',
+    discoverHeadline: 'The Scrabble Z words that score 30+ without a bonus square',
     keywords: ['best scrabble words with z', 'scrabble z words', 'high scoring z words'],
     intro: 'The Z is worth 10 points — one of the two highest-value tiles in Scrabble. Short Z plays are usually more valuable than long ones because you can land them on premium squares and hook off existing words.',
     keyPoints: [
@@ -241,6 +247,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'X is the second-highest scorer and the easiest to place — here is how to make it count.',
     outcomeLine: 'X is an 8-point tile that plays short. Hook it, park it on a premium square, move on.',
     description: 'The most valuable Scrabble words with X, including the critical 2-letter X plays and common 3/4-letter options.',
+    discoverHeadline: 'The Scrabble X words that turn a stuck rack into 20 points',
     keywords: ['best scrabble words with x', 'scrabble x words', 'high scoring x words'],
     intro: 'X scores 8 points and plays surprisingly short. The 2-letter X words are the single most-useful vocabulary list in Scrabble — they give you parallel-play bingos that use the X as a shared letter.',
     keyPoints: [
@@ -278,6 +285,7 @@ export const SUPPORT_SCRABBLE: ContentPageConfig[] = [
     subhead: 'J is valuable but stubborn — here are the short plays that solve awkward-rack situations.',
     outcomeLine: 'J needs a vowel to land softly — know JO, JAB, JET, JIB and the rest and you unload J smoothly.',
     description: 'The most useful Scrabble words with J — short plays and common extensions that prevent the J from stranding on your rack.',
+    discoverHeadline: 'The Scrabble J words most players forget at the worst time',
     keywords: ['best scrabble words with j', 'scrabble j words', 'high scoring j words'],
     intro: 'J is worth 8 points but often feels stuck on your rack. Unlike X and Z, there is no 2-letter J word — so the shortest plays are 3-letter. Knowing the J-friendly triples turns an awkward tile into a productive play.',
     keyPoints: [

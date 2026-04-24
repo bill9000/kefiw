@@ -13,6 +13,15 @@ export interface Env {
   DAILY_HMAC_SECRET?: string;
 }
 
+// Server-side mirror of src/data/daily-pipelines.ts. Kept in sync by hand —
+// the pipeline leaderboard endpoint trusts this list, not the client's claim.
+// When you add or reshuffle a pipeline, update both files.
+const PIPELINE_GAMES: Record<string, string[]> = {
+  core: ["hunt", "hive", "sudoku"],
+  math: ["math-percent", "math-discount", "math-convert", "math-tip", "math-timedelta"],
+  verbal: ["verbal-crypt", "verbal-link", "verbal-shift", "verbal-crosser", "verbal-twist"],
+};
+
 async function hmacSha256Hex(secret: string, msg: string): Promise<string> {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -202,7 +211,10 @@ export default {
       const sortKey =
         gameId === "hunt" ? "guesses" :
         gameId === "hive" ? "points" :
-        gameId === "sudoku" ? "time_sec" : "points";
+        gameId === "sudoku" ? "time_sec" :
+        gameId.startsWith("math-") ? "points" :
+        gameId.startsWith("verbal-") ? "points" :
+        "points";
       const { results } = await env.DB
         .prepare(
           `SELECT handle, cleared, guesses, points, tier, time_sec, submitted_at
@@ -214,6 +226,52 @@ export default {
         .bind(dailyDate, gameId, limit)
         .all();
       return json({ daily_date: dailyDate, game_id: gameId, results }, { headers: cors });
+    }
+
+    // Pipeline-level leaderboard: aggregates per-game scores across the pipeline's
+    // games for a given day. Returns only devices that cleared every game in the
+    // pipeline. Pipeline game set is server-side so clients can't forge.
+    if (url.pathname === "/daily/leaderboard/pipeline" && req.method === "GET") {
+      const dailyDate = url.searchParams.get("date") ?? "";
+      const pipelineId = url.searchParams.get("pipeline") ?? "";
+      const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit") ?? 50)));
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dailyDate) || !/^[a-z0-9_-]{1,32}$/.test(pipelineId)) {
+        return json({ error: "invalid_query" }, { status: 400, headers: cors });
+      }
+      const pipelineGames = PIPELINE_GAMES[pipelineId];
+      if (!pipelineGames) {
+        return json({ error: "unknown_pipeline" }, { status: 404, headers: cors });
+      }
+      // For each device_hash that cleared every game in the pipeline on this day,
+      // sum points (for point-based games) and time_sec (for time-based games).
+      // SQL: aggregate with a JOIN, filter to devices with cleared count == pipeline.length.
+      const placeholders = pipelineGames.map(() => "?").join(",");
+      const { results } = await env.DB
+        .prepare(
+          `SELECT
+             handle,
+             MAX(submitted_at) AS submitted_at,
+             SUM(CASE WHEN cleared = 1 THEN 1 ELSE 0 END) AS games_cleared,
+             SUM(COALESCE(points, 0)) AS total_points,
+             SUM(COALESCE(time_sec, 0)) AS total_time_sec
+           FROM daily_scores
+           WHERE daily_date = ?
+             AND game_id IN (${placeholders})
+           GROUP BY device_hash
+           HAVING games_cleared = ?
+           ORDER BY total_points DESC, total_time_sec ASC, submitted_at ASC
+           LIMIT ?`
+        )
+        .bind(dailyDate, ...pipelineGames, pipelineGames.length, limit)
+        .all();
+      const rows = (results ?? []).map((r: any) => ({
+        handle: r.handle,
+        total_score: Number(r.total_points) || 0,
+        total_time_sec: Number(r.total_time_sec) || 0,
+        games_cleared: Number(r.games_cleared) || 0,
+        submitted_at: Number(r.submitted_at) || 0,
+      }));
+      return json({ daily_date: dailyDate, pipeline_id: pipelineId, results: rows }, { headers: cors });
     }
 
     return json({ error: "not_found" }, { status: 404, headers: cors });

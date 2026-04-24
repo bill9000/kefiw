@@ -25,6 +25,20 @@ export const DAILY_PIPELINES: DailyPipeline[] = [
     games: ['hunt', 'hive', 'sudoku'],
     active: true,
   },
+  {
+    id: 'math',
+    label: 'Kefiw Math',
+    blurb: 'Five mental-math dashes. ~12 minutes. Trains arithmetic speed and proportional reasoning.',
+    games: ['math-percent', 'math-discount', 'math-convert', 'math-tip', 'math-timedelta'],
+    active: true,
+  },
+  {
+    id: 'verbal',
+    label: 'Kefiw Verbal',
+    blurb: 'Five letter-and-word puzzles. One seeded puzzle per game. Trains working memory and letter-pattern recognition.',
+    games: ['verbal-crypt', 'verbal-link', 'verbal-shift', 'verbal-crosser', 'verbal-twist'],
+    active: true,
+  },
 ];
 
 export const PIPELINES_BY_ID: Record<string, DailyPipeline> = Object.fromEntries(

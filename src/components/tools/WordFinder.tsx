@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useWordWorker } from './useWordWorker';
 import { useToolBool, useToolSetting } from './useToolSettings';
 import { track } from '~/lib/analytics';
@@ -36,6 +36,10 @@ export default function WordFinder({ lockedLength }: WordFinderProps = {}) {
   const [letters, setLetters] = useState(lockedLength ? '?'.repeat(lockedLength) : '');
   const [minLen, setMinLen] = useState(lockedLength ?? 2);
   const [maxLen, setMaxLen] = useState(lockedLength ?? 15);
+  const [includes, setIncludes] = useState('');
+  const [excludes, setExcludes] = useState('');
+  const [startsWith, setStartsWith] = useState('');
+  const [endsWith, setEndsWith] = useState('');
   const [results, setResults] = useState<string[]>([]);
   const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedSources = useRef(new Set<string>());
@@ -64,6 +68,19 @@ export default function WordFinder({ lockedLength }: WordFinderProps = {}) {
     }, 120);
     return () => clearTimeout(t);
   }, [letters, minLen, maxLen, mode, searchBy, send]);
+
+  // Client-side filter pipeline — no re-search when tweaking.
+  const filteredResults = useMemo(() => {
+    if (!includes && !excludes && !startsWith && !endsWith) return results;
+    return results.filter((w) => {
+      const lw = w.toLowerCase();
+      if (includes && !includes.split('').every((c) => lw.includes(c))) return false;
+      if (excludes && excludes.split('').some((c) => lw.includes(c))) return false;
+      if (startsWith && !lw.startsWith(startsWith)) return false;
+      if (endsWith && !lw.endsWith(endsWith)) return false;
+      return true;
+    });
+  }, [results, includes, excludes, startsWith, endsWith]);
 
   return (
     <div className="space-y-4">
@@ -131,13 +148,31 @@ export default function WordFinder({ lockedLength }: WordFinderProps = {}) {
           )}
         </div>
       )}
+      <div className="grid gap-2 rounded-md border border-slate-200 bg-slate-50 p-3 sm:grid-cols-4">
+        <label className="flex flex-col gap-1 text-xs text-slate-700">
+          Includes letters
+          <input className="input font-mono text-sm" value={includes} onChange={(e) => setIncludes(e.target.value.toLowerCase().replace(/[^a-z]/g, ''))} placeholder="e.g. r" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs text-slate-700">
+          Excludes letters
+          <input className="input font-mono text-sm" value={excludes} onChange={(e) => setExcludes(e.target.value.toLowerCase().replace(/[^a-z]/g, ''))} placeholder="e.g. xz" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs text-slate-700">
+          Starts with
+          <input className="input font-mono text-sm" value={startsWith} onChange={(e) => setStartsWith(e.target.value.toLowerCase().replace(/[^a-z]/g, ''))} placeholder="e.g. un" />
+        </label>
+        <label className="flex flex-col gap-1 text-xs text-slate-700">
+          Ends with
+          <input className="input font-mono text-sm" value={endsWith} onChange={(e) => setEndsWith(e.target.value.toLowerCase().replace(/[^a-z]/g, ''))} placeholder="e.g. ing" />
+        </label>
+      </div>
       <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
         <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
           checked={showScores} onChange={(e) => setShowScores(e.target.checked)} />
         <span>Show Scrabble + WWF scores</span>
       </label>
-      {phase === 'idle' && results.length > 0 && (() => {
-        const s = wordStats(results);
+      {phase === 'idle' && filteredResults.length > 0 && (() => {
+        const s = wordStats(filteredResults);
         const byLen = countByLengthTopN(s.byLength, 4);
         const wildcards = searchBy === 'pattern' ? (letters.match(/\?/g)?.length ?? 0) : 0;
         const fixed = searchBy === 'pattern' ? letters.length - wildcards : 0;
@@ -175,14 +210,14 @@ export default function WordFinder({ lockedLength }: WordFinderProps = {}) {
         return <OutcomeLayer cards={cards} />;
       })()}
       <ResultList
-        words={results}
+        words={filteredResults}
         loading={phase !== 'idle'}
         group={showScores ? undefined : 'length'}
         scores={showScores}
         rack={searchBy === 'letters' ? letters : undefined}
         tool="word-finder"
         loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
-        emptyLabel="Type some letters to see words you can make."
+        emptyLabel={results.length > 0 ? 'No words match the active filters.' : 'Type some letters to see words you can make.'}
       />
     </div>
   );

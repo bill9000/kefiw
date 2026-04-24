@@ -67,6 +67,24 @@ export default function AnagramSolver() {
         <label className="label" htmlFor="letters">Word or letters</label>
         <input id="letters" className="input font-mono" value={letters} onChange={(e) => setLetters(e.target.value)} placeholder="e.g. listen" autoFocus />
       </div>
+      {/*
+        Sorted-letter key helps spot anagram equivalence at a glance:
+        LISTEN, SILENT, ENLIST, TINSEL, INLETS all sort to EILNST.
+      */}
+      {letters.replace(/\s/g, '').length > 0 && (() => {
+        const clean = letters.replace(/\s/g, '').toUpperCase();
+        const key = clean.split('').filter((c) => /[A-Z?]/.test(c)).sort().join('');
+        const counts: Record<string, number> = {};
+        for (const c of clean) counts[c] = (counts[c] ?? 0) + 1;
+        const summary = Object.entries(counts).sort().map(([k, n]) => `${k}×${n}`).join(' ');
+        return (
+          <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+            <span className="font-semibold text-slate-500">Sorted key:</span>{' '}
+            <span className="font-mono">{key || '—'}</span>
+            {summary && <span className="ml-3 text-slate-500">({summary})</span>}
+          </div>
+        );
+      })()}
       <div className="flex flex-wrap gap-2">
         <button type="button" className={`btn ${exact ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setExact(true)}>All letters</button>
         <button type="button" className={`btn ${!exact ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setExact(false)}>Any letters</button>

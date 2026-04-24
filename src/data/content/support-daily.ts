@@ -14,6 +14,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'Why everyone gets the same puzzle on the same day, and how streaks stay honest.',
     outcomeLine: 'Same puzzle for everyone, same day — that is what makes a daily challenge worth playing.',
     description: 'How daily word puzzles are generated, why everyone sees the same one, and how streak tracking works.',
+    discoverHeadline: 'How daily word puzzles stay fair when millions play the same one',
     keywords: ['daily word challenge', 'how daily puzzles work', 'daily word puzzle'],
     intro: 'A daily word challenge is a puzzle that is the same for everyone on a given date. The shared experience is the point — you can discuss today\'s puzzle with friends knowing they had the same one.',
     keyPoints: [
@@ -52,6 +53,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'The small habits that turn "I play sometimes" into a 200-day streak.',
     outcomeLine: 'Play at the same time daily, keep a buffer day, and do not chase lost streaks.',
     description: 'Practical tips for building and maintaining streaks in daily word puzzles without burning out.',
+    discoverHeadline: 'The 30-second habit that saved my 400-day word puzzle streak',
     keywords: ['daily puzzle streak tips', 'word puzzle streak', 'maintain daily streak'],
     intro: 'Long streaks are not about puzzle skill — they are about routine. Most lost streaks are lost to life (travel, illness, forgetting), not to hard puzzles.',
     keyPoints: [
@@ -90,6 +92,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'What actually changes between easy, medium, hard, and expert puzzles.',
     outcomeLine: 'Difficulty is not about grid size — it is about which solving techniques you need.',
     description: 'How sudoku difficulty levels differ — techniques required, given-clue counts, and what easy/medium/hard/expert actually mean.',
+    discoverHeadline: 'Why "hard" Sudoku feels easy and "easy" takes an hour',
     keywords: ['sudoku difficulty levels', 'sudoku easy medium hard', 'sudoku expert'],
     intro: 'All sudoku puzzles use the same 9×9 grid and the same rules. What changes between easy and expert is the set of solving techniques you need to reach the unique solution.',
     keyPoints: [
@@ -129,6 +132,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'Naked singles and hidden singles — most easy puzzles need nothing else.',
     outcomeLine: 'Scan the grid. Fill every cell that has only one possible digit. Repeat.',
     description: 'The two core sudoku techniques every beginner needs — naked singles and hidden singles — with worked examples.',
+    discoverHeadline: 'The two Sudoku moves every beginner should learn before guessing',
     keywords: ['beginner sudoku strategy', 'naked singles', 'hidden singles', 'easy sudoku technique'],
     intro: 'Easy sudoku puzzles are solvable with two techniques: naked singles and hidden singles. Together they usually carry you through any puzzle graded "easy" without notation.',
     keyPoints: [
@@ -167,6 +171,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'How the board is built, what a clear means for each game, and why there are no accounts.',
     outcomeLine: 'No sign-up, no email, no social graph. A random device id, an optional handle, and a server that signs every accepted submission.',
     description: 'How the Daily Kefiw leaderboard works — device-hash identity, handle display, server-side integrity, and what counts as a clear for Hunt, Hive, and Sudoku.',
+    discoverHeadline: 'The daily word-game leaderboard that works without a single account',
     keywords: ['daily kefiw leaderboard', 'daily puzzle rankings', 'word game leaderboard', 'anonymous leaderboard', 'device hash identity'],
     intro: 'Daily Kefiw runs a leaderboard without asking for an account. You pick a handle, the browser keeps a random id, and only cleared runs show up on the board. Everything resets when the next puzzle drops at 4:00 AM Eastern Time.',
     keyPoints: [
@@ -212,6 +217,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'What ranks you in each of the three boards, and the tradeoffs people miss.',
     outcomeLine: 'Hunt rewards information per guess. Hive rewards pangram-hunting before long-word grinding. Sudoku rewards technique, not speed-tapping.',
     description: 'Practical scoring strategy for the three Daily Kefiw boards — Five-Letter Hunt, Hive, and Sudoku. What ranks, what does not, and common mistakes.',
+    discoverHeadline: 'The daily puzzle scoring mistake that quietly tanks your rank',
     keywords: ['daily kefiw strategy', 'daily puzzle scoring strategy', 'hive pangram strategy', 'word hunt opening guess', 'daily sudoku speed'],
     intro: 'Each of the three daily games ranks on a different axis. Playing them well means knowing what the board rewards — and the worst thing you can do is optimize for the wrong axis.',
     keyPoints: [
@@ -253,6 +259,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'What counts, what resets, and why the pipeline streak is the one to watch.',
     outcomeLine: 'Clear all three games today and every prior day without a break. That is the streak.',
     description: 'The exact rules behind Daily Kefiw streaks — what counts as a clear, when streaks reset, per-game vs pipeline streak distinction.',
+    discoverHeadline: 'Why your Kefiw daily streak resets at 4am ET, not midnight',
     keywords: ['daily kefiw streak', 'daily puzzle streak rules', 'pipeline streak', 'streak tracking'],
     intro: 'Daily Kefiw tracks two kinds of streak. A per-game streak counts consecutive days where you cleared one specific game. The pipeline streak counts consecutive days where you cleared every game in the pipeline.',
     keyPoints: [
@@ -295,6 +302,7 @@ export const SUPPORT_DAILY: ContentPageConfig[] = [
     subhead: 'Every daily and Vibe puzzle \u2014 what it is, why it\u2019s worth playing, and who it suits.',
     outcomeLine: 'One page, every free word game on Kefiw, grouped by what you want out of a session.',
     description: 'Fifteen free word games on Kefiw grouped by shape and by player: daily word, anagram, Sudoku, Hunt, Hive, Cipher, plus senior-friendly and brain-training picks.',
+    discoverHeadline: '15 free word games worth opening before Wordle each morning',
     metaDescription: 'The best free word games on Kefiw \u2014 daily, brain-training, senior-friendly. No sign-up, no download, plays in the browser. 15 games, one page.',
     keywords: ['best free word games', 'free word games online', 'word games for seniors', 'brain word games', 'daily word game', 'games like wordle', 'word games online no download'],
     intro: 'Fifteen free word and number games, grouped by what you want from them. Every game on this page runs in the browser \u2014 no sign-up, no download, no ads blocking the gameplay. Pick by daily cadence, by cognitive target, or by who you\u2019re passing the tablet to.',

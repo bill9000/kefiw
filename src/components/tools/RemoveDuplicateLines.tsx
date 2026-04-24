@@ -3,20 +3,88 @@ import CopyButton from '../CopyButton';
 import { removeDuplicateLines } from '~/lib/text';
 import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
+// Local dedupe that layers on top of the lib's removeDuplicateLines. Handles
+// case-insensitive matching, trim-whitespace matching, and keep-last mode.
+// The lib helper keeps the first occurrence when order is preserved.
+function dedupe(
+  text: string,
+  opts: { preserveOrder: boolean; caseInsensitive: boolean; trimMatch: boolean; keepLast: boolean }
+): string {
+  if (!text) return '';
+  const lines = text.split('\n');
+  const normalize = (s: string): string => {
+    let v = opts.trimMatch ? s.trim() : s;
+    if (opts.caseInsensitive) v = v.toLowerCase();
+    return v;
+  };
+  if (opts.preserveOrder) {
+    if (opts.keepLast) {
+      // Keep each line's last occurrence. Scan right-to-left to know which
+      // index is the last, then reassemble in original order.
+      const lastIdx = new Map<string, number>();
+      lines.forEach((l, i) => lastIdx.set(normalize(l), i));
+      const out: string[] = [];
+      lines.forEach((l, i) => {
+        if (lastIdx.get(normalize(l)) === i) out.push(l);
+      });
+      return out.join('\n');
+    }
+    // Default: keep first
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const l of lines) {
+      const k = normalize(l);
+      if (!seen.has(k)) {
+        seen.add(k);
+        out.push(l);
+      }
+    }
+    return out.join('\n');
+  }
+  // Sorted unique, normalized but preserve original casing of first hit
+  const firstSeen = new Map<string, string>();
+  for (const l of lines) {
+    const k = normalize(l);
+    if (!firstSeen.has(k)) firstSeen.set(k, l);
+  }
+  return Array.from(firstSeen.values()).sort().join('\n');
+}
+
 export default function RemoveDuplicateLines() {
   const [text, setText] = useState('');
   const [preserveOrder, setPreserveOrder] = useState(true);
-  const out = useMemo(() => removeDuplicateLines(text, preserveOrder), [text, preserveOrder]);
+  const [caseInsensitive, setCaseInsensitive] = useState(false);
+  const [trimMatch, setTrimMatch] = useState(false);
+  const [keepLast, setKeepLast] = useState(false);
+  const out = useMemo(() => {
+    // When all toggles are default, delegate to the shared lib helper.
+    if (!caseInsensitive && !trimMatch && !keepLast) {
+      return removeDuplicateLines(text, preserveOrder);
+    }
+    return dedupe(text, { preserveOrder, caseInsensitive, trimMatch, keepLast });
+  }, [text, preserveOrder, caseInsensitive, trimMatch, keepLast]);
   const inCount = text ? text.split('\n').length : 0;
   const outCount = out ? out.split('\n').length : 0;
   const removed = Math.max(0, inCount - outCount);
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-4">
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={preserveOrder} onChange={(e) => setPreserveOrder(e.target.checked)} />
           Preserve original order
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={caseInsensitive} onChange={(e) => setCaseInsensitive(e.target.checked)} />
+          Case-insensitive
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={trimMatch} onChange={(e) => setTrimMatch(e.target.checked)} />
+          Trim whitespace when comparing
+        </label>
+        <label className={`flex items-center gap-2 text-sm ${preserveOrder ? '' : 'opacity-50'}`}>
+          <input type="checkbox" disabled={!preserveOrder} checked={keepLast} onChange={(e) => setKeepLast(e.target.checked)} />
+          Keep last occurrence instead of first
         </label>
         <span className="text-xs text-slate-500">{inCount} in → {outCount} out</span>
       </div>

@@ -57,6 +57,24 @@ const webAppJsonLd = {
       <StartHere tool={tool} />
     </header>
 
+    {/*
+      Compact trust strip. The full review-methodology panel lives at the
+      bottom of the page (anchor #review-methodology).
+    */}
+    <aside aria-label="Review credential" class="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+      <span class="font-semibold uppercase tracking-[0.18em] text-slate-500">Built by</span>
+      <a href={reviewConfig.builtBy.href} class="text-slate-700 hover:text-brand-700 hover:underline">{reviewConfig.builtBy.label}</a>
+      <span aria-hidden="true" class="text-slate-300">·</span>
+      <span class="font-semibold uppercase tracking-[0.18em] text-slate-500">Reviewed by</span>
+      {reviewConfig.reviewers.slice(0, 2).map((r) => (
+        <a href={r.href} class="text-slate-700 hover:text-brand-700 hover:underline">{r.label}</a>
+      ))}
+      <span aria-hidden="true" class="text-slate-300">·</span>
+      <a href="/methodology/" class="text-slate-700 hover:text-brand-700 hover:underline">Methodology</a>
+      <span aria-hidden="true" class="text-slate-300">·</span>
+      <a href="#review-methodology" class="text-slate-500 hover:text-brand-700 hover:underline">Details ↓</a>
+    </aside>
+
     <div class="my-6">
       <AdSlot client:idle zoneId="ALPHA" />
     </div>
@@ -97,8 +115,6 @@ const webAppJsonLd = {
         </ul>
       </section>
     )}
-
-    <AuthorityPanel config={reviewConfig} />
 
     {(tool.commonMistakes ?? []).length > 0 && (
       <section aria-label="Common mistakes" class="mt-8 max-w-3xl">
@@ -141,6 +157,10 @@ const webAppJsonLd = {
     </div>
 
     <RelatedTools tool={tool} />
+
+    <div id="review-methodology" class="scroll-mt-24">
+      <AuthorityPanel config={reviewConfig} />
+    </div>
 
     <div class="my-6">
       <AdSlot client:idle zoneId="DELTA" format="multiplex" />

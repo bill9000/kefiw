@@ -1,6 +1,26 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { countWords } from '~/lib/text';
 import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
+
+interface PacePreset {
+  id: string;
+  label: string;
+  readWpm: number;
+  speakWpm: number;
+  hint: string;
+}
+
+// Context-specific pace presets. The values come from published pace ranges
+// for each format — blog posts skim fast; narration slows for cadence;
+// classrooms slow further so every word lands.
+const PACE_PRESETS: PacePreset[] = [
+  { id: 'blog',       label: 'Blog post',   readWpm: 238, speakWpm: 140, hint: 'Silent skim; average adult web reader.' },
+  { id: 'speech',     label: 'Speech',      readWpm: 200, speakWpm: 130, hint: 'Presentation pace; comfortable for a live audience.' },
+  { id: 'narration',  label: 'Narration',   readWpm: 200, speakWpm: 155, hint: 'Audiobook / podcast pace; clear delivery.' },
+  { id: 'classroom',  label: 'Classroom',   readWpm: 180, speakWpm: 110, hint: 'Slower for comprehension and note-taking.' },
+];
+
+const STORAGE_KEY = 'kefiw.reading-time.v1';
 
 function fmtMin(min: number): string {
   if (min < 1) {
@@ -29,17 +49,43 @@ export default function ReadingTimeCalculator() {
   const [text, setText] = useState('');
   const [readWpm, setReadWpm] = useState(200);
   const [speakWpm, setSpeakWpm] = useState(130);
+  const [pauseSec, setPauseSec] = useState(0);
+  const [targetMin, setTargetMin] = useState<number>(0);
+
+  // Persist slider preferences so returning users don't re-tune.
+  useEffect(() => {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const v = JSON.parse(raw) as { readWpm?: number; speakWpm?: number; pauseSec?: number };
+      if (typeof v.readWpm === 'number') setReadWpm(v.readWpm);
+      if (typeof v.speakWpm === 'number') setSpeakWpm(v.speakWpm);
+      if (typeof v.pauseSec === 'number') setPauseSec(v.pauseSec);
+    } catch { /* ignore */ }
+  }, []);
+  useEffect(() => {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ readWpm, speakWpm, pauseSec }));
+    } catch { /* quota or private mode — ignore */ }
+  }, [readWpm, speakWpm, pauseSec]);
 
   const stats = useMemo(() => {
     const words = countWords(text);
+    const paragraphs = countParagraphs(text);
+    const pauseMin = (pauseSec * paragraphs) / 60;
     return {
       words,
       chars: countChars(text),
-      paragraphs: countParagraphs(text),
-      readMin: words / readWpm,
-      speakMin: words / speakWpm,
+      paragraphs,
+      readMin: words / readWpm + pauseMin,
+      speakMin: words / speakWpm + pauseMin,
     };
-  }, [text, readWpm, speakWpm]);
+  }, [text, readWpm, speakWpm, pauseSec]);
+
+  // Reverse calc: given a target duration in minutes, how many words?
+  const reverseTargetWords = targetMin > 0 ? Math.round(targetMin * speakWpm) : 0;
 
   return (
     <div className="space-y-4">
@@ -54,6 +100,31 @@ export default function ReadingTimeCalculator() {
         />
       </div>
 
+      <div>
+        <div className="label">Context preset</div>
+        <div className="flex flex-wrap gap-2">
+          {PACE_PRESETS.map((p) => {
+            const active = readWpm === p.readWpm && speakWpm === p.speakWpm;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => { setReadWpm(p.readWpm); setSpeakWpm(p.speakWpm); }}
+                className={`rounded-md border px-3 py-1 text-sm transition ${
+                  active
+                    ? 'border-brand-600 bg-brand-50 text-brand-800'
+                    : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                }`}
+                title={p.hint}
+                aria-pressed={active}
+              >
+                {p.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="rwpm">Reading pace (WPM): <span className="font-mono">{readWpm}</span></label>
@@ -65,6 +136,35 @@ export default function ReadingTimeCalculator() {
           <input id="swpm" type="range" min={90} max={200} step={5} value={speakWpm} onChange={(e) => setSpeakWpm(Number(e.target.value))} className="w-full" />
           <div className="flex justify-between text-xs text-slate-500"><span>90 (slow)</span><span>130 (avg)</span><span>180 (fast)</span></div>
         </div>
+      </div>
+
+      <div className="grid gap-3 rounded-md border border-slate-200 bg-slate-50 p-3 sm:grid-cols-2">
+        <label className="flex items-center gap-2 text-sm">
+          <span className="min-w-[8rem] text-slate-700">Pause per paragraph</span>
+          <input
+            type="number"
+            min={0}
+            max={10}
+            step={0.5}
+            value={pauseSec}
+            onChange={(e) => setPauseSec(Math.max(0, Math.min(10, Number(e.target.value) || 0)))}
+            className="input w-20"
+          />
+          <span className="text-xs text-slate-500">sec</span>
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <span className="min-w-[8rem] text-slate-700">Target duration</span>
+          <input
+            type="number"
+            min={0}
+            step={0.5}
+            value={targetMin || ''}
+            placeholder="0"
+            onChange={(e) => setTargetMin(Math.max(0, Number(e.target.value) || 0))}
+            className="input w-20"
+          />
+          <span className="text-xs text-slate-500">min → {reverseTargetWords || '—'} words</span>
+        </label>
       </div>
 
       {stats.words > 0 && (

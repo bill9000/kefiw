@@ -1,0 +1,76 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import { getPipeline } from '~/data/daily-pipelines';
+import { getGame } from '~/data/daily-games';
+
+const pipeline = getPipeline('math');
+if (!pipeline) throw new Error('math pipeline not registered');
+const games = pipeline.games.map((id) => {
+  const g = getGame(id);
+  if (!g) throw new Error(`unknown game id ${id}`);
+  return g;
+});
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/math/', label: 'Kefiw Math' },
+];
+---
+
+<BaseLayout
+  title="Kefiw Math — daily mental-arithmetic pipeline"
+  description="Five mental-math dashes: percent, discount, unit conversion, tip, and date math. Ten rounds each, ~2.5 minutes per game. Fresh set at 4am ET."
+  canonical="/daily/math/"
+  keywords={["mental math practice", "mental arithmetic game", "daily math puzzle", "brain training math"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Kefiw Math</h1>
+      <p class="mt-1 text-lg text-slate-700">Five tools, ten rounds each. Same puzzles for every player, every day.</p>
+      <p class="mt-2 max-w-3xl text-slate-600">
+        Each game gives you ten short problems. Tap one of five answers, or type the exact number for bonus points. The timer adds a speed multiplier — faster = higher score. Clear each with 300+ points (out of 1500) to count toward the Kefiw Math pipeline streak.
+      </p>
+    </header>
+
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {games.map((g) => (
+        <a
+          href={`/daily/math/${g.slug}/`}
+          class="block rounded-lg border border-slate-200 bg-white p-4 transition hover:border-brand-500 hover:shadow-md"
+        >
+          <div class="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">{g.id.replace('math-', '')}</div>
+          <div class="mt-1 text-lg font-bold text-slate-900">{g.name}</div>
+          <p class="mt-2 text-sm text-slate-600">{g.blurb}</p>
+          <div class="mt-3 text-xs text-slate-500">10 rounds · 15s each · max 1500</div>
+        </a>
+      ))}
+    </section>
+
+    <section class="mt-8 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div>
+        <h2 class="text-lg font-semibold">Pipeline leaderboard</h2>
+        <p class="text-sm text-slate-600">Sum of all five game scores across today. Top 50 shown.</p>
+      </div>
+      <a href="/daily/leaderboard/?pipeline=math" class="rounded bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">View ranks →</a>
+    </section>
+
+    <section class="mt-10 border-t border-slate-200 pt-6">
+      <h2 class="text-xl font-semibold">How it works</h2>
+      <ul class="mt-3 space-y-2 text-sm text-slate-700">
+        <li><strong>Ten rounds per game.</strong> Each round has a 15-second cap. Answer fast, score more.</li>
+        <li><strong>Five answer buttons.</strong> Tap the closest one — up to 80 base points based on how close. The timer adds a ×1.0 to ×1.5 speed multiplier (instant = ×1.5).</li>
+        <li><strong>Typed exact.</strong> Or type the exact number for up to 100 base points via <code>100 − 2×%error</code>. Same speed multiplier. Max round = 150.</li>
+        <li><strong>Session max 1500.</strong> Pipeline max 7500 across all five games.</li>
+        <li><strong>Streak</strong>: clear all five today and every prior day without a break. 4am ET rollover.</li>
+      </ul>
+    </section>
+
+    <section class="mt-8 rounded-md border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600">
+      <strong>A note on cognitive training.</strong> This pipeline improves mental-arithmetic speed and proportional-reasoning fluency on the trained tasks — that&rsquo;s what the research supports. It is not a dementia-prevention or IQ-boost product. 15–25 minutes a day, four to five days a week, is the sweet spot per the cognitive-training literature.
+    </section>
+  </article>
+</BaseLayout>

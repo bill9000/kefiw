@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import MathGame from '~/components/daily/MathGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/math/', label: 'Kefiw Math' },
+  { href: '/daily/math/timedelta/', label: 'Time Delta' },
+];
+---
+
+<BaseLayout
+  title="Time Delta — daily calendar-math practice"
+  description="Ten rounds of days-between-dates calendar math. Tap the closest or type the exact. Fresh set at 4am ET."
+  canonical="/daily/math/timedelta/"
+  keywords={["days between dates practice", "date math game", "daily math game", "calendar math practice"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Time Delta</h1>
+      <p class="mt-1 text-slate-600">Days between dates, without counting on fingers. Ten rounds.</p>
+    </header>
+
+    <MathGame client:only="react" gameId="math-timedelta" title="Time Delta" />
+  </article>
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import MathGame from '~/components/daily/MathGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/math/', label: 'Kefiw Math' },
+  { href: '/daily/math/discount/', label: 'Discount Duel' },
+];
+---
+
+<BaseLayout
+  title="Discount Duel — daily stacked-discount practice"
+  description="Ten rounds of stacked discounts: percent off plus a coupon. Tap the closest or type the exact. Fresh set at 4am ET."
+  canonical="/daily/math/discount/"
+  keywords={["mental discount math", "stacked discount calculator", "daily math game", "percent off math"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Discount Duel</h1>
+      <p class="mt-1 text-slate-600">Stacked percent-off math. Ten rounds. Fifteen seconds each.</p>
+    </header>
+
+    <MathGame client:only="react" gameId="math-discount" title="Discount Duel" />
+  </article>
+</BaseLayout>

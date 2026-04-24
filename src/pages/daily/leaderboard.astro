@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
-import Leaderboard from '~/components/daily/Leaderboard.tsx';
+import LeaderboardIsland from '~/components/daily/Leaderboard.tsx';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -36,7 +36,7 @@ const crumbs = [
           <a href="/daily/hunt/" class="text-xs text-brand-700 hover:underline">Play →</a>
         </header>
         <p class="mb-2 text-xs text-slate-500">Fewer guesses = better.</p>
-        <Leaderboard client:only="react" gameId="hunt" />
+        <LeaderboardIsland client:only="react" gameId="hunt" />
       </section>
 
       <section aria-label="Hive leaderboard">
@@ -45,7 +45,7 @@ const crumbs = [
           <a href="/daily/hive/" class="text-xs text-brand-700 hover:underline">Play →</a>
         </header>
         <p class="mb-2 text-xs text-slate-500">More points = better. Pangrams are worth +7.</p>
-        <Leaderboard client:only="react" gameId="hive" />
+        <LeaderboardIsland client:only="react" gameId="hive" />
       </section>
 
       <section aria-label="Sudoku leaderboard">
@@ -54,7 +54,7 @@ const crumbs = [
           <a href="/daily/sudoku/" class="text-xs text-brand-700 hover:underline">Play →</a>
         </header>
         <p class="mb-2 text-xs text-slate-500">Faster clear time = better.</p>
-        <Leaderboard client:only="react" gameId="sudoku" />
+        <LeaderboardIsland client:only="react" gameId="sudoku" />
       </section>
     </div>
 

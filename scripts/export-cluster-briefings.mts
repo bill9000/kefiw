@@ -173,7 +173,7 @@ function buildBrief(clusterSlug: string) {
 
   const linkMap: Record<string, string[]> = {};
   for (const a of articles) {
-    if ('current' in a) {
+    if ('current' in a && a.current) {
       linkMap[a.id] = a.current.relatedIds.filter((r: string) => {
         return tools.some((t) => 'id' in t && t.id === r) || articles.some((x) => x.id === r);
       });

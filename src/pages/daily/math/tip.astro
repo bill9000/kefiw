@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import MathGame from '~/components/daily/MathGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/math/', label: 'Kefiw Math' },
+  { href: '/daily/math/tip/', label: 'Tip Drill' },
+];
+---
+
+<BaseLayout
+  title="Tip Drill — daily restaurant-tip mental-math practice"
+  description="Ten rounds of tip-math: 15%, 18%, 20%. Compute the tip or the total. Fresh set at 4am ET."
+  canonical="/daily/math/tip/"
+  keywords={["tip math practice", "mental tip calculator", "daily math game", "restaurant tip practice"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Tip Drill</h1>
+      <p class="mt-1 text-slate-600">Restaurant math at speed. Ten rounds. Fifteen seconds each.</p>
+    </header>
+
+    <MathGame client:only="react" gameId="math-tip" title="Tip Drill" />
+  </article>
+</BaseLayout>

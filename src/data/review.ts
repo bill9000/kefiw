@@ -34,22 +34,26 @@ export interface ReviewPanelConfig {
 
 export type ReviewArea = ToolCategory | ContentSection | 'health-guide' | undefined;
 
+// ENGINEERING_ROLE is used under "Built by" in the AuthorityPanel. The label
+// reads as a team/group name there ("Built by Kefiw engineering"), not a
+// review-lane name. The href still points at /engineering-review/ which
+// explains the scope of engineering work.
 const ENGINEERING_ROLE: ReviewRole = {
-  label: 'Engineering review',
+  label: 'Kefiw engineering',
   href: REVIEW_LINKS.engineering,
-  note: 'Formula logic, browser behavior, unit handling, and implementation correctness.',
+  note: 'Builds the tool: formula logic, browser behavior, unit handling, rounding, and implementation correctness.',
 };
 
 const SCIENCE_ROLE: ReviewRole = {
   label: 'Scientific review',
   href: REVIEW_LINKS.science,
-  note: 'Source quality, evidence framing, assumptions, and clear statement of limits.',
+  note: 'Reviews source quality, evidence framing, assumptions, and clear statement of limits.',
 };
 
 const NURSE_ROLE: ReviewRole = {
   label: 'Registered nurse review',
   href: REVIEW_LINKS.nurse,
-  note: 'Health safety wording, escalation language, and red-flag copy on health pages.',
+  note: 'Engaged only on health-related pages. Reviews safety wording, escalation language, and red-flag copy. Non-health pages (word tools, calculators, games, guides) are not reviewed by a nurse.',
 };
 
 function sharedLinks(includeHealthDisclaimer = false): ReviewLink[] {

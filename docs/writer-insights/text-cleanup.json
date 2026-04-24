@@ -1,0 +1,771 @@
+{
+  "cluster_id": "text-cleanup",
+  "enhanced_at": "2026-04-22",
+  "source": "docs/article-briefings/text-cleanup-V3-enhanced.json",
+  "status_at_import": "4 articles and 7 tools merged via text-cleanup-enhancements modules.",
+  "serp_research": null,
+  "adsense_readiness": null,
+  "audit_notes": null,
+  "cluster_suggested_tool_enhancements": null,
+  "tool_non_schema_writer_notes": {
+    "word-counter": {
+      "user_scenarios": [
+        "A student has a 1,000-word limit and wants to know whether the conclusion needs cuts.",
+        "A writer wants a six-minute read badge and needs a rough word target.",
+        "A presenter wants to know if a script will fit a five-minute slot.",
+        "A marketer needs a shorter meta description or platform caption."
+      ],
+      "tips": [
+        "Check word count before and after edits to confirm the draft moved toward the target.",
+        "Use characters without spaces only when the requirement asks for that specific count.",
+        "If average words per sentence is high, scan for long sentences that could be split.",
+        "Use the Reading Time Calculator when adjustable WPM is more important than general stats.",
+        "Use the Syllable Counter after length checks when rhythm or line timing matters."
+      ],
+      "internal_links": [
+        {
+          "target_id": "letter-counter",
+          "url": "/word-tools/letter-counter/",
+          "anchor_text": "compare character and letter counts",
+          "reason": "Use when the user cares about letters, vowels, consonants, or frequency."
+        },
+        {
+          "target_id": "reading-time-calculator",
+          "url": "/calculators/reading-time-calculator/",
+          "anchor_text": "adjust reading and speaking WPM",
+          "reason": "Use when timing is the primary task."
+        },
+        {
+          "target_id": "case-converter",
+          "url": "/word-tools/case-converter/",
+          "anchor_text": "normalize case before editing",
+          "reason": "Useful when count checks are part of a cleanup workflow."
+        },
+        {
+          "target_id": "cS-word-counter-vs-letter-counter",
+          "url": "/guides/word-counter-vs-letter-counter/",
+          "anchor_text": "word count vs character count guide",
+          "reason": "Explains which metric fits each requirement."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "notes": "Describe the browser-based utility, input/output, and free access without implying server processing."
+        },
+        {
+          "type": "FAQPage",
+          "notes": "Use the enhanced FAQ questions and answers."
+        },
+        {
+          "type": "HowTo",
+          "notes": "Use concise how-to steps when the page template supports it."
+        },
+        {
+          "type": "BreadcrumbList",
+          "notes": "Match the Word Tools or Calculators cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Counts words, characters, no-space characters, sentences, paragraphs, and time estimates.",
+          "Shows average word length and average words per sentence.",
+          "Surfaces a readability hint when sentences are long."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "suggestion": "Add target limit controls for words and characters.",
+            "user_benefit": "Users can see over/under by exact assignment, form, or platform limit.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/word-counter-vs-letter-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "high",
+            "suggestion": "Align the word-count formula with Reading Time Calculator or clearly label the difference.",
+            "user_benefit": "Users avoid small count discrepancies between related Kefiw tools.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/calculators/reading-time-calculator/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add optional custom WPM settings directly on the Word Counter page.",
+            "user_benefit": "Script and article users can tune timing without switching pages.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/calculators/reading-time-calculator/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add a compact copy-stats button.",
+            "user_benefit": "Users can paste counts into editor notes, assignments, or content QA checklists.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/word-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add a warning for text that appears to lack spaces between words.",
+            "user_benefit": "Users with CJK or Thai text get a clear explanation before relying on word count.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/word-counter-vs-letter-counter/",
+            "status": "proposed_not_current"
+          }
+        ]
+      }
+    },
+    "letter-counter": {
+      "user_scenarios": [
+        "A writer needs to know whether a profile line fits a character limit.",
+        "A puzzle solver wants to spot repeated letters in a clue or rack.",
+        "A teacher wants a simple frequency example for students.",
+        "A developer or content editor wants a quick count without opening a spreadsheet."
+      ],
+      "tips": [
+        "Use the frequency list for quick patterns, not advanced statistical analysis.",
+        "Use Word Counter when you need words, sentences, paragraphs, and timing.",
+        "For text with accents or emoji, rely more on the raw character totals than the letter buckets.",
+        "Normalize case before comparing samples, or remember that this frequency list already lowercases letters.",
+        "Pair with Case Converter when the next step is formatting rather than counting."
+      ],
+      "internal_links": [
+        {
+          "target_id": "word-counter",
+          "url": "/word-tools/word-counter/",
+          "anchor_text": "count words and reading time",
+          "reason": "Use when the task is draft length rather than letter frequency."
+        },
+        {
+          "target_id": "case-converter",
+          "url": "/word-tools/case-converter/",
+          "anchor_text": "change uppercase and lowercase",
+          "reason": "Use after counting when formatting needs cleanup."
+        },
+        {
+          "target_id": "cS-word-counter-vs-letter-counter",
+          "url": "/guides/word-counter-vs-letter-counter/",
+          "anchor_text": "choose the right text count",
+          "reason": "Explains word, character, and letter-count differences."
+        },
+        {
+          "target_id": "reading-time-calculator",
+          "url": "/calculators/reading-time-calculator/",
+          "anchor_text": "estimate reading time",
+          "reason": "Useful when text length affects timing."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "notes": "Describe the browser-based utility, input/output, and free access without implying server processing."
+        },
+        {
+          "type": "FAQPage",
+          "notes": "Use the enhanced FAQ questions and answers."
+        },
+        {
+          "type": "HowTo",
+          "notes": "Use concise how-to steps when the page template supports it."
+        },
+        {
+          "type": "BreadcrumbList",
+          "notes": "Match the Word Tools or Calculators cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Counts characters with and without spaces.",
+          "Reports ASCII letter and digit frequency sorted by count.",
+          "Summarizes vowels, consonants, digits, and punctuation."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "suggestion": "Add Unicode-aware grapheme counting.",
+            "user_benefit": "Emoji, accents, and combined characters match user expectations more closely.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/word-counter-vs-letter-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "high",
+            "suggestion": "Add an ASCII vs Unicode breakdown.",
+            "user_benefit": "Users can see why accented names or emoji do not appear in the letter-frequency list.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/word-counter-vs-letter-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Show frequency percentages in addition to raw counts.",
+            "user_benefit": "Frequency analysis becomes easier when comparing two samples of different lengths.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/letter-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add copy/export options for the frequency table.",
+            "user_benefit": "Teachers, puzzle solvers, and editors can move results into notes or spreadsheets.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/letter-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add optional charts for top letters.",
+            "user_benefit": "Visual learners can spot dominant letters faster.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/word-tools/letter-counter/",
+            "status": "proposed_not_current"
+          }
+        ]
+      }
+    },
+    "case-converter": {
+      "user_scenarios": [
+        "A blogger pastes a title from notes and wants a simple Title Case version.",
+        "A developer converts a UI label into a variable-like name.",
+        "A content editor lowercases tags before deduping a list.",
+        "A student fixes accidental caps lock before submitting text."
+      ],
+      "tips": [
+        "Use lowercase before Remove Duplicate Lines when case-insensitive dedupe is the goal.",
+        "Use Title Case for quick headings, then manually fix small words if a style guide matters.",
+        "Use snake_case or kebab-case only when punctuation loss is acceptable.",
+        "Check the length delta when converting to identifier formats.",
+        "Pair with Sort Lines after normalizing a list’s case."
+      ],
+      "internal_links": [
+        {
+          "target_id": "sort-lines",
+          "url": "/word-tools/sort-lines/",
+          "anchor_text": "sort normalized lines",
+          "reason": "Use after case conversion for list cleanup."
+        },
+        {
+          "target_id": "remove-duplicate-lines",
+          "url": "/word-tools/remove-duplicate-lines/",
+          "anchor_text": "remove duplicates after normalizing case",
+          "reason": "Use when lowercase conversion makes exact duplicates easier to catch."
+        },
+        {
+          "target_id": "word-counter",
+          "url": "/word-tools/word-counter/",
+          "anchor_text": "check text length after conversion",
+          "reason": "Useful when capitalization is part of a draft cleanup."
+        },
+        {
+          "target_id": "cS-text-cleanup-workflows",
+          "url": "/guides/common-text-cleanup-workflows/",
+          "anchor_text": "common text cleanup workflows",
+          "reason": "Shows where case conversion fits in multi-step cleanup."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "notes": "Describe the browser-based utility, input/output, and free access without implying server processing."
+        },
+        {
+          "type": "FAQPage",
+          "notes": "Use the enhanced FAQ questions and answers."
+        },
+        {
+          "type": "HowTo",
+          "notes": "Use concise how-to steps when the page template supports it."
+        },
+        {
+          "type": "BreadcrumbList",
+          "notes": "Match the Word Tools or Calculators cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Eight case styles with a copyable output area.",
+          "Multi-line input support.",
+          "Length-change summary after conversion."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "suggestion": "Add style-guide title case modes for AP, Chicago, APA, and MLA.",
+            "user_benefit": "Writers can format headlines with fewer manual corrections.",
+            "implementation_difficulty": "high",
+            "content_page_to_support": "/word-tools/case-converter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "high",
+            "suggestion": "Add acronym and proper-noun preservation options.",
+            "user_benefit": "Brand names, initialisms, and names are less likely to be damaged by conversion.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/common-text-cleanup-workflows/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Use Unicode-aware tokenization for accented letters.",
+            "user_benefit": "International names and words survive identifier conversion more predictably.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/word-tools/case-converter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add a visual diff or highlight for changed characters.",
+            "user_benefit": "Users can spot removed punctuation, hyphens, or accents before copying.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/common-text-cleanup-workflows/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add quick presets for tags, filenames, and headings.",
+            "user_benefit": "Beginners can choose a goal rather than learning every case name first.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/case-converter/",
+            "status": "proposed_not_current"
+          }
+        ]
+      }
+    },
+    "reverse-text": {
+      "user_scenarios": [
+        "A puzzle maker needs a clue written backwards.",
+        "A user pastes a chronological list and wants newest-first order.",
+        "A teacher demonstrates character reversal.",
+        "A writer experiments with word order for a line or prompt."
+      ],
+      "tips": [
+        "Use Lines mode for lists and logs, not Characters mode.",
+        "Use Words mode when the sentence should remain readable word-by-word.",
+        "Remove or review complex emoji before character reversal.",
+        "For palindrome checks, remember that punctuation is not fully ignored.",
+        "Pair with Sort Lines when list order needs more than a simple flip."
+      ],
+      "internal_links": [
+        {
+          "target_id": "case-converter",
+          "url": "/word-tools/case-converter/",
+          "anchor_text": "change case after reversing text",
+          "reason": "Useful for creative formatting after reversal."
+        },
+        {
+          "target_id": "sort-lines",
+          "url": "/word-tools/sort-lines/",
+          "anchor_text": "sort or flip line-based lists",
+          "reason": "Use for ordered list cleanup."
+        },
+        {
+          "target_id": "remove-duplicate-lines",
+          "url": "/word-tools/remove-duplicate-lines/",
+          "anchor_text": "dedupe reversed lists",
+          "reason": "Useful when line reversal is part of list cleanup."
+        },
+        {
+          "target_id": "cS-text-cleanup-workflows",
+          "url": "/guides/common-text-cleanup-workflows/",
+          "anchor_text": "clean pasted text workflows",
+          "reason": "Shows where reversal fits among list operations."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "notes": "Describe the browser-based utility, input/output, and free access without implying server processing."
+        },
+        {
+          "type": "FAQPage",
+          "notes": "Use the enhanced FAQ questions and answers."
+        },
+        {
+          "type": "HowTo",
+          "notes": "Use concise how-to steps when the page template supports it."
+        },
+        {
+          "type": "BreadcrumbList",
+          "notes": "Match the Word Tools or Calculators cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Reverses by characters, words, or lines.",
+          "Preserves whitespace groups in Words mode.",
+          "Shows a palindrome hint in Characters mode."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "suggestion": "Add grapheme-cluster reversal with Intl.Segmenter fallback logic.",
+            "user_benefit": "Emoji, accents, flags, and combined characters are less likely to break.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/word-tools/reverse-text/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Normalize CRLF line endings before Lines mode output.",
+            "user_benefit": "Technical and Windows-origin text reverses with fewer hidden-character surprises.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/reverse-text/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add Reverse Each Word mode.",
+            "user_benefit": "Users can flip letters inside words without changing sentence word order.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/reverse-text/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add optional punctuation-insensitive palindrome detection.",
+            "user_benefit": "Classic phrase palindromes become easier to check.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/reverse-text/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add a clearly labeled mirror-glyph generator as a separate mode.",
+            "user_benefit": "Users searching for visual mirror text get the correct effect without confusing it with reversal.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/word-tools/reverse-text/",
+            "status": "proposed_not_current"
+          }
+        ]
+      }
+    },
+    "sort-lines": {
+      "user_scenarios": [
+        "A content editor alphabetizes tags before publication.",
+        "A teacher sorts vocabulary words by length.",
+        "A developer reviews a pasted list of labels.",
+        "A user sorts a numbered plain-text list before deduping."
+      ],
+      "tips": [
+        "Use case-insensitive alpha sort for most everyday lists.",
+        "Use length descending when you want to find outliers or overly long items.",
+        "Use Remove Duplicate Lines after sorting if the duplicate stat matters.",
+        "Trim or inspect whitespace before length sorting if visible length is important.",
+        "For file names with numbers, watch for natural-sort edge cases until that feature exists."
+      ],
+      "internal_links": [
+        {
+          "target_id": "remove-duplicate-lines",
+          "url": "/word-tools/remove-duplicate-lines/",
+          "anchor_text": "remove duplicate lines after sorting",
+          "reason": "Most list cleanup workflows combine sorting and dedupe."
+        },
+        {
+          "target_id": "reverse-text",
+          "url": "/word-tools/reverse-text/",
+          "anchor_text": "reverse line order",
+          "reason": "Use when flipping order is enough and sorting is not needed."
+        },
+        {
+          "target_id": "case-converter",
+          "url": "/word-tools/case-converter/",
+          "anchor_text": "normalize case before sorting",
+          "reason": "Useful when capitalization should not affect list review."
+        },
+        {
+          "target_id": "cS-sort-lines-when",
+          "url": "/guides/when-to-sort-lines/",
+          "anchor_text": "when to sort lines guide",
+          "reason": "Explains which sort mode fits each task."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "notes": "Describe the browser-based utility, input/output, and free access without implying server processing."
+        },
+        {
+          "type": "FAQPage",
+          "notes": "Use the enhanced FAQ questions and answers."
+        },
+        {
+          "type": "HowTo",
+          "notes": "Use concise how-to steps when the page template supports it."
+        },
+        {
+          "type": "BreadcrumbList",
+          "notes": "Match the Word Tools or Calculators cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Six sort modes: alpha asc/desc, length asc/desc, numeric asc/desc.",
+          "Case-sensitive toggle for alpha sorting and duplicate counts.",
+          "Duplicate and unique counts after sorting."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "suggestion": "Add true natural/version sorting.",
+            "user_benefit": "File names and labels such as item-2 and item-10 sort in human-friendly order.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/when-to-sort-lines/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "high",
+            "suggestion": "Add trim and remove-empty-line toggles.",
+            "user_benefit": "Users can prepare messy pasted lists without manual cleanup first.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/guides/common-text-cleanup-workflows/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add locale selection or explain current locale in the UI.",
+            "user_benefit": "Users with accented text understand why order differs across environments.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/when-to-sort-lines/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add sort-and-dedupe as an explicit optional output mode.",
+            "user_benefit": "Common cleanup workflows take fewer copy-paste steps while staying transparent.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/common-text-cleanup-workflows/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add a before/after preview for the first changed lines.",
+            "user_benefit": "Users can see whether the selected mode did what they expected.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/word-tools/sort-lines/",
+            "status": "proposed_not_current"
+          }
+        ]
+      }
+    },
+    "remove-duplicate-lines": {
+      "user_scenarios": [
+        "A marketer pastes tags from several tools and needs unique entries.",
+        "A student combines vocabulary lists and removes repeats.",
+        "A site owner cleans duplicate URLs before checking counts.",
+        "A developer dedupes simple line-based config snippets."
+      ],
+      "tips": [
+        "Normalize case before dedupe when capitalization should not matter.",
+        "Dedupe last after any planned case or whitespace cleanup.",
+        "Preserve order when the first occurrence carries context.",
+        "Sort unique output only when alphabetical order is more useful than original order.",
+        "Use Word Counter or line stats afterward to verify the cleanup."
+      ],
+      "internal_links": [
+        {
+          "target_id": "case-converter",
+          "url": "/word-tools/case-converter/",
+          "anchor_text": "lowercase a list before dedupe",
+          "reason": "Useful workaround for case-insensitive dedupe."
+        },
+        {
+          "target_id": "sort-lines",
+          "url": "/word-tools/sort-lines/",
+          "anchor_text": "sort lines before or after dedupe",
+          "reason": "Related list-cleanup task."
+        },
+        {
+          "target_id": "word-counter",
+          "url": "/word-tools/word-counter/",
+          "anchor_text": "verify counts after dedupe",
+          "reason": "Use to confirm how much text changed."
+        },
+        {
+          "target_id": "cS-remove-duplicate-lines-when",
+          "url": "/guides/when-to-remove-duplicate-lines/",
+          "anchor_text": "when to remove duplicate lines",
+          "reason": "Guide explains when dedupe helps and when it hides useful frequency."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "notes": "Describe the browser-based utility, input/output, and free access without implying server processing."
+        },
+        {
+          "type": "FAQPage",
+          "notes": "Use the enhanced FAQ questions and answers."
+        },
+        {
+          "type": "HowTo",
+          "notes": "Use concise how-to steps when the page template supports it."
+        },
+        {
+          "type": "BreadcrumbList",
+          "notes": "Match the Word Tools or Calculators cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Removes duplicate lines by exact line match after trailing-whitespace trim.",
+          "Keeps the first occurrence.",
+          "Preserve-order toggle, with sorted unique output when disabled.",
+          "Reports input, output, removed, and unique-rate stats."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "suggestion": "Add a case-insensitive matching toggle.",
+            "user_benefit": "Users can dedupe “Apple,” “apple,” and “APPLE” without a separate case-conversion step.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/guides/when-to-remove-duplicate-lines/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "high",
+            "suggestion": "Add trim-leading and trim-all-whitespace options.",
+            "user_benefit": "Copied tables and indented lists produce fewer missed duplicates.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/guides/common-text-cleanup-workflows/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add show removed duplicates with counts and line numbers.",
+            "user_benefit": "Users can audit what changed before trusting the cleaned list.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/when-to-remove-duplicate-lines/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add Unicode normalization before matching as an option.",
+            "user_benefit": "Visually identical accented strings are less likely to remain as separate lines.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/word-counter-vs-letter-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add keep-first vs keep-last mode.",
+            "user_benefit": "Users can choose whether earliest or latest data wins.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/when-to-remove-duplicate-lines/",
+            "status": "proposed_not_current"
+          }
+        ]
+      }
+    },
+    "reading-time-calculator": {
+      "user_scenarios": [
+        "A writer wants a “5 min read” target.",
+        "A presenter needs a draft to fit a time slot.",
+        "A teacher estimates how long an assignment takes to read.",
+        "A podcaster checks whether a script section is too long."
+      ],
+      "tips": [
+        "Use a slower speaking WPM for formal talks or dense material.",
+        "Add a buffer for pauses, slide transitions, and emphasis.",
+        "Use Word Counter first when you also need characters, sentences, or paragraphs.",
+        "Rehearse spoken scripts after using the estimate.",
+        "Keep WPM consistent when comparing multiple drafts."
+      ],
+      "internal_links": [
+        {
+          "target_id": "word-counter",
+          "url": "/word-tools/word-counter/",
+          "anchor_text": "check full text statistics",
+          "reason": "Use when words, characters, sentences, and paragraphs matter together."
+        },
+        {
+          "target_id": "letter-counter",
+          "url": "/word-tools/letter-counter/",
+          "anchor_text": "check character totals",
+          "reason": "Useful when text also has strict character limits."
+        },
+        {
+          "target_id": "cS-word-counter-vs-letter-counter",
+          "url": "/guides/word-counter-vs-letter-counter/",
+          "anchor_text": "word count and character count guide",
+          "reason": "Explains when timing, words, or characters matter most."
+        },
+        {
+          "target_id": "case-converter",
+          "url": "/word-tools/case-converter/",
+          "anchor_text": "format pasted headings or labels",
+          "reason": "Helpful when timing is part of a larger editing workflow."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "notes": "Describe the browser-based utility, input/output, and free access without implying server processing."
+        },
+        {
+          "type": "FAQPage",
+          "notes": "Use the enhanced FAQ questions and answers."
+        },
+        {
+          "type": "HowTo",
+          "notes": "Use concise how-to steps when the page template supports it."
+        },
+        {
+          "type": "BreadcrumbList",
+          "notes": "Match the Word Tools or Calculators cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Adjustable reading WPM slider.",
+          "Adjustable speaking WPM slider.",
+          "Word, character, and paragraph stats.",
+          "Fixed comparison across slow, average, and fast reference rates."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "suggestion": "Align the word-count formula with Word Counter or display a formula note.",
+            "user_benefit": "Users get consistent counts across linked Kefiw tools.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/word-tools/word-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "high",
+            "suggestion": "Add presets for blog post, speech, narration, and classroom reading.",
+            "user_benefit": "Users choose a real task and get sensible WPM starting points.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/calculators/reading-time-calculator/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Add optional pause/buffer controls for speaking time.",
+            "user_benefit": "Presenters can estimate realistic delivery time beyond raw word speed.",
+            "implementation_difficulty": "medium",
+            "content_page_to_support": "/guides/word-counter-vs-letter-counter/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "medium",
+            "suggestion": "Persist slider preferences locally.",
+            "user_benefit": "Frequent users can keep their preferred WPM without resetting each visit.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/calculators/reading-time-calculator/",
+            "status": "proposed_not_current"
+          },
+          {
+            "impact": "low",
+            "suggestion": "Add a reverse calculator for target minutes to target word count.",
+            "user_benefit": "Speakers can plan how many words fit a five-minute or ten-minute slot.",
+            "implementation_difficulty": "low",
+            "content_page_to_support": "/calculators/reading-time-calculator/",
+            "status": "proposed_not_current"
+          }
+        ]
+      }
+    }
+  },
+  "writer_recommended_new_articles": null
+}

@@ -14,6 +14,22 @@ export default function LetterCounter() {
     const vowels = letters.filter(([k]) => VOWELS.has(k)).reduce((s, [, n]) => s + n, 0);
     const letterTotal = letters.reduce((s, [, n]) => s + n, 0);
     const punct = text.replace(/[a-zA-Z0-9\s]/g, '').length;
+    // ASCII vs Unicode breakdown — code points ≥128 are non-ASCII.
+    let ascii = 0, nonAscii = 0;
+    for (const ch of text) {
+      if ((ch.codePointAt(0) ?? 0) >= 128) nonAscii++;
+      else ascii++;
+    }
+    // Grapheme count (Intl.Segmenter when available — emoji ZWJ-joined = 1).
+    let graphemes = Array.from(text).length;
+    try {
+      const I = Intl as unknown as { Segmenter?: new (l?: string, o?: { granularity: string }) => { segment: (s: string) => Iterable<unknown> } };
+      if (I.Segmenter) {
+        const seg = new I.Segmenter(undefined, { granularity: 'grapheme' });
+        graphemes = 0;
+        for (const _ of seg.segment(text)) graphemes++;
+      }
+    } catch { /* ignore */ }
     return {
       chars: text.length,
       charsNoSpace: text.replace(/\s/g, '').length,
@@ -22,6 +38,9 @@ export default function LetterCounter() {
       vowels,
       consonants: letterTotal - vowels,
       punct,
+      ascii,
+      nonAscii,
+      graphemes,
       topLetter: letters[0]?.[0] ?? null,
       topCount: letters[0]?.[1] ?? 0,
       entries,
@@ -39,13 +58,51 @@ export default function LetterCounter() {
         <div className="card text-center"><div className="text-xl font-semibold">{data.letters}</div><div className="text-xs text-slate-500">Letters</div></div>
         <div className="card text-center"><div className="text-xl font-semibold">{data.digits}</div><div className="text-xs text-slate-500">Digits</div></div>
       </div>
+      {data.chars > 0 && (
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="card">
+            <div className="text-lg font-semibold text-slate-900">{data.graphemes}</div>
+            <div className="text-xs text-slate-500">Graphemes (user-visible)</div>
+          </div>
+          <div className="card">
+            <div className="text-lg font-semibold text-slate-900">{data.ascii}</div>
+            <div className="text-xs text-slate-500">ASCII</div>
+          </div>
+          <div className={`card ${data.nonAscii > 0 ? '' : 'opacity-60'}`}>
+            <div className="text-lg font-semibold text-slate-900">{data.nonAscii}</div>
+            <div className="text-xs text-slate-500">Unicode (non-ASCII)</div>
+          </div>
+        </div>
+      )}
       {data.entries.length > 0 && (
         <div>
-          <div className="label">Frequency</div>
+          <div className="flex items-center justify-between">
+            <div className="label">Frequency</div>
+            <button
+              type="button"
+              onClick={() => {
+                const lines = data.entries.map(([k, n]) => {
+                  const pct = data.chars > 0 ? ((n / data.chars) * 100).toFixed(1) : '0.0';
+                  return `${k}\t${n}\t${pct}%`;
+                });
+                void navigator.clipboard?.writeText(`char\tcount\tpercent\n${lines.join('\n')}`);
+              }}
+              className="text-xs text-brand-700 hover:underline"
+              aria-label="Copy frequency table"
+            >
+              Copy table
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
-            {data.entries.map(([k, n]) => (
-              <span key={k} className="chip"><code>{k}</code> × {n}</span>
-            ))}
+            {data.entries.map(([k, n]) => {
+              const pct = data.chars > 0 ? ((n / data.chars) * 100).toFixed(1) : '0.0';
+              return (
+                <span key={k} className="chip" title={`${pct}% of ${data.chars} chars`}>
+                  <code>{k}</code> × {n}
+                  <span className="ml-1 text-xs text-slate-500">{pct}%</span>
+                </span>
+              );
+            })}
           </div>
         </div>
       )}

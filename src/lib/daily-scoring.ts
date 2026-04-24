@@ -12,6 +12,8 @@
 //   - A day the user did not play at all also resets (no grace period)
 
 import { isHiveCleared, type HiveTier } from './daily-hive-score';
+import { isMathCleared } from './daily-math-rounds';
+import { isVerbalCleared } from './daily-verbal-puzzles';
 import { getActivePipelines, getPipeline, type DailyPipeline } from '~/data/daily-pipelines';
 
 export interface HuntResult {
@@ -33,7 +35,23 @@ export interface SudokuResult {
   timeSec: number;
 }
 
-export type GameResult = HuntResult | HiveResult | SudokuResult;
+export interface MathResult {
+  // gameId matches one of the math-* ids in daily-games.ts
+  gameId: 'math-percent' | 'math-discount' | 'math-convert' | 'math-tip' | 'math-timedelta';
+  score: number;            // 0..1500 for the session
+  roundsCompleted: number;  // 0..10
+  timeSec: number;          // total session time used
+}
+
+export interface VerbalResult {
+  gameId: 'verbal-crypt' | 'verbal-link' | 'verbal-shift' | 'verbal-crosser' | 'verbal-twist';
+  score: number;            // 0..1500 after time multiplier
+  accuracy: number;         // 0..1 raw accuracy
+  timeSec: number;          // total solve time (no hard cap)
+  finished: boolean;        // user hit "submit" or ran out of retries
+}
+
+export type GameResult = HuntResult | HiveResult | SudokuResult | MathResult | VerbalResult;
 
 export function isCleared(result: GameResult): boolean {
   switch (result.gameId) {
@@ -43,6 +61,18 @@ export function isCleared(result: GameResult): boolean {
       return isHiveCleared(result.tier);
     case 'sudoku':
       return result.solved;
+    case 'math-percent':
+    case 'math-discount':
+    case 'math-convert':
+    case 'math-tip':
+    case 'math-timedelta':
+      return isMathCleared(result.score, result.roundsCompleted);
+    case 'verbal-crypt':
+    case 'verbal-link':
+    case 'verbal-shift':
+    case 'verbal-crosser':
+    case 'verbal-twist':
+      return result.finished && isVerbalCleared(result.score);
   }
 }
 

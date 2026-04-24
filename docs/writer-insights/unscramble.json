@@ -1,0 +1,604 @@
+{
+  "cluster_id": "unscramble",
+  "enhanced_at": "2026-04-22",
+  "source": "docs/article-briefings/unscramble-V3-enhanced.json",
+  "status_at_import": "13 articles and 5 tools merged via unscramble-enhancements modules.",
+  "serp_research": null,
+  "adsense_readiness": null,
+  "audit_notes": null,
+  "cluster_suggested_tool_enhancements": null,
+  "tool_non_schema_writer_notes": {
+    "word-unscrambler": {
+      "user_scenarios": [
+        "A casual player has seven letters and wants to know whether a long play exists.",
+        "A student is practicing word-building patterns and wants every word from a small letter set.",
+        "A puzzle solver has a blank tile and needs to see how it changes the possible answers."
+      ],
+      "tips": [
+        "Start with a higher minimum length when you are hunting for a long answer.",
+        "Switch to Scrabble Helper or WWF Helper when score order matters more than length.",
+        "Use Word Finder when you know a fixed position, such as C?T or ..ING.",
+        "Use the Full list for general vocabulary, not for official game rulings."
+      ],
+      "internal_links": [
+        {
+          "id": "anagram-solver",
+          "url": "/word-tools/anagram-solver/",
+          "anchor_text": "anagram solver",
+          "reason": "Use when every letter must be rearranged into a same-length word.",
+          "priority": "high"
+        },
+        {
+          "id": "scrabble-helper",
+          "url": "/word-tools/scrabble-helper/",
+          "anchor_text": "Scrabble word finder",
+          "reason": "Use when score ranking matters more than length-first browsing.",
+          "priority": "high"
+        },
+        {
+          "id": "word-finder",
+          "url": "/word-tools/word-finder/",
+          "anchor_text": "word finder by letters or pattern",
+          "reason": "Use when the user knows positions or wants length-bounded letter search.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-how-to-use-a-word-unscrambler",
+          "url": "/guides/how-to-use-a-word-unscrambler/",
+          "anchor_text": "how to use a word unscrambler",
+          "reason": "Supports users who need a deeper workflow after trying the tool.",
+          "priority": "medium"
+        },
+        {
+          "id": "cS-search-by-word-length",
+          "url": "/guides/how-to-search-by-word-length/",
+          "anchor_text": "search by word length",
+          "reason": "Explains how to tame large result sets with length constraints.",
+          "priority": "medium"
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "WebApplication",
+          "reason": "Describes the browser-based interactive word tool."
+        },
+        {
+          "type": "HowTo",
+          "reason": "Supports the concise step-by-step tool workflow."
+        },
+        {
+          "type": "FAQPage",
+          "reason": "Marks up the PAA-style FAQ."
+        },
+        {
+          "type": "BreadcrumbList",
+          "reason": "Clarifies the word-tools cluster path."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Browser-based rack search using ENABLE1 or a broader dictionary.",
+          "Single-character blank tiles with ?.",
+          "Minimum length filter and optional Scrabble/WWF score display."
+        ],
+        "proposed_upgrades": [
+          {
+            "impact": "high",
+            "title": "Score blanks as zero and mark which letter each blank represents",
+            "user_benefit": "Users can trust score estimates more when a blank is involved and can see why a play is possible.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-blank-tiles-word-tools",
+              "url": "/guides/blank-tiles-in-word-tools/"
+            }
+          },
+          {
+            "impact": "high",
+            "title": "Add result caps, pagination, or progressive rendering",
+            "user_benefit": "Large racks with blanks stay fast and readable instead of flooding the page.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-search-by-word-length",
+              "url": "/guides/how-to-search-by-word-length/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Add include, exclude, starts-with, and ends-with filters",
+            "user_benefit": "Users can turn a broad rack search into a focused shortlist without switching tools.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-search-by-word-length",
+              "url": "/guides/how-to-search-by-word-length/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Explain Game list versus Full list inline",
+            "user_benefit": "Players understand why a word appears and which list is safer for casual game use.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-unscrambler-vs-anagram-solver",
+              "url": "/guides/unscrambler-vs-anagram-solver/"
+            }
+          }
+        ]
+      }
+    },
+    "anagram-solver": {
+      "user_scenarios": [
+        "A crossword clue says an answer is an anagram of a given word.",
+        "A puzzle solver wants to verify whether LISTEN can become SILENT.",
+        "A word-game player wants shorter alternatives from a rack but does not have blanks."
+      ],
+      "tips": [
+        "Use All letters first for true anagrams.",
+        "Switch to Any letters when no exact word exists or the puzzle allows subsets.",
+        "Use Word Finder when you know fixed positions.",
+        "Use Word Unscrambler for blank tiles and broader rack-style searches."
+      ],
+      "internal_links": [
+        {
+          "id": "word-unscrambler",
+          "url": "/word-tools/word-unscrambler/",
+          "anchor_text": "word unscrambler",
+          "reason": "Use when subsets or blank tiles matter.",
+          "priority": "high"
+        },
+        {
+          "id": "word-finder",
+          "url": "/word-tools/word-finder/",
+          "anchor_text": "word finder",
+          "reason": "Use when the user knows positions or fixed word length.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-how-to-solve-anagrams-faster",
+          "url": "/guides/how-to-solve-anagrams-faster/",
+          "anchor_text": "solve anagrams faster",
+          "reason": "Teaches human pattern strategies that complement the tool.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-unscrambler-vs-anagram-solver",
+          "url": "/guides/unscrambler-vs-anagram-solver/",
+          "anchor_text": "unscrambler vs anagram solver",
+          "reason": "Clarifies exact versus subset searches.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-common-anagram-patterns",
+          "url": "/guides/common-anagram-patterns/",
+          "anchor_text": "common anagram patterns",
+          "reason": "Builds topical authority around solving skill.",
+          "priority": "medium"
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "WebApplication",
+          "reason": "Describes the interactive anagram solver."
+        },
+        {
+          "type": "HowTo",
+          "reason": "Captures exact versus partial mode instructions."
+        },
+        {
+          "type": "FAQPage",
+          "reason": "Supports common anagram and phrase-anagram questions."
+        },
+        {
+          "type": "BreadcrumbList",
+          "reason": "Places the page in the word-tools cluster."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Exact all-letter single-word anagrams.",
+          "Any-letters partial single-word matches.",
+          "Game list and Full list dictionary modes.",
+          "Optional Scrabble and WWF score display."
+        ],
+        "proposed_upgrades": [
+          {
+            "impact": "high",
+            "title": "Add optional blank-tile support with clear scoring notes",
+            "user_benefit": "Puzzle and game users can solve anagrams that include one or two unknown letters without switching tools.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-blank-tiles-word-tools",
+              "url": "/guides/blank-tiles-in-word-tools/"
+            }
+          },
+          {
+            "impact": "high",
+            "title": "Add phrase-anagram mode as a clearly separate workflow",
+            "user_benefit": "Users entering multi-word clues can search phrase outputs without confusing the current single-word solver.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": {
+              "id": "cS-unscrambler-vs-anagram-solver",
+              "url": "/guides/unscrambler-vs-anagram-solver/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Add near-anagram mode for one missing or extra letter",
+            "user_benefit": "Crossword and spelling-game users can recover from uncertain letters more quickly.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-how-to-solve-anagrams-faster",
+              "url": "/guides/how-to-solve-anagrams-faster/"
+            }
+          },
+          {
+            "impact": "low",
+            "title": "Show the sorted-letter key and letter counts",
+            "user_benefit": "Learners can understand why duplicate letters matter.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-common-anagram-patterns",
+              "url": "/guides/common-anagram-patterns/"
+            }
+          }
+        ]
+      }
+    },
+    "word-finder": {
+      "user_scenarios": [
+        "A solver knows the word is five letters and the third letter is R.",
+        "A player has a rack plus one blank and wants only 5 to 7 letter options.",
+        "A student is learning how changing one letter creates word families."
+      ],
+      "tips": [
+        "Use Pattern mode as soon as you know even one position.",
+        "Use dots for unknowns if ? is visually confusing with blank tiles.",
+        "In Letters mode, set max length to your rack size or puzzle limit.",
+        "Switch to Words Starting/Ending/Containing tools only when the task is pure prefix, suffix, or substring search."
+      ],
+      "internal_links": [
+        {
+          "id": "word-unscrambler",
+          "url": "/word-tools/word-unscrambler/",
+          "anchor_text": "word unscrambler",
+          "reason": "Use for broad rack searches without fixed positions.",
+          "priority": "high"
+        },
+        {
+          "id": "anagram-solver",
+          "url": "/word-tools/anagram-solver/",
+          "anchor_text": "anagram solver",
+          "reason": "Use for exact same-letter rearrangements.",
+          "priority": "medium"
+        },
+        {
+          "id": "cS-search-by-word-length",
+          "url": "/guides/how-to-search-by-word-length/",
+          "anchor_text": "how to search by word length",
+          "reason": "Explains exact, minimum, and maximum length choices.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-blank-tiles-word-tools",
+          "url": "/guides/blank-tiles-in-word-tools/",
+          "anchor_text": "blank tiles and wildcards",
+          "reason": "Clarifies ? behavior across tools.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-common-anagram-patterns",
+          "url": "/guides/common-anagram-patterns/",
+          "anchor_text": "common anagram patterns",
+          "reason": "Teaches pattern recognition for human solving.",
+          "priority": "medium"
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "WebApplication",
+          "reason": "Describes the interactive letter and pattern finder."
+        },
+        {
+          "type": "HowTo",
+          "reason": "Captures mode choice and pattern syntax."
+        },
+        {
+          "type": "FAQPage",
+          "reason": "Answers wildcard, length, and trust questions."
+        },
+        {
+          "type": "BreadcrumbList",
+          "reason": "Supports cluster navigation."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Letters mode with rack-fit search and blanks.",
+          "Pattern mode with ?, _, and . single-character wildcards.",
+          "Min/max length controls in Letters mode.",
+          "Optional score display."
+        ],
+        "proposed_upgrades": [
+          {
+            "impact": "high",
+            "title": "Add must-include and exclude-letter filters",
+            "user_benefit": "Wordle and crossword users can remove known-bad letters without leaving the page.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-search-by-word-length",
+              "url": "/guides/how-to-search-by-word-length/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Add starts-with, ends-with, and contains fields in the same interface",
+            "user_benefit": "Users can combine pattern and substring clues instead of bouncing among tools.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-common-anagram-patterns",
+              "url": "/guides/common-anagram-patterns/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Add locked-length presets for common puzzle lengths beyond 5, 6, and 7",
+            "user_benefit": "Puzzle solvers can start with the right length faster.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-search-by-word-length",
+              "url": "/guides/how-to-search-by-word-length/"
+            }
+          },
+          {
+            "impact": "low",
+            "title": "Show wildcard and fixed-letter counts beside examples",
+            "user_benefit": "Beginners understand why a pattern returns few or many results.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-search-by-word-length",
+              "url": "/guides/how-to-search-by-word-length/"
+            }
+          }
+        ]
+      }
+    },
+    "scrabble-helper": {
+      "user_scenarios": [
+        "A player has a Q or Z and wants to know whether a short high-value play exists.",
+        "A learner wants to study why some balanced racks produce many bingos.",
+        "A casual player has one anchor letter available and wants candidates passing through it."
+      ],
+      "tips": [
+        "Use Scored mode for decision-making and Basic mode for studying the word list.",
+        "Check high-value short words before choosing a long common-letter word.",
+        "Subtract blank values manually when a result uses ?.",
+        "Pair results with board review because placement can beat raw tile score."
+      ],
+      "internal_links": [
+        {
+          "id": "words-with-friends-helper",
+          "url": "/word-tools/words-with-friends-helper/",
+          "anchor_text": "Words With Friends word finder",
+          "reason": "Compare WWF scoring and bonus differences.",
+          "priority": "high"
+        },
+        {
+          "id": "word-unscrambler",
+          "url": "/word-tools/word-unscrambler/",
+          "anchor_text": "word unscrambler",
+          "reason": "Use for length-first browsing and broader word discovery.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-highest-scoring-from-letters",
+          "url": "/guides/highest-scoring-words-from-letters/",
+          "anchor_text": "highest-scoring words from letters",
+          "reason": "Supports score strategy beyond the tool UI.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-board-letters-with-rack",
+          "url": "/guides/how-to-use-board-letters-with-rack-tools/",
+          "anchor_text": "using board letters with rack tools",
+          "reason": "Explains how to handle the current one-letter board constraint honestly.",
+          "priority": "high"
+        },
+        {
+          "id": "cA-2-letter-words",
+          "url": "/word-tools/2-letter-words/",
+          "anchor_text": "2-letter words",
+          "reason": "Short-word study supports hook and tight-board play.",
+          "priority": "medium"
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "WebApplication",
+          "reason": "Describes the interactive Scrabble-style helper."
+        },
+        {
+          "type": "HowTo",
+          "reason": "Captures rack, blank, and board-letter workflow."
+        },
+        {
+          "type": "FAQPage",
+          "reason": "Answers dictionary, blank, and scoring questions."
+        },
+        {
+          "type": "BreadcrumbList",
+          "reason": "Places the page within word tools."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Score-ranked rack results using standard Scrabble tile values.",
+          "Blank tile support with ?.",
+          "Single optional plays-through board letter.",
+          "Seven-rack-tile bingo flag and +50 bonus.",
+          "Browser-based processing."
+        ],
+        "proposed_upgrades": [
+          {
+            "impact": "high",
+            "title": "Fix blank scoring to zero with visible blank attribution",
+            "user_benefit": "Players can trust displayed scores and understand which tile was played as a blank.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-blank-tiles-word-tools",
+              "url": "/guides/blank-tiles-in-word-tools/"
+            }
+          },
+          {
+            "impact": "high",
+            "title": "Add full-board placement and premium-square scoring",
+            "user_benefit": "Users can move from candidate words to actual playable moves with realistic scores.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": {
+              "id": "cS-board-letters-with-rack",
+              "url": "/guides/how-to-use-board-letters-with-rack-tools/"
+            }
+          },
+          {
+            "impact": "high",
+            "title": "Add official dictionary modes where licensing permits",
+            "user_benefit": "Tournament and club users can choose a word list that matches their rules.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": {
+              "id": "cS-unscrambler-vs-anagram-solver",
+              "url": "/guides/unscrambler-vs-anagram-solver/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Add rack leave notes for common high-value and vowel-heavy leaves",
+            "user_benefit": "Players learn why the best immediate score may not be the best strategic move.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-highest-scoring-from-letters",
+              "url": "/guides/highest-scoring-words-from-letters/"
+            }
+          }
+        ]
+      }
+    },
+    "words-with-friends-helper": {
+      "user_scenarios": [
+        "A WWF player has high-value tiles and wants a ranked shortlist.",
+        "A casual player wants to compare the same rack in Scrabble and WWF.",
+        "A learner wants to understand why WWF and Scrabble scores differ."
+      ],
+      "tips": [
+        "Use WWF Helper for WWF racks and Scrabble Helper for Scrabble racks.",
+        "Compare the second-best score and score gap before choosing.",
+        "Use short-word lists when a board is tight.",
+        "Manually adjust blank-involved scores until blank scoring is fixed."
+      ],
+      "internal_links": [
+        {
+          "id": "scrabble-helper",
+          "url": "/word-tools/scrabble-helper/",
+          "anchor_text": "Scrabble word finder",
+          "reason": "Compare Scrabble tile values and bonus behavior.",
+          "priority": "high"
+        },
+        {
+          "id": "word-unscrambler",
+          "url": "/word-tools/word-unscrambler/",
+          "anchor_text": "word unscrambler",
+          "reason": "Use for broader word discovery not limited to score ranking.",
+          "priority": "medium"
+        },
+        {
+          "id": "cS-highest-scoring-from-letters",
+          "url": "/guides/highest-scoring-words-from-letters/",
+          "anchor_text": "highest-scoring words from letters",
+          "reason": "Explains score-sorted thinking across word games.",
+          "priority": "high"
+        },
+        {
+          "id": "cS-best-short-words-from-letters",
+          "url": "/guides/best-short-words-from-scrambled-letters/",
+          "anchor_text": "best short words from scrambled letters",
+          "reason": "Supports short-word strategy for tight boards.",
+          "priority": "medium"
+        },
+        {
+          "id": "cA-3-letter-words",
+          "url": "/word-tools/3-letter-words/",
+          "anchor_text": "3-letter words",
+          "reason": "Short words are essential for WWF-style tight-board play.",
+          "priority": "medium"
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "WebApplication",
+          "reason": "Describes the interactive WWF-style helper."
+        },
+        {
+          "type": "HowTo",
+          "reason": "Captures rack, blank, and optional board-letter workflow."
+        },
+        {
+          "type": "FAQPage",
+          "reason": "Answers WWF dictionary and scoring questions."
+        },
+        {
+          "type": "BreadcrumbList",
+          "reason": "Supports cluster navigation."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "WWF tile-value scoring.",
+          "Blank tile support with ?.",
+          "Single optional plays-through board letter.",
+          "+35 seven-tile bonus flag.",
+          "Browser-based rack search."
+        ],
+        "proposed_upgrades": [
+          {
+            "impact": "high",
+            "title": "Fix blank scoring and display blank attribution",
+            "user_benefit": "WWF score estimates become more trustworthy when blanks are involved.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-blank-tiles-word-tools",
+              "url": "/guides/blank-tiles-in-word-tools/"
+            }
+          },
+          {
+            "impact": "high",
+            "title": "Add full WWF board layout and premium-square scoring",
+            "user_benefit": "Users can evaluate actual playable WWF moves, not just rack candidates.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": {
+              "id": "cS-board-letters-with-rack",
+              "url": "/guides/how-to-use-board-letters-with-rack-tools/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Add a clear WWF dictionary disclaimer panel",
+            "user_benefit": "Users understand ENABLE1 proxy behavior before relying on a word.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-unscrambler-vs-anagram-solver",
+              "url": "/guides/unscrambler-vs-anagram-solver/"
+            }
+          },
+          {
+            "impact": "medium",
+            "title": "Add side-by-side Scrabble versus WWF score comparison",
+            "user_benefit": "Players moving between games can see why the best word changes.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-highest-scoring-from-letters",
+              "url": "/guides/highest-scoring-words-from-letters/"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "writer_recommended_new_articles": null
+}

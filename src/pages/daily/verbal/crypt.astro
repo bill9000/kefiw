@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import VerbalCrypt from '~/components/daily/VerbalCrypt.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/verbal/', label: 'Kefiw Verbal' },
+  { href: '/daily/verbal/crypt/', label: 'Cryptogram' },
+];
+---
+
+<BaseLayout
+  title="Daily Cryptogram — today's substitution cipher puzzle"
+  description="Decode today's cryptogram, one letter at a time. Fresh quote daily at 4am ET."
+  canonical="/daily/verbal/crypt/"
+  keywords={["daily cryptogram", "substitution cipher puzzle", "decode quote", "word puzzle"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Cryptogram</h1>
+      <p class="mt-1 text-slate-600">Every cipher letter maps to one plaintext letter. Tap a letter in the quote, then pick what it decodes to.</p>
+    </header>
+
+    <VerbalCrypt client:only="react" />
+  </article>
+</BaseLayout>

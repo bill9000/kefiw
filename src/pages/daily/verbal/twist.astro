@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import VerbalTwist from '~/components/daily/VerbalTwist.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/verbal/', label: 'Kefiw Verbal' },
+  { href: '/daily/verbal/twist/', label: 'Word Twist' },
+];
+---
+
+<BaseLayout
+  title="Daily Word Twist — find all the words in seven letters"
+  description="Seven seeded letters. How many real 3+ letter words can you find? Fresh puzzle daily at 4am ET."
+  canonical="/daily/verbal/twist/"
+  keywords={["daily word twist", "seven letter puzzle", "word hunt game", "anagram game"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Word Twist</h1>
+      <p class="mt-1 text-slate-600">Find as many real 3+ letter words as you can from the seven letters below. Each letter used once per word.</p>
+    </header>
+
+    <VerbalTwist client:only="react" />
+  </article>
+</BaseLayout>

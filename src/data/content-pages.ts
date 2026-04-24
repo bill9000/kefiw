@@ -69,6 +69,15 @@ export interface ContentPageConfig {
   // Contains markdown prose (H2 sections, paragraphs, inline links).
   longformMarkdown?: string;
   metaDescription?: string;
+  // Google Discover / social hook — emitted as og:title + twitter:title only.
+  // Formula: named topic + one emotion + one concrete promise, ~60–70 chars,
+  // aligned to a real PAA query. Only set on substantial informative articles;
+  // the SEO-optimized `title` still governs the <title> tag and search listings.
+  discoverHeadline?: string;
+  // Per-article hero image for Google Discover + social cards. Path relative
+  // to /public (e.g. '/og/scrabble-blanks.jpg'). Minimum 1200px wide, ~16:9,
+  // no text/logos/watermarks. Falls back to the site-wide /og-image.png.
+  ogImage?: string;
   // cross-linking
   relatedIds?: string[];
   relatedLinks?: ContentCta[];
@@ -114,9 +123,13 @@ import { ARTICLES_HEALTH_PEPTIDE_PREP } from './content/articles-health-peptide-
 import { ARTICLES_HEALTH_PEPTIDE_BIO } from './content/articles-health-peptide-bio';
 import { ARTICLES_TRIAD_SCENARIOS } from './content/articles-triad-scenarios';
 import { ARTICLES_VIBE_GAMES } from './content/articles-vibe-games';
+import { ARTICLES_BRAIN_GAMES } from './content/articles-brain-games';
 
 // Writer-AI V3 enhancement overrides (merged in at export time below).
 import { SCRABBLE_ENHANCEMENTS } from './content/scrabble-enhancements';
+import { TEXT_CLEANUP_ENHANCEMENTS } from './content/text-cleanup-enhancements';
+import { UNSCRAMBLE_ENHANCEMENTS } from './content/unscramble-enhancements';
+import { WORD_FAMILIES_ENHANCEMENTS } from './content/word-families-enhancements';
 import {
   SCRABBLE_ARTICLE_PATCHES,
   SCRABBLE_NEW_GUIDES,
@@ -153,10 +166,14 @@ const RAW_CONTENT_PAGES: ContentPageConfig[] = [
   ...ARTICLES_HEALTH_PEPTIDE_BIO,
   ...ARTICLES_TRIAD_SCENARIOS,
   ...ARTICLES_VIBE_GAMES,
+  ...ARTICLES_BRAIN_GAMES,
 ];
 
 const ENHANCEMENT_OVERRIDES: Record<string, Partial<ContentPageConfig>> = {
   ...SCRABBLE_ENHANCEMENTS,
+  ...TEXT_CLEANUP_ENHANCEMENTS,
+  ...UNSCRAMBLE_ENHANCEMENTS,
+  ...WORD_FAMILIES_ENHANCEMENTS,
 };
 
 // Apply sparse append-style patches (new FAQs, longform sections, relatedIds)

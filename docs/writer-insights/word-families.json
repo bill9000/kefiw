@@ -1,0 +1,523 @@
+{
+  "cluster_id": "word-families",
+  "enhanced_at": "2026-04-22",
+  "source": "docs/article-briefings/word-families-V3-enhanced.json",
+  "status_at_import": "10 articles and 4 tools merged via word-families-enhancements modules.",
+  "serp_research": null,
+  "adsense_readiness": null,
+  "audit_notes": null,
+  "cluster_suggested_tool_enhancements": null,
+  "tool_non_schema_writer_notes": {
+    "words-starting-with": {
+      "user_scenarios": [
+        "A crossword solver knows a clue answer starts with PRE and has seven letters.",
+        "A teacher wants examples of words beginning with un- for a spelling mini-lesson.",
+        "A writer needs alliterative options that start with ST or TR.",
+        "A word-game player wants possible rack ideas but still needs to verify game validity."
+      ],
+      "tips": [
+        "Start with the shortest confirmed prefix, then add letters only when the list is too broad.",
+        "Use length filters before scanning long rare-word lists.",
+        "For prefix study, compare un-, re-, pre-, and dis- to see how meanings differ.",
+        "When the start is known but one internal letter is unknown, use Word Finder pattern mode.",
+        "Use Words Containing if the same letters can appear anywhere instead of only at the start."
+      ],
+      "internal_links": [
+        {
+          "id": "words-ending-with",
+          "title": "Words Ending With — Kefiw",
+          "url": "/word-tools/words-ending-with/",
+          "anchor_text": "find words by ending letters",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "words-containing",
+          "title": "Words Containing Letters — Kefiw",
+          "url": "/word-tools/words-containing/",
+          "anchor_text": "find words containing letters",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "word-finder",
+          "title": "Word Finder by Letters — Kefiw",
+          "url": "/word-tools/word-finder/",
+          "anchor_text": "find words from letters or patterns",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-what-prefixes-do",
+          "title": "What Prefixes Do in English — The Short, Useful Version",
+          "url": "/guides/what-prefixes-do-in-english/",
+          "anchor_text": "learn what prefixes do",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-common-english-beginnings",
+          "title": "Common English Word Beginnings — The High-Frequency Prefixes",
+          "url": "/guides/common-english-word-beginnings/",
+          "anchor_text": "common English word beginnings",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "purpose": "Describe the browser-based word tool and its input/output behavior."
+        },
+        {
+          "type": "FAQPage",
+          "purpose": "Mark up the visible tool FAQ."
+        },
+        {
+          "type": "BreadcrumbList",
+          "purpose": "Clarify the Word Tools hierarchy."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Browser-based broad dictionary search.",
+          "Minimum and maximum length filters.",
+          "Length-grouped result list with result count and summary stats.",
+          "Notice when more than 500 matches exist."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Add a Game list vs Full dictionary toggle",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Users could distinguish playable word-game candidates from broad vocabulary matches without leaving the page.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-common-english-beginnings",
+              "url": "/guides/common-english-word-beginnings/",
+              "anchor_text": "Common English Word Beginnings — The High-Frequency Prefixes"
+            }
+          },
+          {
+            "impact": "high",
+            "feature": "Add an optional starts-with plus contains filter",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Crossword and puzzle users could combine a known beginning with an internal letter sequence in one workflow.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-what-prefixes-do",
+              "url": "/guides/what-prefixes-do-in-english/",
+              "anchor_text": "What Prefixes Do in English — The Short, Useful Version"
+            }
+          },
+          {
+            "impact": "medium",
+            "feature": "Add a copy/export visible-results action",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Writers and teachers could save lesson lists, themed word banks, or puzzle candidates faster.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-common-english-beginnings",
+              "url": "/guides/common-english-word-beginnings/",
+              "anchor_text": "Common English Word Beginnings — The High-Frequency Prefixes"
+            }
+          },
+          {
+            "impact": "low",
+            "feature": "Show a normalization warning when characters are stripped",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Users would understand why spaces, hyphens, or punctuation did not affect the search.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-what-prefixes-do",
+              "url": "/guides/what-prefixes-do-in-english/",
+              "anchor_text": "What Prefixes Do in English — The Short, Useful Version"
+            }
+          }
+        ]
+      }
+    },
+    "words-ending-with": {
+      "user_scenarios": [
+        "A crossword solver knows an answer ends with TION and has eight letters.",
+        "A student wants examples of words ending in -ness for a suffix assignment.",
+        "A songwriter is checking spelling endings before moving to a rhyme tool.",
+        "A game player wants possible -ed or -ing extensions but must still validate the play."
+      ],
+      "tips": [
+        "Use common endings such as -ing, -ed, -er, -ly, and -tion as starting points.",
+        "For crosswords, set the exact answer length with matching min and max values.",
+        "For writing, use the list to brainstorm, then choose the word that fits meaning and rhythm.",
+        "For rhyme, check pronunciation separately because spelling can mislead.",
+        "When the ending plus an internal cluster matters, use Words Containing as a second step."
+      ],
+      "internal_links": [
+        {
+          "id": "words-starting-with",
+          "title": "Words Starting With — Kefiw",
+          "url": "/word-tools/words-starting-with/",
+          "anchor_text": "find words by starting letters",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "words-containing",
+          "title": "Words Containing Letters — Kefiw",
+          "url": "/word-tools/words-containing/",
+          "anchor_text": "find words containing letters",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "word-finder",
+          "title": "Word Finder by Letters — Kefiw",
+          "url": "/word-tools/word-finder/",
+          "anchor_text": "find words from letters or patterns",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-what-suffixes-do",
+          "title": "What Suffixes Do in English — Changing Part of Speech",
+          "url": "/guides/what-suffixes-do-in-english/",
+          "anchor_text": "learn what suffixes do",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-common-english-endings",
+          "title": "Common English Word Endings — Patterns Worth Recognising",
+          "url": "/guides/common-english-word-endings/",
+          "anchor_text": "common English word endings",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "purpose": "Describe the browser-based word tool and its input/output behavior."
+        },
+        {
+          "type": "FAQPage",
+          "purpose": "Mark up the visible tool FAQ."
+        },
+        {
+          "type": "BreadcrumbList",
+          "purpose": "Clarify the Word Tools hierarchy."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Browser-based broad dictionary search.",
+          "Minimum and maximum length filters.",
+          "Length-grouped result list with count, stats, and capped-display notice.",
+          "Next-step links to starting, containing, and unscrambler-style tools."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Add an optional Game list vs Full dictionary toggle",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Users could separate broad vocabulary from likely word-game candidates without leaving the suffix page.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-common-english-endings",
+              "url": "/guides/common-english-word-endings/",
+              "anchor_text": "Common English Word Endings — Patterns Worth Recognising"
+            }
+          },
+          {
+            "impact": "high",
+            "feature": "Add an ending plus contains filter",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Crossword users could search words ending in TION that also contain a confirmed internal cluster.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-what-suffixes-do",
+              "url": "/guides/what-suffixes-do-in-english/",
+              "anchor_text": "What Suffixes Do in English — Changing Part of Speech"
+            }
+          },
+          {
+            "impact": "medium",
+            "feature": "Add a spelling-vs-sound callout for rhyme searches",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Poets and lyric writers would avoid mistaking same-ending words for true rhymes.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-common-english-endings",
+              "url": "/guides/common-english-word-endings/",
+              "anchor_text": "Common English Word Endings — Patterns Worth Recognising"
+            }
+          },
+          {
+            "impact": "low",
+            "feature": "Add common suffix chips such as ING, ED, LY, TION, NESS",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Beginners could explore high-value endings quickly without knowing which examples to type.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-what-suffixes-do",
+              "url": "/guides/what-suffixes-do-in-english/",
+              "anchor_text": "What Suffixes Do in English — Changing Part of Speech"
+            }
+          }
+        ]
+      }
+    },
+    "words-containing": {
+      "user_scenarios": [
+        "A crossword solver has _QUA_ in the middle of an answer.",
+        "A student wants examples containing EIGH for spelling practice.",
+        "A word-game player sees a QUA board cluster and wants possibilities.",
+        "A writer wants words with a repeated visual pattern for a title or exercise."
+      ],
+      "tips": [
+        "Use three or more letters for cleaner results when possible.",
+        "If the cluster is at the start, switch to Words Starting With for stricter output.",
+        "If the cluster is at the end, switch to Words Ending With.",
+        "For rack letters that can move around, use Word Finder Letters mode.",
+        "Pair contains searches with common endings to learn productive spelling patterns."
+      ],
+      "internal_links": [
+        {
+          "id": "words-starting-with",
+          "title": "Words Starting With — Kefiw",
+          "url": "/word-tools/words-starting-with/",
+          "anchor_text": "search by starting letters",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "words-ending-with",
+          "title": "Words Ending With — Kefiw",
+          "url": "/word-tools/words-ending-with/",
+          "anchor_text": "search by ending letters",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "word-finder",
+          "title": "Word Finder by Letters — Kefiw",
+          "url": "/word-tools/word-finder/",
+          "anchor_text": "search by rack letters or fixed pattern",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-what-prefixes-do",
+          "title": "What Prefixes Do in English — The Short, Useful Version",
+          "url": "/guides/what-prefixes-do-in-english/",
+          "anchor_text": "prefix meaning guide",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-what-suffixes-do",
+          "title": "What Suffixes Do in English — Changing Part of Speech",
+          "url": "/guides/what-suffixes-do-in-english/",
+          "anchor_text": "suffix meaning guide",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "purpose": "Describe the browser-based word tool and its input/output behavior."
+        },
+        {
+          "type": "FAQPage",
+          "purpose": "Mark up the visible tool FAQ."
+        },
+        {
+          "type": "BreadcrumbList",
+          "purpose": "Clarify the Word Tools hierarchy."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Exact contiguous substring search.",
+          "Minimum and maximum length filters.",
+          "Length-grouped result list with result count and summary cards.",
+          "Next-step links to starting, ending, and unscrambler-style tools."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Add explicit mode tabs for Contiguous sequence vs Any letters",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Users would stop confusing substring search with anagram or non-adjacent letter matching.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-common-english-beginnings",
+              "url": "/guides/common-english-word-beginnings/",
+              "anchor_text": "Common English Word Beginnings — The High-Frequency Prefixes"
+            }
+          },
+          {
+            "impact": "high",
+            "feature": "Add optional position filters: anywhere, starts, ends, middle",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Puzzle users could keep one workflow while narrowing a known cluster by position.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-common-english-endings",
+              "url": "/guides/common-english-word-endings/",
+              "anchor_text": "Common English Word Endings — Patterns Worth Recognising"
+            }
+          },
+          {
+            "impact": "medium",
+            "feature": "Add a no-results troubleshooting card",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Users would learn to shorten the sequence, check adjacency, or switch to Word Finder when letters are not adjacent.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-what-prefixes-do",
+              "url": "/guides/what-prefixes-do-in-english/",
+              "anchor_text": "What Prefixes Do in English — The Short, Useful Version"
+            }
+          },
+          {
+            "impact": "low",
+            "feature": "Add common cluster chips such as QUA, EIGH, STR, TION",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Beginners could explore useful patterns quickly and learn which clusters are productive.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-common-english-beginnings",
+              "url": "/guides/common-english-word-beginnings/",
+              "anchor_text": "Common English Word Beginnings — The High-Frequency Prefixes"
+            }
+          }
+        ]
+      }
+    },
+    "word-finder": {
+      "user_scenarios": [
+        "A player has seven letters and wants to know possible words before choosing a board move.",
+        "A crossword solver knows C _ A _ E and needs five-letter candidates.",
+        "A puzzle player wants to compare game-list and broad-dictionary output.",
+        "A teacher uses pattern mode to demonstrate how fixed letters narrow possibilities."
+      ],
+      "tips": [
+        "Use Letters mode for rack-style searches and Pattern mode for fixed slots.",
+        "Turn on scores only after you have a manageable candidate list.",
+        "Try Game list first for word-game practice, then Full list for vocabulary exploration.",
+        "For crosswords, enter every known position instead of only the letters you remember.",
+        "After finding candidates, check meaning and board placement before using a word."
+      ],
+      "internal_links": [
+        {
+          "id": "words-starting-with",
+          "title": "Words Starting With — Kefiw",
+          "url": "/word-tools/words-starting-with/",
+          "anchor_text": "use prefix search instead",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "words-ending-with",
+          "title": "Words Ending With — Kefiw",
+          "url": "/word-tools/words-ending-with/",
+          "anchor_text": "use suffix search instead",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "words-containing",
+          "title": "Words Containing Letters — Kefiw",
+          "url": "/word-tools/words-containing/",
+          "anchor_text": "use contiguous contains search instead",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-common-english-beginnings",
+          "title": "Common English Word Beginnings — The High-Frequency Prefixes",
+          "url": "/guides/common-english-word-beginnings/",
+          "anchor_text": "learn common beginnings",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        },
+        {
+          "id": "cS-common-english-endings",
+          "title": "Common English Word Endings — Patterns Worth Recognising",
+          "url": "/guides/common-english-word-endings/",
+          "anchor_text": "learn common endings",
+          "why_link": "Useful next step within the same word families and patterns cluster."
+        }
+      ],
+      "schema_suggestions": [
+        {
+          "type": "SoftwareApplication",
+          "purpose": "Describe the browser-based word tool and its input/output behavior."
+        },
+        {
+          "type": "FAQPage",
+          "purpose": "Mark up the visible tool FAQ."
+        },
+        {
+          "type": "BreadcrumbList",
+          "purpose": "Clarify the Word Tools hierarchy."
+        }
+      ],
+      "suggested_tool_enhancements": {
+        "existing_features": [
+          "Letters and Pattern search modes.",
+          "Blank tile support in Letters mode.",
+          "Single-character wildcards in Pattern mode.",
+          "Game list and Full list options.",
+          "Optional Scrabble and Words With Friends scores.",
+          "Locked-length variants for 5-, 6-, and 7-letter pattern searches."
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Add must-include and exclude-letter filters",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Users could narrow rack and pattern searches without switching tools or manually scanning results.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": {
+              "id": "cS-common-english-beginnings",
+              "url": "/guides/common-english-word-beginnings/",
+              "anchor_text": "Common English Word Beginnings — The High-Frequency Prefixes"
+            }
+          },
+          {
+            "impact": "high",
+            "feature": "Add a board-aware helper as a separate advanced mode",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Game players could estimate hooks, board anchors, and premium-square opportunities while keeping the current simple finder intact.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": {
+              "id": "cS-common-english-endings",
+              "url": "/guides/common-english-word-endings/",
+              "anchor_text": "Common English Word Endings — Patterns Worth Recognising"
+            }
+          },
+          {
+            "impact": "medium",
+            "feature": "Add a wildcard legend beside the input",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Beginners would understand ? versus _, . and avoid trying unsupported star wildcards.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-what-prefixes-do",
+              "url": "/guides/what-prefixes-do-in-english/",
+              "anchor_text": "What Prefixes Do in English — The Short, Useful Version"
+            }
+          },
+          {
+            "impact": "medium",
+            "feature": "Add copy/export for grouped results and scores",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "Players, teachers, and writers could save candidate lists for practice or lesson planning.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-common-english-beginnings",
+              "url": "/guides/common-english-word-beginnings/",
+              "anchor_text": "Common English Word Beginnings — The High-Frequency Prefixes"
+            }
+          },
+          {
+            "impact": "low",
+            "feature": "Add mode-specific empty-state tips",
+            "claim_status": "proposed_feature_not_current",
+            "user_benefit": "No-result screens could explain wrong pattern length, strict fixed letters, or overly narrow filters.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": {
+              "id": "cS-what-suffixes-do",
+              "url": "/guides/what-suffixes-do-in-english/",
+              "anchor_text": "What Suffixes Do in English — Changing Part of Speech"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "writer_recommended_new_articles": null
+}

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import MathGame from '~/components/daily/MathGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/math/', label: 'Kefiw Math' },
+  { href: '/daily/math/percent/', label: 'Percent Dash' },
+];
+---
+
+<BaseLayout
+  title="Percent Dash — daily mental percentage practice"
+  description="Ten timed 'X% of Y' rounds. Tap the closest answer or type the exact. Same questions for every player each day. Fresh set at 4am ET."
+  canonical="/daily/math/percent/"
+  keywords={["mental percent math", "percent practice game", "daily math game", "10% of calculator"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Percent Dash</h1>
+      <p class="mt-1 text-slate-600">Ten rounds. Fifteen seconds each. Faster answers score higher.</p>
+    </header>
+
+    <MathGame client:only="react" gameId="math-percent" title="Percent Dash" />
+  </article>
+</BaseLayout>

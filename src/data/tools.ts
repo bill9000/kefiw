@@ -4733,10 +4733,16 @@ const RAW_TOOLS: ToolConfig[] = [
 
 // Writer-AI V3 enhancement overrides — merged onto RAW_TOOLS to produce the exported TOOLS.
 import { SCRABBLE_TOOL_ENHANCEMENTS } from './tools-scrabble-enhancements';
+import { TEXT_CLEANUP_TOOL_ENHANCEMENTS } from './tools-text-cleanup-enhancements';
+import { UNSCRAMBLE_TOOL_ENHANCEMENTS } from './tools-unscramble-enhancements';
+import { WORD_FAMILIES_TOOL_ENHANCEMENTS } from './tools-word-families-enhancements';
 import { SCRABBLE_TOOL_RELATED_ADDITIONS } from './content/scrabble-docs-update';
 
 const TOOL_ENHANCEMENT_OVERRIDES: Record<string, Partial<ToolConfig>> = {
   ...SCRABBLE_TOOL_ENHANCEMENTS,
+  ...TEXT_CLEANUP_TOOL_ENHANCEMENTS,
+  ...UNSCRAMBLE_TOOL_ENHANCEMENTS,
+  ...WORD_FAMILIES_TOOL_ENHANCEMENTS,
 };
 
 export const TOOLS: ToolConfig[] = RAW_TOOLS.map((t) => {

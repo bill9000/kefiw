@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import BaseLayout from './BaseLayout.astro';
 import AuthorityPanel from '~/components/AuthorityPanel.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
@@ -12,6 +14,25 @@ import { contentPageById, contentHref } from '~/data/content-pages';
 import { TOOLS_BY_ID, toolHref } from '~/data/tools';
 import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
 import { renderMarkdown } from '~/lib/markdown';
+
+// Build-time lookup: which /og/{slug}-social.png files actually exist in
+// public/og/? Cached once per build. When an article has a discoverHeadline
+// but no matching image, we fall back to the site-wide /og-image.png
+// instead of emitting a broken meta tag.
+const OG_SOCIAL_DIR = path.join(process.cwd(), 'public', 'og');
+let OG_SOCIAL_SET: Set<string> | null = null;
+function hasOgSocial(slug: string): boolean {
+  if (OG_SOCIAL_SET === null) {
+    try {
+      OG_SOCIAL_SET = new Set(
+        fs.readdirSync(OG_SOCIAL_DIR).filter((f) => f.endsWith('-social.png'))
+      );
+    } catch {
+      OG_SOCIAL_SET = new Set();
+    }
+  }
+  return OG_SOCIAL_SET.has(`${slug}-social.png`);
+}
 
 interface Props {
   config: ContentPageConfig;
@@ -108,6 +129,15 @@ const pvCritical = resolvePivotTarget(config.pivotSwitch?.critical);
 const pvStable = resolvePivotTarget(config.pivotSwitch?.stable);
 const pvFallback = resolvePivotTarget(config.pivotSwitch?.fallback);
 const hasPivotSwitch = !!(pvCritical && pvStable && pvFallback);
+
+// Substantial articles (discoverHeadline set) use a per-article hero image at
+// /og/{slug}-social.png when one was shipped. Otherwise the site-wide
+// /og-image.png falls through from BaseLayout's default. Explicit config.ogImage
+// always wins.
+const defaultOgImage = config.discoverHeadline && hasOgSocial(config.slug)
+  ? `/og/${config.slug}-social.png`
+  : undefined;
+const resolvedOgImage = config.ogImage ?? defaultOgImage;
 ---
 
 <BaseLayout
@@ -115,6 +145,9 @@ const hasPivotSwitch = !!(pvCritical && pvStable && pvFallback);
   description={config.description}
   canonical={canonical}
   keywords={config.keywords}
+  socialTitle={config.discoverHeadline}
+  ogImage={resolvedOgImage}
+  ogType="article"
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(articleJsonLd)} />
   <Breadcrumb crumbs={crumbs} />
@@ -172,7 +205,25 @@ const hasPivotSwitch = !!(pvCritical && pvStable && pvFallback);
       <AdSlot client:idle zoneId="ALPHA" />
     </div>
 
-    <AuthorityPanel config={reviewConfig} />
+    {/*
+      Compact trust strip. The full review-methodology panel lives at the
+      bottom of the article (anchor #review-methodology). This keeps the
+      top of the page focused on the tool/content, while still surfacing
+      the review credential and a link to the canonical methodology page.
+    */}
+    <aside aria-label="Review credential" class="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+      <span class="font-semibold uppercase tracking-[0.18em] text-slate-500">Built by</span>
+      <a href={reviewConfig.builtBy.href} class="text-slate-700 hover:text-brand-700 hover:underline">{reviewConfig.builtBy.label}</a>
+      <span aria-hidden="true" class="text-slate-300">·</span>
+      <span class="font-semibold uppercase tracking-[0.18em] text-slate-500">Reviewed by</span>
+      {reviewConfig.reviewers.slice(0, 2).map((r) => (
+        <a href={r.href} class="text-slate-700 hover:text-brand-700 hover:underline">{r.label}</a>
+      ))}
+      <span aria-hidden="true" class="text-slate-300">·</span>
+      <a href="/methodology/" class="text-slate-700 hover:text-brand-700 hover:underline">Methodology</a>
+      <span aria-hidden="true" class="text-slate-300">·</span>
+      <a href="#review-methodology" class="text-slate-500 hover:text-brand-700 hover:underline">Details ↓</a>
+    </aside>
 
     {hasKeyPoints && (
       <section aria-label="Key points" class="mb-8">
@@ -297,6 +348,10 @@ const hasPivotSwitch = !!(pvCritical && pvStable && pvFallback);
 
     <div class="my-6">
       <AdSlot client:idle zoneId="EPSILON" />
+    </div>
+
+    <div id="review-methodology" class="scroll-mt-24">
+      <AuthorityPanel config={reviewConfig} />
     </div>
 
     <div class="my-6">

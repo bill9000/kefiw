@@ -83,7 +83,9 @@ export default function AdSlot({
     }
 
     try {
-      (window.adsbygoogle = window.adsbygoogle ?? []).push({});
+      const ads = (window.adsbygoogle ?? []) as NonNullable<Window['adsbygoogle']>;
+      window.adsbygoogle = ads;
+      ads.push({} as Record<string, unknown>);
       track({ event_type: 'ad_request', zone_id: zoneId });
       lastRefreshRef.current = Date.now();
     } catch {
