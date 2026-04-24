@@ -207,7 +207,7 @@ export default function VibeShift() {
           </p>
           <h2 className="truncate text-lg font-bold">
             {level.name}{' '}
-            <span className="font-normal text-slate-500">
+            <span className="font-normal text-slate-300">
               · {levelIdx + 1}/{LEVELS.length}
             </span>
           </h2>
@@ -239,7 +239,7 @@ export default function VibeShift() {
           className={`rounded-full border px-4 py-1 font-mono text-sm tracking-[0.3em] transition ${
             isValid
               ? 'border-cyan-400 bg-cyan-400/10 text-cyan-100 shadow-[0_0_22px_rgba(34,211,238,0.45)]'
-              : 'border-slate-700 bg-slate-900 text-slate-500'
+              : 'border-slate-700 bg-slate-900 text-slate-300'
           }`}
         >
           {currentWord || '—'}
@@ -279,7 +279,7 @@ export default function VibeShift() {
         <Stat label="Lifetime" value={String(levelsCompleted)} />
       </div>
 
-      <p className="mt-3 text-center text-[11px] text-slate-500">
+      <p className="mt-3 text-center text-[11px] text-slate-300">
         Drag a column or tap a letter to bring it to the goal row.
       </p>
 
@@ -313,7 +313,7 @@ export default function VibeShift() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/70 px-2 py-1.5">
-      <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</div>
+      <div className="text-[10px] uppercase tracking-[0.2em] text-slate-300">{label}</div>
       <div className="mt-0.5 font-mono text-sm font-bold text-cyan-200">{value}</div>
     </div>
   );
@@ -378,7 +378,7 @@ function Column({
                   : 'border-slate-400 bg-slate-700/60 text-white shadow-[0_0_14px_rgba(148,163,184,0.25)]'
               : used
                 ? 'border-cyan-500/40 bg-cyan-500/5 text-cyan-300'
-                : 'border-slate-700/60 bg-slate-800/40 text-slate-500';
+                : 'border-slate-700/60 bg-slate-800/40 text-slate-300';
 
             return (
               <button
@@ -401,7 +401,7 @@ function Column({
             type="button"
             onClick={() => onSelect(Math.max(0, selectedIdx - 1))}
             disabled={selectedIdx === 0}
-            className="absolute left-1/2 top-1 z-20 -translate-x-1/2 rounded-full border border-slate-700 bg-slate-900/80 p-0.5 text-slate-400 transition hover:text-cyan-300 disabled:opacity-20"
+            className="absolute left-1/2 top-1 z-20 -translate-x-1/2 rounded-full border border-slate-700 bg-slate-900/80 p-0.5 text-slate-300 transition hover:text-cyan-300 disabled:opacity-20"
             aria-label="Scroll column up"
           >
             <ChevronUp className="h-3 w-3" />
@@ -410,7 +410,7 @@ function Column({
             type="button"
             onClick={() => onSelect(Math.min(maxIdx, selectedIdx + 1))}
             disabled={selectedIdx === maxIdx}
-            className="absolute bottom-1 left-1/2 z-20 -translate-x-1/2 rounded-full border border-slate-700 bg-slate-900/80 p-0.5 text-slate-400 transition hover:text-cyan-300 disabled:opacity-20"
+            className="absolute bottom-1 left-1/2 z-20 -translate-x-1/2 rounded-full border border-slate-700 bg-slate-900/80 p-0.5 text-slate-300 transition hover:text-cyan-300 disabled:opacity-20"
             aria-label="Scroll column down"
           >
             <ChevronDown className="h-3 w-3" />
@@ -449,7 +449,7 @@ function WinModal({
       >
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 text-slate-400 hover:text-white"
+          className="absolute right-3 top-3 text-slate-300 hover:text-white"
           aria-label="Close"
         >
           <X className="h-4 w-4" />
@@ -460,7 +460,7 @@ function WinModal({
           </div>
           <p className="text-[10px] uppercase tracking-[0.3em] text-cyan-400/80">Level cleared</p>
           <h3 className="mt-1 text-xl font-bold">{levelName}</h3>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-300">
             Lifetime levels:{' '}
             <span className="font-mono font-bold text-cyan-300">{levelsCompleted}</span>
           </p>
@@ -506,16 +506,16 @@ function SettingsModal({
       >
         <button
           onClick={onClose}
-          className="absolute right-3 top-3 text-slate-400 hover:text-white"
+          className="absolute right-3 top-3 text-slate-300 hover:text-white"
           aria-label="Close"
         >
           <X className="h-4 w-4" />
         </button>
         <h3 className="mb-1 text-lg font-bold">Settings</h3>
-        <p className="mb-4 text-xs text-slate-500">Lifetime levels: {levelsCompleted}</p>
+        <p className="mb-4 text-xs text-slate-300">Lifetime levels: {levelsCompleted}</p>
 
         <div className="mb-5">
-          <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-slate-500">
+          <div className="mb-2 text-[10px] uppercase tracking-[0.2em] text-slate-300">
             Jump to level
           </div>
           <div className="flex flex-wrap gap-2">

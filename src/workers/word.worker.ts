@@ -1,4 +1,4 @@
-import { SCRABBLE_VALUES, WWF_VALUES, canMakeFromRack, matchesPattern, sortedLetters, wordScore } from '../lib/dict';
+import { SCRABBLE_VALUES, WWF_VALUES, canMakeFromRack, matchesPattern, rackFitDetails, sortedLetters, wordScore } from '../lib/dict';
 
 let WORDS: string[] | null = null;
 let BY_LEN: Map<number, string[]> | null = null;
@@ -177,21 +177,31 @@ self.onmessage = async (e: MessageEvent<Req>) => {
         const boardLetter = (msg.boardLetter ?? '').toLowerCase().replace(/[^a-z]/g, '').slice(0, 1);
         const values = msg.valueSet === 'wwf' ? WWF_VALUES : SCRABBLE_VALUES;
         const usable = filterLen(words, msg.minLen ?? 2, msg.maxLen ?? 15);
-        const matches: Array<{ word: string; score: number }> = [];
+        const matches: Array<{ word: string; score: number; blankPositions: number[] }> = [];
         const bingoBonus = msg.valueSet === 'wwf' ? 35 : 50;
         const rackCap = rack.length + (boardLetter ? 1 : 0);
         for (const w of usable) {
           if (w.length > rackCap) continue;
           let remainder = w;
+          let boardOffset = -1;
           if (boardLetter) {
             const idx = w.indexOf(boardLetter);
             if (idx === -1) continue;
             remainder = w.slice(0, idx) + w.slice(idx + 1);
+            boardOffset = idx;
           }
-          if (!canMakeFromRack(remainder, rack)) continue;
+          const fit = rackFitDetails(remainder, rack);
+          if (!fit.fits) continue;
+          // Real Scrabble / WWF score blanks as 0.
           let score = wordScore(w, values);
+          const lowerRem = remainder.toLowerCase();
+          // Translate blank positions from the `remainder` string back into positions in `w`.
+          const blankPositions: number[] = fit.blankPositions.map((p) =>
+            boardOffset >= 0 && p >= boardOffset ? p + 1 : p,
+          );
+          for (const p of fit.blankPositions) score -= values[lowerRem[p]] ?? 0;
           if (remainder.length === 7) score += bingoBonus;
-          matches.push({ word: w, score });
+          matches.push({ word: w, score, blankPositions });
         }
         matches.sort((a, b) => b.score - a.score || b.word.length - a.word.length || a.word.localeCompare(b.word));
         reply(msg.id, { results: matches.slice(0, msg.limit ?? 500) });

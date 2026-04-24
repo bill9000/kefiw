@@ -1,0 +1,58 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Editorial Policy — Kefiw"
+  description="Kefiw's editorial policy: how pages are written, what reviewed means, how formulas and sources are chosen, and how limits and disclaimers are handled."
+  canonical="/editorial-policy/"
+  keywords={['editorial policy', 'content policy', 'review policy', 'kefiw policy']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Editorial Policy</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw writes pages to be useful under pressure: short path to the answer, explicit assumptions, visible limits, and review labels that describe what was actually checked.
+    </p>
+
+    <TrustNav current="/editorial-policy/" />
+
+    <h2>Core principles</h2>
+    <ul>
+      <li><strong>Deterministic first.</strong> If a page gives a number, list, or score, it should use stated logic rather than opaque guessing.</li>
+      <li><strong>Scope before hype.</strong> A page should say what it does, what it does not do, and when a user should reach for a different tool or guide.</li>
+      <li><strong>Review labels should be specific.</strong> &ldquo;Reviewed&rdquo; only matters if the scope is named.</li>
+      <li><strong>User intent matters.</strong> The page should explain what the user is actually trying to accomplish, not just define the tool in isolation.</li>
+    </ul>
+
+    <h2>How pages are written</h2>
+    <p>
+      Tool pages are written around the real job to be done: solving a puzzle, checking a formula, comparing options, drafting a line, cleaning text, or planning a task. Guide pages add the surrounding expertise that a raw result cannot carry on its own. That usually includes practical examples, common mistakes, edge cases, and what related page to use next.
+    </p>
+
+    <h2>What review labels mean</h2>
+    <ul>
+      <li><strong>Engineering review</strong> means the implementation and stated logic were checked together.</li>
+      <li><strong>Scientific review</strong> means the evidence framing, assumptions, and limits were checked.</li>
+      <li><strong>Registered nurse review</strong> appears on health pages where safety wording and escalation language matter.</li>
+    </ul>
+
+    <h2>What Kefiw avoids</h2>
+    <ul>
+      <li>unstated formulas or unexplained heuristics</li>
+      <li>claims of legal, financial, tax, or medical advice unless a page explicitly supports and justifies that use case</li>
+      <li>copy that turns a helper into a promise, diagnosis, or guarantee</li>
+      <li>sitewide review claims that imply every page received the same level of scrutiny</li>
+    </ul>
+
+    <h2>Updates and corrections</h2>
+    <p>
+      Pages are revised when formulas change, rules change, new sources materially alter the explanation, or implementation behavior changes. When a page is updated, the goal is not just to change the output logic but to make sure the surrounding explanation and limitations still match.
+    </p>
+
+    <h2>Related reading</h2>
+    <p>
+      See the <a href="/methodology/">methodology</a> page for the build pattern, <a href="/sources/">sources</a> for source families, and <a href="/about-the-reviewers/">About the Reviewers</a> for role boundaries.
+    </p>
+  </article>
+</BaseLayout>

@@ -7,6 +7,7 @@ import {
   type ContentPageConfig,
 } from '~/data/content-pages';
 import { CLUSTERS, clusterHref } from '~/data/clusters';
+import { DAILY_GAMES } from '~/data/daily-games';
 
 const STATIC_ROUTES = [
   '/',
@@ -16,10 +17,16 @@ const STATIC_ROUTES = [
   '/contact/',
   '/privacy/',
   '/terms/',
+  '/daily/',
+  '/daily/leaderboard/',
+  ...DAILY_GAMES.map((g) => `/daily/${g.slug}/`),
 ];
 
 function publishedContent(section: 'word-tools' | 'guides' | 'calculators' | 'converters' | 'games'): ContentPageConfig[] {
   return contentPagesBySection(section).filter((c) => {
+    // Drop any content page marked noindex — never submit a URL to the sitemap
+    // that we also tell Google not to index. That produces Search Console warnings.
+    if ((c as { noindex?: boolean }).noindex === true) return false;
     if (c.kind !== 'word-list') return true;
     const words = c.buildWords?.() ?? [];
     const min = c.minWords ?? 10;
@@ -33,7 +40,8 @@ export const GET: APIRoute = ({ site }) => {
   const urls = [
     ...STATIC_ROUTES,
     ...CLUSTERS.map(clusterHref),
-    ...TOOLS.filter((t) => !t.comingSoon).map(toolHref),
+    // Exclude noindex tools (reagent-* etc.) — same rationale as above.
+    ...TOOLS.filter((t) => !t.comingSoon && !t.noindex).map(toolHref),
     ...seoPages.map((p) => `/word-tools/${p.slug}/`),
     ...publishedContent('word-tools').map(contentHref),
     ...publishedContent('guides').map(contentHref),

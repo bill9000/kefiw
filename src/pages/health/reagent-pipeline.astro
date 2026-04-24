@@ -1,0 +1,108 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReagentRecon from '~/components/tools/reagent/ReagentRecon.tsx';
+import ReagentDispense from '~/components/tools/reagent/ReagentDispense.tsx';
+import ReagentMcgRatio from '~/components/tools/reagent/ReagentMcgRatio.tsx';
+
+const canonical = '/health/reagent-pipeline/';
+---
+<BaseLayout
+  title="Reagent Pipeline — Reconstitute → Dispense → Lookup | Kefiw"
+  description="One page, three steps: reconstitute a vial to get mg/mL, convert a target mg into syringe units and mL, and read the full per-unit lookup for your syringe."
+  canonical={canonical}
+  keywords={['reagent pipeline', 'reconstitute dispense lookup', 'vial to syringe units', 'mg/mL to mL syringe', 'configurable syringe calculator']}
+  noindex={true}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/health/', label: 'Health' },
+    { href: canonical, label: 'Reagent Pipeline' },
+  ]} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Reagent Pipeline</h1>
+      <p class="mt-2 max-w-3xl text-slate-600">
+        Three calculators on one screen. The concentration you produce in Step 1 flows automatically into Steps 2 and 3 via the PRC-1 bridge, so you only enter each number once.
+      </p>
+
+      <ol class="mt-5 grid gap-3 sm:grid-cols-3 text-sm">
+        <li class="rounded-lg border border-slate-200 bg-white p-3">
+          <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Step 1</div>
+          <div class="mt-1 font-semibold text-slate-900">Reconstitute</div>
+          <div class="mt-1 text-slate-600">Vial mg + BAC mL → concentration (mg/mL)</div>
+        </li>
+        <li class="rounded-lg border border-slate-200 bg-white p-3">
+          <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Step 2</div>
+          <div class="mt-1 font-semibold text-slate-900">Dispense</div>
+          <div class="mt-1 text-slate-600">Target mg + your syringe → mL + units to draw</div>
+        </li>
+        <li class="rounded-lg border border-slate-200 bg-white p-3">
+          <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Step 3</div>
+          <div class="mt-1 font-semibold text-slate-900">Lookup</div>
+          <div class="mt-1 text-slate-600">Full unit → mcg / mg / mL table for that syringe</div>
+        </li>
+      </ol>
+    </header>
+
+    <section aria-labelledby="step-1" class="mb-8 scroll-mt-16" id="step-1">
+      <div class="mb-3 flex items-baseline gap-3">
+        <span class="rounded-md bg-slate-900 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-white">Step 1</span>
+        <h2 class="text-xl font-semibold text-slate-900">Reconstitute — vial mg + BAC water → mg/mL</h2>
+      </div>
+      <p class="mb-3 max-w-3xl text-sm text-slate-600">
+        Enter the vial mass and the volume of BAC water you are adding. The resulting concentration is written to the shared bridge and picked up by Step 2 and Step 3 automatically.
+      </p>
+      <ReagentRecon client:load />
+    </section>
+
+    <div aria-hidden="true" class="mb-8 flex items-center gap-3">
+      <div class="h-px flex-1 bg-slate-300"></div>
+      <div class="text-xs font-mono uppercase tracking-widest text-slate-500">↓ concentration flows forward ↓</div>
+      <div class="h-px flex-1 bg-slate-300"></div>
+    </div>
+
+    <section aria-labelledby="step-2" class="mb-8 scroll-mt-16" id="step-2">
+      <div class="mb-3 flex items-baseline gap-3">
+        <span class="rounded-md bg-slate-900 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-white">Step 2</span>
+        <h2 class="text-xl font-semibold text-slate-900">Dispense — target mg + syringe → mL and units</h2>
+      </div>
+      <p class="mb-3 max-w-3xl text-sm text-slate-600">
+        Enter the amount you want to administer. Pick the syringe you are actually using (U-100, U-40, 0.5 mL insulin, tuberculin, or a custom W mL × Q divisions barrel). The tool returns both the volume in mL and the unit mark to draw to on that specific syringe.
+      </p>
+      <ReagentDispense client:load />
+    </section>
+
+    <div aria-hidden="true" class="mb-8 flex items-center gap-3">
+      <div class="h-px flex-1 bg-slate-300"></div>
+      <div class="text-xs font-mono uppercase tracking-widest text-slate-500">↓ same concentration, full table ↓</div>
+      <div class="h-px flex-1 bg-slate-300"></div>
+    </div>
+
+    <section aria-labelledby="step-3" class="mb-8 scroll-mt-16" id="step-3">
+      <div class="mb-3 flex items-baseline gap-3">
+        <span class="rounded-md bg-slate-900 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-white">Step 3</span>
+        <h2 class="text-xl font-semibold text-slate-900">Lookup — every tick on your syringe</h2>
+      </div>
+      <p class="mb-3 max-w-3xl text-sm text-slate-600">
+        A printable reference: for the chosen concentration and syringe, read mcg, mg, and mL at each tick. Screenshot or print and keep it with the vial.
+      </p>
+      <ReagentMcgRatio client:load />
+    </section>
+
+    <section class="mt-8 rounded-md border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+      <p class="font-medium text-slate-900">How the pipeline shares state</p>
+      <p class="mt-1 text-slate-600">
+        Each tool keeps its own inputs and localStorage settings independently. The shared piece is the concentration value: Step 1 writes it to the PRC-1 dashboard bridge, and Steps 2 and 3 read it on mount and on change. You can still override the concentration manually in Step 2 or Step 3 if you want to run a what-if calculation — untick "Auto-fill concentration from PRC-1 reconstitution" on that step.
+      </p>
+    </section>
+
+    <section class="mt-6 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+      <p class="font-medium">Disclaimer</p>
+      <p class="mt-1">
+        Arithmetic only. Not medical advice. Verify every input. Syringe behavior, tile capacity, and unit-per-mL scaling depend on the specific syringe you hold — pick the correct preset or enter your exact W and Q values. Research and compounding contexts only.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

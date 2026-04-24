@@ -1,0 +1,8 @@
+# Kefiw — responsible disclosure policy
+# https://securitytxt.org
+
+Contact: https://kefiw.com/contact/
+Expires: 2027-04-22T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://kefiw.com/.well-known/security.txt
+Policy: https://kefiw.com/privacy/

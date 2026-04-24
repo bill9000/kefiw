@@ -1,5 +1,5 @@
 import CopyButton from '../CopyButton';
-import { SCRABBLE_VALUES, WWF_VALUES, wordScore } from '~/lib/dict';
+import { SCRABBLE_VALUES, WWF_VALUES, wordScore, wordScoreWithBlanks } from '~/lib/dict';
 
 interface Props {
   words: string[];
@@ -9,20 +9,57 @@ interface Props {
   group?: 'length';
   tool?: string;
   scores?: boolean;
+  // When provided, per-word Scrabble / WWF scores use real-game blank scoring
+  // (blanks = 0) and the UI marks blank positions in each result.
+  rack?: string;
 }
 
-export default function ResultList({ words, loading, emptyLabel = 'No matches yet.', loadingLabel = 'Searching…', group, tool, scores }: Props) {
+function renderWordWithBlanks(word: string, blankPositions: number[]) {
+  if (!blankPositions.length) return word;
+  const set = new Set(blankPositions);
+  return (
+    <span>
+      {Array.from(word).map((ch, i) =>
+        set.has(i) ? (
+          <span
+            key={i}
+            className="text-slate-500 lowercase underline decoration-dotted decoration-slate-400"
+            title="Blank tile — scores 0"
+          >
+            {ch.toLowerCase()}
+          </span>
+        ) : (
+          <span key={i}>{ch}</span>
+        ),
+      )}
+    </span>
+  );
+}
+
+function formatWordForCopy(word: string, blankPositions: number[]): string {
+  if (!blankPositions.length) return word;
+  const set = new Set(blankPositions);
+  return Array.from(word).map((ch, i) => (set.has(i) ? ch.toLowerCase() : ch)).join('');
+}
+
+export default function ResultList({ words, loading, emptyLabel = 'No matches yet.', loadingLabel = 'Searching…', group, tool, scores, rack }: Props) {
   if (loading) return <div className="p-4 text-sm text-slate-500">{loadingLabel}</div>;
   if (!words.length) return <div className="p-4 text-sm text-slate-500">{emptyLabel}</div>;
 
+  const rackHasBlanks = !!rack && rack.includes('?');
+
   if (scores) {
-    const rows = words.map((w) => ({
-      word: w,
-      length: w.length,
-      scrabble: wordScore(w, SCRABBLE_VALUES),
-      wwf: wordScore(w, WWF_VALUES),
-    }));
-    const copyValue = rows.map((r) => `${r.word} (S${r.scrabble}/W${r.wwf})`).join('\n');
+    const rows = words.map((w) => {
+      if (rackHasBlanks) {
+        const s = wordScoreWithBlanks(w, rack, SCRABBLE_VALUES);
+        const f = wordScoreWithBlanks(w, rack, WWF_VALUES);
+        return { word: w, length: w.length, scrabble: s.score, wwf: f.score, blankPositions: s.blankPositions };
+      }
+      return { word: w, length: w.length, scrabble: wordScore(w, SCRABBLE_VALUES), wwf: wordScore(w, WWF_VALUES), blankPositions: [] as number[] };
+    });
+    const copyValue = rows
+      .map((r) => `${formatWordForCopy(r.word, r.blankPositions)} (S${r.scrabble}/W${r.wwf})`)
+      .join('\n');
     return (
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -45,10 +82,10 @@ export default function ResultList({ words, loading, emptyLabel = 'No matches ye
                   <td className="p-2 font-mono">
                     <button
                       type="button"
-                      onClick={() => navigator.clipboard?.writeText(r.word)}
+                      onClick={() => navigator.clipboard?.writeText(formatWordForCopy(r.word, r.blankPositions))}
                       className="hover:text-brand-700"
                     >
-                      {r.word}
+                      {renderWordWithBlanks(r.word, r.blankPositions)}
                     </button>
                   </td>
                   <td className="p-2 text-slate-600">{r.length}</td>

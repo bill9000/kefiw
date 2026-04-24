@@ -1,0 +1,1022 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-22T01:59:13.245Z",
+  "cluster": {
+    "slug": "rhyme",
+    "section": "word-tools",
+    "hubSlug": "rhyme-and-syllable-help",
+    "url": "/word-tools/rhyme-and-syllable-help/",
+    "title": "Rhyme & Syllable Help — Kefiw",
+    "h1": "Rhyme & Syllable Help",
+    "subhead": "Find rhymes, count syllables, and structure your lines.",
+    "intro": "Rhyme Finder, Syllable Counter, and Haiku Checker solve the mechanical parts of poetry and lyrics so you can focus on the writing. This cluster explains how each tool works and when to pick one over another.",
+    "description": "Rhyme finder, syllable counter, and haiku 5-7-5 checker — with guides to perfect vs near rhyme, syllable counting rules, and writing to a meter.",
+    "keywords": [
+      "rhyme finder help",
+      "syllable counter help",
+      "haiku checker"
+    ],
+    "faq": [
+      {
+        "q": "Is the rhyme finder phonetic?",
+        "a": "It uses a combination of ending-letter patterns and a pronunciation dictionary — near rhymes fall back to pattern matching when the word isn't in the dictionary."
+      },
+      {
+        "q": "How accurate is the syllable counter?",
+        "a": "About 95% on common English words. Edge cases (unusual names, loanwords) may need a manual check."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "word-families",
+      "text-cleanup"
+    ]
+  },
+  "tools": [
+    {
+      "id": "rhyme-finder",
+      "slug": "rhyme-finder",
+      "category": "word-tools",
+      "url": "/word-tools/rhyme-finder/",
+      "title": "Rhyme Finder — Kefiw",
+      "h1": "Rhyme Finder",
+      "current_word_count": 80,
+      "current": {
+        "description": "Find words that rhyme with your input. Useful for songwriting, poetry, and rap.",
+        "keywords": [
+          "rhyme finder",
+          "rhymes with",
+          "rhyming dictionary"
+        ],
+        "intro": "Enter any word and get a list of words that rhyme with it, grouped by perfect rhyme, near rhyme, and end-sound match.",
+        "outcomeLine": "Perfect, near, and slant rhymes — with syllable counts.",
+        "howTo": [
+          "Enter a single word.",
+          "View perfect rhymes first, then near-rhymes."
+        ],
+        "examples": [
+          {
+            "title": "Rhymes with TIME",
+            "body": "dime, lime, rhyme, prime, chime, climb, crime, sublime…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How are rhymes computed?",
+            "a": "By matching the trailing phoneme pattern of each word. Perfect rhymes share the last stressed vowel and all following sounds."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "words-ending-with"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "single English word (letters a-z; normalized to lowercase)",
+        "output_type": "two arrays — perfect rhymes and near rhymes — each capped at 200 results, sorted by length then alphabetically",
+        "processing_steps": [
+          "Normalize input: lowercase, strip non-letter characters.",
+          "Derive three candidate endings: last 4, last 3, and last 2 letters of the input.",
+          "Scan the ENABLE1 word list (~172k words) for every word ending in the last-4 suffix → perfect rhymes.",
+          "Scan remaining words for those ending in the last-3 suffix → near rhymes.",
+          "Sort each bucket by length ascending, then alphabetically.",
+          "Truncate each bucket to 200 entries before returning."
+        ],
+        "data_sources": [
+          "ENABLE1 public-domain English word list (~172,000 entries, `public/data/enable.txt`), loaded on first use via web worker."
+        ],
+        "fallback_behavior": "No phonetic fallback. All matching is spelling-based. If the input has no letters, both buckets return empty.",
+        "known_limitations": [
+          "Purely spelling-based — NOT phonetic. Words that look alike but sound different (e.g. \"through\" / \"rough\") will be matched as perfect rhymes despite not rhyming.",
+          "Words that sound alike but are spelled differently (e.g. \"eight\" / \"late\") will not be matched.",
+          "ENABLE1 does not include proper nouns, abbreviations, or profanity — so celebrity names, place names, and vulgar rhymes will never appear.",
+          "No multi-word rhymes (e.g. \"carry on\" / \"marathon\").",
+          "No dialect/accent handling. American-English spelling bias.",
+          "Each bucket capped at 200 results; longer words with common endings may hit the cap.",
+          "Stress patterns are ignored — \"happy\" (trochee) and \"reply\" (iamb) can both match \"-y\" endings regardless of where the stressed syllable falls."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "word (single-line text input, autofocused)"
+          ],
+          "filters": [
+            "mode: Quick | Extended — Quick shows perfect only; Extended shows perfect + near"
+          ],
+          "outputs": [
+            "Perfect rhymes chip list with count",
+            "Near rhymes chip list with count (Extended only)",
+            "Summary card: total rhyme count for the input",
+            "Stats card: mode, perfect count, near count (Extended), shortest and longest rhyme",
+            "Takeaway card: which bucket is strongest",
+            "Next-step card with links to Syllable Counter and Haiku Checker",
+            "Copy button per bucket (newline-joined list)"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Uses a large English word list",
+            "Separates results into perfect and near rhymes",
+            "Runs entirely in the browser (no server round-trip)",
+            "Spelling-based matching using trailing letters"
+          ],
+          "claim_forbidden": [
+            "Phonetic / pronunciation-aware rhyme matching",
+            "Includes celebrity or place names",
+            "Handles multi-word rhyming phrases",
+            "Respects stress patterns or meter",
+            "Dialect-specific rhymes (e.g. British vs American)"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "syllable-counter",
+      "slug": "syllable-counter",
+      "category": "word-tools",
+      "url": "/word-tools/syllable-counter/",
+      "title": "Syllable Counter — Kefiw",
+      "h1": "Syllable Counter",
+      "current_word_count": 78,
+      "current": {
+        "description": "Count the syllables in any word or phrase. Useful for haiku, poetry, and writing.",
+        "keywords": [
+          "syllable counter",
+          "count syllables",
+          "syllables in word"
+        ],
+        "intro": "Type or paste a word, sentence, or paragraph and get an accurate syllable count per word and total.",
+        "outcomeLine": "Per-word and per-line syllable counts for songs and poems.",
+        "howTo": [
+          "Type or paste your text.",
+          "View per-word and total syllable counts."
+        ],
+        "examples": [
+          {
+            "title": "Input: \"kefiw dictionary\"",
+            "body": "kefiw (2) + dictionary (4) = 6 syllables"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How accurate is it?",
+            "a": "Uses a heuristic that is ~95% accurate on common English words. Rare or technical words may be off by one."
+          }
+        ],
+        "relatedIds": [
+          "word-counter",
+          "letter-counter",
+          "rhyme-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — single word, sentence, or paragraph",
+        "output_type": "total syllable count across all words, plus per-word counts and per-line summary when multi-line",
+        "processing_steps": [
+          "Split input on whitespace to get a word list.",
+          "For each word: lowercase, strip non-letter characters.",
+          "If the cleaned word is 3 letters or fewer, count = 1.",
+          "Otherwise: strip trailing silent-e patterns and simple suffix endings.",
+          "Strip a leading \"y\" if present.",
+          "Count matches of the regex /[aeiouy]{1,2}/g — each vowel group = 1 syllable.",
+          "If no vowel groups found, default to 1.",
+          "Sum per-word counts for the total.",
+          "Detect haiku shape automatically: total === 17 and exactly 3 non-empty lines."
+        ],
+        "data_sources": [
+          "No dictionary. Pure regex / heuristic algorithm — `countSyllables()` in `src/lib/text.ts`."
+        ],
+        "fallback_behavior": "Returns at least 1 syllable for any non-empty word, even when no vowel pattern is detected.",
+        "known_limitations": [
+          "Approximately 95% accurate on common English words. Edge cases may disagree.",
+          "No dictionary lookup — exceptions like \"every\" (EV-RY vs EV-ER-Y), \"fire\" (1 or 2), or \"poem\" (POHM vs PO-EM) are resolved by the regex, not pronunciation.",
+          "Loanwords and proper nouns often miscount.",
+          "Compound words may be under-counted if the heuristic collapses vowel groups across the seam.",
+          "No dialect / stress awareness — British and American pronunciations treated identically.",
+          "Non-letter characters (digits, symbols) are stripped, so \"3D\" becomes \"d\" → 1 syllable."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea)"
+          ],
+          "filters": [
+            "mode: Quick | Extended — Extended shows per-word chips in addition to the total"
+          ],
+          "outputs": [
+            "Total syllable count (large numeric display in a card)",
+            "Summary card: total + word count",
+            "Stats card: words, syllables, avg syllables/word, longest word with count, shortest word with count",
+            "Per-line comparison card (only shown when input has 2+ non-empty lines)",
+            "Haiku-detection takeaway (when total === 17 and 3 non-empty lines)",
+            "Per-word chips showing word + syllable count (Extended mode only)",
+            "Next-step card with links to Rhyme Finder and Haiku Checker"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Counts syllables using a vowel-group heuristic",
+            "Provides per-word and total counts",
+            "Detects haiku-shaped input automatically",
+            "Runs in the browser, no server call",
+            "Accurate enough for songwriting and poetry on common English words"
+          ],
+          "claim_forbidden": [
+            "Uses a pronunciation or phonetic dictionary",
+            "Guaranteed accuracy on names or loanwords",
+            "Handles dialect / regional pronunciation",
+            "Respects IPA stress marks"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "haiku-checker",
+      "slug": "haiku-checker",
+      "category": "word-tools",
+      "url": "/word-tools/haiku-checker/",
+      "title": "Haiku Checker — Kefiw",
+      "h1": "Haiku Checker",
+      "current_word_count": 139,
+      "current": {
+        "description": "Check if your poem follows the 5-7-5 haiku syllable pattern. Free, runs in your browser.",
+        "keywords": [
+          "haiku checker",
+          "haiku syllables",
+          "5 7 5 haiku",
+          "haiku validator"
+        ],
+        "intro": "Paste a three-line poem and see instantly whether each line hits the classic 5-7-5 syllable count. Syllables are estimated with a heuristic tuned for English.",
+        "outcomeLine": "Validates the 5-7-5 structure line by line.",
+        "howTo": [
+          "Type or paste your haiku — one line per line break.",
+          "Each line is scored against its target count (5, 7, 5).",
+          "Green means the target is met."
+        ],
+        "examples": [
+          {
+            "title": "Classic haiku",
+            "body": "An old silent pond / A frog jumps into the pond / Splash! Silence again — 5-7-5, valid."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How accurate is the syllable count?",
+            "a": "English syllable counts are estimated from letter patterns — usually accurate within 1, sometimes off on unusual words."
+          },
+          {
+            "q": "Must it be exactly 5-7-5?",
+            "a": "Modern haiku often bend the rule, but the checker enforces the traditional 5-7-5 structure so you know when you are on target."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "word-counter",
+          "rhyme-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "3 lines of text separated by newlines (pre-filled with an example haiku)",
+        "output_type": "per-line syllable counts with pass/fail against the 5-7-5 target, plus overall pass/fail boolean",
+        "processing_steps": [
+          "Split input by newline into raw lines.",
+          "For each line: split on whitespace, sum `countSyllables()` across all words.",
+          "Filter to non-empty lines (lines with at least one word).",
+          "Check: non-empty lines count === 3 AND line 1 count === 5 AND line 2 count === 7 AND line 3 count === 5.",
+          "Render each line with its count, its target, and a ✓ / over / under badge."
+        ],
+        "data_sources": [
+          "Same heuristic `countSyllables()` from `src/lib/text.ts`. No dictionary."
+        ],
+        "fallback_behavior": "Accepts fewer than 3 non-empty lines (shows partial validation). Extra lines beyond 3 are listed but have no target.",
+        "known_limitations": [
+          "Inherits all limitations of the syllable counter (heuristic ~95% accurate).",
+          "Only validates 5-7-5 shape. Does not detect kigo (seasonal word) or kireji (cutting word).",
+          "Only supports English haiku. Does not support Japanese kana counting (onji vs syllables).",
+          "Does not detect or suggest alternative forms (tanka 5-7-5-7-7, renga, senryu).",
+          "Accepts any text on each line — no quality/meaning check."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "haiku text (3-line textarea, font-serif, pre-filled with example)"
+          ],
+          "filters": [],
+          "outputs": [
+            "Per-line card with colored border (green = target met, red = off by any amount, amber = extra line beyond line 3)",
+            "Per-line count vs target with ✓ / (over) / (under) annotation",
+            "Summary card with \"Valid haiku\" or a diagnostic message",
+            "Stats card: lines count, total syllables, current pattern (e.g. 5-7-5), target pattern",
+            "Per-line comparison card with deltas",
+            "Takeaway card: congrats + kigo/kireji note when valid, or corrective hint when not",
+            "Next-step card with links to Syllable Counter and Rhyme Finder"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Validates the 5-7-5 syllable structure of English haiku",
+            "Shows per-line counts with pass/fail indicators",
+            "Works with any 3-line input (pre-filled with example)"
+          ],
+          "claim_forbidden": [
+            "Detects seasonal words (kigo) or cutting words (kireji)",
+            "Supports Japanese kana / onji counting",
+            "Validates tanka, renga, senryu, or other Japanese forms",
+            "Evaluates poetic quality, imagery, or juxtaposition"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "word-counter",
+      "slug": "word-counter",
+      "category": "word-tools",
+      "url": "/word-tools/word-counter/",
+      "title": "Word Counter — Kefiw",
+      "h1": "Word Counter",
+      "current_word_count": 59,
+      "current": {
+        "description": "Count words, sentences, paragraphs, and reading time in any text.",
+        "keywords": [
+          "word counter",
+          "count words",
+          "word count tool"
+        ],
+        "intro": "Paste any text and get word, sentence, paragraph, and reading-time stats instantly.",
+        "outcomeLine": "Words, characters, lines, and sentences — everything text counts.",
+        "howTo": [
+          "Paste your text.",
+          "Stats update as you type."
+        ],
+        "examples": [
+          {
+            "title": "Typical essay",
+            "body": "500 words ≈ 2.5 min read. 1500 words ≈ 7 min read."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How is reading time calculated?",
+            "a": "At 200 words per minute (average adult silent reading speed)."
+          }
+        ],
+        "relatedIds": [
+          "letter-counter",
+          "syllable-counter",
+          "case-converter"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — any length, single or multi-line",
+        "output_type": "multi-metric text statistics including word / character / sentence / paragraph counts and reading/speaking time estimates",
+        "processing_steps": [
+          "Split input on whitespace for word count.",
+          "Count characters including spaces, and again excluding spaces.",
+          "Split on sentence-ending punctuation (. ! ?) to approximate sentence count.",
+          "Split on blank-line gaps for paragraph count.",
+          "Derive longest word by character length.",
+          "Derive average word length (chars / words) and average words per sentence.",
+          "Estimate reading time based on standard words-per-minute (WPM) reading speed.",
+          "Estimate speaking time based on a slower WPM speaking-aloud rate."
+        ],
+        "data_sources": [
+          "No dictionary. Pure string analysis — `textStats()` in `src/lib/outcomes.ts`."
+        ],
+        "fallback_behavior": "Empty input returns zeros. Any non-space content yields at least 1 word.",
+        "known_limitations": [
+          "Sentence detection is punctuation-based — abbreviations (\"Dr.\", \"e.g.\") and ellipses may inflate the count.",
+          "Paragraph detection requires blank-line separators — single-line-break text counts as one paragraph.",
+          "Reading / speaking times are estimates based on average-reader WPM, not personalized.",
+          "No language detection — all text treated as English-ish for WPM.",
+          "Non-Latin scripts (Chinese, Japanese, Thai) without explicit whitespace may undercount words.",
+          "Longest word may include attached punctuation if not surrounded by whitespace."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea, h-48 — tall by default)"
+          ],
+          "filters": [],
+          "outputs": [
+            "Stat grid: Words, Characters, No spaces, Sentences, Paragraphs, Reading time (6-column responsive grid)",
+            "Summary card: word count + reading time label",
+            "Stats card: characters, characters-no-spaces, sentences, paragraphs, avg word length, avg words per sentence, longest word with length",
+            "Takeaway: reading vs speaking-aloud time comparison",
+            "Takeaway (conditional): readability hint when avg sentence > 20 words",
+            "Next-step card with links to Syllable Counter and Reading Time Calculator"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Counts words, characters, sentences, paragraphs in any English text",
+            "Estimates reading and speaking-aloud time",
+            "Runs in the browser; text never leaves the device",
+            "Flags long-sentence readability issues"
+          ],
+          "claim_forbidden": [
+            "Detects grammar, spelling, or style issues",
+            "Works on non-whitespace-delimited languages (Chinese, Japanese)",
+            "Provides per-reader personalized reading speed"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cE-rhyme-perfect-vs-near",
+      "slug": "rhyme-perfect-vs-near",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/rhyme-perfect-vs-near/",
+      "title": "Perfect Rhymes vs Near Rhymes — Explained — Kefiw",
+      "h1": "Perfect Rhymes vs Near Rhymes",
+      "subhead": "How poets and songwriters use different kinds of rhyme",
+      "current_word_count": 101,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The difference between perfect rhymes, slant rhymes, eye rhymes, and near rhymes — with examples from poetry and song.",
+        "keywords": [
+          "perfect rhyme",
+          "near rhyme",
+          "slant rhyme",
+          "eye rhyme",
+          "rhyme types"
+        ],
+        "outcomeLine": null,
+        "intro": "Not every rhyme is a perfect rhyme. This guide walks through the main categories with examples.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Is \"love\" / \"move\" a rhyme?",
+            "a": "It is an eye rhyme — same spelling, different sound. In strict poetic terms it is not a rhyme at all, but it is used for visual effect."
+          },
+          {
+            "q": "Are near rhymes \"cheating\"?",
+            "a": "No — many of the best songwriters and poets prefer near rhymes for freshness. Perfect rhyme can feel predictable."
+          }
+        ],
+        "relatedIds": [
+          "rhyme-finder",
+          "syllable-counter"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cE-syllables-counting-rules",
+      "slug": "syllables-counting-rules",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/syllables-counting-rules/",
+      "title": "How to Count Syllables — Rules and Edge Cases — Kefiw",
+      "h1": "How to Count Syllables",
+      "subhead": "The rules and the tricky cases",
+      "current_word_count": 106,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Practical rules for counting syllables, plus common edge cases like silent e, diphthongs, and the -tion suffix.",
+        "keywords": [
+          "count syllables",
+          "syllable rules",
+          "how to count syllables",
+          "syllable counting"
+        ],
+        "outcomeLine": null,
+        "intro": "Counting syllables sounds easy — a vowel per beat — but English has several traps. Here are the rules that cover 95% of cases.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Why do different tools give different counts?",
+            "a": "English syllable counting is approximate. Automated counters use heuristics; humans often disagree too, especially for compound words and proper nouns."
+          },
+          {
+            "q": "Does \"fire\" have 1 or 2 syllables?",
+            "a": "Both are common. In fast speech it is 1 (\"fyr\"); in slower careful speech it is 2 (\"fy-er\"). Haiku counts usually treat it as 1."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "haiku-checker",
+          "rhyme-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-how-to-use-rhyme-finder",
+      "slug": "how-to-use-a-rhyme-finder",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-use-a-rhyme-finder/",
+      "title": "How to Use a Rhyme Finder — Perfect, Near, and Slant Rhymes",
+      "h1": "How to Use a Rhyme Finder",
+      "subhead": "The three rhyme modes and when each one actually works in a song or poem.",
+      "current_word_count": 343,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Practical walkthrough of a rhyme finder — perfect vs. near vs. slant rhymes, syllable matching, and how to write lines that land.",
+        "keywords": [
+          "how to use rhyme finder",
+          "rhyme finder guide",
+          "perfect near slant rhyme"
+        ],
+        "outcomeLine": "Pick the rhyme mode that matches the line, not the one that returns the most words.",
+        "intro": "A rhyme finder returns three kinds of output: perfect rhymes (same stressed vowel and everything after), near rhymes (close but not exact), and slant rhymes (matching consonants, different vowels). Knowing which to use comes down to the line's weight.",
+        "keyPoints": [
+          "Perfect rhymes match the stressed vowel and every sound after it — CAT/HAT, BELIEVE/RECEIVE.",
+          "Near rhymes relax the vowel match slightly — LOVE/MOVE, TIME/LINE. Common in pop and folk.",
+          "Slant rhymes match consonants but shift the vowel — WORM/WARM, SOUL/ROLL. Common in hip-hop and modern poetry.",
+          "Syllable count matters: a 2-syllable line usually wants a 2-syllable rhyme, not a 1-syllable one.",
+          "The end of a phrase carries the rhyme — pick the word you want readers to land on, then find its rhyme."
+        ],
+        "examples": [
+          {
+            "title": "Pop chorus",
+            "body": "Perfect rhymes for singability — LIGHT/NIGHT/RIGHT/SIGHT. Clear and easy to sing."
+          },
+          {
+            "title": "Hip-hop bar",
+            "body": "Slant and multi-syllable rhymes for density — CARRY ON / MARATHON. Consonant pattern matches, vowel moves."
+          },
+          {
+            "title": "Poem",
+            "body": "Near rhymes for emotional distance — HOME/ROOM creates tension a perfect rhyme would resolve."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "rhyme-finder",
+            "note": "Paste a word, choose perfect / near / slant, get candidates with syllable counts."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "Use before picking a rhyme — match the syllable count of your line ending."
+          },
+          {
+            "toolId": "haiku-checker",
+            "note": "If you are writing haiku, rhyme matters less than the 5-7-5 syllable structure. Use this instead."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are near and slant rhymes the same thing?",
+            "a": "Close but not identical. Near rhymes relax the vowel slightly while keeping most sounds; slant rhymes match consonants but shift the vowel more aggressively. In practice the terms overlap."
+          },
+          {
+            "q": "Why do some rhymes feel forced?",
+            "a": "Usually because the rhyming word does not fit the line's meaning — you picked the rhyme first and the sentence second. Write the idea, then look for a rhyme that supports it."
+          }
+        ],
+        "relatedIds": [
+          "rhyme-finder",
+          "syllable-counter",
+          "haiku-checker",
+          "cE-rhyme-perfect-vs-near",
+          "cE-syllables-counting-rules"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-count-syllables-in-a-line",
+      "slug": "how-to-count-syllables-in-a-line",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-count-syllables-in-a-line/",
+      "title": "How to Count Syllables in a Line — For Songs, Poems, and Haiku",
+      "h1": "How to Count Syllables in a Line",
+      "subhead": "Clap, mark vowels, or use a tool — three methods that agree 95% of the time.",
+      "current_word_count": 323,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Three methods to count syllables in a line of poetry or song lyrics, with examples and edge cases.",
+        "keywords": [
+          "how to count syllables in a line",
+          "syllable counting",
+          "syllables in poetry"
+        ],
+        "outcomeLine": "One syllable per vowel sound, compound vowels count once — almost every line resolves by that rule.",
+        "intro": "Counting syllables is about counting vowel sounds, not vowel letters. Most lines give the same answer whether you clap, mark the vowels, or use a tool — but a few common traps make disagreements occasional.",
+        "keyPoints": [
+          "Count vowel sounds, not letters. QUEEN has two vowels letters (E+E) but one vowel sound — one syllable.",
+          "Clap method: say the line naturally, clap once per beat. Each clap = one syllable.",
+          "Mark method: underline every vowel cluster, count the underlines.",
+          "Silent E at end of word does not add a syllable: CAKE = 1, HATE = 1.",
+          "Compound vowels (EA, OU, OI) almost always count as one syllable — BREAD = 1, HOUSE = 1."
+        ],
+        "examples": [
+          {
+            "title": "Simple line",
+            "body": "\"The cat sat on the mat\" — THE-CAT-SAT-ON-THE-MAT = 6 syllables. Every word one syllable."
+          },
+          {
+            "title": "Trickier line",
+            "body": "\"Fireflies danced over the meadow\" — FIRE-FLIES-DANCED-O-VER-THE-MEA-DOW = 8. FIRE is one syllable, FIREFLIES is two."
+          },
+          {
+            "title": "Edge case",
+            "body": "\"Every evening in the garden\" — EV-RY-EVE-NING-IN-THE-GAR-DEN = 8. \"Every\" is usually pronounced EV-RY (2), not EV-ER-Y (3)."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "syllable-counter",
+            "note": "Paste a line or a whole poem — gets per-word and total counts."
+          },
+          {
+            "toolId": "haiku-checker",
+            "note": "For haiku specifically — validates the 5-7-5 structure across three lines."
+          },
+          {
+            "toolId": "rhyme-finder",
+            "note": "After counting, match the syllable count when picking a rhyme for the next line."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What if my count differs from the tool?",
+            "a": "Usually a dialect difference. FIRE is 1 or 2 depending on accent. POEM is 1 (POHM) or 2 (PO-EM). Pick the pronunciation that fits your line's rhythm."
+          },
+          {
+            "q": "Do dictionaries always agree on syllable counts?",
+            "a": "Mostly — but not always. Merriam-Webster and Cambridge occasionally disagree on borderline cases. For strict forms, pick one dictionary and stay consistent."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "haiku-checker",
+          "rhyme-finder",
+          "cE-syllables-counting-rules",
+          "cS-how-to-write-a-haiku"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-how-to-write-a-haiku",
+      "slug": "how-to-write-a-haiku",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-write-a-haiku/",
+      "title": "How to Write a Haiku — Structure, Subject, and the 5-7-5 Trap",
+      "h1": "How to Write a Haiku",
+      "subhead": "The syllable pattern, the seasonal word, and why good haiku usually break at least one rule.",
+      "current_word_count": 343,
+      "target_word_count": 1200,
+      "current": {
+        "description": "A practical guide to writing a haiku in English — the 5-7-5 syllable structure, seasonal word (kigo), and the cut (kireji) concept.",
+        "keywords": [
+          "how to write a haiku",
+          "haiku structure",
+          "haiku syllables"
+        ],
+        "outcomeLine": "Start with 5-7-5 syllables and a single concrete image — refine later.",
+        "intro": "A haiku is a three-line poem with a 5-7-5 syllable structure in English. The form is simple; the craft is picking one concrete image and letting it carry the whole poem.",
+        "keyPoints": [
+          "Line 1: 5 syllables. Line 2: 7 syllables. Line 3: 5 syllables.",
+          "Traditional haiku includes a seasonal word (kigo) — \"cherry blossom\" for spring, \"snow\" for winter.",
+          "A cut (kireji) separates two images — the turn in the poem, often between lines 2 and 3.",
+          "English haiku often drop the kigo requirement. They almost always keep the syllable count and the concrete-image rule.",
+          "One idea, one image. Abstract statements (\"love is beautiful\") do not haiku well."
+        ],
+        "examples": [
+          {
+            "title": "Classic form",
+            "body": "\"An old silent pond... / A frog jumps into the pond, / splash! Silence again.\" — Bashō. 5-7-5, seasonal imagery, the cut at \"splash\"."
+          },
+          {
+            "title": "Modern haiku",
+            "body": "\"kitchen window / the neighbour's tomatoes / touching my side\" — concrete image, implicit season, 5-7-5 approximate."
+          },
+          {
+            "title": "Common mistake",
+            "body": "\"I feel sad today / because my cat ran away / I miss him so much\" — 5-7-5 but abstract and narrative. A haiku wants an image, not an explanation."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "haiku-checker",
+            "note": "Validates the 5-7-5 count line by line. Catches miscounts before you share the poem."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "For individual lines when the haiku checker flags a problem."
+          },
+          {
+            "toolId": "rhyme-finder",
+            "note": "Haiku do not rhyme, but if you are playing with sound patterns inside lines, this helps."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does a haiku have to be 5-7-5 exactly?",
+            "a": "In English, modern poets often bend the count. Japanese haiku use \"on\" units, which do not map cleanly to English syllables. Stay close to 5-7-5 unless you know why you are breaking it."
+          },
+          {
+            "q": "Do haiku have to rhyme?",
+            "a": "No. Rhyme is foreign to the Japanese form and usually forced-sounding in English. Focus on image, sound, and the cut."
+          }
+        ],
+        "relatedIds": [
+          "haiku-checker",
+          "syllable-counter",
+          "rhyme-finder",
+          "cS-count-syllables-in-a-line",
+          "cE-syllables-counting-rules"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-why-words-look-like-rhymes",
+      "slug": "why-some-words-look-like-they-rhyme",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/why-some-words-look-like-they-rhyme/",
+      "title": "Why Some Words Look Like They Rhyme — Eye Rhymes and False Rhymes",
+      "h1": "Why Some Words Look Like They Rhyme",
+      "subhead": "Spelling rhymes, sound rhymes, and the gap between them.",
+      "current_word_count": 305,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Why some words look like rhymes but are not — eye rhymes, dialect differences, and historical pronunciation shifts.",
+        "keywords": [
+          "eye rhyme",
+          "words that look like rhymes",
+          "false rhyme english"
+        ],
+        "outcomeLine": "English spelling lies about pronunciation — trust your ear, not the page.",
+        "intro": "English spelling is inconsistent. Words that share endings on the page often do not share sounds — LOVE and MOVE, BOUGH and COUGH. These are called eye rhymes: they rhyme visually, not sonically.",
+        "keyPoints": [
+          "Eye rhyme: same spelling, different pronunciation. LOVE / MOVE, COUGH / ROUGH / DOUGH.",
+          "English had massive pronunciation shifts (Great Vowel Shift, 1400s-1700s) but spelling did not catch up.",
+          "Some older poems use eye rhymes intentionally — modern readers hear them as near-rhymes or misses.",
+          "Regional accents affect rhyme: MERRY/MARRY/MARY is one sound in most US accents, three in most UK accents.",
+          "A reliable rhyme check is the pronunciation, not the spelling. Say it out loud."
+        ],
+        "examples": [
+          {
+            "title": "Classic eye rhyme",
+            "body": "LOVE and MOVE. Same -OVE ending, completely different vowel sound. Early modern English had them closer."
+          },
+          {
+            "title": "OUGH family",
+            "body": "THROUGH (thru), TOUGH (tuf), THOUGH (tho), COUGH (cof), BOUGH (bow). Six different pronunciations."
+          },
+          {
+            "title": "Accent-dependent",
+            "body": "DANCE / CHANCE rhyme in US English. In UK English, they might not (BATH-trap split)."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "rhyme-finder",
+            "note": "Uses phonetic matching — catches true rhymes even when spellings differ. Avoids eye-rhyme traps."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "For checking that the words at the end of each line match by count as well as by sound."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are eye rhymes acceptable in poetry?",
+            "a": "Yes — formal poets use them deliberately. But in modern song lyrics or spoken poetry, an eye rhyme usually sounds like a failed rhyme to listeners."
+          },
+          {
+            "q": "How do I know a true rhyme from an eye rhyme?",
+            "a": "Say both words aloud. If the stressed vowel and everything after it sound identical, it is a true rhyme. If they only look similar, it is an eye rhyme."
+          }
+        ],
+        "relatedIds": [
+          "rhyme-finder",
+          "syllable-counter",
+          "cE-rhyme-perfect-vs-near",
+          "cS-how-to-use-rhyme-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cE-rhyme-perfect-vs-near": [
+      "rhyme-finder",
+      "syllable-counter"
+    ],
+    "cE-syllables-counting-rules": [
+      "syllable-counter",
+      "haiku-checker",
+      "rhyme-finder"
+    ],
+    "cS-how-to-use-rhyme-finder": [
+      "rhyme-finder",
+      "syllable-counter",
+      "haiku-checker",
+      "cE-rhyme-perfect-vs-near",
+      "cE-syllables-counting-rules"
+    ],
+    "cS-count-syllables-in-a-line": [
+      "syllable-counter",
+      "haiku-checker",
+      "rhyme-finder",
+      "cE-syllables-counting-rules",
+      "cS-how-to-write-a-haiku"
+    ],
+    "cS-how-to-write-a-haiku": [
+      "haiku-checker",
+      "syllable-counter",
+      "rhyme-finder",
+      "cS-count-syllables-in-a-line",
+      "cE-syllables-counting-rules"
+    ],
+    "cS-why-words-look-like-rhymes": [
+      "rhyme-finder",
+      "syllable-counter",
+      "cE-rhyme-perfect-vs-near",
+      "cS-how-to-use-rhyme-finder"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "rhyme-finder",
+          "url": "/word-tools/rhyme-finder/"
+        },
+        {
+          "id": "syllable-counter",
+          "url": "/word-tools/syllable-counter/"
+        },
+        {
+          "id": "haiku-checker",
+          "url": "/word-tools/haiku-checker/"
+        },
+        {
+          "id": "word-counter",
+          "url": "/word-tools/word-counter/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cE-rhyme-perfect-vs-near",
+          "url": "/guides/rhyme-perfect-vs-near/"
+        },
+        {
+          "id": "cE-syllables-counting-rules",
+          "url": "/guides/syllables-counting-rules/"
+        },
+        {
+          "id": "cS-how-to-use-rhyme-finder",
+          "url": "/guides/how-to-use-a-rhyme-finder/"
+        },
+        {
+          "id": "cS-count-syllables-in-a-line",
+          "url": "/guides/how-to-count-syllables-in-a-line/"
+        },
+        {
+          "id": "cS-how-to-write-a-haiku",
+          "url": "/guides/how-to-write-a-haiku/"
+        },
+        {
+          "id": "cS-why-words-look-like-rhymes",
+          "url": "/guides/why-some-words-look-like-they-rhyme/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

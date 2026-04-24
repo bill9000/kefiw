@@ -214,9 +214,9 @@ export default function VibeCipher({ words }: VibeCipherProps) {
     const base = 'flex items-center justify-center rounded-md border text-xl font-bold uppercase transition-all duration-300 aspect-square w-full';
     if (state === 'correct') return `${base} border-emerald-400 bg-emerald-500/20 text-emerald-300 shadow-[0_0_18px_rgba(52,211,153,0.55)]`;
     if (state === 'present') return `${base} border-amber-400 bg-amber-500/15 text-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.5)]`;
-    if (state === 'absent') return `${base} border-slate-700 bg-slate-800/60 text-slate-500`;
+    if (state === 'absent') return `${base} border-slate-700 bg-slate-800/60 text-slate-300`;
     if (state === 'filled') return `${base} border-slate-500 bg-slate-800 text-slate-100 shadow-[0_0_8px_rgba(148,163,184,0.3)]`;
-    return `${base} border-slate-800 bg-slate-900 text-slate-400`;
+    return `${base} border-slate-800 bg-slate-900 text-slate-300`;
   };
 
   const keyClass = (ch: string) => {
@@ -237,7 +237,7 @@ export default function VibeCipher({ words }: VibeCipherProps) {
         <header className="flex items-center justify-between">
           <div>
             <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-400">VibeCipher</div>
-            <div className="text-xs text-slate-400">Unlimited play · 5 letters · 6 tries</div>
+            <div className="text-xs text-slate-300">Unlimited play · 5 letters · 6 tries</div>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-300">
             <Trophy className="h-4 w-4 text-amber-400" aria-hidden />
@@ -386,7 +386,7 @@ function WinLossModal({ state, secret, stats, winRate, onClose, onNewGame }: Mod
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 text-slate-500 hover:text-slate-200"
+          className="absolute right-3 top-3 text-slate-300 hover:text-slate-200"
         >
           <X className="h-5 w-5" />
         </button>
@@ -406,7 +406,7 @@ function WinLossModal({ state, secret, stats, winRate, onClose, onNewGame }: Mod
           <Stat label="Streak" value={stats.streak} />
           <Stat label="Best" value={stats.bestStreak} />
         </div>
-        <div className="mt-2 text-center text-xs text-slate-400">
+        <div className="mt-2 text-center text-xs text-slate-300">
           Win rate <span className="font-mono text-emerald-400">{winRate}%</span>
         </div>
 
@@ -435,7 +435,7 @@ function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-md border border-slate-700 bg-slate-800/60 p-2">
       <div className="font-mono text-lg font-bold text-emerald-300">{value}</div>
-      <div className="text-[10px] uppercase tracking-wide text-slate-500">{label}</div>
+      <div className="text-[10px] uppercase tracking-wide text-slate-300">{label}</div>
     </div>
   );
 }

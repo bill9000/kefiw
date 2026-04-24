@@ -694,6 +694,52 @@ export const ARTICLES_CONVERTERS_GAMES: ContentPageConfig[] = [
 
   // ===== SUDOKU =====
   {
+    id: 'art-cg-sudoku-rules',
+    kind: 'guide',
+    section: 'guides',
+    slug: 'sudoku-rules-how-to-play',
+    guideCategory: 'Sudoku',
+    title: 'Sudoku Rules: How to Play Sudoku (Complete Beginner Guide) | Kefiw',
+    h1: 'Sudoku Rules: How to Play',
+    subhead: 'The complete rules of Sudoku in five steps — no strategy, no jargon, just how the game works.',
+    outcomeLine: 'After reading this you can sit down with any Sudoku puzzle and legally fill in cells without guessing.',
+    description: 'The complete rules of Sudoku explained from zero. Learn the 9x9 grid, the 1-9 constraint on rows, columns, and boxes, and how to place your first digit.',
+    keywords: ['sudoku rules', 'how to play sudoku', 'sudoku for beginners', 'learn sudoku', 'sudoku instructions'],
+    intro: 'Sudoku is a logic puzzle with exactly three rules — once you understand them the entire game falls into place. No arithmetic, no sums, no diagonals. Just "each digit once per row, once per column, once per 3x3 box."',
+    keyPoints: [
+      'The board is a 9x9 grid (81 cells) split into nine 3x3 boxes by thicker lines. Some cells start with digits printed in them — these are clues and cannot be changed.',
+      'Rule 1 — rows: each row of 9 cells must contain every digit from 1 to 9 exactly once, no repeats.',
+      'Rule 2 — columns: each column of 9 cells must contain every digit from 1 to 9 exactly once.',
+      'Rule 3 — boxes: each of the nine 3x3 boxes must contain every digit from 1 to 9 exactly once.',
+      'A digit is legal in a blank cell only if it does not already appear in that cell\'s row, column, or box. If all three checks pass, it\'s a valid candidate.',
+      'A proper Sudoku has exactly one solution — you never need to guess. If you feel like guessing, you missed a deduction.',
+      'Simplest opening technique: pick a digit (say 1), scan all nine boxes, and fill in any box where only one cell can hold that digit. Repeat for 2 through 9.',
+    ],
+    examples: [
+      { title: 'Rule check in action', body: 'You want to place a 5 in an empty cell. Look at its row — no 5 present, OK. Look at its column — no 5 present, OK. Look at its 3x3 box — already has a 5. Illegal. Try another digit or another cell.' },
+      { title: 'Forced placement', body: 'Box 7 (bottom-left) has cells for 4 missing digits. Three of those cells already see a 2 in their row or column. The fourth cell is the only place a 2 can go — place it.' },
+      { title: 'Scanning 1-9', body: 'After placing your clues, scan each digit from 1 to 9 across the whole board. For every digit, check each box — if only one cell in the box can legally hold it, place it. One pass usually yields 5-15 cells on an easy puzzle.' },
+    ],
+    whenToUse: [{ toolId: 'sudoku', note: 'Start on Easy (40 clues). If you can solve Easy without guessing or getting red-cell conflicts, move up to Medium.' }],
+    relatedIds: ['sudoku', 'sudoku-easy'],
+    faq: [
+      { q: 'Is there math in Sudoku?', a: 'No. The digits 1-9 are symbols — you could replace them with any nine unique characters and the game would be identical. There is no addition, no multiplication, no relationship between digits.' },
+      { q: 'Do diagonals need to contain 1-9 too?', a: 'Not in standard Sudoku. The two main diagonals have no constraint. Variants like "Sudoku X" or "Diagonal Sudoku" add that rule, but they are separate puzzle types.' },
+      { q: 'What happens if I place a wrong digit?', a: 'On Kefiw Sudoku, the cell will highlight red if it breaks a row, column, or box rule. If no conflict highlights but the digit is still wrong for the final solution, you will hit a contradiction later and need to backtrack. That is why guessing is discouraged.' },
+      { q: 'How many clues do Sudoku puzzles start with?', a: 'It varies by difficulty. On Kefiw: Easy 40, Medium 32, Hard 28, Expert 24. The mathematical minimum for a uniquely-solvable puzzle is 17 (proven in 2012) — most human-solvable experts stay above 22.' },
+      { q: 'Can I take notes of possible digits?', a: 'Experienced players pencil-mark candidates — small numbers in a cell showing which digits could legally go there. Kefiw Sudoku does not have built-in pencil marks yet; use mental candidates or scratch paper until the feature ships.' },
+    ],
+    thresholds: {
+      cyan: 'You can recite the three rules and check if a digit is legal in a cell — ready to play.',
+      gold: 'You keep forgetting to check the 3x3 box — slow down and do all three checks before each placement.',
+      magenta: 'You placed a digit and a cell lit red — you broke a rule; undo and rescan.',
+    },
+    pivotLink: {
+      toolId: 'sudoku-easy',
+      note: 'Rules locked in? Start with Easy — 40 clues, most placements are single-digit-only forced moves.',
+    },
+  },
+  {
     id: 'art-cg-sudoku-solve-faster',
     kind: 'guide',
     section: 'guides',

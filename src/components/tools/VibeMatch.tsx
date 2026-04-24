@@ -284,8 +284,7 @@ export default function VibeMatch() {
           touchAction: 'manipulation',
         }}
       >
-        <AnimatePresence>
-          {tiles.map((tile, i) => {
+        {tiles.map((tile, i) => {
             const Icon = ICON_MAP[tile.iconKey];
             const showFront = tile.faceUp || tile.matched;
             const isGlitchTile = glitchIndices.has(i);
@@ -294,16 +293,14 @@ export default function VibeMatch() {
             const frontGlow = tile.matched ? COLOR_MATCH_GLOW : (i % 2 === 0 ? COLOR_CYAN_GLOW : COLOR_MAGENTA_GLOW);
             return (
               <motion.button
-                key={tile.id}
-                layout
-                layoutId={tile.id}
-                transition={{ layout: { duration: 0.45, ease: 'easeInOut' } }}
+                key={`${i}-${tile.id}`}
                 onClick={() => flip(i)}
                 whileTap={{ scale: 0.95 }}
                 animate={{
                   rotateY: showFront ? 180 : 0,
                   filter: isGlitchTile ? 'hue-rotate(180deg) contrast(1.4)' : 'none',
                 }}
+                transition={{ rotateY: { duration: 0.35 }, filter: { duration: 0.3 } }}
                 style={{
                   position: 'relative',
                   aspectRatio: '1 / 1',
@@ -356,7 +353,6 @@ export default function VibeMatch() {
               </motion.button>
             );
           })}
-        </AnimatePresence>
       </motion.div>
 
       {/* Glitch banner */}

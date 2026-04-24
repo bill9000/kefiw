@@ -452,7 +452,7 @@ export default function VibeCrosser() {
             setFoundWords(new Set());
             setHintedCells(new Set());
           }}
-          className="flex items-center gap-1.5 rounded border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-xs uppercase tracking-widest text-slate-400 hover:border-slate-500"
+          className="flex items-center gap-1.5 rounded border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-xs uppercase tracking-widest text-slate-300 hover:border-slate-500"
           title="Restart this puzzle"
         >
           <RefreshCw size={14} /> Reset

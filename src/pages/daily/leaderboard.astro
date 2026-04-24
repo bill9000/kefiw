@@ -1,0 +1,76 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import Leaderboard from '~/components/daily/Leaderboard.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/leaderboard/', label: 'Leaderboard' },
+];
+---
+
+<BaseLayout
+  title="Daily Kefiw Leaderboard — today's top solvers"
+  description="Live leaderboard for today's Five-Letter Hunt, Hive, and Sudoku. Fewer guesses, more points, faster solves — rank on each."
+  canonical="/daily/leaderboard/"
+  keywords={["daily kefiw leaderboard", "daily puzzle rankings", "word game leaderboard"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Daily Leaderboard</h1>
+      <p class="mt-1 text-lg text-slate-700">Who solved today, how fast, and how well.</p>
+      <p class="mt-2 max-w-3xl text-slate-600">
+        Pick a handle on the <a href="/daily/" class="text-brand-700 hover:underline">Daily hub</a>
+        to show up with a name instead of <code class="rounded bg-slate-100 px-1">anonXXXX</code>.
+        Board resets at 4:00 AM Eastern Time with the next puzzle.
+      </p>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-3">
+      <section aria-label="Hunt leaderboard">
+        <header class="mb-2 flex items-baseline justify-between">
+          <h2 class="text-xl font-semibold">Five-Letter Hunt</h2>
+          <a href="/daily/hunt/" class="text-xs text-brand-700 hover:underline">Play →</a>
+        </header>
+        <p class="mb-2 text-xs text-slate-500">Fewer guesses = better.</p>
+        <Leaderboard client:only="react" gameId="hunt" />
+      </section>
+
+      <section aria-label="Hive leaderboard">
+        <header class="mb-2 flex items-baseline justify-between">
+          <h2 class="text-xl font-semibold">Hive</h2>
+          <a href="/daily/hive/" class="text-xs text-brand-700 hover:underline">Play →</a>
+        </header>
+        <p class="mb-2 text-xs text-slate-500">More points = better. Pangrams are worth +7.</p>
+        <Leaderboard client:only="react" gameId="hive" />
+      </section>
+
+      <section aria-label="Sudoku leaderboard">
+        <header class="mb-2 flex items-baseline justify-between">
+          <h2 class="text-xl font-semibold">Sudoku</h2>
+          <a href="/daily/sudoku/" class="text-xs text-brand-700 hover:underline">Play →</a>
+        </header>
+        <p class="mb-2 text-xs text-slate-500">Faster clear time = better.</p>
+        <Leaderboard client:only="react" gameId="sudoku" />
+      </section>
+    </div>
+
+    <section class="mt-10 border-t border-slate-200 pt-6">
+      <h2 class="text-xl font-semibold">How rankings work</h2>
+      <ul class="mt-3 space-y-2 text-sm text-slate-700">
+        <li>Only <strong>cleared</strong> runs appear — a Hive run below the Good tier does not show.</li>
+        <li>One row per device per game per day. Resubmitting a better result overwrites the old one.</li>
+        <li>No accounts. Identity = a random id in your browser. Clear your storage, get a new identity.</li>
+        <li>Handles are display-only. They don't reserve names — two players can use the same handle.</li>
+        <li>All leaderboards reset when the puzzle rolls over at 4:00 AM Eastern Time.</li>
+      </ul>
+      <p class="mt-4 text-xs text-slate-500">
+        See the <a href="/guides/daily-kefiw-leaderboard-system/" class="text-brand-700 hover:underline">Leaderboard system guide</a>
+        for the full explanation of identity, integrity, and what counts as a clear.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

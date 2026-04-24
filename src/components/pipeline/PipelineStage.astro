@@ -11,31 +11,31 @@ const { stage, totalStages, title, summary, toolHref, toolTitle } = Astro.props;
 ---
 <section class="mb-2">
   <div
-    class="mx-auto max-w-4xl rounded-t-lg border border-b-0 border-slate-700 bg-slate-900 px-4 py-3"
+    class="mx-auto max-w-4xl rounded-t-lg border border-b-0 border-slate-300 bg-slate-50 px-4 py-3"
     style="font-family: 'JetBrains Mono', ui-monospace, monospace;"
   >
     <div class="flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-3">
-        <span class="inline-flex h-7 w-7 items-center justify-center rounded border border-cyan-400/40 bg-cyan-500/10 text-xs font-bold text-cyan-300">
+        <span class="inline-flex h-7 w-7 items-center justify-center rounded border border-cyan-500 bg-cyan-50 text-xs font-bold text-cyan-700">
           {String(stage).padStart(2, '0')}
         </span>
         <div>
-          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500">
             Stage {stage} of {totalStages}
           </div>
-          <div class="text-sm font-semibold text-slate-100">{title}</div>
+          <div class="text-sm font-semibold text-slate-900">{title}</div>
         </div>
       </div>
       <a
         href={toolHref}
-        class="text-[10px] uppercase tracking-[0.15em] text-slate-400 hover:text-cyan-300"
+        class="text-[10px] uppercase tracking-[0.15em] text-slate-500 hover:text-cyan-700"
       >
         Standalone · {toolTitle} →
       </a>
     </div>
-    <p class="mt-2 text-xs text-slate-400">{summary}</p>
+    <p class="mt-2 text-xs text-slate-600">{summary}</p>
   </div>
-  <div class="mx-auto max-w-4xl rounded-b-lg border border-slate-700 bg-slate-900">
+  <div class="mx-auto max-w-4xl rounded-b-lg border border-slate-300 bg-white">
     <slot />
   </div>
 </section>

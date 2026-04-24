@@ -1,0 +1,53 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Engineering Review — Kefiw"
+  description="What engineering review means on Kefiw: deterministic formulas, search logic, input handling, unit conversion, browser behavior, rounding, and implementation correctness."
+  canonical="/engineering-review/"
+  keywords={['engineering review', 'formula review', 'implementation review', 'kefiw engineering']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Engineering Review</h1>
+    <p class="lead text-lg text-slate-700">
+      Engineering review on Kefiw means a page is checked for deterministic logic, clean input handling, reliable browser behavior, and honest presentation of what the system actually computes.
+    </p>
+
+    <TrustNav current="/engineering-review/" />
+
+    <h2>What engineering review covers</h2>
+    <ul>
+      <li>formula implementation and variable definitions</li>
+      <li>unit conversion, rounding behavior, defaults, and input validation</li>
+      <li>tool-state behavior across mobile and desktop use</li>
+      <li>search and scoring logic for word tools and puzzle helpers</li>
+      <li>clear explanation of what the tool is doing step by step</li>
+    </ul>
+
+    <h2>What users are usually trying to do</h2>
+    <p>
+      Users come to calculator and tool pages because they want a number, a ranked list, a pattern match, a usable shortcut, or a fast way to verify their own work. Engineering review exists to make sure the page behaves predictably under that pressure. The same inputs should produce the same outputs, and the route from input to result should be explainable.
+    </p>
+
+    <h2>Examples of engineering review in practice</h2>
+    <ul>
+      <li>A calculator shows the formula, inputs, assumptions, rounding, and at least one worked example.</li>
+      <li>A game helper explains the rule model it assumes, including where official dictionaries or puzzle-specific logic may differ.</li>
+      <li>A text utility states exactly how it counts, splits, sorts, or removes content instead of implying magic.</li>
+    </ul>
+
+    <h2>What engineering review does not mean</h2>
+    <ul>
+      <li>It does not mean a tool answer is appropriate for every professional, legal, financial, or medical context.</li>
+      <li>It does not mean a heuristic model has become certain just because the code is clean.</li>
+      <li>It does mean the implementation matches the stated logic as closely as possible.</li>
+    </ul>
+
+    <h2>Why this matters</h2>
+    <p>
+      Many tool pages on the web hide their assumptions. A user types numbers in, gets a confident answer back, and has no idea which formula was used or how edge cases were handled. Engineering review closes that gap by making the implementation behavior part of the content, not a secret buried in code.
+    </p>
+  </article>
+</BaseLayout>

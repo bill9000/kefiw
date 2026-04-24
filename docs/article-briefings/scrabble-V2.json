@@ -1,0 +1,2167 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-22T03:08:21.584Z",
+  "cluster": {
+    "slug": "scrabble",
+    "section": "word-tools",
+    "hubSlug": "scrabble-word-help",
+    "url": "/word-tools/scrabble-word-help/",
+    "title": "Scrabble & Word Game Help — Kefiw",
+    "h1": "Scrabble & Word Game Help",
+    "subhead": "Find, score, and play the right word faster.",
+    "intro": "The Scrabble cluster pulls together every tool and list that helps you find high-scoring plays, remember the short words that clear racks, and understand how the scoring actually works. Pick the tool or list that matches your situation.",
+    "description": "Tools, lists, and strategy guides for Scrabble and Words With Friends — rack solvers, high-scoring word lists, Q-without-U words, and scoring rules.",
+    "keywords": [
+      "scrabble help",
+      "scrabble word finder",
+      "scrabble strategy",
+      "words with friends help"
+    ],
+    "faq": [
+      {
+        "q": "Which helper should I use — Scrabble or Words With Friends?",
+        "a": "Use the one that matches the game you are playing — tile values differ enough that the high-score play is often different."
+      },
+      {
+        "q": "Are all these words tournament-legal?",
+        "a": "Lists use the public-domain ENABLE1 word list — close to TWL/SOWPODS but not identical. Confirm unusual words in your game's dictionary before challenging."
+      },
+      {
+        "q": "Where do I start if I'm new?",
+        "a": "Memorise the 2-letter list, learn how the blank tile works, then read the scoring guide. Those three unlock most intermediate plays."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "unscramble",
+      "pattern",
+      "word-families"
+    ]
+  },
+  "tools": [
+    {
+      "id": "scrabble-helper",
+      "slug": "scrabble-helper",
+      "category": "word-tools",
+      "url": "/word-tools/scrabble-helper/",
+      "title": "Scrabble Word Finder — Kefiw",
+      "h1": "Scrabble Word Finder",
+      "current_word_count": 94,
+      "current": {
+        "description": "Find the highest-scoring Scrabble words you can play with your tiles.",
+        "keywords": [
+          "scrabble word finder",
+          "scrabble helper",
+          "scrabble cheat"
+        ],
+        "intro": "Enter your rack (up to 7 letters, use ? for blanks) and get every playable Scrabble word, sorted by point value.",
+        "outcomeLine": "Your rack plus the board — every playable word ranked by score.",
+        "howTo": [
+          "Enter your tiles. Use ? for blanks.",
+          "Results are sorted by Scrabble score, highest first.",
+          "Tap any word to copy it to your clipboard."
+        ],
+        "examples": [
+          {
+            "title": "Rack: QUIZZES",
+            "body": "Top play: QUIZZES (34 points, uses all tiles for a 50-point bingo)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are tile values exact?",
+            "a": "Yes — standard tournament Scrabble tile values."
+          },
+          {
+            "q": "Does this include bingo bonus?",
+            "a": "Yes, +50 if you use all 7 tiles."
+          }
+        ],
+        "relatedIds": [
+          "words-with-friends-helper",
+          "word-unscrambler",
+          "anagram-solver"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "rack of up to 9 letters (a-z plus `?` for blank tiles); optional single board letter the word must play through",
+        "output_type": "ranked array of playable words with Scrabble scores, capped at 300 results, sorted by score descending then length descending then alphabetical",
+        "processing_steps": [
+          "Normalize rack: lowercase, strip non-letter/non-`?` characters, truncate to 9 characters.",
+          "Normalize board letter (if provided): lowercase, first letter only.",
+          "Load the ENABLE1 word list (~172,823 words) on first use via web worker.",
+          "Filter dictionary to words between 2 and 15 letters.",
+          "For each candidate word: if a board letter is specified, require the word to contain it; remove one instance before rack-fit check.",
+          "Check rack fit with `canMakeFromRack` — blanks (`?`) satisfy any missing letter.",
+          "Score each playable word with `wordScore` using SCRABBLE_VALUES (standard tournament tile values).",
+          "Add a +50 bingo bonus when the word uses exactly 7 tiles from the rack (i.e. `remainder.length === 7` after optional board-letter removal).",
+          "Sort by score descending, then length descending, then alphabetically.",
+          "Truncate to 300 results before returning.",
+          "Client re-sorts to alphabetical in Basic mode; keeps score order in Scored mode."
+        ],
+        "data_sources": [
+          "ENABLE1 public-domain English word list (~172,823 entries, `public/data/enable.txt`), loaded on first use via web worker.",
+          "SCRABBLE_VALUES tile map in `src/lib/dict.ts` (Q/Z=10, J/X=8, K=5, F/H/V/W/Y=4, B/C/M/P=3, D/G=2, A/E/I/L/N/O/R/S/T/U=1)."
+        ],
+        "fallback_behavior": "Empty rack returns no results. No phonetic, morphological, or proper-noun fallback. Reset button clears rack and board letter together.",
+        "known_limitations": [
+          "Scores blanks as full tile value. Standard Scrabble rules score a blank as 0 — this tool overstates the score by the value of each letter represented by a blank.",
+          "Bingo bonus is awarded only when the word consumes 7 rack tiles. A 7-letter word that uses a board letter plus 6 rack tiles is not treated as a bingo, matching real play.",
+          "Dictionary is ENABLE1, not TWL or SOWPODS. A handful of tournament-valid words (e.g. recent additions, SOWPODS-only entries) may not appear; a few ENABLE1 words are not TWL-legal.",
+          "No board context beyond a single \"plays through\" letter. Does not model double-letter, triple-letter, double-word, triple-word premium squares, adjacent letters, hooks, or open-parallel plays.",
+          "No proper nouns, abbreviations, or acronyms — ENABLE1 excludes them.",
+          "Board-letter check accepts the first occurrence only; when the same letter repeats in the word, only one instance is treated as the board tile.",
+          "Results capped at 300. Very open racks (e.g. lots of common letters) may hit the cap."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "rack (single-line text input, uppercase display, font-mono, maxLength 9, autofocused)",
+            "board letter (single-character optional input, uppercase display, maxLength 1)"
+          ],
+          "filters": [
+            "mode: Basic | Scored — Basic sorts results alphabetically; Scored keeps the score-ranked order"
+          ],
+          "outputs": [
+            "Summary card: best play and its score",
+            "Stats card: total plays, second-best play, score gap, bingo candidate count, best short play (≤4 letters), best long play (≥5)",
+            "Takeaway card (conditional): bingo candidate count and +50 bonus reminder",
+            "Takeaway card (conditional): board-letter constraint notice when set",
+            "Results table: Word | Length | Score (Score column hidden in Basic mode)",
+            "Copy-all button that dumps the result list (with or without scores depending on mode)",
+            "Next-step card linking to WWF Helper and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Ranks playable Scrabble words by point value using standard tournament tile values",
+            "Supports blanks (`?`) in the rack",
+            "Supports a single optional \"plays through\" board letter",
+            "Flags 7-letter bingo candidates and adds the +50 bonus",
+            "Runs entirely in the browser (no server round-trip)"
+          ],
+          "claim_forbidden": [
+            "Models the full board, premium squares, adjacent words, hooks, or parallel plays",
+            "Scores blanks as 0 (as tournament rules require)",
+            "Uses the TWL or SOWPODS tournament word list — it uses ENABLE1",
+            "Includes proper nouns, abbreviations, or acronyms",
+            "Respects recent dictionary updates beyond ENABLE1"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "words-with-friends-helper",
+      "slug": "words-with-friends-helper",
+      "category": "word-tools",
+      "url": "/word-tools/words-with-friends-helper/",
+      "title": "Words With Friends Word Finder — Kefiw",
+      "h1": "Words With Friends Word Finder",
+      "current_word_count": 68,
+      "current": {
+        "description": "Find the highest-scoring Words With Friends plays from your tiles.",
+        "keywords": [
+          "words with friends",
+          "wwf word finder",
+          "wwf helper"
+        ],
+        "intro": "Enter your rack and get every valid Words With Friends play, scored using WWF tile values.",
+        "outcomeLine": "WWF tile values and dictionary — different game, different answers.",
+        "howTo": [
+          "Enter your tiles. Use ? for blanks.",
+          "Results are sorted by WWF score."
+        ],
+        "examples": [
+          {
+            "title": "Rack: SQUEEZE",
+            "body": "Top play: SQUEEZE (high-value Z and Q combo)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are the tile values different from Scrabble?",
+            "a": "Yes — Words With Friends uses its own tile distribution and values."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "rack of up to 9 letters (a-z plus `?` for blank tiles); optional single board letter the word must play through",
+        "output_type": "ranked array of playable words with WWF scores, capped at 300 results, sorted by score descending then length descending then alphabetical",
+        "processing_steps": [
+          "Normalize rack: lowercase, strip non-letter/non-`?` characters, truncate to 9 characters.",
+          "Normalize board letter (if provided): lowercase, first letter only.",
+          "Load the ENABLE1 word list (~172,823 words) on first use via web worker.",
+          "Filter dictionary to words between 2 and 15 letters.",
+          "For each candidate word: if a board letter is specified, require it in the word; remove one instance before rack-fit check.",
+          "Check rack fit with `canMakeFromRack` — blanks (`?`) satisfy any missing letter.",
+          "Score each playable word with `wordScore` using WWF_VALUES (Words With Friends tile distribution).",
+          "Add a +35 bingo bonus (WWF standard) when the word uses exactly 7 tiles from the rack.",
+          "Sort by score descending, then length descending, then alphabetically.",
+          "Truncate to 300 results before returning."
+        ],
+        "data_sources": [
+          "ENABLE1 public-domain English word list (~172,823 entries, `public/data/enable.txt`), shared with Scrabble Helper.",
+          "WWF_VALUES tile map in `src/lib/dict.ts`. Differs from Scrabble: J=10 (vs 8), B/F/H/M/P=4 (vs 3/4/4/3/3), L=2 (vs 1), N=2 (vs 1), U=2 (vs 1), Y=3 (vs 4), C=4 (vs 3), G=3 (vs 2)."
+        ],
+        "fallback_behavior": "Empty rack returns no results. No phonetic, morphological, or proper-noun fallback. Reset clears rack and board letter together.",
+        "known_limitations": [
+          "Same blank-scoring caveat as Scrabble Helper: blanks score full tile value here, but real WWF scores them as 0.",
+          "Bingo bonus fires only when 7 rack tiles are consumed — a 7-letter word that uses a board letter plus 6 rack tiles is not flagged as bingo.",
+          "No board context beyond a single \"plays through\" letter. Does not model WWF premium squares (triple-letter, triple-word, or the different square layout), hooks, or parallel plays.",
+          "Uses the ENABLE1 dictionary as a reasonable proxy for the WWF dictionary — the two overlap heavily but are not identical. A handful of WWF-legal slang and informal words may be missing; a few ENABLE1 words may not be WWF-legal.",
+          "No proper nouns, abbreviations, or acronyms.",
+          "Board-letter check accepts the first occurrence only.",
+          "Results capped at 300."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "rack (single-line text input, uppercase display, font-mono, maxLength 9, autofocused)",
+            "board letter (single-character optional input, maxLength 1)"
+          ],
+          "filters": [
+            "mode: Basic | Scored — Basic sorts results alphabetically; Scored keeps the score-ranked order"
+          ],
+          "outputs": [
+            "Summary card: best play and its WWF score",
+            "Stats card: total plays, second-best, score gap, bingo count, best short play (≤4), best long play (≥5)",
+            "Takeaway card (conditional): bingo candidate count with +35 WWF bonus reminder",
+            "Takeaway card (conditional): board-letter constraint notice when set",
+            "Results table: Word | Length | Score (Score column hidden in Basic mode)",
+            "Copy-all button",
+            "Next-step card linking to Scrabble Helper and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Ranks playable Words With Friends plays by point value using WWF tile values",
+            "Supports blanks (`?`) in the rack",
+            "Supports a single optional \"plays through\" board letter",
+            "Flags 7-letter bingo candidates and adds the +35 WWF bonus",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Uses the official Zynga Words With Friends dictionary — it uses ENABLE1 as a close proxy",
+            "Models the WWF board, premium squares, or parallel plays",
+            "Scores blanks as 0 (as real WWF scoring does)",
+            "Handles the WWF2 ruleset variants (Solo Challenge, Lightning Round) specifically",
+            "Includes proper nouns, player names, or brand names"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "word-unscrambler",
+      "slug": "word-unscrambler",
+      "category": "word-tools",
+      "url": "/word-tools/word-unscrambler/",
+      "title": "Word Unscrambler — Kefiw",
+      "h1": "Word Unscrambler",
+      "current_word_count": 161,
+      "current": {
+        "description": "Unscramble letters into valid English words. Fast, free, runs entirely in your browser.",
+        "keywords": [
+          "unscrambler",
+          "unscramble letters",
+          "word unscrambler",
+          "letter unscrambler"
+        ],
+        "intro": "Paste a set of scrambled letters and get every valid English word you can build from them. Works offline, runs in your browser, and returns results in milliseconds.",
+        "outcomeLine": "Paste your letters, see every real word they make — ranked by length or score.",
+        "howTo": [
+          "Type or paste your scrambled letters into the input box.",
+          "Click Unscramble (or just wait — the tool runs as you type).",
+          "Results are grouped by length, longest first.",
+          "Tap any word to copy it to your clipboard."
+        ],
+        "examples": [
+          {
+            "title": "Input: TEINGL",
+            "body": "Returns: tingle, ingle, tile, tine, gent, gilt, lien, line, nite, tien, tile, gel, lie, ten…"
+          },
+          {
+            "title": "Input: AEILNRT",
+            "body": "Returns: retinal, latrine, ratline, reliant, trenail, entail, linter, rental…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does this support wildcards?",
+            "a": "Yes — use ? for a single blank tile. You can combine known letters with wildcards, e.g. \"ca?t\"."
+          },
+          {
+            "q": "What dictionary is used?",
+            "a": "An open-source English word list covering common Scrabble- and Words With Friends-valid words."
+          },
+          {
+            "q": "Does it work offline?",
+            "a": "Yes. All processing runs locally in your browser. No server calls."
+          }
+        ],
+        "relatedIds": [
+          "anagram-solver",
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "string of letters (a-z, plus `?` for blank/wildcard tiles)",
+        "output_type": "array of every dictionary word that can be spelled from the input letters, sorted by length descending then alphabetical",
+        "processing_steps": [
+          "Load the chosen word list on first use via web worker: Game list = ENABLE1 (~172,823 words) or Full list = dict.txt (~370,105 words).",
+          "Normalize input: lowercase, strip non-letter/non-`?` characters.",
+          "For each dictionary word within the min/max length range: use `canMakeFromRack` to check whether it can be built from the input letters (blanks satisfy any missing letter).",
+          "Sort matches by length descending, then alphabetically.",
+          "Fallback: if minLen > 2 produces zero matches, re-run with minLen = 2 and surface an amber \"No words found at N+ letters\" notice.",
+          "Client optionally computes per-word Scrabble and WWF scores when the \"Show scores\" checkbox is enabled."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries) — the \"Game list\" mode used for casual Scrabble/WWF play.",
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries) — the \"Full list\" mode that includes archaic, technical, and inflected forms.",
+          "SCRABBLE_VALUES and WWF_VALUES for optional score display."
+        ],
+        "fallback_behavior": "Empty input returns no results. If minLen > 2 yields nothing, automatically retries at minLen = 2 and displays a fallback banner. No phonetic or transliteration fallback.",
+        "known_limitations": [
+          "Requires every letter of the candidate word to be spellable from the input (blanks cover gaps). Does not return anagrams that need extra letters.",
+          "No result cap — very open letter sets (\"aeinorst\") can produce thousands of matches and slow the render.",
+          "Full list includes archaic, technical, and inflected forms; some are not valid Scrabble/WWF plays.",
+          "Neither list includes proper nouns, abbreviations, or acronyms.",
+          "Wildcard handling is length-only — `?` represents one blank tile, not a multi-character wildcard.",
+          "No pattern or positional matching — use Word Finder or Pattern Solver for those.",
+          "Scores, when shown, follow the same blank-scoring overcount as the rack helpers (blanks scored at full tile value)."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "letters (single-line text input, font-mono, autofocused)"
+          ],
+          "filters": [
+            "mode: Game list (ENABLE1) | Full list (dict.txt)",
+            "min length: dropdown 2–7",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Amber fallback banner when min-length fallback fires",
+            "Summary card: total word count",
+            "Stats card: longest word, shortest word, best Scrabble play with score, best WWF play with score",
+            "Comparison card: count by word length (top 4 lengths)",
+            "Takeaway: best short play (≤4 letters) with Scrabble score",
+            "Result list grouped by length (or flat when scores are shown)",
+            "Copy button per result group",
+            "Next-step card linking to Scrabble Helper and WWF Helper"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds every valid English word that can be spelled from the input letters",
+            "Supports blank tiles (`?`)",
+            "Offers a compact game list (ENABLE1) and a broader dictionary (dict.txt)",
+            "Optionally shows Scrabble and WWF scores inline",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Finds only full-letter anagrams (use Anagram Solver for that)",
+            "Supports multi-letter wildcards or positional patterns (use Word Finder / Pattern Solver)",
+            "Includes proper nouns, slang, or acronyms",
+            "Returns tournament-certified TWL/SOWPODS validity"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "word-finder",
+      "slug": "word-finder",
+      "category": "word-tools",
+      "url": "/word-tools/word-finder/",
+      "title": "Word Finder by Letters — Kefiw",
+      "h1": "Word Finder by Letters",
+      "current_word_count": 109,
+      "current": {
+        "description": "Find words that can be made from a specific set of letters, with optional minimum and maximum length filters.",
+        "keywords": [
+          "word finder",
+          "find words with letters",
+          "word maker"
+        ],
+        "intro": "Enter the letters you have (including blanks as ?) and filter by word length. Useful for Scrabble, Words With Friends, and general word puzzles. For prefix, suffix, or substring searches, use the dedicated Words Starting With, Words Ending With, or Words Containing tools.",
+        "outcomeLine": "Pattern-match with ? and * across the whole dictionary.",
+        "howTo": [
+          "Enter your available letters (2–15 characters).",
+          "Use ? for each blank tile.",
+          "Optionally set a minimum and maximum word length.",
+          "Tap any result to copy it."
+        ],
+        "examples": [
+          {
+            "title": "Input: RSTLNE?",
+            "body": "Returns ELDEST, LETTERS, RELENTS, STERN…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many blanks can I use?",
+            "a": "Up to 2 — same as real Scrabble."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "letters (a-z plus `?` for blanks) OR a fixed-length pattern (a-z plus `?`/`_`/`.` as wildcards)",
+        "output_type": "array of dictionary words matching either the letter rack (with min/max length filters) or the positional pattern",
+        "processing_steps": [
+          "Load the chosen word list on first use: Game list = ENABLE1 or Full list = dict.txt.",
+          "If search mode is \"Letters\": strip whitespace, call the `unscramble` worker with minLen/maxLen — same rack-fit logic as Word Unscrambler but with separate length bounds.",
+          "If search mode is \"Pattern\": pattern length fixes the candidate word length. For each dictionary word of that length, call `matchesPattern` — any position whose pattern char is `?`, `_`, or `.` accepts any letter; other positions must match exactly (case-insensitive).",
+          "Letters mode sorts by length descending then alphabetically; Pattern mode returns in the source word-list order (effectively alphabetical from the dictionary file).",
+          "Optional Scrabble + WWF score display when toggled.",
+          "Lightweight variants (`5-letter-word-finder`, `6-letter-word-finder`, `7-letter-word-finder`) lock the pattern length to 5/6/7 and hide the min/max controls."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`) — \"Full list\" mode."
+        ],
+        "fallback_behavior": "Empty input returns no results. No automatic min-length fallback (unlike Word Unscrambler). No phonetic fallback.",
+        "known_limitations": [
+          "Pattern mode matches exact-length candidates only — a 4-character pattern cannot match a 5-letter word.",
+          "Pattern wildcards (`?`, `_`, `.`) are single-character only — no regex quantifiers, no character classes.",
+          "Letters mode does not support a \"must include these letters\" constraint — use Words Containing for substring matching instead.",
+          "No position-aware scoring, no premium-square modelling.",
+          "Neither word list includes proper nouns, abbreviations, or acronyms.",
+          "Does not deduplicate between the two word lists — switching mode refetches and rebuilds the index."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "letters or pattern (single-line text input, font-mono, autofocused; maxLength is locked on the 5/6/7-letter variants)",
+            "min length: dropdown 2–8 (letters mode only; hidden on locked-length variants)",
+            "max length: dropdown 5–15 (letters mode only; hidden on locked-length variants)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "search by: Letters | Pattern",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Summary card: match count, with the pattern echoed when in Pattern mode",
+            "Stats card: mode, longest, shortest, best Scrabble, best WWF; plus wildcard and fixed-char counts in Pattern mode",
+            "Comparison card: count by word length (top 4 lengths)",
+            "Takeaway (conditional): most common result length",
+            "Result list — grouped by length when scores are off, flat when scores are on",
+            "Next-step card linking to Words Starting With / Ending With / Containing"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Two search modes: Letters (anagram-style with min/max length) and Pattern (positional, fixed length)",
+            "Accepts single-letter wildcards (`?`, `_`, `.`) in Pattern mode",
+            "Supports blanks (`?`) in Letters mode",
+            "Offers a compact game list (ENABLE1) and a broader dictionary (dict.txt)",
+            "Runs entirely in the browser",
+            "Powers the 5-, 6-, and 7-letter variants with the pattern length locked"
+          ],
+          "claim_forbidden": [
+            "Regex-style patterns (quantifiers, character classes)",
+            "Prefix/suffix/substring search — those are separate tools",
+            "Scrabble/WWF board modelling, premium squares, or hook plays",
+            "Proper nouns, slang, or acronyms"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cS-best-2-letter-scrabble-words",
+      "slug": "best-2-letter-scrabble-words",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-2-letter-scrabble-words/",
+      "title": "Best 2-Letter Scrabble Words — Ranked by Score and Use",
+      "h1": "Best 2-Letter Scrabble Words",
+      "subhead": "Which two-letter plays actually matter, and why.",
+      "current_word_count": 318,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The highest-value 2-letter Scrabble words ranked by score and playability, with the ones most worth memorising first.",
+        "keywords": [
+          "best 2 letter scrabble words",
+          "2 letter scrabble words",
+          "top 2-letter scrabble"
+        ],
+        "outcomeLine": "Memorise this shortlist and your hook-play score goes up immediately.",
+        "intro": "Two-letter words are the backbone of Scrabble scoring. Every hook play and parallel extension uses one. Learn the ones that score best and crop up most often.",
+        "keyPoints": [
+          "QI and ZA are the single biggest payoff: 11 and 11 points on a bare board, much more on bonus squares.",
+          "JO is the third-highest: 9 points, and it lets you dump a J without a friendly vowel position.",
+          "Focus memorisation on words that combine a high-value letter (Q, Z, J, X) with a common vowel — those are the ones you actually draw.",
+          "Plural-adding twos like AS, ES, IS, OS combined with a final S give you parallel-play flexibility.",
+          "Vowel dumps (AA, AE, AI, OE, OI) become valuable when you have an unbalanced rack."
+        ],
+        "examples": [
+          {
+            "title": "QI (11)",
+            "body": "Eastern life-force energy. The single most valuable 2-letter word because it solves the Q-without-U problem."
+          },
+          {
+            "title": "ZA (11)",
+            "body": "Slang for pizza. Same point value as QI but with a more common tile."
+          },
+          {
+            "title": "JO (9)",
+            "body": "Scottish sweetheart. Gives the J somewhere to go."
+          },
+          {
+            "title": "XI / XU (9)",
+            "body": "XI is a Greek letter; XU is a Vietnamese monetary unit. Both dump X on short plays."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Paste your rack and it surfaces every 2-letter play, sorted by score, with hook positions on the board."
+          },
+          {
+            "toolId": "word-unscrambler",
+            "note": "Great for exploring every short word a specific rack can produce — filter to 2 letters."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many legal 2-letter Scrabble words are there?",
+            "a": "About 100 in the standard tournament dictionary (TWL); a few more in SOWPODS. Memorising the full list takes an afternoon and pays off for years."
+          },
+          {
+            "q": "Are all 2-letter words playable as hooks?",
+            "a": "Yes — every 2-letter word is a potential hook for parallel plays. Which is why they're the highest-leverage vocabulary you can learn."
+          }
+        ],
+        "relatedIds": [
+          "cA-2-letter-words",
+          "cE-scrabble-2-letter-mastery",
+          "cE-scrabble-q-without-u",
+          "scrabble-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-best-3-letter-scrabble-words",
+      "slug": "best-3-letter-scrabble-words",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-3-letter-scrabble-words/",
+      "title": "Best 3-Letter Scrabble Words — High-Value Plays to Memorise",
+      "h1": "Best 3-Letter Scrabble Words",
+      "subhead": "The three-letter words that win more games than the length suggests.",
+      "current_word_count": 294,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most valuable 3-letter Scrabble words — J, Q, X, Z plays plus the vowel-dumpers that save a tight rack.",
+        "keywords": [
+          "best 3 letter scrabble words",
+          "3 letter scrabble words",
+          "top 3-letter scrabble"
+        ],
+        "outcomeLine": "Three-letter high scorers let you unload awkward tiles without opening the board.",
+        "intro": "Three-letter words are the workhorse length in Scrabble — long enough to hit two bonus squares, short enough to fit in tight board positions. The best ones combine a high-value tile with two easy letters.",
+        "keyPoints": [
+          "ZAX (19), JEU (10), JIB (12), ZED (13), ZIG (13): the J/Z/X plays you want to memorise first.",
+          "QUA, QAT, QIS, SUQ — the Q-friendly plays that solve a locked-in Q.",
+          "Vowel-heavy 3-letter words (AAH, OOT, EEL) clear vowel-heavy racks without changing the board much.",
+          "Many 3-letter words hook onto 2-letter plays for parallel scoring — look for shared endings.",
+          "Focus first on J/Q/X/Z words, then the vowel dumpers, then the rest."
+        ],
+        "examples": [
+          {
+            "title": "ZAX (19)",
+            "body": "A slater's chopping tool. Three-letter high-scorer that also dumps the X."
+          },
+          {
+            "title": "JIB (12)",
+            "body": "Triangular sail. Clears a J without needing specific positions."
+          },
+          {
+            "title": "QAT (12)",
+            "body": "An East African shrub (also khat). Lets you play Q without U."
+          },
+          {
+            "title": "AAH (6)",
+            "body": "An exclamation. A vowel-dump when your rack is AAAOOOU."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Shows every 3-letter play ordered by score, with hook positions highlighted."
+          },
+          {
+            "toolId": "words-with-friends-helper",
+            "note": "Tile values differ — same 3-letter word can score very differently. Use this for WWF games."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why focus on 3-letter words over 4-letter?",
+            "a": "More 3-letter plays fit on a contested board, and they're the length where J, Q, X, and Z plays are easiest to produce."
+          },
+          {
+            "q": "How do 3-letter words stack with bonus squares?",
+            "a": "On a triple-letter square, a 3-letter play with the X (worth 8) scores 24 from that tile alone — often beating a longer play with only 1-point tiles."
+          }
+        ],
+        "relatedIds": [
+          "cA-3-letter-words",
+          "cE-scrabble-scoring",
+          "cE-scrabble-bingo-strategy",
+          "scrabble-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-best-bingo-words",
+      "slug": "best-bingo-words-in-scrabble",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-bingo-words-in-scrabble/",
+      "title": "Best Bingo Words in Scrabble — 7-Letter Patterns Worth Memorising",
+      "h1": "Best Bingo Words in Scrabble",
+      "subhead": "The 7-letter words that actually come up — suffix-driven, vowel-balanced, high-probability.",
+      "current_word_count": 307,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The 7-letter words most likely to materialise on your rack, organised by stem + suffix patterns.",
+        "keywords": [
+          "best bingo words scrabble",
+          "7 letter words scrabble",
+          "common bingo plays"
+        ],
+        "outcomeLine": "Learn the common stem-plus-suffix combinations and bingo rate goes from occasional to routine.",
+        "intro": "A bingo (using all 7 tiles for a 50-point bonus) looks like magic but is mostly pattern recognition. Most bingos come from a short stem plus a common suffix — learn the stems, and the bingo finds you.",
+        "keyPoints": [
+          "Common -ING bingos: TESTING, RAISING, LEADING. Keep ING tiles when the stem letters are common.",
+          "Common -IEST bingos: EASIEST, PRICIEST, HEAVIEST. -IEST with a familiar adjective stem.",
+          "Common -IER bingos: RANGIER, PRICIER, HEAVIER. Same stems as -IEST minus one letter.",
+          "-ATION words: STATION, RELATION, DONATION. Great when you have a vowel-heavy rack with T and N.",
+          "The \"SATIRE\" and \"RETAINS\" stems (AEINRST) have the most 7-letter anagrams in the language — hundreds of bingos from that set."
+        ],
+        "examples": [
+          {
+            "title": "Rack: AEINRST",
+            "body": "Forms RETAINS, RETSINA, STAINER, STEARIN, NASTIER and many more. Known as the \"bingo stem\" for a reason."
+          },
+          {
+            "title": "Rack: AEEIRST",
+            "body": "Forms AERIEST, SERIATE. One less consonant, still bingo-rich."
+          },
+          {
+            "title": "Pattern: stem + ING",
+            "body": "Stems like TRAIL-, SAIL-, DRAIN- all take ING. If you have I, N, G plus a usable stem, scan for -ING options."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Paste your 7-tile rack — it surfaces every bingo plus the board-contact options."
+          },
+          {
+            "toolId": "anagram-solver",
+            "note": "For practising off the board — take the bingo stems (AEINRST, AEEIRST) and work every anagram."
+          },
+          {
+            "toolId": "word-unscrambler",
+            "note": "Great for filtering by length 7 to study bingo-length vocabulary."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is the most common bingo stem?",
+            "a": "AEINRST — the \"retains stem\". It has more 7-letter anagrams than any other combination. Memorising its core words pays off repeatedly."
+          },
+          {
+            "q": "How often should I expect a bingo?",
+            "a": "Strong club players average one bingo every 2–3 games. Learning stems and keeping rack balance are the two biggest levers."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "anagram-solver",
+          "word-unscrambler",
+          "cE-scrabble-bingo-strategy",
+          "cS-how-to-find-bingo-plays"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-how-to-find-bingo-plays",
+      "slug": "how-to-find-bingo-plays",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-find-bingo-plays/",
+      "title": "How to Find Bingo Plays — Rack Balance, Stems, and Board Scan",
+      "h1": "How to Find Bingo Plays",
+      "subhead": "The habits that let you spot a 50-point play when the board is tight.",
+      "current_word_count": 358,
+      "target_word_count": 1200,
+      "current": {
+        "description": "A practical process for finding bingo plays — rack balance, stem recognition, and board-scan technique.",
+        "keywords": [
+          "find bingo plays scrabble",
+          "how to bingo scrabble",
+          "scrabble bingo technique"
+        ],
+        "outcomeLine": "Keep a balanced rack, know your stems, and scan the board for hook squares — bingos appear more often than you think.",
+        "intro": "Finding a bingo is two problems stacked — first, having a rack that can form one; second, finding a place on the board it will fit. Good players manage both in parallel throughout the game.",
+        "keyPoints": [
+          "Rack balance: aim for 3-4 vowels and 3-4 consonants. A 6-vowel or 6-consonant rack almost never bingos.",
+          "Keep stems when you exchange — AEINRST and similar have enormous bingo potential.",
+          "Scan the board for single exposed letters — these are bingo hook points. A lone T can support STATIONS, SEATING, etc.",
+          "Rearrange mentally: group vowels and consonants separately, look for -ING, -ED, -IES, -IER endings.",
+          "If bingo is not possible, the setup matters — play in a way that leaves your rack bingo-ready for next turn."
+        ],
+        "examples": [
+          {
+            "title": "Rack ANIRESE",
+            "body": "Rearrange: AEEINRS. Near the bingo stem. SEARINE? No. Scan for hooks — an existing R on the board enables RESIANE (invalid), ARENITES (8 letters, not bingo), etc. Takes trained eye."
+          },
+          {
+            "title": "Hook hunt",
+            "body": "Board has an isolated S with space above it. Your rack forms a 7-letter word ending S — your bingo lives in that column."
+          },
+          {
+            "title": "Exchange decision",
+            "body": "Rack QIIIUU — hopeless. Exchange 5+ tiles. Keeping Q+I only and drawing fresh usually beats forcing a low-score play."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Paste rack and board state — it finds every bingo placement, not just the word candidates."
+          },
+          {
+            "toolId": "anagram-solver",
+            "note": "For rack-only practice — take a random 7-letter stem and see every bingo it can form."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For targeted searches like \"7-letter words ending -ING\"."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Should I always play a bingo if I see one?",
+            "a": "Usually yes — +50 points is hard to beat. But if the bingo opens a triple-word lane for the opponent, consider the tempo tradeoff."
+          },
+          {
+            "q": "What if I never find bingos?",
+            "a": "Two fixes: one, learn the AEINRST stem and its anagrams; two, audit your rack-balance habits. Most missed bingos are self-inflicted from poor rack management."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "anagram-solver",
+          "word-finder",
+          "cS-best-bingo-words",
+          "cE-scrabble-bingo-strategy"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-best-words-with-z",
+      "slug": "best-scrabble-words-with-z",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-scrabble-words-with-z/",
+      "title": "Best Scrabble Words With Z — High-Scoring Plays to Memorise",
+      "h1": "Best Scrabble Words With Z",
+      "subhead": "Where to dump the Z before a vowel problem traps you.",
+      "current_word_count": 349,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most valuable Scrabble words containing Z, ranked by score and playability — 2, 3, and 4-letter options for tight board positions.",
+        "keywords": [
+          "best scrabble words with z",
+          "scrabble z words",
+          "high scoring z words"
+        ],
+        "outcomeLine": "Z is a 10-point tile — use it on short, bonus-adjacent plays and it pays for itself.",
+        "intro": "The Z is worth 10 points — one of the two highest-value tiles in Scrabble. Short Z plays are usually more valuable than long ones because you can land them on premium squares and hook off existing words.",
+        "keyPoints": [
+          "ZA (11) — slang for pizza, the single most useful 2-letter Z play.",
+          "ZO (11) — a Tibetan yak hybrid. Another 2-letter Z dump.",
+          "ZAX (19) — a slater's tool. Three-letter Z+X monster when the tiles show up together.",
+          "ZEE (12), ZIT (12), ZIP (14), ZAP (14), ZIG (13), ZED (13) — all 3-letter Z words for flexible placements.",
+          "ZEBRA, ZESTY, CRAZY, JAZZ — 5-letter plays good for bingo-setup or triple-word lanes."
+        ],
+        "examples": [
+          {
+            "title": "ZA on a triple-letter",
+            "body": "Z on TL square = 30 just from the Z tile, plus base. Often 30-40 points from a 2-letter word."
+          },
+          {
+            "title": "ZAX (19 base)",
+            "body": "Combines Z(10) + X(8) in one play. On any bonus square it scores 40+."
+          },
+          {
+            "title": "JAZZ",
+            "body": "Rare but real — 29 points base from the double Z plus J. If both Zs show up (there's only one blank-free Z in the bag, but second Z can be a blank), look for JAZZ placements."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Paste rack with Z — surfaces every Z play sorted by score with hook positions."
+          },
+          {
+            "toolId": "words-with-friends-helper",
+            "note": "Z is 10 in WWF too, but bonus-square positions differ — use this for WWF."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For offline study — \"3-letter words containing Z\"."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many Zs are in a Scrabble bag?",
+            "a": "One. Plus two blanks that can substitute. Holding onto a Z waiting for a perfect play is usually a mistake — play it as soon as you have a decent option."
+          },
+          {
+            "q": "Is ZO really a valid word?",
+            "a": "Yes in TWL and SOWPODS. It refers to a Tibetan hybrid of yak and cow. Frequently disputed at kitchen-table games, consistently valid in tournaments."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder",
+          "cA-words-with-z",
+          "cS-best-2-letter-scrabble-words"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-best-words-with-x",
+      "slug": "best-scrabble-words-with-x",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-scrabble-words-with-x/",
+      "title": "Best Scrabble Words With X — Short Plays That Punch Above Their Weight",
+      "h1": "Best Scrabble Words With X",
+      "subhead": "X is the second-highest scorer and the easiest to place — here is how to make it count.",
+      "current_word_count": 324,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most valuable Scrabble words with X, including the critical 2-letter X plays and common 3/4-letter options.",
+        "keywords": [
+          "best scrabble words with x",
+          "scrabble x words",
+          "high scoring x words"
+        ],
+        "outcomeLine": "X is an 8-point tile that plays short. Hook it, park it on a premium square, move on.",
+        "intro": "X scores 8 points and plays surprisingly short. The 2-letter X words are the single most-useful vocabulary list in Scrabble — they give you parallel-play bingos that use the X as a shared letter.",
+        "keyPoints": [
+          "XI (9), XU (9) — the two 2-letter X words. Memorise both.",
+          "AX, EX, OX — the other 2-letter X plays. Common vowel + X combinations.",
+          "ZAX (19), LAX (10), LOX (10), OXY (13), HEX (13), POX (12), TAX (10), VEX (13) — 3-letter X plays for bonus squares.",
+          "X is also a \"hook letter\" — add it to existing plays to form new words parallel to them.",
+          "X on a triple-letter square = 24 from the X alone. On a double-word with AX = 20+. Easy bonuses."
+        ],
+        "examples": [
+          {
+            "title": "AX parallel play",
+            "body": "Existing word ...CAR on board. Play AXE below to form CAR+A, AR+X (if valid), R+E. Multiple words one move."
+          },
+          {
+            "title": "XI on triple-letter",
+            "body": "XI = X(8×3)+I(1) = 25 points from a 2-letter play. Plus any parallel scoring."
+          },
+          {
+            "title": "OXY",
+            "body": "3-letter OXY on a double-word: (1+8+4) × 2 = 26 points. Small play, strong payoff."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Paste rack with X — sorts all X plays by score with bonus-square awareness."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For \"3-letter words with X\" style offline study."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why is X easier to play than Q?",
+            "a": "X pairs with any vowel (AX, EX, OX) and several consonants. Q almost always needs a U or specific Q-without-U words. X is the more flexible high-value tile."
+          },
+          {
+            "q": "How many Xs are in the bag?",
+            "a": "One X, plus blanks. Unlike Z, X shows up often enough that hoarding it is rarely worth it — play it when you have a usable spot."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder",
+          "cA-words-with-x",
+          "cS-best-2-letter-scrabble-words",
+          "cS-best-3-letter-scrabble-words"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-best-words-with-j",
+      "slug": "best-scrabble-words-with-j",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-scrabble-words-with-j/",
+      "title": "Best Scrabble Words With J — Eight Points, Awkward Placement",
+      "h1": "Best Scrabble Words With J",
+      "subhead": "J is valuable but stubborn — here are the short plays that solve awkward-rack situations.",
+      "current_word_count": 332,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most useful Scrabble words with J — short plays and common extensions that prevent the J from stranding on your rack.",
+        "keywords": [
+          "best scrabble words with j",
+          "scrabble j words",
+          "high scoring j words"
+        ],
+        "outcomeLine": "J needs a vowel to land softly — know JO, JAB, JET, JIB and the rest and you unload J smoothly.",
+        "intro": "J is worth 8 points but often feels stuck on your rack. Unlike X and Z, there is no 2-letter J word — so the shortest plays are 3-letter. Knowing the J-friendly triples turns an awkward tile into a productive play.",
+        "keyPoints": [
+          "No 2-letter J words exist — JO was removed and has not returned.",
+          "3-letter J words: JO(?) no — JAB(12), JAG(11), JAM(12), JAR(10), JAW(13), JAY(13), JET(10), JEU(10), JIB(12), JIG(11), JOB(12), JOT(10), JOY(13), JUG(11), JUS(10), JUT(10).",
+          "4-letter dumps: JAZZ, JOKE, JUMP, JEEP, JOWL.",
+          "J on a triple-letter square = 24 from the J alone. 3-letter J plays on bonus squares score 30-40.",
+          "If you have no vowel, exchanging is almost always better than holding a J indefinitely."
+        ],
+        "examples": [
+          {
+            "title": "JAW on a double-letter",
+            "body": "J(8) + A(1×2) + W(4) = 14 points base, plus any parallel. 3-letter play, double-digit score."
+          },
+          {
+            "title": "JEU / JIB / JOE dumps",
+            "body": "When no hook exists, these short J words let you play J without a huge setup."
+          },
+          {
+            "title": "JAZZ",
+            "body": "With a blank filling for the second Z, JAZZ is a 29-point play. Rare rack, big payoff."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Finds every J play on your rack + board, sorted by score."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For offline study — \"3-letter words with J\"."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why is there no 2-letter J word?",
+            "a": "Historical accident of the dictionaries. JO used to be valid in some older lists but is not in current TWL. Every legal 2-letter word list is worth checking against a current source."
+          },
+          {
+            "q": "Should I hold a J for a perfect play?",
+            "a": "Usually no. Each turn you hold a J, you are playing with a 6-tile rack effectively. Play it at the next decent opportunity — perfection is rare."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder",
+          "cA-words-with-j",
+          "cS-best-3-letter-scrabble-words"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-words-with-friends-scoring-differs",
+      "slug": "how-words-with-friends-scoring-differs",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-words-with-friends-scoring-differs/",
+      "title": "How Words With Friends Scoring Differs From Scrabble",
+      "h1": "How Words With Friends Scoring Differs",
+      "subhead": "Same grid feeling, different tile values and bonus squares.",
+      "current_word_count": 297,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The concrete scoring differences between Scrabble and Words With Friends — tile values, bonus squares, bingo bonus, and dictionary.",
+        "keywords": [
+          "words with friends vs scrabble",
+          "wwf scoring",
+          "words with friends tile values"
+        ],
+        "outcomeLine": "Know the tile-value and bonus-layout differences and you stop mis-costing your plays.",
+        "intro": "Words With Friends looks like Scrabble at a glance, but the tile values, bonus-square positions, and dictionary all differ. Plays that feel strong in one game can be mediocre in the other.",
+        "keyPoints": [
+          "Tile values differ: X is 8 in Scrabble but 9 in WWF. J is 8 in Scrabble but 10 in WWF. Q and Z are 10 in both.",
+          "Bonus-square positions are different — triple-letter squares sit where Scrabble has double-letter, and vice versa.",
+          "Bingo bonus (use all 7 tiles) = 50 points in Scrabble, 35 in WWF.",
+          "Dictionaries differ: WWF uses a modified ENABLE list; Scrabble uses TWL or SOWPODS. Some words valid in one fail in the other.",
+          "Net effect: the same word can score meaningfully differently. A rack full of letter-specific plays deserves a re-check when switching games."
+        ],
+        "examples": [
+          {
+            "title": "ZEBRA",
+            "body": "Scrabble: Z(10)+E(1)+B(3)+R(1)+A(1) = 16. WWF: Z(10)+E(1)+B(4)+R(1)+A(1) = 17. Small but real."
+          },
+          {
+            "title": "JUMBO",
+            "body": "Scrabble: 14 base. WWF: 16 base (J is 10). Same letters, different value."
+          },
+          {
+            "title": "Bingo",
+            "body": "Full-rack play is +50 in Scrabble, +35 in WWF. The bingo threshold worth chasing is lower in WWF."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "words-with-friends-helper",
+            "note": "Uses WWF tile values and dictionary — not interchangeable with the Scrabble helper."
+          },
+          {
+            "toolId": "scrabble-helper",
+            "note": "Use this ONLY for Scrabble play. Tile values are different."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is one game easier than the other?",
+            "a": "WWF's lower bingo bonus and shifted board make it a slightly lower-variance game. Scrabble rewards big high-value plays more."
+          },
+          {
+            "q": "Can I use a Scrabble solver for WWF?",
+            "a": "No — tile values and dictionary both differ. A Scrabble solver will score your rack wrongly and may suggest invalid words."
+          }
+        ],
+        "relatedIds": [
+          "words-with-friends-helper",
+          "scrabble-helper",
+          "cE-scrabble-scoring",
+          "cE-scrabble-bingo-strategy"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cE-scrabble-q-without-u",
+      "slug": "scrabble-q-without-u",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/scrabble-q-without-u/",
+      "title": "Q Without U in Scrabble — Every Word Explained — Kefiw",
+      "h1": "Q Without U in Scrabble",
+      "subhead": "The complete list of Q-words that do not need a U, and why they exist",
+      "current_word_count": 149,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Why some Q-words do not need a U, which ones to memorise, and how to use them for emergency Scrabble plays.",
+        "keywords": [
+          "q without u scrabble",
+          "q no u words",
+          "scrabble q words no u",
+          "qi qat faqir"
+        ],
+        "outcomeLine": null,
+        "intro": "Drawing a Q without a U is the classic Scrabble nightmare. This guide lists every legal Q-without-U word and explains why they exist.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Is QI really a word?",
+            "a": "Yes. QI is the Chinese concept of life energy and has been legal in Scrabble for decades. It is one of the highest-scoring 2-letter plays."
+          },
+          {
+            "q": "What about QATS and QOPHS?",
+            "a": "Both are valid plurals of QAT (a plant chewed as a stimulant) and QOPH (a Hebrew letter)."
+          },
+          {
+            "q": "Can I keep waiting for a U?",
+            "a": "Only up to a point. If you are holding Q for more than two or three turns with no U in the bag, play a Q-no-U word to clear the tile."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cE-scrabble-blanks",
+      "slug": "scrabble-blanks",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/scrabble-blanks/",
+      "title": "How to Use Scrabble Blanks — Strategy Guide — Kefiw",
+      "h1": "How to Use Scrabble Blanks",
+      "subhead": "When to hold, when to play, and how to maximise the zero-point tile",
+      "current_word_count": 132,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Blank tiles score zero but can represent any letter. This guide covers when to play them for bingos, when to hold, and how to find the highest-value blank play.",
+        "keywords": [
+          "scrabble blanks",
+          "blank tile strategy",
+          "scrabble blank tiles",
+          "how to use blanks"
+        ],
+        "outcomeLine": null,
+        "intro": "Blanks are the most valuable tiles in Scrabble despite scoring zero points themselves. This guide explains the strategy around them.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How much is a blank worth?",
+            "a": "Zero points on its own — but it often enables 50-100 point plays via bingos and word-multipliers."
+          },
+          {
+            "q": "Should I always hold blanks for a bingo?",
+            "a": "Usually yes — the 50-point bonus for playing all 7 tiles is nearly always worth one or two turns of patience."
+          },
+          {
+            "q": "Can a blank be challenged?",
+            "a": "No. Blanks are legally any letter the player declares at time of placement."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder",
+          "anagram-solver"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cE-scrabble-scoring",
+      "slug": "scrabble-scoring",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/scrabble-scoring/",
+      "title": "Scrabble Scoring Explained — Tile Values, Bonus Squares, Bingos — Kefiw",
+      "h1": "Scrabble Scoring Explained",
+      "subhead": "Tile values, bonus squares, multipliers, and the bingo bonus",
+      "current_word_count": 118,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How Scrabble scoring works, including tile values, double/triple letter squares, double/triple word squares, and the 50-point bingo bonus.",
+        "keywords": [
+          "scrabble scoring",
+          "scrabble tile values",
+          "scrabble bonus squares",
+          "how scrabble scoring works"
+        ],
+        "outcomeLine": null,
+        "intro": "Scrabble scoring looks simple but has a few subtleties. Here is the full reference — tile values, bonus squares, and the 50-point bingo bonus.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Does the bonus square affect cross-words?",
+            "a": "Yes. Any bonus square you cover affects every word that uses a letter on that square."
+          },
+          {
+            "q": "Do letter bonuses multiply before or after word bonuses?",
+            "a": "Letter bonuses are applied first, then the whole word score is multiplied by any word-multiplier covered."
+          },
+          {
+            "q": "What is the maximum single-play score?",
+            "a": "OXYPHENBUTAZONE has a theoretical max of 1,778 points in a contrived but legal setup."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cE-scrabble-bingo-strategy",
+      "slug": "scrabble-bingo-strategy",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/scrabble-bingo-strategy/",
+      "title": "Scrabble Bingo Strategy — How to Find 7-Letter Plays — Kefiw",
+      "h1": "Scrabble Bingo Strategy",
+      "subhead": "Rack management, prefix-suffix hooks, and spotting 7-letter plays",
+      "current_word_count": 112,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to find and play bingos — the 7-letter plays that earn a 50-point bonus. Covers rack balance, prefix/suffix thinking, and common bingo stems.",
+        "keywords": [
+          "scrabble bingo",
+          "how to find bingos",
+          "7 letter scrabble",
+          "scrabble bingo strategy"
+        ],
+        "outcomeLine": null,
+        "intro": "A bingo is worth 50 points on top of the word score — the single biggest edge in Scrabble. This guide covers the habits and patterns that make bingos reliable.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How often should I expect a bingo?",
+            "a": "Top club-level players average one bingo every 3-4 turns. Beginners average roughly zero. The gap is the biggest skill-rating lever."
+          },
+          {
+            "q": "Do bingos have to be 7 letters exactly?",
+            "a": "Yes. Playing 8 letters (with a board-hook) also earns the bonus but is much rarer."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder",
+          "7-letter-word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cE-scrabble-2-letter-mastery",
+      "slug": "scrabble-2-letter-mastery",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/scrabble-2-letter-mastery/",
+      "title": "Mastering Scrabble 2-Letter Words — Kefiw",
+      "h1": "Mastering 2-Letter Words",
+      "subhead": "Why every competitive Scrabble player memorises all 100",
+      "current_word_count": 104,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The 2-letter Scrabble words — why they matter, how to learn them, and which ones beginners miss.",
+        "keywords": [
+          "scrabble 2 letter words",
+          "two letter words scrabble",
+          "memorise 2 letter words",
+          "2 letter word mastery"
+        ],
+        "outcomeLine": null,
+        "intro": "Mastering every valid 2-letter word is the fastest single way to raise a Scrabble rating. Here is why, and how to do it.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How long does it take to memorise all 2-letter words?",
+            "a": "About two hours of deliberate practice, or a week of playing 15 minutes a day with flashcards."
+          },
+          {
+            "q": "Are all 2-letter words valid in Words With Friends?",
+            "a": "Most are, but WWF uses its own internal dictionary with a few differences. Verify with the Words With Friends Helper."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-2-letter-words",
+      "slug": "2-letter-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/2-letter-words/",
+      "title": "2-Letter Words — Every Valid 2-Letter Scrabble Word — Kefiw",
+      "h1": "2-Letter Words",
+      "subhead": "Every valid 2-letter word in the Kefiw word list",
+      "current_word_count": 190,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete list of valid 2-letter words from the ENABLE word list, useful for Scrabble, Words With Friends, and tight board plays.",
+        "keywords": [
+          "2 letter words",
+          "two letter words",
+          "2 letter scrabble words",
+          "valid 2 letter words"
+        ],
+        "outcomeLine": null,
+        "intro": "Two-letter words are the single most important rack-clearing plays in Scrabble and Words With Friends. This is the complete alphabetical list from the Kefiw word list.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Scrabble \"bonus\" short plays",
+            "body": "QI (12), ZA (11), and XU (9) are the highest-scoring plain 2-letter words before bonus squares."
+          },
+          {
+            "title": "Vowel dumps",
+            "body": "If your rack is vowel-heavy, AA, AE, AI, OE, OI help you trade clogged tiles for fresh ones."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many 2-letter words are there in Scrabble?",
+            "a": "The official TWL list has roughly 100 valid 2-letter words; SOWPODS adds a handful more. Kefiw uses the public ENABLE list, which sits close to TWL."
+          },
+          {
+            "q": "Is \"QI\" really a word?",
+            "a": "Yes. QI (the Chinese concept of life force) was added to the official Scrabble dictionaries in the 2000s. It is one of the highest-value 2-letter plays."
+          },
+          {
+            "q": "Are 2-letter words also valid in Words With Friends?",
+            "a": "Most are, but Words With Friends uses its own internal dictionary. Use the Words With Friends Helper for exact validation."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-3-letter-words",
+      "slug": "3-letter-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/3-letter-words/",
+      "title": "3-Letter Words — Every Valid 3-Letter Scrabble Word — Kefiw",
+      "h1": "3-Letter Words",
+      "subhead": "Every valid 3-letter word in the Kefiw word list",
+      "current_word_count": 176,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete list of valid 3-letter words, grouped by starting letter — essential for Scrabble, Words With Friends, and crossword tight spots.",
+        "keywords": [
+          "3 letter words",
+          "three letter words",
+          "3 letter scrabble words",
+          "valid 3 letter words"
+        ],
+        "outcomeLine": null,
+        "intro": "Three-letter words are the bread and butter of tight board play. This is the complete list from the Kefiw word list, grouped for easy skimming.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "High-value 3-letter plays",
+            "body": "ZAX, ZEP, FIZ, JEU, JUS, QIS, XIS — small words, big scores, especially across bonus squares."
+          },
+          {
+            "title": "Common unusual words",
+            "body": "AAL, AAS, AGA, AHI, AIT, ANE — uncommon in speech, fully valid on a Scrabble board."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many 3-letter words exist?",
+            "a": "Around 1,000 in a standard English Scrabble list. Exact count varies slightly between TWL, SOWPODS, and ENABLE."
+          },
+          {
+            "q": "Why are so many 3-letter words unfamiliar?",
+            "a": "Scrabble dictionaries include archaic, regional, and loan-word entries. Knowing the odd 3-letter words is one of the biggest single rating boosts for intermediate players."
+          },
+          {
+            "q": "Can I filter these by starting letter?",
+            "a": "Yes — see the linked letter-specific pages (3-letter words starting with A, B, C…) or use the Word Finder with a prefix pattern."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-q-no-u",
+      "slug": "words-with-q-no-u",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-q-no-u/",
+      "title": "Words With Q But No U — Q Words Without U — Kefiw",
+      "h1": "Words With Q (No U)",
+      "subhead": "Every Q-word that does not need a U",
+      "current_word_count": 168,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Every valid English word that contains Q without a following U — essential for Scrabble emergencies when you draw a Q and no U.",
+        "keywords": [
+          "q words without u",
+          "words with q no u",
+          "q without u scrabble",
+          "q no u words"
+        ],
+        "outcomeLine": null,
+        "intro": "Drawing a Q without a U is one of the classic Scrabble traps. This is the complete list of Q-words that never need a U — commit them to memory.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Short Q-no-U plays",
+            "body": "QI scores 11 even without a bonus square. QAT and QADI are next up."
+          },
+          {
+            "title": "Loan words",
+            "body": "QOPH and QOPHS (from Hebrew), FAQIR (alternate of fakir), QWERTY (the keyboard layout) are all legal."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Why are some Q words exempt from needing a U?",
+            "a": "Most come from languages other than Latin/French roots — Hebrew (QOPH), Arabic (QADI, FAQIR, QANAT), or Chinese (QI)."
+          },
+          {
+            "q": "Is \"QWERTY\" really valid?",
+            "a": "Yes, it is listed in modern Scrabble dictionaries as a common noun for the keyboard layout."
+          },
+          {
+            "q": "What about words with Q followed by a non-U vowel?",
+            "a": "A few exist: QINTAR, QINDARKA are examples where Q is followed by I."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-z",
+      "slug": "words-with-z",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-z/",
+      "title": "Words With Z — Short Scrabble-Friendly Z Words — Kefiw",
+      "h1": "Words With Z (2–5 Letters)",
+      "subhead": "Short high-value Z-plays for Scrabble and Words With Friends",
+      "current_word_count": 174,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Every 2 to 5 letter word containing Z — the short, high-scoring plays you want to have memorised for Scrabble and crossword emergencies.",
+        "keywords": [
+          "words with z",
+          "short z words",
+          "scrabble z words",
+          "z words list"
+        ],
+        "outcomeLine": null,
+        "intro": "Z scores 10 points on its own in Scrabble. These short Z-words are the ones you want memorised — they turn an awkward draw into a 30+ point play.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Biggest short plays",
+            "body": "ZAX (triple-letter on Z = 30 base), ZEP (Z on DL = 23 + bonuses), FIZZ (with a blank)."
+          },
+          {
+            "title": "Defensive plays",
+            "body": "Playing ZA across a double-word line can score 22+ while blocking an opening column."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many Scrabble words contain Z?",
+            "a": "Roughly 5,000 total in the ENABLE list. This page focuses on the 2-5 letter subset that is most useful at the board."
+          },
+          {
+            "q": "What is the best Z word to play with no vowels?",
+            "a": "Z itself does not appear in vowel-less words — you still need vowels to form valid plays."
+          },
+          {
+            "q": "Is ZZZ a valid word?",
+            "a": "No. Scrabble dictionaries require distinct phonetic words; ZZZ is an interjection not a word."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-x",
+      "slug": "words-with-x",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-x/",
+      "title": "Words With X — Short Scrabble-Friendly X Words — Kefiw",
+      "h1": "Words With X (2–5 Letters)",
+      "subhead": "Short high-value X-plays for Scrabble and Words With Friends",
+      "current_word_count": 150,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Every 2 to 5 letter word containing X — the short, high-scoring plays useful in Scrabble and crossword tight corners.",
+        "keywords": [
+          "words with x",
+          "short x words",
+          "scrabble x words",
+          "x words list"
+        ],
+        "outcomeLine": null,
+        "intro": "X is worth 8 points and fits beautifully across bonus squares. These short X-words give you the full toolkit for Scrabble emergencies.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "2-letter X plays",
+            "body": "AX, EX, OX, XI, XU — each worth 9+ points on their own."
+          },
+          {
+            "title": "3-letter hooks",
+            "body": "AXE, FIX, HEX, SIX, TAX, VEX all accept an -ES or -ED hook to become 4-5 letter plays."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "What is the highest-scoring short X word?",
+            "a": "XU is 9 points for just 2 letters — the base rate per letter is the highest of any 2-letter word."
+          },
+          {
+            "q": "Are there any vowel-less words with X?",
+            "a": "No — all valid X words contain a vowel."
+          },
+          {
+            "q": "Can I play X at the start of a word?",
+            "a": "Yes — XI, XU, XIS, XED are all valid."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-j",
+      "slug": "words-with-j",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-j/",
+      "title": "Words With J — Short Scrabble-Friendly J Words — Kefiw",
+      "h1": "Words With J (2–5 Letters)",
+      "subhead": "Short high-value J-plays for Scrabble and Words With Friends",
+      "current_word_count": 154,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Every 2 to 5 letter word containing J — the short plays that turn an 8-point tile into a board-defining score.",
+        "keywords": [
+          "words with j",
+          "short j words",
+          "scrabble j words",
+          "j words list"
+        ],
+        "outcomeLine": null,
+        "intro": "J is worth 8 points in Scrabble — same as X. This is the short-word subset you want to have memorised for tight rack moments.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Highest-value short J plays",
+            "body": "JO on a TL square can score 20+ points; JOY and JEU are strong 3-letter options."
+          },
+          {
+            "title": "J at word start",
+            "body": "JIB, JAR, JAW, JET, JIG, JUG — all flexible for hooks and parallel plays."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many 2-letter J words are there?",
+            "a": "Just one: JO (a sweetheart, archaic). That is the only 2-letter J play in ENABLE and TWL."
+          },
+          {
+            "q": "Can J be at the end of a word?",
+            "a": "Rarely — HAJJ and HADJ are valid examples in longer forms."
+          },
+          {
+            "q": "Is \"JEEZ\" a valid Scrabble word?",
+            "a": "Yes, JEEZ is a valid play in most modern Scrabble dictionaries."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-highest-scoring-words",
+      "slug": "highest-scoring-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/highest-scoring-words/",
+      "title": "Highest-Scoring Scrabble Words — Kefiw",
+      "h1": "Highest-Scoring Scrabble Words",
+      "subhead": "The top 500 highest-value 5–8 letter plays",
+      "current_word_count": 173,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The top 500 highest-scoring Scrabble words between 5 and 8 letters, ranked by raw tile value (before bonus squares).",
+        "keywords": [
+          "highest scoring scrabble words",
+          "best scrabble words",
+          "high value scrabble words",
+          "top scoring words"
+        ],
+        "outcomeLine": null,
+        "intro": "Raw tile value is the foundation of every big Scrabble play. These are the 500 highest-scoring 5-8 letter words in the ENABLE list, ignoring bonus squares.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "All three 10-point tiles",
+            "body": "PIZZAZZ, JAZZILY, ZUGZWANG, and JEJUNELY all pack multiple high-value tiles into one word."
+          },
+          {
+            "title": "Clean 8-letter bingos",
+            "body": "QUETZALS, JAZZMEN, BOXWOODS — high base score plus a 50-point bingo bonus."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Are these scores before or after bonus squares?",
+            "a": "Before. The scores are the sum of raw tile values only — a J + Z + vowels alone is already 20+ points."
+          },
+          {
+            "q": "Can I actually play these?",
+            "a": "Yes, as long as the letters fit your rack and the existing board. Use the Scrabble Helper to match a word to a specific rack plus board position."
+          },
+          {
+            "q": "What is the single highest-scoring legal play ever recorded?",
+            "a": "OXYPHENBUTAZONE (1,778 points) is the theoretical maximum single-play score in standard Scrabble with optimal board setup."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-short-high-scoring",
+      "slug": "short-high-scoring-scrabble-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/short-high-scoring-scrabble-words/",
+      "title": "Short High-Scoring Scrabble Words (2–3 Letters) — Kefiw",
+      "h1": "Short High-Scoring Scrabble Words",
+      "subhead": "2 and 3 letter plays worth 8+ points",
+      "current_word_count": 168,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Every 2 and 3 letter Scrabble word worth 8 or more points in raw tile value — the short plays that rescue tight rack moments.",
+        "keywords": [
+          "short scrabble words high value",
+          "short high scoring words",
+          "2 letter high scoring",
+          "3 letter high scoring"
+        ],
+        "outcomeLine": null,
+        "intro": "The best Scrabble players memorise every short play that contains a J, Q, X, or Z. These are the 2 and 3 letter words worth 8 or more raw points.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Top 2-letter plays",
+            "body": "QI (11), ZA (11), XU (9), XI (9), JO (9) — these five alone cover most emergency scoring."
+          },
+          {
+            "title": "Top 3-letter plays",
+            "body": "ZAX (19), ZEP (14), ZAG (13), ZIT (12), JEZ (19) — watch for uncommon vowels after J, Q, X, Z."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Why only 2-3 letter words?",
+            "a": "These are the ones most commonly missed and the most useful for tight-board play. Longer high-value words are listed in Highest-Scoring Scrabble Words."
+          },
+          {
+            "q": "What about blanks?",
+            "a": "Blanks score zero but let you place any letter. If you have a blank and a Q, think QI — blank as the I scores 10 on the Q alone."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cS-best-2-letter-scrabble-words": [
+      "cA-2-letter-words",
+      "cE-scrabble-2-letter-mastery",
+      "cE-scrabble-q-without-u",
+      "scrabble-helper"
+    ],
+    "cS-best-3-letter-scrabble-words": [
+      "cA-3-letter-words",
+      "cE-scrabble-scoring",
+      "cE-scrabble-bingo-strategy",
+      "scrabble-helper"
+    ],
+    "cS-best-bingo-words": [
+      "scrabble-helper",
+      "word-unscrambler",
+      "cE-scrabble-bingo-strategy",
+      "cS-how-to-find-bingo-plays"
+    ],
+    "cS-how-to-find-bingo-plays": [
+      "scrabble-helper",
+      "word-finder",
+      "cS-best-bingo-words",
+      "cE-scrabble-bingo-strategy"
+    ],
+    "cS-best-words-with-z": [
+      "scrabble-helper",
+      "words-with-friends-helper",
+      "word-finder",
+      "cA-words-with-z",
+      "cS-best-2-letter-scrabble-words"
+    ],
+    "cS-best-words-with-x": [
+      "scrabble-helper",
+      "word-finder",
+      "cA-words-with-x",
+      "cS-best-2-letter-scrabble-words",
+      "cS-best-3-letter-scrabble-words"
+    ],
+    "cS-best-words-with-j": [
+      "scrabble-helper",
+      "word-finder",
+      "cA-words-with-j",
+      "cS-best-3-letter-scrabble-words"
+    ],
+    "cS-words-with-friends-scoring-differs": [
+      "words-with-friends-helper",
+      "scrabble-helper",
+      "cE-scrabble-scoring",
+      "cE-scrabble-bingo-strategy"
+    ],
+    "cE-scrabble-q-without-u": [
+      "scrabble-helper",
+      "words-with-friends-helper"
+    ],
+    "cE-scrabble-blanks": [
+      "scrabble-helper",
+      "word-finder"
+    ],
+    "cE-scrabble-scoring": [
+      "scrabble-helper",
+      "word-finder"
+    ],
+    "cE-scrabble-bingo-strategy": [
+      "scrabble-helper",
+      "word-finder"
+    ],
+    "cE-scrabble-2-letter-mastery": [
+      "scrabble-helper",
+      "word-finder"
+    ],
+    "cA-2-letter-words": [
+      "scrabble-helper",
+      "words-with-friends-helper",
+      "word-finder"
+    ],
+    "cA-3-letter-words": [
+      "scrabble-helper",
+      "words-with-friends-helper",
+      "word-finder"
+    ],
+    "cA-words-with-q-no-u": [
+      "scrabble-helper",
+      "words-with-friends-helper",
+      "word-finder"
+    ],
+    "cA-words-with-z": [
+      "scrabble-helper",
+      "words-with-friends-helper"
+    ],
+    "cA-words-with-x": [
+      "scrabble-helper",
+      "words-with-friends-helper"
+    ],
+    "cA-words-with-j": [
+      "scrabble-helper",
+      "words-with-friends-helper"
+    ],
+    "cA-highest-scoring-words": [
+      "scrabble-helper",
+      "words-with-friends-helper"
+    ],
+    "cA-short-high-scoring": [
+      "scrabble-helper",
+      "word-finder"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "scrabble-helper",
+          "url": "/word-tools/scrabble-helper/"
+        },
+        {
+          "id": "words-with-friends-helper",
+          "url": "/word-tools/words-with-friends-helper/"
+        },
+        {
+          "id": "word-unscrambler",
+          "url": "/word-tools/word-unscrambler/"
+        },
+        {
+          "id": "word-finder",
+          "url": "/word-tools/word-finder/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cS-best-2-letter-scrabble-words",
+          "url": "/guides/best-2-letter-scrabble-words/"
+        },
+        {
+          "id": "cS-best-3-letter-scrabble-words",
+          "url": "/guides/best-3-letter-scrabble-words/"
+        },
+        {
+          "id": "cS-best-bingo-words",
+          "url": "/guides/best-bingo-words-in-scrabble/"
+        },
+        {
+          "id": "cS-how-to-find-bingo-plays",
+          "url": "/guides/how-to-find-bingo-plays/"
+        },
+        {
+          "id": "cS-best-words-with-z",
+          "url": "/guides/best-scrabble-words-with-z/"
+        },
+        {
+          "id": "cS-best-words-with-x",
+          "url": "/guides/best-scrabble-words-with-x/"
+        },
+        {
+          "id": "cS-best-words-with-j",
+          "url": "/guides/best-scrabble-words-with-j/"
+        },
+        {
+          "id": "cS-words-with-friends-scoring-differs",
+          "url": "/guides/how-words-with-friends-scoring-differs/"
+        },
+        {
+          "id": "cE-scrabble-q-without-u",
+          "url": "/guides/scrabble-q-without-u/"
+        },
+        {
+          "id": "cE-scrabble-blanks",
+          "url": "/guides/scrabble-blanks/"
+        },
+        {
+          "id": "cE-scrabble-scoring",
+          "url": "/guides/scrabble-scoring/"
+        },
+        {
+          "id": "cE-scrabble-bingo-strategy",
+          "url": "/guides/scrabble-bingo-strategy/"
+        },
+        {
+          "id": "cE-scrabble-2-letter-mastery",
+          "url": "/guides/scrabble-2-letter-mastery/"
+        },
+        {
+          "id": "cA-2-letter-words",
+          "url": "/word-tools/2-letter-words/"
+        },
+        {
+          "id": "cA-3-letter-words",
+          "url": "/word-tools/3-letter-words/"
+        },
+        {
+          "id": "cA-words-with-q-no-u",
+          "url": "/word-tools/words-with-q-no-u/"
+        },
+        {
+          "id": "cA-words-with-z",
+          "url": "/word-tools/words-with-z/"
+        },
+        {
+          "id": "cA-words-with-x",
+          "url": "/word-tools/words-with-x/"
+        },
+        {
+          "id": "cA-words-with-j",
+          "url": "/word-tools/words-with-j/"
+        },
+        {
+          "id": "cA-highest-scoring-words",
+          "url": "/word-tools/highest-scoring-words/"
+        },
+        {
+          "id": "cA-short-high-scoring",
+          "url": "/word-tools/short-high-scoring-scrabble-words/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

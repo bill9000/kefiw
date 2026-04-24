@@ -2,7 +2,6 @@
 import '~/styles/global.css';
 import Header from '~/components/Header.astro';
 import Footer from '~/components/Footer.astro';
-import SystemTray from '~/components/SystemTray.tsx';
 import ConsentAnchor from '~/components/ConsentAnchor.tsx';
 import StickyAdBanner from '~/components/ads/StickyAdBanner.tsx';
 import AdSenseScript from '~/components/ads/AdSenseScript.astro';
@@ -45,6 +44,14 @@ const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string | und
     <link rel="canonical" href={canonicalUrl} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="mask-icon" href="/favicon.svg" color="#2666e1" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="application-name" content="Kefiw" />
+    <meta name="apple-mobile-web-app-title" content="Kefiw" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -71,7 +78,6 @@ const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string | und
     )}
   </head>
   <body class="min-h-screen flex flex-col pb-24">
-    <SystemTray client:load />
     <Header />
     <main class="flex-1">
       <slot />

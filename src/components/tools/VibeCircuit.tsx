@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Cpu, RotateCcw, Check } from 'lucide-react';
+import { Cpu, RotateCcw, Check, Key } from 'lucide-react';
 
 type Coord = [number, number];
 type ColorKey = 'cyan' | 'magenta' | 'lime' | 'gold' | 'crimson';
@@ -27,9 +27,9 @@ const COLOR_SPEC: Record<ColorKey, { base: string; glow: string; label: string }
 
 const LEVELS: Level[] = [
   { id: 'L1', cols: 5, rows: 5, pairs: [
-    { color: 'cyan',    a: [0, 0], b: [4, 4] },
+    { color: 'cyan',    a: [0, 0], b: [2, 2] },
     { color: 'magenta', a: [4, 0], b: [0, 4] },
-    { color: 'lime',    a: [2, 2], b: [4, 2] },
+    { color: 'lime',    a: [4, 2], b: [4, 4] },
   ]},
   { id: 'L2', cols: 5, rows: 5, pairs: [
     { color: 'cyan',    a: [0, 0], b: [2, 2] },
@@ -77,6 +77,72 @@ const COLOR_DIM = '#64748b';
 function coordEq(a: Coord, b: Coord) { return a[0] === b[0] && a[1] === b[1]; }
 function isAdj(a: Coord, b: Coord) { return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) === 1; }
 
+function solveLevel(level: Level): Partial<Record<ColorKey, Coord[]>> | null {
+  const { cols, rows, pairs } = level;
+  const sorted = [...pairs].sort((p, q) => {
+    const dp = Math.abs(p.a[0] - p.b[0]) + Math.abs(p.a[1] - p.b[1]);
+    const dq = Math.abs(q.a[0] - q.b[0]) + Math.abs(q.a[1] - q.b[1]);
+    return dq - dp;
+  });
+  const cell: (ColorKey | null)[][] = Array.from({ length: rows }, () =>
+    Array.from({ length: cols }, () => null as ColorKey | null)
+  );
+  for (const p of pairs) {
+    cell[p.a[1]][p.a[0]] = p.color;
+    cell[p.b[1]][p.b[0]] = p.color;
+  }
+  const solution: Partial<Record<ColorKey, Coord[]>> = {};
+  let iterations = 0;
+  const MAX_ITER = 2_000_000;
+
+  function solve(i: number): boolean {
+    if (i === sorted.length) return true;
+    const p = sorted[i];
+    const [ax, ay] = p.a;
+    const [bx, by] = p.b;
+    const path: Coord[] = [[ax, ay]];
+
+    function dfs(x: number, y: number): boolean {
+      if (++iterations > MAX_ITER) return false;
+      if (x === bx && y === by) {
+        solution[p.color] = path.slice();
+        if (solve(i + 1)) return true;
+        return false;
+      }
+      const dx = Math.sign(bx - x);
+      const dy = Math.sign(by - y);
+      const dirs: [number, number][] = [];
+      if (dx !== 0) dirs.push([dx, 0]);
+      if (dy !== 0) dirs.push([0, dy]);
+      if (dx !== 0) dirs.push([-dx, 0]);
+      if (dy !== 0) dirs.push([0, -dy]);
+      for (const d of [[1, 0], [-1, 0], [0, 1], [0, -1]] as [number, number][]) {
+        if (!dirs.some(([a, b]) => a === d[0] && b === d[1])) dirs.push(d);
+      }
+      for (const [ddx, ddy] of dirs) {
+        const nx = x + ddx;
+        const ny = y + ddy;
+        if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue;
+        const c = cell[ny][nx];
+        const isTarget = nx === bx && ny === by;
+        if (c !== null && !(isTarget && c === p.color)) continue;
+        if (!isTarget) cell[ny][nx] = p.color;
+        path.push([nx, ny]);
+        if (dfs(nx, ny)) return true;
+        path.pop();
+        if (!isTarget) cell[ny][nx] = null;
+      }
+      return false;
+    }
+
+    if (dfs(ax, ay)) return true;
+    delete solution[p.color];
+    return false;
+  }
+
+  return solve(0) ? solution : null;
+}
+
 export default function VibeCircuit() {
   const [levelIndex, setLevelIndex] = useState(0);
   const [paths, setPaths] = useState<Partial<Record<ColorKey, Coord[]>>>({});
@@ -89,6 +155,8 @@ export default function VibeCircuit() {
 
   const level = LEVELS[levelIndex];
   const { cols, rows, pairs } = level;
+
+  const solution = useMemo(() => solveLevel(level), [level]);
 
   useEffect(() => {
     try {
@@ -251,6 +319,13 @@ export default function VibeCircuit() {
     setDragging(null);
     setCountedConnect(false);
     setCountedPerfect(false);
+  }
+  function showSolution() {
+    if (!solution) return;
+    setCountedConnect(true);
+    setCountedPerfect(true);
+    setPaths(solution);
+    setDragging(null);
   }
   function prevLevel() { setLevelIndex((i) => Math.max(0, i - 1)); }
   function nextLevel() { setLevelIndex((i) => Math.min(LEVELS.length - 1, i + 1)); }
@@ -433,6 +508,9 @@ export default function VibeCircuit() {
         <button onClick={prevLevel} disabled={levelIndex === 0} style={ctrlBtn(COLOR_DIM, levelIndex === 0)}>← PREV</button>
         <button onClick={resetLevel} style={ctrlBtn(COLOR_SPEC.crimson.base, false)}>
           <RotateCcw size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />RESET
+        </button>
+        <button onClick={showSolution} disabled={!solution} style={ctrlBtn(COLOR_SPEC.gold.base, !solution)}>
+          <Key size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />{solution ? 'SOLUTION' : 'NO SOLUTION'}
         </button>
         <button onClick={nextLevel} disabled={levelIndex === LEVELS.length - 1} style={ctrlBtn(COLOR_SPEC.cyan.base, levelIndex === LEVELS.length - 1)}>NEXT →</button>
       </div>

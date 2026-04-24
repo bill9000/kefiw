@@ -1,0 +1,101 @@
+{
+  "cluster_id": "rhyme",
+  "enhanced_at": "2026-04-22",
+  "source": "docs/article-briefings/rhyme-V3-enhanced.json",
+  "status_at_import": "all enhanced content imported into data files (2026-04-21)",
+  "major_corrections_applied": [
+    "Rhyme Finder now described as spelling-based, not phonetic.",
+    "cS-why-words-look-like-rhymes whenToUse note corrected: removed false 'Uses phonetic matching - catches true rhymes' claim.",
+    "cluster FAQ now states Rhyme Finder is spelling-based, matches trailing letter patterns.",
+    "Tool pages no longer claim slant-rhyme mode or per-result syllable counts that do not exist in ui_fields."
+  ],
+  "articles_shipped": [
+    {
+      "id": "cS-how-to-write-a-rhyming-poem",
+      "url": "/guides/how-to-write-a-rhyming-poem/",
+      "shipped_at": "2026-04-22",
+      "cross_links_added": [
+        "cS-how-to-use-rhyme-finder longform + relatedIds",
+        "cE-rhyme-perfect-vs-near longform + relatedIds",
+        "cS-count-syllables-in-a-line longform + relatedIds",
+        "cS-why-words-look-like-rhymes relatedIds",
+        "rhyme-finder tool relatedIds",
+        "rhyme cluster featuredSupportIds (hub surfacing)"
+      ]
+    }
+  ],
+  "remaining_product_opportunities": [
+    "Add a pronunciation dictionary or phoneme layer before claiming true perfect rhymes.",
+    "Add syllable counts beside rhyme results if the page wants to promise syllable-aware rhyme selection.",
+    "Add true slant-rhyme and multi-word rhyme features before describing them as tool modes.",
+    "Add live SERP/PAA collection fields if you want the FAQ set to be based on current search results rather than search-intent modeling."
+  ],
+  "suggested_tool_enhancements": {
+    "rhyme-finder": [
+      "Add a pronunciation dictionary or phoneme layer for true rhyme mode.",
+      "Add syllable counts alongside each rhyme result.",
+      "Add real slant-rhyme matching beyond trailing-letter grouping.",
+      "Add multi-word or phrase-rhyme brainstorming.",
+      "Add an eye-rhyme warning badge for high-risk spellings such as -ove, -ough, -ear, -ose."
+    ],
+    "syllable-counter": [
+      "Add a manual override for individual word counts.",
+      "Add dictionary exceptions for common edge cases such as every, fire, poem, and family.",
+      "Add a compare-lines view for poems with target counts.",
+      "Add preset forms such as haiku, tanka, limerick, and common hymn meter.",
+      "Add a warning when a word is likely ambiguous."
+    ],
+    "haiku-checker": [
+      "Add optional presets for tanka 5-7-5-7-7 and other short forms.",
+      "Add a revision helper that highlights likely removable filler words.",
+      "Add a seasonal-word prompt library without claiming automatic detection.",
+      "Add manual syllable overrides for ambiguous words.",
+      "Add a craft checklist after the structural pass: image, season, contrast, cut."
+    ],
+    "word-counter": [
+      "Expose the exact reading and speaking WPM assumptions in the UI.",
+      "Add adjustable reading-speed and speaking-speed controls.",
+      "Add export/copy for the full stats panel.",
+      "Add platform presets for meta descriptions, social posts, and ad copy.",
+      "Add a script mode with target duration and words-to-cut guidance."
+    ]
+  },
+  "recommended_new_articles": [
+    {
+      "id": "cS-how-to-write-a-rhyming-poem",
+      "slug": "how-to-write-a-rhyming-poem",
+      "section": "guides",
+      "title": "How to Write a Rhyming Poem — Meaning, Sound, Rhythm, and Revision",
+      "h1": "How to Write a Rhyming Poem",
+      "target_word_count": 1200,
+      "why_add": "Captures the user intent behind the Rhyme Finder: not just finding a rhyming word, but finishing a better poem.",
+      "relatedIds": [
+        "rhyme-finder",
+        "syllable-counter",
+        "cS-how-to-use-rhyme-finder",
+        "cE-rhyme-perfect-vs-near",
+        "cS-why-words-look-like-rhymes"
+      ],
+      "proposed_outline": [
+        "Start with one subject or moment",
+        "Choose a rhyme scheme that fits the tone",
+        "Write the idea before searching for rhymes",
+        "Match syllable count and rhythm",
+        "Avoid cliche and forced rhymes",
+        "Revise by reading aloud"
+      ]
+    }
+  ],
+  "schema_recommendations": [
+    {
+      "field": "tool content_claim_scope",
+      "issue": "No explicit field separates true tool capabilities from broader educational concepts.",
+      "fix": "Add content_claim_scope with values such as tool_capability, educational_context, and future_enhancement."
+    },
+    {
+      "field": "enhancement_brief.longform_rules.target_length",
+      "issue": "Brief said 1,200+ in goal but 800-1200 in longform rules.",
+      "fix": "Pick one target: 900-1,300 words for support guides, 300-700 words for tool pages."
+    }
+  ]
+}

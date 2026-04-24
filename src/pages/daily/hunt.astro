@@ -1,0 +1,38 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import HuntGame from '~/components/daily/HuntGame.tsx';
+import Leaderboard from '~/components/daily/Leaderboard.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/hunt/', label: 'Five-Letter Hunt' },
+];
+---
+
+<BaseLayout
+  title="Daily Five-Letter Hunt — Kefiw"
+  description="Crack today's 5-letter word in six guesses. New word every day at 4am ET."
+  canonical="/daily/hunt/"
+  keywords={["five letter word game", "daily word puzzle", "word hunt", "wordle alternative"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Five-Letter Hunt</h1>
+      <p class="mt-1 text-slate-600">Six guesses. One word. Green = right spot, yellow = wrong spot.</p>
+    </header>
+
+    <HuntGame client:only="react" />
+
+    <section class="mx-auto mt-8 max-w-md">
+      <h2 class="mb-3 text-lg font-semibold">Today's top solvers</h2>
+      <Leaderboard client:only="react" gameId="hunt" limit={20} />
+      <p class="mt-3 text-center text-xs text-slate-500">
+        <a href="/daily/leaderboard/" class="text-brand-700 hover:underline">All three boards →</a>
+      </p>
+    </section>
+  </article>
+</BaseLayout>

@@ -5,21 +5,45 @@ const { items } = Astro.props;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: items.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
+  mainEntity: items.map((f) => {
+    const question: Record<string, unknown> = {
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    };
+    if (f.faq_intent) {
+      question.additionalProperty = {
+        '@type': 'PropertyValue',
+        name: 'faqIntent',
+        value: f.faq_intent,
+      };
+    }
+    return question;
+  }),
+};
+const intentLabel: Record<string, string> = {
+  definition: 'Definition',
+  comparison: 'Comparison',
+  'edge-case': 'Edge case',
+  'how-to': 'How-to',
+  troubleshooting: 'Troubleshooting',
+  cost: 'Cost',
+  trust: 'Trust & accuracy',
 };
 ---
 <section class="container-wide mt-10">
   <h2 class="mb-3 text-xl font-semibold">Frequently asked questions</h2>
   <div class="divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white">
     {items.map((f) => (
-      <details class="group p-4">
+      <details class="group p-4" data-faq-intent={f.faq_intent ?? undefined}>
         <summary class="cursor-pointer list-none font-medium text-slate-900 marker:hidden">
           <span class="inline-block w-5 text-brand-600 transition group-open:rotate-90">›</span>
           {f.q}
+          {f.faq_intent && (
+            <span class="ml-2 inline-block rounded bg-slate-100 px-1.5 py-0.5 align-middle text-[10px] font-normal uppercase tracking-wide text-slate-600">
+              {intentLabel[f.faq_intent] ?? f.faq_intent}
+            </span>
+          )}
         </summary>
         <p class="mt-2 pl-5 text-slate-700">{f.a}</p>
       </details>

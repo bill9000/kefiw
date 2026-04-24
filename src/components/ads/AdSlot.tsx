@@ -60,6 +60,10 @@ export default function AdSlot({
   className,
 }: Props): JSX.Element {
   const [state, setState] = useState<'loading' | 'filled' | 'unfilled'>('loading');
+  const [dismissedUntil, setDismissedUntil] = useState<number>(0);
+  const [now, setNow] = useState<number>(() => Date.now());
+  const dismissed = dismissedUntil > now;
+  const secondsLeft = dismissed ? Math.ceil((dismissedUntil - now) / 1000) : 0;
   const lastRefreshRef = useRef<number>(0);
   const viewableFiredRef = useRef<boolean>(false);
   const insRef = useRef<HTMLModElement | null>(null);
@@ -129,44 +133,114 @@ export default function AdSlot({
     return () => observer.disconnect();
   }, [state, zoneId]);
 
+  // Light-theme shell matching the sticky banner. Also breaks out of the page
+  // container so each ad spans the full viewport width — the `width: 100vw`
+  // + margin-left/right trick works regardless of the parent's padding.
   const shellStyle: React.CSSProperties = {
     position: 'relative',
     minHeight: height,
-    border: '1px solid #27272a',
-    background: '#0b1120',
-    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
-    overflow: 'hidden',
-  };
-
-  const labelStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: 4,
-    left: 6,
-    fontSize: 10,
-    color: '#64748b',
-    letterSpacing: '0.08em',
-    pointerEvents: 'none',
-    zIndex: 1,
-  };
-
-  const stateTextStyle: React.CSSProperties = {
-    position: 'absolute',
-    inset: 0,
+    background: '#ffffff',
+    borderTop: '1px solid #e2e8f0',
+    borderBottom: '1px solid #e2e8f0',
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 11,
-    color: '#475569',
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
+    width: '100vw',
+    marginLeft: 'calc(50% - 50vw)',
+    marginRight: 'calc(50% - 50vw)',
   };
+
+  const closeBtnStyle: React.CSSProperties = {
+    // Circle chip floating outside the banner's top-right corner — matches the
+    // sticky banner close button.
+    position: 'absolute',
+    top: -12,
+    right: 4,
+    width: 28,
+    height: 28,
+    padding: 0,
+    lineHeight: 1,
+    background: '#ffffff',
+    color: '#334155',
+    border: '1px solid #cbd5e1',
+    cursor: 'pointer',
+    fontSize: 16,
+    zIndex: 3,
+    borderRadius: 999,
+    boxShadow: '0 2px 6px rgba(15, 23, 42, 0.12)',
+  };
+
+  const close = (): void => {
+    track({ event_type: 'ad_close', zone_id: zoneId });
+    setDismissedUntil(Date.now() + REFRESH_FLOOR_MS);
+  };
+
+  useEffect(() => {
+    if (!dismissed) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [dismissed]);
+
+  const labelStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 6,
+    left: 12,
+    fontSize: 10,
+    color: '#94a3b8',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    pointerEvents: 'none',
+    zIndex: 1,
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  };
+
+  const stateTextStyle: React.CSSProperties = {
+    color: '#94a3b8',
+    fontSize: 12,
+    letterSpacing: '0.02em',
+  };
+
+  const dismissedStyle: React.CSSProperties = {
+    position: 'relative',
+    height: 24,
+    background: '#f8fafc',
+    borderTop: '1px solid #e2e8f0',
+    borderBottom: '1px solid #e2e8f0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontSize: 11,
+    color: '#94a3b8',
+    width: '100vw',
+    marginLeft: 'calc(50% - 50vw)',
+    marginRight: 'calc(50% - 50vw)',
+  };
+
+  if (dismissed) {
+    return (
+      <div
+        className={className}
+        data-kfw-zone={zoneId}
+        data-dismissed="true"
+        style={dismissedStyle}
+      >
+        Advertisement returns in {secondsLeft}s
+      </div>
+    );
+  }
 
   if (devMode) {
     return (
       <div ref={shellRef} style={shellStyle} className={className} data-kfw-zone={zoneId}>
-        <div style={labelStyle}>[COMMERCIAL_DATA_FEED // KFW-ZONE-{zoneId}]</div>
+        <div style={labelStyle}>Advertisement</div>
+        <button type="button" style={closeBtnStyle} onClick={close} aria-label="Close advertisement">×</button>
         <div style={stateTextStyle}>
-          [ DEV // {ltd ? 'LTD_MODE' : 'FULL_MODE'} // {height}px ]
+          Ad placeholder · {height}px · {ltd ? 'contextual' : 'personalized'}
         </div>
       </div>
     );
@@ -174,16 +248,15 @@ export default function AdSlot({
 
   return (
     <div ref={shellRef} style={shellStyle} className={className} data-kfw-zone={zoneId}>
-      <div style={labelStyle}>[COMMERCIAL_DATA_FEED // KFW-ZONE-{zoneId}]</div>
+      <div style={labelStyle}>Advertisement</div>
+      <button type="button" style={closeBtnStyle} onClick={close} aria-label="Close advertisement">×</button>
 
       {state === 'loading' && (
-        <div style={stateTextStyle}>[LOADING // KFW-ZONE-{zoneId}]</div>
+        <div style={stateTextStyle}>Loading…</div>
       )}
 
       {state === 'unfilled' && ltd && (
-        <div style={{ ...stateTextStyle, background: '#18181b' }}>
-          [ RESOURCE_OFFLINE ]
-        </div>
+        <div style={stateTextStyle}>No ad available</div>
       )}
 
       {state === 'unfilled' && !ltd && (

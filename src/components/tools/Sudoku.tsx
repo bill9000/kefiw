@@ -1,9 +1,42 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { conflicts, generate, isComplete, type Board, type Difficulty } from '~/lib/sudoku';
 import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
 const DEFAULT_STORAGE_KEY = 'kefiw.sudoku.v1';
 const BEST_KEY = 'kefiw.sudoku.best.';
+
+// Module-level pool: keeps 1-2 pre-generated puzzles per difficulty so
+// switching difficulty doesn't block on backtracking-solver re-runs.
+type PoolEntry = { puzzle: Board; solution: Board };
+const PUZZLE_POOL: Partial<Record<Difficulty, PoolEntry[]>> = {};
+const POOL_TARGET = 2;
+const warmingTimers = new Set<number>();
+
+function warmPool(diff: Difficulty) {
+  if ((PUZZLE_POOL[diff]?.length ?? 0) >= POOL_TARGET) return;
+  const tid = window.setTimeout(() => {
+    warmingTimers.delete(tid);
+    if ((PUZZLE_POOL[diff]?.length ?? 0) >= POOL_TARGET) return;
+    try {
+      const item = generate(diff);
+      PUZZLE_POOL[diff] = [...(PUZZLE_POOL[diff] ?? []), item];
+    } catch { /* ignore generator failures */ }
+    warmPool(diff);
+  }, 0);
+  warmingTimers.add(tid);
+}
+
+function takeFromPool(diff: Difficulty): PoolEntry {
+  const pool = PUZZLE_POOL[diff];
+  if (pool && pool.length > 0) {
+    const item = pool.shift()!;
+    warmPool(diff);
+    return item;
+  }
+  const item = generate(diff);
+  warmPool(diff);
+  return item;
+}
 
 function loadBest(diff: Difficulty): number | null {
   if (typeof localStorage === 'undefined') return null;
@@ -58,20 +91,39 @@ export default function Sudoku({ lockedDifficulty }: SudokuProps = {}) {
   const storageKey = lockedDifficulty ? `${DEFAULT_STORAGE_KEY}.${lockedDifficulty}` : DEFAULT_STORAGE_KEY;
   const [saved, setSaved] = useState<Saved | null>(null);
   const [sel, setSel] = useState<number | null>(null);
+  const [showRules, setShowRules] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const generatingRef = useRef(false);
 
   useEffect(() => {
     const s = loadSaved(storageKey);
     if (s && (!lockedDifficulty || s.difficulty === lockedDifficulty)) setSaved(s);
     else newGame(lockedDifficulty ?? 'easy', true);
+    // warm up pool for all difficulties after first render
+    (['easy','medium','hard','expert'] as Difficulty[]).forEach((d) => warmPool(d));
   }, [storageKey, lockedDifficulty]);
 
   const newGame = useCallback((diff: Difficulty, silent = false) => {
+    if (generatingRef.current) return;
     if (!silent && saved && !isComplete(saved.state) && !confirm('Start a new game? Progress will be lost.')) return;
-    const { puzzle, solution } = generate(diff);
-    const s: Saved = { difficulty: diff, puzzle, solution, state: [...puzzle], started: Date.now(), mistakes: 0 };
-    saveState(storageKey, s);
-    setSaved(s);
-    setSel(null);
+    generatingRef.current = true;
+    setGenerating(true);
+    // yield a frame so the "generating…" state paints before a possible
+    // sync generate() blocks the main thread
+    const run = () => {
+      try {
+        const { puzzle, solution } = takeFromPool(diff);
+        const s: Saved = { difficulty: diff, puzzle, solution, state: [...puzzle], started: Date.now(), mistakes: 0 };
+        saveState(storageKey, s);
+        setSaved(s);
+        setSel(null);
+      } finally {
+        generatingRef.current = false;
+        setGenerating(false);
+      }
+    };
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setTimeout(run, 0));
+    else setTimeout(run, 0);
   }, [saved, storageKey]);
 
   const restart = useCallback(() => {
@@ -150,10 +202,36 @@ export default function Sudoku({ lockedDifficulty }: SudokuProps = {}) {
 
   return (
     <div className="space-y-4">
+      <div className="rounded-md border border-slate-200 bg-slate-50">
+        <button
+          type="button"
+          onClick={() => setShowRules((v) => !v)}
+          className="flex w-full items-center justify-between px-3 py-2 text-left text-sm font-semibold text-slate-800"
+          aria-expanded={showRules}
+        >
+          <span>How to play Sudoku {showRules ? '▾' : '▸'}</span>
+          <span className="text-xs font-normal text-slate-500">{showRules ? 'hide' : 'rules & tips'}</span>
+        </button>
+        {showRules && (
+          <div className="border-t border-slate-200 px-3 py-3 text-sm text-slate-700 space-y-2">
+            <p><strong>The board:</strong> 9×9 grid divided into nine 3×3 boxes. Some cells start with digits (clues); the rest are blank.</p>
+            <p><strong>Goal:</strong> fill every blank cell with a digit 1–9 so that:</p>
+            <ul className="ml-5 list-disc space-y-1">
+              <li>Each <strong>row</strong> contains 1–9 exactly once.</li>
+              <li>Each <strong>column</strong> contains 1–9 exactly once.</li>
+              <li>Each <strong>3×3 box</strong> contains 1–9 exactly once.</li>
+            </ul>
+            <p><strong>Play:</strong> tap a blank cell, press 1–9 on the keypad or keyboard. Backspace/Delete clears. Conflicting cells highlight red — use that as a safety net, not as your strategy.</p>
+            <p><strong>Start-here tactic:</strong> scan each digit 1→9 across the whole board; look for a row, column, or box that already has eight of that digit placed — the ninth is forced. Chase those forced placements until none remain, then move to candidate elimination.</p>
+            <p className="text-xs text-slate-500">Every puzzle here has a unique solution — you never need to guess, though some expert boards require advanced techniques (pointing pairs, X-wing, XY-wing).</p>
+          </div>
+        )}
+      </div>
+
       <div className="flex flex-wrap items-center gap-2">
         {!lockedDifficulty && (['easy','medium','hard','expert'] as Difficulty[]).map((d) => (
-          <button key={d} onClick={() => newGame(d)}
-            className={`btn ${saved.difficulty===d ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900 hover:bg-slate-200'}`}>
+          <button key={d} onClick={() => newGame(d)} disabled={generating}
+            className={`btn ${saved.difficulty===d ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900 hover:bg-slate-200'} disabled:opacity-50`}>
             {d[0].toUpperCase() + d.slice(1)}
           </button>
         ))}
@@ -162,8 +240,9 @@ export default function Sudoku({ lockedDifficulty }: SudokuProps = {}) {
             {lockedDifficulty[0].toUpperCase() + lockedDifficulty.slice(1)}
           </span>
         )}
-        <button onClick={() => newGame(saved.difficulty)} className="btn-ghost">New puzzle</button>
+        <button onClick={() => newGame(saved.difficulty)} disabled={generating} className="btn-ghost disabled:opacity-50">New puzzle</button>
         <button onClick={restart} className="btn-ghost">Restart</button>
+        {generating && <span className="text-xs text-slate-500">generating…</span>}
       </div>
 
       <div className="mx-auto grid w-full max-w-md grid-cols-9 overflow-hidden rounded border-2 border-slate-800">

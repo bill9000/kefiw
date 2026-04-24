@@ -1,0 +1,310 @@
+I am including a JSON file for a Kefiw.com website tool/content cluster.
+
+Your job is to produce the V3-enhanced.json file.
+
+This site has simple tools such as word solvers, puzzle/game helpers, calculators, math helpers, and everyday-life utilities. The goal is AdSense monetization through genuinely helpful tool pages surrounded by strong guides and FAQs. I want Kefiw to become an authority on each tool topic, not just publish thin tool pages.
+
+Important: preserve the JSON structure and IDs. Do not rewrite the system as a new format unless you are adding clearly useful fields.
+
+SOURCE-OF-TRUTH RULES
+
+1. Treat `tool_logic`, `ui_fields`, `content_guidance.claim_allowed`, and `content_guidance.claim_forbidden` as the highest authority.
+2. If `current` copy conflicts with verified `tool_logic`, do not modify `current`; instead, fix the claim in `enhanced`.
+3. Never claim a feature exists unless it appears in `ui_fields`, `processing_steps`, `claim_allowed`, or another verified field.
+4. Never claim the tool uses AI, phonetics, dictionaries, live search, APIs, user accounts, saved history, server processing, or advanced validation unless the JSON says so.
+5. Keep every `id`, `slug`, `url`, `title`, `h1`, `relatedIds`, and `link_map` value intact unless there is a clear typo that should be noted separately.
+6. Do not delete `current`; it is a baseline snapshot for diffing.
+7. Return valid JSON only in the output file.
+
+WHAT TO ENHANCE
+
+For each tool:
+
+Fill or create an `enhanced` object with:
+
+- `description`
+- `meta_description`
+- `intro`
+- `outcomeLine`
+- `howTo`
+- `examples`
+- `faq`
+- `use_cases`
+- `user_scenarios`
+- `common_mistakes`
+- `tips`
+- `limitations`
+- `suggested_tool_enhancements`
+- `internal_links`
+- `schema_suggestions`
+
+Tool-page copy should stay concise. Do not turn the tool page into a 1,200-word article. The tool page should quickly explain what the tool does, why the user needs it, how to use it, what the result means, when to use related tools, and what limitations to remember.
+
+For each article:
+
+Fill or create:
+
+- `enhanced`
+- `longform_markdown`
+- `word_count_estimate`
+- `faq`
+- `internal_links`
+- `schema_suggestions`
+
+The article should become an authority-style guide. Aim for the article’s `target_word_count` if present. If no target exists, aim for roughly 1,000–1,300 words.
+
+The `longform_markdown` must:
+
+- use Markdown;
+- use H2 sections only, no H1;
+- include 4–7 useful H2 sections;
+- include practical examples;
+- explain the real user scenario behind the tool;
+- teach the user how to get better at the task, not just how the tool works;
+- link only to URLs present in the JSON;
+- avoid competitor links;
+- avoid filler introductions such as “in today’s fast-paced world”;
+- avoid “in conclusion,” “let us delve,” “furthermore,” and similar AI-sounding transitions.
+
+USER-INTENT REQUIREMENT
+
+For every tool and article, explain what the user is actually trying to do.
+
+Examples:
+
+- For a rhyme tool, the user may be writing a poem, song, rap verse, greeting card, classroom poem, or lyric.
+- For a word game helper, the user may be trying to solve a puzzle, learn the rules, improve strategy, or avoid wasting guesses.
+- For a calculator, the user may be comparing options, checking a formula, planning a task, estimating a result, or avoiding manual math.
+- For a math tool, the user may be learning the concept, checking homework, validating a calculation, or understanding the steps.
+- For a text utility, the user may be cleaning text, preparing a post, meeting a limit, formatting content, or checking readability.
+
+Add this intent layer to `content_strategy` or an equivalent field.
+
+CONTENT STRATEGY FIELDS
+
+For each tool, create or fill:
+
+```json
+"content_strategy": {
+  "why_users_need_this_tool": "",
+  "primary_user_scenarios": [],
+  "beginner_guidance": [],
+  "advanced_tips": [],
+  "common_mistakes": [],
+  "related_skill_lessons": [],
+  "authority_angles": [],
+  "paa_targets": [],
+  "tool_limitations_to_explain": [],
+  "upgrade_opportunities": []
+}
+TOOL-TYPE-SPECIFIC RULES
+
+If the tool is a game or puzzle helper, add:
+
+"game_context": {
+  "game_or_puzzle_name": "",
+  "rules_summary": [],
+  "what_the_tool_helps_with": "",
+  "strategy_angles": [],
+  "beginner_tips": [],
+  "advanced_tips": [],
+  "common_mistakes": [],
+  "fair_use_positioning": ""
+}
+For game/puzzle helpers, cover the rules of the game and give 4–8 strategy angles, such as opening strategy, pattern recognition, probability, elimination, common traps, advanced tactics, practice methods, and how to use the helper without removing the challenge.
+
+If the tool is a calculator or mathematical tool, add:
+
+"calculation_context": {
+  "formula_or_method": "",
+  "variables": [],
+  "assumptions": [],
+  "rounding_rules": "",
+  "worked_examples": [],
+  "edge_cases": [],
+  "plain_english_explanation": "",
+  "disclaimers": []
+}
+For calculators, explain the formula, inputs, assumptions, rounding, limitations, and at least one worked example. Do not make legal, financial, medical, tax, or professional advice claims unless the JSON explicitly supports that use case.
+
+If the tool is a word/text/writing tool, add:
+
+"writing_or_text_context": {
+  "what_user_is_creating_or_checking": [],
+  "workflow": [],
+  "quality_tips": [],
+  "examples": [],
+  "limitations": []
+}
+FAQ RULES
+
+For each tool, include 4–6 FAQs.
+
+For each article, include 5–7 FAQs.
+
+Each FAQ item should include:
+
+{
+  "q": "",
+  "a": "",
+  "faq_intent": "definition | comparison | edge-case | how-to | troubleshooting | trust | cost"
+}
+FAQ requirements:
+
+Questions should sound like real People Also Ask/search questions.
+
+Start questions with words like How, Why, What, Is, Can, Does, Should, or When.
+
+The first sentence of each answer should be a direct 15–25 word answer.
+
+The full answer should usually be 40–70 words.
+
+Cover distinct intents: definition, comparison, edge case, how-to, troubleshooting, and trust.
+
+Do not write several versions of the same question.
+
+Include target keywords naturally, not repetitively.
+
+PAA / SERP RESEARCH
+
+use live browsing to research likely People Also Ask and related-search intent for the main topic before writing FAQs. Add a field like:
+
+"serp_research": {
+  "status": "researched | inferred",
+  "primary_queries": [],
+  "paa_questions": [],
+  "related_search_intents": [],
+  "date_checked": "",
+  "country": "US",
+  "notes": ""
+}
+If browsing is not available, generate likely PAA-style questions from the topic and mark status as inferred.
+
+INTERNAL LINKING RULES
+
+Use only URLs that exist in the uploaded JSON.
+
+Prefer links within the same cluster.
+
+Preserve all existing relatedIds.
+
+Add helpful internal links in enhanced.internal_links.
+
+When writing longform_markdown, use Markdown links with exact URLs from the JSON.
+
+Do not invent URLs.
+
+Do not link to external competitors.
+
+AUTHORITY REQUIREMENT
+
+For each tool and article, add useful expertise beyond basic definitions.
+
+Include:
+
+real-world use cases;
+
+beginner guidance;
+
+practical examples;
+
+common mistakes;
+
+edge cases;
+
+limitations;
+
+tips for improving at the underlying activity;
+
+when to use the tool;
+
+when not to rely on the tool;
+
+what related tool or guide to use next.
+
+For example, do not only explain that a rhyme finder returns rhyming words. Explain why someone needs a rhyme finder, what they are likely writing, how to choose a rhyme that fits meaning and rhythm, how to avoid forced rhymes, and how related tools like a syllable counter help polish the final line.
+
+QUALITY GATES
+
+Before creating the final file, check:
+
+The output is valid JSON.
+
+No current fields were modified unless absolutely necessary.
+
+Every enhanced object is filled.
+
+Every article has longform_markdown.
+
+Tool pages are concise and not overloaded with article-length prose.
+
+Article pages are substantial and useful.
+
+No forbidden claims were introduced.
+
+No URLs were invented.
+
+FAQs include faq_intent.
+
+Longform content avoids generic SEO filler.
+
+Stale or inaccurate claims in current are corrected in enhanced.
+
+All tool limitations are explained honestly.
+
+Suggested tool enhancements are clearly marked as suggestions, not existing features.
+
+OUTPUT REQUIREMENTS
+
+Create a downloadable file named:
+
+[GROUP]-V3-enhanced.json
+
+Also provide a short summary explaining:
+
+what was enhanced;
+
+any stale or conflicting claims you corrected;
+
+any high-priority tool improvements you suggest;
+
+any missing information that would improve the next version.
+
+Do not paste the entire JSON in chat unless it is very small. Provide the file link.
+
+
+## What your future `group-v2` should include
+
+For best results, every future V2 file should include the same kind of verified implementation detail that your rhyme V2 included: `tool_logic`, `processing_steps`, `data_sources`, `fallback_behavior`, `known_limitations`, `ui_fields`, and `content_guidance`. That is what lets the enhancement process avoid false claims like saying a spelling-based tool is phonetic. :contentReference[oaicite:1]{index=1}
+
+Use this mini-template inside each tool when possible:
+
+```json
+"tool_logic": {
+  "input_type": "",
+  "output_type": "",
+  "processing_steps": [],
+  "data_sources": [],
+  "fallback_behavior": "",
+  "known_limitations": [],
+  "ui_fields": {
+    "inputs": [],
+    "filters": [],
+    "outputs": []
+  },
+  "content_guidance": {
+    "claim_allowed": [],
+    "claim_forbidden": []
+  }
+}
+The most important fields are claim_allowed and claim_forbidden. They keep the content honest.
+
+
+In addition to content enhancement, audit each tool for product improvements. Add `suggested_tool_enhancements` 
+with practical upgrades ranked by impact: high, medium, low. Separate existing features from proposed features. 
+For each suggestion, explain the user benefit, implementation difficulty, 
+and which content page could support that feature. Assumme the coder will implement your suggestions. Update your 
+articles and faqs with the assumption that your suggestions will be implemented. Add additional IDs to link map for 
+articles if you need and add cross-linking (from existing to new and from new to existing guuides/articles/faqs), highest priority anchor text, 
+
+Also add an `adsense_readiness` field for the cluster and each page. Note whether the page has enough original utility, whether the guide content is substantial, whether ad placement should avoid blocking the tool, and whether the page has any policy-sensitive claims. Keep this practical and concise.

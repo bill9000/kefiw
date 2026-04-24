@@ -242,7 +242,7 @@ export default function VibePair() {
         <div className="flex items-center gap-2">
           <Zap size={14} className="text-pink-400" />
           <span className="text-xs uppercase tracking-[0.3em] text-cyan-400/80">VibePair</span>
-          <span className="ml-2 text-[11px] tracking-[0.25em] text-slate-500">
+          <span className="ml-2 text-[11px] tracking-[0.25em] text-slate-300">
             // LEVEL {puzzleIdx + 1}/{PUZZLES.length}
           </span>
         </div>
@@ -280,7 +280,7 @@ export default function VibePair() {
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15, type: 'spring' }}
-          className="text-2xl font-black text-slate-500"
+          className="text-2xl font-black text-slate-300"
         >
           <Plus size={28} className="text-fuchsia-400" />
         </motion.div>
@@ -366,7 +366,7 @@ export default function VibePair() {
       <div className="relative flex justify-center px-4 pb-4">
         <div className="flex max-w-md flex-wrap justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] p-3 backdrop-blur-sm">
           {bank.length === 0 && (
-            <div className="px-6 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-500">
+            <div className="px-6 py-2 text-[11px] uppercase tracking-[0.3em] text-slate-300">
               // bank empty
             </div>
           )}

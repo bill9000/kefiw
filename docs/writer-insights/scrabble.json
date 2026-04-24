@@ -1,0 +1,571 @@
+{
+  "cluster_id": "scrabble",
+  "enhanced_at": "2026-04-22",
+  "source": "docs/article-briefings/scrabble-V3-enhanced.json",
+  "status_at_import": "21 articles and 4 tools merged via scrabble-enhancements modules.",
+  "serp_research": {
+    "status": "researched",
+    "date_checked": "2026-04-22",
+    "country": "US",
+    "primary_queries": [
+      "Scrabble two letter words FAQ QI ZA JO valid current official dictionary",
+      "Scrabble bingo strategy rack balance common bingo stems FAQ",
+      "Words With Friends scoring tile values bingo bonus FAQ",
+      "Scrabble Q words without U QI QAT QOPH FAQ"
+    ],
+    "related_search_intents": [
+      "check whether a short odd word is legal",
+      "find high-scoring short plays for a difficult rack",
+      "understand how bingos, blanks, and premium squares affect score",
+      "compare Scrabble and Words With Friends scoring",
+      "learn Q-without-U, X, Z, and J emergency vocabulary"
+    ],
+    "notes": "SERP patterns were used to shape PAA-style FAQs and intent coverage; Kefiw implementation details remain the source of truth for feature claims."
+  },
+  "adsense_readiness": {
+    "status": "ready_with_layout_care",
+    "original_utility": "Strong: the page is attached to an interactive word-game utility or a practical guide, not just scraped definitions.",
+    "content_depth": "Tool pages should stay concise; guide and list pages need the longform body plus FAQs to avoid thin-content risk.",
+    "ad_placement_notes": [
+      "Do not place ads between the page title and the primary input or word list.",
+      "Keep sticky or anchor ads from covering rack inputs, filters, result tables, or copy buttons.",
+      "For long guides, place ads after substantial content sections rather than immediately after every heading."
+    ],
+    "policy_sensitive_claims": "Low. Position helpers as learning, validation, and casual-game aids; avoid implying tournament certification or encouraging rule-breaking.",
+    "trust_notes": [
+      "Explain that Kefiw uses ENABLE1 rather than an official tournament dictionary.",
+      "Flag blank-tile scoring limitations where relevant.",
+      "Avoid claiming full board modelling unless the implementation adds it later."
+    ],
+    "article_page_specific": "cluster content is suitable for contextual ads after the first worked example and near FAQ, not inside tables or lists."
+  },
+  "audit_notes": {
+    "preserved_source_fields": "All id, slug, url, title, h1, current, relatedIds, and link_map values were preserved from the V2 file.",
+    "corrected_in_enhanced_not_current": [
+      {
+        "path": "tools.scrabble-helper.current / tool_logic.known_limitations",
+        "issue": "The live tool currently scores blanks as full tile value, while real Scrabble blanks score zero.",
+        "enhanced_handling": "Enhanced limitations, FAQ, tips, and suggested enhancements tell users to verify blank-involved scores and propose zero-value blank scoring."
+      },
+      {
+        "path": "tools.words-with-friends-helper.current / tool_logic.known_limitations",
+        "issue": "The live WWF helper has the same blank-scoring overcount as the Scrabble helper.",
+        "enhanced_handling": "Enhanced copy avoids claiming exact real-game blank scores and proposes a blank-value fix."
+      },
+      {
+        "path": "tools.word-finder.current.outcomeLine",
+        "issue": "The current outcome line says pattern matching supports *; verified logic supports only single-letter wildcards ?, _, and . in Pattern mode.",
+        "enhanced_handling": "Enhanced outcome line and FAQ describe exact-length pattern matching with single-character wildcards only."
+      },
+      {
+        "path": "articles.cS-best-words-with-j.current",
+        "issue": "The source contains conflicting guidance about whether JO is valid; Kefiw/ENABLE-related pages list JO as a playable short J word.",
+        "enhanced_handling": "Enhanced copy states that JO appears in the Kefiw list but users should confirm unusual words in their game dictionary."
+      },
+      {
+        "path": "articles.cA-2-letter-words.current.examples",
+        "issue": "QI is shown as 12 in one current example, but QI is 11 using standard Scrabble values.",
+        "enhanced_handling": "Enhanced examples and FAQs use QI = 11 and explain raw score versus board multipliers."
+      },
+      {
+        "path": "articles with full-board placement claims",
+        "issue": "Several current notes imply board-state or hook-position modelling, but the verified Scrabble/WWF helpers only support an optional single through-letter.",
+        "enhanced_handling": "Enhanced tool references describe rack search and optional through-letter filtering, not full placement solving."
+      }
+    ],
+    "high_priority_product_improvements": [
+      "Score blanks as zero and show which letter each blank represents.",
+      "Add board modelling for premium squares, cross-checks, hooks, and parallel plays.",
+      "Add dictionary-mode labels or toggles for ENABLE1, official Scrabble/NWL-style play, Collins-style play, and Words With Friends if licensing permits.",
+      "Add word-list tables generated from the same dictionary powering each list page, with score and length filters."
+    ]
+  },
+  "cluster_suggested_tool_enhancements": {
+    "existing_features_to_preserve": [
+      "Client-side word lookup for fast interaction",
+      "Shared ENABLE1 source for consistent game-list behavior",
+      "Score-aware helpers for Scrabble and WWF",
+      "Internal linking between tools, lists, and guides"
+    ],
+    "proposed_features_ranked": [
+      {
+        "impact": "high",
+        "feature": "Zero-value blank scoring across every scoring surface",
+        "user_benefit": "Restores trust in score-ranked results whenever ? is used.",
+        "implementation_difficulty": "medium",
+        "supporting_content_page": "/guides/scrabble-blanks/"
+      },
+      {
+        "impact": "high",
+        "feature": "Full board solver layer for Scrabble and WWF helpers",
+        "user_benefit": "Turns candidate words into legal board placements with premium-square and cross-word scoring.",
+        "implementation_difficulty": "high",
+        "supporting_content_page": "/guides/scrabble-scoring/"
+      },
+      {
+        "impact": "high",
+        "feature": "Dictionary transparency controls and validation badges",
+        "user_benefit": "Users can see whether a result is from ENABLE1, a broader list, or a future licensed game dictionary.",
+        "implementation_difficulty": "medium_to_high",
+        "supporting_content_page": "/word-tools/2-letter-words/"
+      },
+      {
+        "impact": "medium",
+        "feature": "Generated word-list tables with score, length, and starts/ends filters",
+        "user_benefit": "List pages become more original and useful for AdSense review and user retention.",
+        "implementation_difficulty": "medium",
+        "supporting_content_page": "/word-tools/short-high-scoring-scrabble-words/"
+      },
+      {
+        "impact": "medium",
+        "feature": "Word detail drawer with definition, hooks, plural, score, and source-list note",
+        "user_benefit": "Users learn why a strange word is playable and can defend it in casual games.",
+        "implementation_difficulty": "medium",
+        "supporting_content_page": "/guides/best-2-letter-scrabble-words/"
+      }
+    ]
+  },
+  "tool_non_schema_writer_notes": {
+    "scrabble-helper": {
+      "user_scenarios": [
+        "A casual player has seven tiles and wants to avoid missing a high-value short play.",
+        "A learner is drilling Q-without-U and X words from real racks.",
+        "A player sees one open board letter and wants words that can pass through it.",
+        "A content reader moves from a strategy guide into a live rack check."
+      ],
+      "tips": [
+        "Compare the best short play and best long play; a short Z or X play can beat a longer low-value word.",
+        "Use the through-letter field sparingly. It means the word must contain that letter, not that the tool knows the board layout.",
+        "When a blank creates several bingos, test the real board before spending it on a small score.",
+        "After choosing a candidate, check cross-words and premium squares in the game itself."
+      ],
+      "internal_links": [
+        {
+          "id": "words-with-friends-helper",
+          "label": "Words With Friends Word Finder",
+          "url": "/word-tools/words-with-friends-helper/",
+          "reason": "Use this when the same rack is being played under Words With Friends scoring."
+        },
+        {
+          "id": "word-unscrambler",
+          "label": "Word Unscrambler",
+          "url": "/word-tools/word-unscrambler/",
+          "reason": "Use this for broad rack exploration and length-grouped word discovery."
+        },
+        {
+          "id": "word-finder",
+          "label": "Word Finder by Letters",
+          "url": "/word-tools/word-finder/",
+          "reason": "Use this for letter-set searches or fixed-length wildcard patterns."
+        },
+        {
+          "id": "cE-scrabble-scoring",
+          "label": "Scrabble Scoring Explained",
+          "url": "/guides/scrabble-scoring/",
+          "reason": "Explains tile values, premium squares, and bingo scoring."
+        },
+        {
+          "id": "cE-scrabble-blanks",
+          "label": "How to Use Scrabble Blanks",
+          "url": "/guides/scrabble-blanks/",
+          "reason": "Explains how blanks work and why score checks matter."
+        },
+        {
+          "id": "cS-best-2-letter-scrabble-words",
+          "label": "Best 2-Letter Scrabble Words",
+          "url": "/guides/best-2-letter-scrabble-words/",
+          "reason": "Prioritises the highest-value short words to learn first."
+        }
+      ],
+      "schema_suggestions": {
+        "recommended_schema_types": [
+          "SoftwareApplication",
+          "FAQPage",
+          "BreadcrumbList"
+        ],
+        "software_application_notes": [
+          "Set applicationCategory to GameApplication or UtilitiesApplication depending on the site taxonomy.",
+          "Use browser-based processing language only when the implementation remains client-side.",
+          "Do not mark proposed features as current software features."
+        ],
+        "faq_schema_notes": "Use only the enhanced FAQ items with faq_intent-stratified questions.",
+        "breadcrumb_notes": "Include Word Tools > page title."
+      },
+      "suggested_tool_enhancements": {
+        "existing_features_to_preserve": [
+          "Client-side dictionary lookup via web worker",
+          "? blank support",
+          "Optional score display or score-ranked mode where implemented",
+          "Clear result sorting and copy-friendly output"
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Correct blank scoring to zero and display the substituted blank letter.",
+            "user_benefit": "Users can trust score totals when ? is used and can see how the word is being formed.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/scrabble-blanks/"
+          },
+          {
+            "impact": "high",
+            "feature": "Add full board placement with premium squares, cross-checks, hooks, and parallel words.",
+            "user_benefit": "Users can move from rack candidates to legal board plays without manual geometry checks.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": "/guides/scrabble-scoring/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add dictionary-mode labels or toggles where licensing allows.",
+            "user_benefit": "Users can see whether they are practicing ENABLE1, Scrabble-style, Collins-style, or WWF-style vocabulary.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/word-tools/2-letter-words/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add explanations for unusual words on tap.",
+            "user_benefit": "Users learn vocabulary instead of copying opaque suggestions.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/best-2-letter-scrabble-words/"
+          },
+          {
+            "impact": "low",
+            "feature": "Add export filters for length, score band, and contains high-value tile.",
+            "user_benefit": "Users can turn results into study lists quickly.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": "/word-tools/short-high-scoring-scrabble-words/"
+          }
+        ]
+      }
+    },
+    "words-with-friends-helper": {
+      "user_scenarios": [
+        "A WWF player has a strong rack but cannot tell whether the Scrabble answer is still best.",
+        "A learner wants a safe way to study common short WWF plays.",
+        "A player is trying to dump a Q or J without destroying next-turn balance.",
+        "A strategy reader wants to see how the same rack differs between games."
+      ],
+      "tips": [
+        "Recheck any rack with J, C, B, L, N, U, or Y because WWF values differ from Scrabble.",
+        "Use the score gap to decide whether a risky top play is worth opening the board.",
+        "If several plays are close, prefer the one with a stronger leave or safer board shape.",
+        "Use the Scrabble helper only when the game is actually Scrabble."
+      ],
+      "internal_links": [
+        {
+          "id": "scrabble-helper",
+          "label": "Scrabble Word Finder",
+          "url": "/word-tools/scrabble-helper/",
+          "reason": "Use this when a user has an actual rack and wants ranked Scrabble plays."
+        },
+        {
+          "id": "word-unscrambler",
+          "label": "Word Unscrambler",
+          "url": "/word-tools/word-unscrambler/",
+          "reason": "Use this for broad rack exploration and length-grouped word discovery."
+        },
+        {
+          "id": "word-finder",
+          "label": "Word Finder by Letters",
+          "url": "/word-tools/word-finder/",
+          "reason": "Use this for letter-set searches or fixed-length wildcard patterns."
+        },
+        {
+          "id": "cS-words-with-friends-scoring-differs",
+          "label": "How Words With Friends Scoring Differs",
+          "url": "/guides/how-words-with-friends-scoring-differs/",
+          "reason": "Prevents Scrabble and WWF scoring from being mixed."
+        },
+        {
+          "id": "cA-short-high-scoring",
+          "label": "Short High-Scoring Scrabble Words",
+          "url": "/word-tools/short-high-scoring-scrabble-words/",
+          "reason": "Supports quick memorisation of compact high-scoring words."
+        }
+      ],
+      "schema_suggestions": {
+        "recommended_schema_types": [
+          "SoftwareApplication",
+          "FAQPage",
+          "BreadcrumbList"
+        ],
+        "software_application_notes": [
+          "Set applicationCategory to GameApplication or UtilitiesApplication depending on the site taxonomy.",
+          "Use browser-based processing language only when the implementation remains client-side.",
+          "Do not mark proposed features as current software features."
+        ],
+        "faq_schema_notes": "Use only the enhanced FAQ items with faq_intent-stratified questions.",
+        "breadcrumb_notes": "Include Word Tools > page title."
+      },
+      "suggested_tool_enhancements": {
+        "existing_features_to_preserve": [
+          "Client-side dictionary lookup via web worker",
+          "? blank support",
+          "Optional score display or score-ranked mode where implemented",
+          "Clear result sorting and copy-friendly output"
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Correct blank scoring to zero and display the substituted blank letter.",
+            "user_benefit": "Users can trust score totals when ? is used and can see how the word is being formed.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/scrabble-blanks/"
+          },
+          {
+            "impact": "high",
+            "feature": "Add full board placement with premium squares, cross-checks, hooks, and parallel words.",
+            "user_benefit": "Users can move from rack candidates to legal board plays without manual geometry checks.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": "/guides/scrabble-scoring/"
+          },
+          {
+            "impact": "high",
+            "feature": "Add a clearer dictionary disclaimer and optional WWF-specific word source if licensing permits.",
+            "user_benefit": "Users better understand why an app may accept or reject a suggestion.",
+            "implementation_difficulty": "high",
+            "supporting_content_page": "/guides/how-words-with-friends-scoring-differs/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add explanations for unusual words on tap.",
+            "user_benefit": "Users learn vocabulary instead of copying opaque suggestions.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/best-2-letter-scrabble-words/"
+          },
+          {
+            "impact": "low",
+            "feature": "Add export filters for length, score band, and contains high-value tile.",
+            "user_benefit": "Users can turn results into study lists quickly.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": "/word-tools/short-high-scoring-scrabble-words/"
+          }
+        ]
+      }
+    },
+    "word-unscrambler": {
+      "user_scenarios": [
+        "A puzzle solver has mixed letters and needs every possible word by length.",
+        "A Scrabble learner is studying bingos from common stems.",
+        "A classroom user wants examples of words made from the same letters.",
+        "A player wants to see whether a blank creates a usable word family."
+      ],
+      "tips": [
+        "Start with a lower minimum length if the rack is awkward, then raise it once you see useful stems.",
+        "Use Game list for Scrabble-like practice and Full list for broader word discovery.",
+        "Turn on scores only after you have scanned the longest words, so score does not distract from pattern recognition.",
+        "Move to the Scrabble helper when you are ready to rank a rack by game score."
+      ],
+      "internal_links": [
+        {
+          "id": "scrabble-helper",
+          "label": "Scrabble Word Finder",
+          "url": "/word-tools/scrabble-helper/",
+          "reason": "Use this when a user has an actual rack and wants ranked Scrabble plays."
+        },
+        {
+          "id": "words-with-friends-helper",
+          "label": "Words With Friends Word Finder",
+          "url": "/word-tools/words-with-friends-helper/",
+          "reason": "Use this when the same rack is being played under Words With Friends scoring."
+        },
+        {
+          "id": "word-finder",
+          "label": "Word Finder by Letters",
+          "url": "/word-tools/word-finder/",
+          "reason": "Use this for letter-set searches or fixed-length wildcard patterns."
+        },
+        {
+          "id": "cS-best-bingo-words",
+          "label": "Best Bingo Words in Scrabble",
+          "url": "/guides/best-bingo-words-in-scrabble/",
+          "reason": "Shows common bingo patterns and stems."
+        },
+        {
+          "id": "cE-scrabble-bingo-strategy",
+          "label": "Scrabble Bingo Strategy",
+          "url": "/guides/scrabble-bingo-strategy/",
+          "reason": "Teaches rack management for 7-tile plays."
+        }
+      ],
+      "schema_suggestions": {
+        "recommended_schema_types": [
+          "SoftwareApplication",
+          "FAQPage",
+          "BreadcrumbList"
+        ],
+        "software_application_notes": [
+          "Set applicationCategory to GameApplication or UtilitiesApplication depending on the site taxonomy.",
+          "Use browser-based processing language only when the implementation remains client-side.",
+          "Do not mark proposed features as current software features."
+        ],
+        "faq_schema_notes": "Use only the enhanced FAQ items with faq_intent-stratified questions.",
+        "breadcrumb_notes": "Include Word Tools > page title."
+      },
+      "suggested_tool_enhancements": {
+        "existing_features_to_preserve": [
+          "Client-side dictionary lookup via web worker",
+          "? blank support",
+          "Optional score display or score-ranked mode where implemented",
+          "Clear result sorting and copy-friendly output"
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Correct blank scoring to zero and display the substituted blank letter.",
+            "user_benefit": "Users can trust score totals when ? is used and can see how the word is being formed.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/scrabble-blanks/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add result caps, lazy loading, and filters for large open racks.",
+            "user_benefit": "Very productive racks stay fast and easier to scan.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/word-tools/word-unscrambler/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Show which input letters were used for each result.",
+            "user_benefit": "Learners can see how blanks and repeated letters form each word.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/best-bingo-words-in-scrabble/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add dictionary-mode labels or toggles where licensing allows.",
+            "user_benefit": "Users can see whether they are practicing ENABLE1, Scrabble-style, Collins-style, or WWF-style vocabulary.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/word-tools/2-letter-words/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add explanations for unusual words on tap.",
+            "user_benefit": "Users learn vocabulary instead of copying opaque suggestions.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/best-2-letter-scrabble-words/"
+          },
+          {
+            "impact": "low",
+            "feature": "Add export filters for length, score band, and contains high-value tile.",
+            "user_benefit": "Users can turn results into study lists quickly.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": "/word-tools/short-high-scoring-scrabble-words/"
+          }
+        ]
+      }
+    },
+    "word-finder": {
+      "user_scenarios": [
+        "A puzzle solver knows the second and fourth letters but not the rest.",
+        "A word-game player wants all words from a rack between 4 and 7 letters.",
+        "A learner is drilling fixed patterns like ??ING or A?E??.",
+        "A list-page reader wants to move from study to a custom search."
+      ],
+      "tips": [
+        "Use Pattern mode when fixed positions matter; it is faster than scanning a long word list manually.",
+        "Use Letters mode for racks where the exact position does not matter.",
+        "Switch from Full list to Game list when results feel too obscure for word games.",
+        "Move to the Scrabble helper when score ranking is more important than pattern matching."
+      ],
+      "internal_links": [
+        {
+          "id": "scrabble-helper",
+          "label": "Scrabble Word Finder",
+          "url": "/word-tools/scrabble-helper/",
+          "reason": "Use this when a user has an actual rack and wants ranked Scrabble plays."
+        },
+        {
+          "id": "word-unscrambler",
+          "label": "Word Unscrambler",
+          "url": "/word-tools/word-unscrambler/",
+          "reason": "Use this for broad rack exploration and length-grouped word discovery."
+        },
+        {
+          "id": "words-with-friends-helper",
+          "label": "Words With Friends Word Finder",
+          "url": "/word-tools/words-with-friends-helper/",
+          "reason": "Use this when the same rack is being played under Words With Friends scoring."
+        },
+        {
+          "id": "cA-2-letter-words",
+          "label": "2-Letter Words",
+          "url": "/word-tools/2-letter-words/",
+          "reason": "Supports short-word memorisation and hook play."
+        },
+        {
+          "id": "cA-3-letter-words",
+          "label": "3-Letter Words",
+          "url": "/word-tools/3-letter-words/",
+          "reason": "Supports tight-board practice with short playable words."
+        }
+      ],
+      "schema_suggestions": {
+        "recommended_schema_types": [
+          "SoftwareApplication",
+          "FAQPage",
+          "BreadcrumbList"
+        ],
+        "software_application_notes": [
+          "Set applicationCategory to GameApplication or UtilitiesApplication depending on the site taxonomy.",
+          "Use browser-based processing language only when the implementation remains client-side.",
+          "Do not mark proposed features as current software features."
+        ],
+        "faq_schema_notes": "Use only the enhanced FAQ items with faq_intent-stratified questions.",
+        "breadcrumb_notes": "Include Word Tools > page title."
+      },
+      "suggested_tool_enhancements": {
+        "existing_features_to_preserve": [
+          "Client-side dictionary lookup via web worker",
+          "? blank support",
+          "Optional score display or score-ranked mode where implemented",
+          "Clear result sorting and copy-friendly output"
+        ],
+        "proposed_features": [
+          {
+            "impact": "high",
+            "feature": "Correct blank scoring to zero and display the substituted blank letter.",
+            "user_benefit": "Users can trust score totals when ? is used and can see how the word is being formed.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/scrabble-blanks/"
+          },
+          {
+            "impact": "high",
+            "feature": "Add prefix, suffix, contains, and must-include filters inside Word Finder.",
+            "user_benefit": "Users can solve more puzzle types without switching tools.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/word-tools/3-letter-words/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add optional * wildcard for zero-or-more letters, clearly separated from exact-length Pattern mode.",
+            "user_benefit": "Users expecting broad pattern search can express flexible gaps without misusing ?.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/word-tools/word-finder/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add dictionary-mode labels or toggles where licensing allows.",
+            "user_benefit": "Users can see whether they are practicing ENABLE1, Scrabble-style, Collins-style, or WWF-style vocabulary.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/word-tools/2-letter-words/"
+          },
+          {
+            "impact": "medium",
+            "feature": "Add explanations for unusual words on tap.",
+            "user_benefit": "Users learn vocabulary instead of copying opaque suggestions.",
+            "implementation_difficulty": "medium",
+            "supporting_content_page": "/guides/best-2-letter-scrabble-words/"
+          },
+          {
+            "impact": "low",
+            "feature": "Add export filters for length, score band, and contains high-value tile.",
+            "user_benefit": "Users can turn results into study lists quickly.",
+            "implementation_difficulty": "low",
+            "supporting_content_page": "/word-tools/short-high-scoring-scrabble-words/"
+          }
+        ]
+      }
+    }
+  },
+  "writer_recommended_new_articles": null
+}

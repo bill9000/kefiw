@@ -1,0 +1,2126 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-22T03:27:02.113Z",
+  "cluster": {
+    "slug": "pattern",
+    "section": "word-tools",
+    "hubSlug": "pattern-and-puzzle-solvers",
+    "url": "/word-tools/pattern-and-puzzle-solvers/",
+    "title": "Pattern & Puzzle Solvers — Kefiw",
+    "h1": "Pattern & Puzzle Solvers",
+    "subhead": "Find words that match a shape: Wordle, crossword, hangman, or any pattern.",
+    "intro": "Most word puzzles reduce to the same problem — find words that match a pattern of known letters and blanks. This cluster pulls together the pattern tools and the logic tricks that make Wordle, crosswords, and hangman easier.",
+    "description": "Word finder by pattern, Wordle solver, crossword solver, and hangman solver — plus guides to wildcard search, green/yellow/gray logic, and finding words by position.",
+    "keywords": [
+      "word pattern solver",
+      "wordle solver",
+      "crossword solver",
+      "hangman helper"
+    ],
+    "faq": [
+      {
+        "q": "What's the difference between Word Finder and the solvers?",
+        "a": "Word Finder takes a pattern (like c?t) and returns matches. The solvers encode game-specific logic (Wordle colours, crossword grids) on top of pattern search."
+      },
+      {
+        "q": "Can I use these during a live puzzle?",
+        "a": "Yes — the tools run in your browser, no server round-trips. Instant answers."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "scrabble",
+      "unscramble",
+      "word-families"
+    ]
+  },
+  "tools": [
+    {
+      "id": "word-finder",
+      "slug": "word-finder",
+      "category": "word-tools",
+      "url": "/word-tools/word-finder/",
+      "title": "Word Finder by Letters — Kefiw",
+      "h1": "Word Finder by Letters",
+      "current_word_count": 109,
+      "current": {
+        "description": "Find words that can be made from a specific set of letters, with optional minimum and maximum length filters.",
+        "keywords": [
+          "word finder",
+          "find words with letters",
+          "word maker"
+        ],
+        "intro": "Enter the letters you have (including blanks as ?) and filter by word length. Useful for Scrabble, Words With Friends, and general word puzzles. For prefix, suffix, or substring searches, use the dedicated Words Starting With, Words Ending With, or Words Containing tools.",
+        "outcomeLine": "Pattern-match with ? and * across the whole dictionary.",
+        "howTo": [
+          "Enter your available letters (2–15 characters).",
+          "Use ? for each blank tile.",
+          "Optionally set a minimum and maximum word length.",
+          "Tap any result to copy it."
+        ],
+        "examples": [
+          {
+            "title": "Input: RSTLNE?",
+            "body": "Returns ELDEST, LETTERS, RELENTS, STERN…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many blanks can I use?",
+            "a": "Up to 2 — same as real Scrabble."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "letters (a-z plus `?` for blanks) OR a fixed-length pattern (a-z plus `?`/`_`/`.` as wildcards)",
+        "output_type": "array of dictionary words matching either the letter rack (with min/max length filters) or the positional pattern",
+        "processing_steps": [
+          "Load the chosen word list on first use: Game list = ENABLE1 or Full list = dict.txt.",
+          "If search mode is \"Letters\": strip whitespace, call the `unscramble` worker with minLen/maxLen — same rack-fit logic as Word Unscrambler but with separate length bounds.",
+          "If search mode is \"Pattern\": pattern length fixes the candidate word length. For each dictionary word of that length, call `matchesPattern` — any position whose pattern char is `?`, `_`, or `.` accepts any letter; other positions must match exactly (case-insensitive).",
+          "Letters mode sorts by length descending then alphabetically; Pattern mode returns in the source word-list order (effectively alphabetical from the dictionary file).",
+          "Optional Scrabble + WWF score display when toggled.",
+          "Lightweight variants (`5-letter-word-finder`, `6-letter-word-finder`, `7-letter-word-finder`) lock the pattern length to 5/6/7 and hide the min/max controls."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`) — \"Full list\" mode."
+        ],
+        "fallback_behavior": "Empty input returns no results. No automatic min-length fallback (unlike Word Unscrambler). No phonetic fallback.",
+        "known_limitations": [
+          "Pattern mode matches exact-length candidates only — a 4-character pattern cannot match a 5-letter word.",
+          "Pattern wildcards (`?`, `_`, `.`) are single-character only — no regex quantifiers, no character classes.",
+          "Letters mode does not support a \"must include these letters\" constraint — use Words Containing for substring matching instead.",
+          "No position-aware scoring, no premium-square modelling.",
+          "Neither word list includes proper nouns, abbreviations, or acronyms.",
+          "Does not deduplicate between the two word lists — switching mode refetches and rebuilds the index."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "letters or pattern (single-line text input, font-mono, autofocused; maxLength is locked on the 5/6/7-letter variants)",
+            "min length: dropdown 2–8 (letters mode only; hidden on locked-length variants)",
+            "max length: dropdown 5–15 (letters mode only; hidden on locked-length variants)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "search by: Letters | Pattern",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Summary card: match count, with the pattern echoed when in Pattern mode",
+            "Stats card: mode, longest, shortest, best Scrabble, best WWF; plus wildcard and fixed-char counts in Pattern mode",
+            "Comparison card: count by word length (top 4 lengths)",
+            "Takeaway (conditional): most common result length",
+            "Result list — grouped by length when scores are off, flat when scores are on",
+            "Next-step card linking to Words Starting With / Ending With / Containing"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Two search modes: Letters (anagram-style with min/max length) and Pattern (positional, fixed length)",
+            "Accepts single-letter wildcards (`?`, `_`, `.`) in Pattern mode",
+            "Supports blanks (`?`) in Letters mode",
+            "Offers a compact game list (ENABLE1) and a broader dictionary (dict.txt)",
+            "Runs entirely in the browser",
+            "Powers the 5-, 6-, and 7-letter variants with the pattern length locked"
+          ],
+          "claim_forbidden": [
+            "Regex-style patterns (quantifiers, character classes)",
+            "Prefix/suffix/substring search — those are separate tools",
+            "Scrabble/WWF board modelling, premium squares, or hook plays",
+            "Proper nouns, slang, or acronyms"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "wordle-solver",
+      "slug": "wordle-solver",
+      "category": "word-tools",
+      "url": "/word-tools/wordle-solver/",
+      "title": "Wordle Solver — Green / Yellow / Gray Narrowing — Kefiw",
+      "h1": "Wordle Solver",
+      "current_word_count": 218,
+      "current": {
+        "description": "Narrow Wordle candidates by entering greens (letter + position), yellows (letter present but wrong spot), and gray letters.",
+        "keywords": [
+          "wordle solver",
+          "wordle helper",
+          "wordle cheat",
+          "wordle tool",
+          "wordle assistant"
+        ],
+        "intro": "Type each guessed letter into its position, tap to cycle green / yellow / gray, and add any letters you know are not in the word. The candidate list updates instantly.",
+        "outcomeLine": "Feed in greens, yellows, and greys — get a narrowed list instantly.",
+        "howTo": [
+          "Enter the letter in each box — the box defaults to green (correct position).",
+          "Tap the caption below any box to cycle through green → yellow (present, wrong spot) → empty.",
+          "Add fully-gray letters (not in the word) in the wrong-letters field.",
+          "Use the frequency tip to pick a guess that eliminates the most remaining candidates."
+        ],
+        "examples": [
+          {
+            "title": "CRANE guess",
+            "body": "If C and A are yellow and the rest are gray, enter C (yellow), A (yellow) at their positions, and RNE in the wrong-letters box. The solver narrows to all 5-letter words containing C and A but without R, N, or E."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does this cheat at Wordle?",
+            "a": "It is a solver, not an auto-submit bot. It narrows candidates — you still choose which one to play."
+          },
+          {
+            "q": "Which dictionary is used?",
+            "a": "The game-style ENABLE list, which is close to the Wordle accepted-guess list."
+          },
+          {
+            "q": "Can the same letter be both green and yellow in one guess?",
+            "a": "Yes — if a letter appears twice in the answer, one can be green and another yellow."
+          }
+        ],
+        "relatedIds": [
+          "5-letter-word-finder",
+          "anagram-solver",
+          "word-finder",
+          "hangman-solver"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "five-slot row where each slot has a letter (a-z) and a colour state (green = correct position, yellow = wrong position, empty = unused), plus a free-text list of gray (excluded) letters",
+        "output_type": "array of every 5-letter candidate word satisfying all green, yellow, and excluded-letter constraints, in worker-returned order (effectively alphabetical)",
+        "processing_steps": [
+          "Build a 5-character green pattern: for each slot that is green with a letter, use that letter; otherwise `?`.",
+          "Send the pattern to the worker's `pattern` handler with `dictSource: \"fast\"` (ENABLE1).",
+          "Collect yellow requirements: each yellow slot contributes `{ letter, notAt: slotIndex }`.",
+          "Normalize the gray / excluded letters: lowercase, strip non-letters, then remove any letter that is already green or yellow (those cannot simultaneously be excluded).",
+          "Client-side filter the pattern results: every yellow letter must appear in the candidate, but not at its slot index; no excluded letter may appear anywhere.",
+          "No result cap. No debounce — recomputes synchronously on every slot/exclusion change.",
+          "Compute a follow-up hint from the remaining candidate count (1 → \"only one word\", ≤5 → \"pick a word that tests new letters\", else → \"eliminate common vowels/consonants\")."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries). Hardcoded — no Full-list toggle on this tool."
+        ],
+        "fallback_behavior": "Empty slots produce the pattern `?????`, which matches every 5-letter ENABLE1 word; the candidate list loads as soon as the tool mounts. No alternative dictionary.",
+        "known_limitations": [
+          "Fixed to five letters — cannot be used for non-standard Wordle variants (e.g. 4-letter mini, 6-letter, 7-letter Xordle).",
+          "Uses ENABLE1 as a proxy for Wordle's accepted-guess list. ENABLE1 overlaps heavily with Wordle but is not identical: a handful of Wordle-legal words may be missing and a few ENABLE1 words may not be Wordle-legal.",
+          "Does not model Wordle's \"answer\" list (the curated ~2,300 daily answers) — all 5-letter ENABLE1 entries are candidates, including obscure words that Wordle never uses as the day's answer.",
+          "Duplicate-letter scoring nuance is respected only partly: a yellow letter requires at least one occurrence elsewhere, but the tool does not count exact duplicate letter counts. If the answer has two Es and your guess has three, all three will filter the same way.",
+          "No \"hard mode\" enforcement (Wordle's rule that subsequent guesses must use known green/yellow letters).",
+          "No guess-quality ranking beyond a text takeaway hint — does not suggest the optimal next guess by information gain.",
+          "Does not include proper nouns, abbreviations, or recent dictionary additions beyond ENABLE1."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "5 letter slots (single-character inputs, uppercase display, font-mono, tap-to-cycle caption underneath each)",
+            "gray/wrong letters (single-line text input, font-mono; accepts any number of letters)"
+          ],
+          "filters": [
+            "per-slot colour toggle: empty | green | yellow (cycles when the caption button below each slot is tapped; auto-sets to green when a letter is typed into an empty slot)"
+          ],
+          "outputs": [
+            "Summary card: candidate count",
+            "Stats card: candidates, highest-scoring candidate (Scrabble value), green count, yellow count",
+            "Takeaway card: strategy hint tuned to candidate-count buckets (1 / ≤5 / many)",
+            "Result list of remaining candidates (worker order; no scores)",
+            "Reset button (clears all slots + grays)",
+            "Next-step card linking to 5-Letter Finder and Anagram Solver"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Narrows 5-letter Wordle candidates by green (correct position), yellow (wrong position), and gray (excluded) constraints",
+            "Uses the ENABLE1 word list as a close proxy for Wordle's accepted-guess list",
+            "Offers a candidate-count-tuned strategy hint",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Uses the official Wordle answer list or the NYT accepted-guess list verbatim",
+            "Enforces Wordle hard-mode rules",
+            "Ranks guesses by information gain or any solver algorithm",
+            "Counts duplicate-letter frequencies exactly the way the real game does",
+            "Supports Wordle variants (4-letter, 6-letter, multi-board)",
+            "Includes proper nouns or dictionary additions beyond ENABLE1"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "crossword-solver",
+      "slug": "crossword-solver",
+      "category": "word-tools",
+      "url": "/word-tools/crossword-solver/",
+      "title": "Crossword Solver — Pattern & Wildcard Search — Kefiw",
+      "h1": "Crossword Solver",
+      "current_word_count": 141,
+      "current": {
+        "description": "Solve crossword clues by pattern. Enter the letters you have and use ? for unknown squares — every matching word appears instantly.",
+        "keywords": [
+          "crossword solver",
+          "crossword helper",
+          "crossword pattern search",
+          "crossword cheat"
+        ],
+        "intro": "Type a crossword pattern using the letters you already have and ? for each missing square. Results match the exact word length and every fixed letter.",
+        "outcomeLine": "Turn a half-solved grid slot into a clean candidate list.",
+        "howTo": [
+          "Type the letters you have, using ? for each unknown square.",
+          "Do not include spaces or punctuation.",
+          "Switch to the Letters tab if you have a set of letters without fixed positions."
+        ],
+        "examples": [
+          {
+            "title": "Pattern: ???O?AL",
+            "body": "Returns words like BIFOCAL, VIBRANT, RIPONAL, and other 7-letter matches."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does this handle cryptic clues?",
+            "a": "No — this is a pattern solver only. For cryptic clue parsing you still need a human brain."
+          },
+          {
+            "q": "Can I search for words that end in a given letter?",
+            "a": "Yes — type ? for every unknown and the known trailing letter at the end."
+          }
+        ],
+        "relatedIds": [
+          "word-finder",
+          "5-letter-word-finder",
+          "6-letter-word-finder",
+          "7-letter-word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "crossword pattern — fixed letters (a-z) plus `?` / `_` / `.` for unknown squares; pattern length equals word length",
+        "output_type": "array of every dictionary word matching the positional pattern",
+        "processing_steps": [
+          "Renders the shared `WordFinder` component (same as Word Finder and Pattern Solver). Matching logic is the worker's `pattern` handler.",
+          "Load the chosen word list on first use: Game list = ENABLE1 or Full list = dict.txt.",
+          "Pattern length fixes the candidate word length.",
+          "For each same-length dictionary word, `matchesPattern` checks that every non-wildcard position matches exactly (case-insensitive).",
+          "Wildcards: `?`, `_`, and `.` all accept any letter at that position.",
+          "Results return in dictionary order (effectively alphabetical)."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries) — \"Full list\" mode."
+        ],
+        "fallback_behavior": "Empty pattern returns no results. No cryptic-clue parsing; no anagram fallback.",
+        "known_limitations": [
+          "Cannot parse cryptic crossword clues — this is a positional pattern matcher only. Users still need to decode the clue themselves.",
+          "Like Pattern Solver, the default search mode is \"Letters\" (shared setting with Word Finder via `kefiw.word-finder.searchBy`). A first-time visitor must switch to Pattern mode; otherwise typing a pattern runs an anagram-style search.",
+          "Single-character wildcards only — no regex.",
+          "Pattern length fixes the word length; cannot return longer or shorter matches.",
+          "No intersection/crossing-letter constraints with neighbouring crossword entries — solves one slot at a time.",
+          "Dict.txt may include archaic, technical, and inflected forms that a crossword editor would reject; flip to Game list (ENABLE1) for tighter tournament-style output."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "crossword pattern (single-line text input, font-mono, autofocused; wildcards `?`, `_`, `.` accepted)",
+            "min/max length dropdowns (only meaningful in Letters mode)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "search by: Letters | Pattern (shared setting with Word Finder)",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Summary card with match count and echoed pattern",
+            "Stats card: mode, longest, shortest, best Scrabble/WWF, wildcard count, fixed-char count",
+            "Length-distribution comparison card",
+            "Takeaway: most common length",
+            "Result list — flat with scores, length-grouped without",
+            "Next-step card linking to Pattern Solver, Anagram Solver, and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds every English word matching a fixed-length crossword pattern",
+            "Single-character wildcards (`?`, `_`, `.`)",
+            "Optional Scrabble / WWF scoring",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Parses cryptic crossword clues",
+            "Uses crossing-letter or grid context from a full puzzle",
+            "Supports regex patterns",
+            "Includes proper nouns or abbreviations"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "hangman-solver",
+      "slug": "hangman-solver",
+      "category": "word-tools",
+      "url": "/word-tools/hangman-solver/",
+      "title": "Hangman Solver — Kefiw",
+      "h1": "Hangman Solver",
+      "current_word_count": 177,
+      "current": {
+        "description": "Enter the known pattern and wrong-guessed letters. Instantly see remaining candidates and the best next guess by letter frequency.",
+        "keywords": [
+          "hangman solver",
+          "hangman helper",
+          "hangman cheat",
+          "hangman assistant"
+        ],
+        "intro": "Feed the solver what you already know — letters you have revealed and the letters you have guessed wrong. It returns every candidate word and the best next letter to guess.",
+        "outcomeLine": "Best next letter from the pattern, wrong-letter set, and length.",
+        "howTo": [
+          "Type a pattern like _A_P_Y using _ or ? for each unknown letter.",
+          "Add the letters you have already guessed and missed in the wrong-letters field.",
+          "The frequency tip shows which letter appears in the largest share of candidates — that is usually the best guess."
+        ],
+        "examples": [
+          {
+            "title": "Pattern _O_SE",
+            "body": "Wrong letters: M, B. Returns HORSE, LOOSE, GOOSE, NOOSE, etc., and suggests the letter appearing in the most remaining candidates."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why a frequency tip instead of picking a word?",
+            "a": "In hangman you guess one letter at a time. Picking the letter shared by the most remaining words maximises information, even if it is not in the \"best\" word."
+          },
+          {
+            "q": "Does it handle partial matches?",
+            "a": "It matches exact word length only. If the length is unknown, try the Word Finder first."
+          }
+        ],
+        "relatedIds": [
+          "wordle-solver",
+          "word-finder",
+          "5-letter-word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "pattern with known letters and blanks (`?`, `_`, or `-` are all treated as unknown-letter wildcards), plus a free-text list of already-guessed-wrong letters",
+        "output_type": "array of every same-length dictionary word matching the known letters and containing none of the wrong letters, plus a \"best next guess\" letter-frequency table",
+        "processing_steps": [
+          "Normalize pattern: lowercase, strip non `a-z?_-` characters, then map `_` and `-` to `?`.",
+          "Require pattern length ≥ 2; shorter patterns return no results.",
+          "Send the cleaned pattern to the worker's `pattern` handler with `dictSource: \"fast\"` (ENABLE1).",
+          "Client-side filter: drop any candidate containing any excluded letter.",
+          "Compute best-next-letter frequency: for each candidate, take the unique letters that are not already revealed in the pattern and not excluded; count how many candidates contain each; return the top 6 with count and percentage.",
+          "No debounce — recomputes on every pattern/exclusion change.",
+          "No result cap."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries). Hardcoded — no Full-list toggle."
+        ],
+        "fallback_behavior": "Patterns shorter than 2 characters return no results. No alternative dictionary. No pattern-relaxation fallback.",
+        "known_limitations": [
+          "Matches exact word length only — if the length of the hangman target is unknown, this tool cannot search across lengths.",
+          "Best-next-letter heuristic maximises information about the remaining candidate set but does not account for the cost of a wrong guess (e.g. number of lives left).",
+          "Does not weight candidates by frequency of use — all ENABLE1 words are equally likely as far as the solver is concerned.",
+          "Proper nouns, names, abbreviations, and many recent slang terms are not in ENABLE1, so hangman games drawn from pop culture may have no matches.",
+          "Wildcards collapse to `?` — there is no distinction between \"known to not be E\" and \"blank\"; if you need per-position negative constraints, use Wordle Solver instead.",
+          "Hardcoded to the fast word list; users cannot switch to the broader dict.txt."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "pattern (single-line text input, font-mono, autofocused; `?`, `_`, or `-` accepted as blanks)",
+            "wrong letters (single-line text input, font-mono)"
+          ],
+          "filters": [],
+          "outputs": [
+            "Summary card: candidate count with echoed pattern",
+            "Best-next-guess comparison card: top 6 letters by frequency with percent and count",
+            "Stats card: candidates, pattern length, wrong-letter count, highest-scoring candidate",
+            "Takeaway card: \"only one word fits\" when 1 candidate, else top-frequency letter hint",
+            "Result list of remaining candidates (worker order; no scores)",
+            "Next-step card linking to Word Finder and Wordle Solver"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Matches hangman patterns with known letters and blanks",
+            "Filters out candidates containing any already-missed letter",
+            "Suggests the next letter to guess by frequency across remaining candidates",
+            "Uses the ENABLE1 word list",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Parses variable-length patterns",
+            "Includes proper nouns, place names, or recent slang",
+            "Optimises guesses for remaining lives or expected-loss minimisation",
+            "Supports `?`-per-position negative constraints (use Wordle Solver for that)",
+            "Offers a broader dictionary toggle"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "pattern-solver",
+      "slug": "pattern-solver",
+      "category": "word-tools",
+      "url": "/word-tools/pattern-solver/",
+      "title": "Word Pattern Solver — Any-Length Wildcard Search — Kefiw",
+      "h1": "Word Pattern Solver",
+      "current_word_count": 101,
+      "current": {
+        "description": "Find every English word matching a pattern of letters and ? wildcards. Any length, full and game dictionaries.",
+        "keywords": [
+          "word pattern solver",
+          "pattern search",
+          "wildcard word search",
+          "word matcher"
+        ],
+        "intro": "A flexible pattern matcher — use known letters plus ? for unknowns. Length is determined by your input.",
+        "outcomeLine": "General pattern search for any word puzzle.",
+        "howTo": [
+          "Type a pattern — known letters plus ? for any unknown position.",
+          "Pattern length equals the word length; no length selector needed.",
+          "Switch to Letters mode for letter-set anagram search instead."
+        ],
+        "examples": [
+          {
+            "title": "Pattern: c?t",
+            "body": "CAT, COT, CUT."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is the difference between this and the Word Finder?",
+            "a": "This page defaults to pattern search; Word Finder defaults to letter-set search. They are backed by the same engine."
+          }
+        ],
+        "relatedIds": [
+          "crossword-solver",
+          "word-finder",
+          "wordle-solver"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "pattern string mixing fixed letters (a-z) and `?` / `_` / `.` wildcards; length of the pattern determines word length",
+        "output_type": "array of every dictionary word whose length matches the pattern length and whose non-wildcard positions match exactly",
+        "processing_steps": [
+          "This page renders the same `WordFinder` component used by Word Finder and Crossword Solver; pattern matching runs through the worker's `pattern` handler.",
+          "Load the chosen word list on first use: Game list = ENABLE1 (~172,823 words) or Full list = dict.txt (~370,105 words).",
+          "Pattern length fixes candidate word length — the worker filters `byLen(source).get(p.length)` first, then calls `matchesPattern` per candidate.",
+          "`matchesPattern` treats any position whose pattern char is `?`, `_`, or `.` as a wildcard; other positions must match exactly (case-insensitive).",
+          "Results return in the source word-list order (effectively alphabetical from the dictionary file) — no explicit sort.",
+          "Optional inline Scrabble + WWF scoring when toggled."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries) — \"Full list\" mode."
+        ],
+        "fallback_behavior": "Empty pattern returns no results. No phonetic fallback.",
+        "known_limitations": [
+          "The underlying component defaults to \"Letters\" search mode (the setting is shared with Word Finder via `kefiw.word-finder.searchBy`). A first-time visitor must manually switch to Pattern mode to get pattern behaviour — typing a pattern while still in Letters mode will run an anagram-style search instead.",
+          "Pattern wildcards are single-character only — no regex quantifiers, no character classes.",
+          "No position-aware scoring or premium-square modelling.",
+          "Neither word list includes proper nouns, abbreviations, or acronyms.",
+          "No cross-pattern constraints (e.g. \"word length 7 AND contains Q\") — use Word Finder's Letters mode for set-based search."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "pattern (single-line text input, font-mono, autofocused)",
+            "min/max length dropdowns (only active in Letters mode; hidden/ignored when using Pattern mode since pattern length is fixed)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "search by: Letters | Pattern (shared setting with Word Finder — user must select Pattern explicitly for this page to behave as advertised)",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Summary card with match count and echoed pattern",
+            "Stats card: mode, longest, shortest, best Scrabble, best WWF, wildcard count, fixed-char count",
+            "Length-distribution comparison card",
+            "Takeaway: most common result length",
+            "Result list — flat when scores are on, length-grouped when off",
+            "Next-step card linking to Words Starting With / Ending With / Containing"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds every English word whose length matches the pattern and whose non-wildcard letters match exactly",
+            "Single-character wildcards (`?`, `_`, `.`)",
+            "Offers ENABLE1 and dict.txt word lists",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Regex-style patterns (quantifiers, character classes, alternation)",
+            "Length-variable patterns",
+            "Cryptic crossword clue parsing",
+            "Proper nouns, slang, or acronyms"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "5-letter-word-finder",
+      "slug": "5-letter-word-finder",
+      "category": "word-tools",
+      "url": "/word-tools/5-letter-word-finder/",
+      "title": "5-Letter Word Finder — Wordle-Style Pattern Search — Kefiw",
+      "h1": "5-Letter Word Finder",
+      "current_word_count": 136,
+      "current": {
+        "description": "Find every 5-letter word matching a pattern. Use ? for unknown letters — perfect for Wordle hints and crossword fills.",
+        "keywords": [
+          "5 letter word finder",
+          "5 letter words",
+          "wordle helper",
+          "five letter words"
+        ],
+        "intro": "Enter a 5-character pattern using ? for each unknown letter. Instantly see every valid 5-letter word that matches — same pattern solver used for Wordle hints.",
+        "outcomeLine": "Wordle-ready pattern search, length locked to 5.",
+        "howTo": [
+          "Type exactly 5 characters. Use letters you know for position, and ? for unknowns.",
+          "For example, C?A?R returns CHAIR, CLAIR (etc.).",
+          "Switch to Letters mode to find 5-letter words you can spell from a rack."
+        ],
+        "examples": [
+          {
+            "title": "Pattern: C?A?R",
+            "body": "CHAIR — a classic Wordle-solver pattern."
+          },
+          {
+            "title": "Pattern: ?OUSE",
+            "body": "HOUSE, MOUSE, LOUSE, ROUSE, DOUSE."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can I use this to solve Wordle?",
+            "a": "Yes. Enter known letters in position and ? for unknowns. You can narrow further with a letter-rack search."
+          },
+          {
+            "q": "Does it respect Scrabble or full English dictionary?",
+            "a": "Both — toggle the Word list switch."
+          }
+        ],
+        "relatedIds": [
+          "word-finder",
+          "6-letter-word-finder",
+          "7-letter-word-finder",
+          "scrabble-helper"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "fixed 5-character pattern (letters a-z plus `?` / `_` / `.` wildcards), OR a letter rack in Letters mode",
+        "output_type": "array of every dictionary word whose length is 5 and matches the pattern (Pattern mode), or every 5-letter word spellable from the rack (Letters mode)",
+        "processing_steps": [
+          "Uses the shared `WordFinder` component with `lockedLength={5}` — the length selectors are hidden, and the input is capped at 5 characters.",
+          "Default search mode when `lockedLength` is set is Pattern (unlike plain Word Finder / Pattern Solver / Crossword Solver, which default to Letters).",
+          "Persists mode choice under its own storage key: `kefiw.word-finder-5.searchBy` — not shared with other finders.",
+          "Load the chosen word list (ENABLE1 or dict.txt) on first use.",
+          "Pattern mode: dispatch to the worker's `pattern` handler; only 5-letter words are candidates.",
+          "Letters mode: dispatch to the worker's `unscramble` handler with min=max=5."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries) — \"Full list\" mode."
+        ],
+        "fallback_behavior": "Empty input returns no results. No phonetic fallback.",
+        "known_limitations": [
+          "Hard-locked to 5 letters — cannot find 4- or 6-letter words.",
+          "Single-character wildcards only in Pattern mode.",
+          "Letters mode respects blanks (`?`) but does not support per-position constraints — use Wordle Solver or Pattern mode for that.",
+          "Not the Wordle accepted-guess list specifically — uses ENABLE1 / dict.txt.",
+          "No proper nouns, abbreviations, or acronyms."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "5-character input (single-line, font-mono, autofocused, maxLength 5; pattern mode allows `?`/`_`/`.` wildcards)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "search by: Letters | Pattern (persisted independently per length)",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Summary card with match count",
+            "Stats card: mode, longest, shortest (always 5), best Scrabble, best WWF, wildcard count (Pattern mode)",
+            "Length-distribution card (single-length in Pattern mode)",
+            "Result list — flat with scores, length-grouped without",
+            "Next-step card linking to Words Starting With / Ending With / Containing"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Wordle-style 5-letter pattern search with single-character wildcards",
+            "Letter-rack search for 5-letter words you can spell",
+            "Game list and full dictionary word lists",
+            "Optional Scrabble/WWF scoring"
+          ],
+          "claim_forbidden": [
+            "Uses the official Wordle answer or accepted-guess list",
+            "Enforces Wordle-specific constraints (greens/yellows/grays) — that is Wordle Solver",
+            "Supports regex patterns",
+            "Includes proper nouns, names, or abbreviations"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "6-letter-word-finder",
+      "slug": "6-letter-word-finder",
+      "category": "word-tools",
+      "url": "/word-tools/6-letter-word-finder/",
+      "title": "6-Letter Word Finder — Pattern & Letter Search — Kefiw",
+      "h1": "6-Letter Word Finder",
+      "current_word_count": 82,
+      "current": {
+        "description": "Find every 6-letter word matching a pattern. Use ? for unknown letters — useful for crosswords, Scrabble, and word puzzles.",
+        "keywords": [
+          "6 letter word finder",
+          "6 letter words",
+          "six letter words"
+        ],
+        "intro": "Enter a 6-character pattern using ? for each unknown letter. Results show every valid 6-letter word that fits.",
+        "outcomeLine": "Six-letter candidates for puzzles and word games.",
+        "howTo": [
+          "Type exactly 6 characters, using ? for unknowns.",
+          "Switch to Letters mode to find 6-letter words you can spell from a rack."
+        ],
+        "examples": [
+          {
+            "title": "Pattern: ?REAM?",
+            "body": "CREAMS, DREAMS, CREAMY, DREAMY, PREAMS."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can I search by letters I have (not position)?",
+            "a": "Yes — switch to Letters mode."
+          }
+        ],
+        "relatedIds": [
+          "word-finder",
+          "5-letter-word-finder",
+          "7-letter-word-finder",
+          "scrabble-helper"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "fixed 6-character pattern with `?` / `_` / `.` wildcards, OR a letter rack in Letters mode",
+        "output_type": "array of every dictionary word whose length is 6 and matches the pattern, or every 6-letter word spellable from the rack",
+        "processing_steps": [
+          "Uses the shared `WordFinder` component with `lockedLength={6}`; length selectors hidden, input capped at 6 characters.",
+          "Default mode is Pattern. Mode persists under `kefiw.word-finder-6.searchBy`.",
+          "Load the chosen word list (ENABLE1 or dict.txt).",
+          "Pattern mode calls the worker's `pattern` handler; Letters mode calls `unscramble` with min=max=6."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`).",
+          "Broader English dictionary (`public/data/dict.txt`)."
+        ],
+        "fallback_behavior": "Empty input returns no results.",
+        "known_limitations": [
+          "Hard-locked to 6 letters.",
+          "Single-character wildcards only in Pattern mode.",
+          "No position-constrained Letters mode.",
+          "No proper nouns, abbreviations, or acronyms."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "6-character input (maxLength 6, font-mono, autofocused)"
+          ],
+          "filters": [
+            "word list: Game list | Full list",
+            "search by: Letters | Pattern (persisted per length)",
+            "show scores toggle"
+          ],
+          "outputs": [
+            "Summary / stats / result list as with other WordFinder variants",
+            "Next-step card linking to sibling prefix/suffix/substring finders"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "6-letter pattern and letter-rack search",
+            "Game list and full dictionary word lists",
+            "Optional Scrabble/WWF scoring"
+          ],
+          "claim_forbidden": [
+            "Length-variable search — use Word Finder for that",
+            "Regex patterns",
+            "Proper nouns or abbreviations"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "7-letter-word-finder",
+      "slug": "7-letter-word-finder",
+      "category": "word-tools",
+      "url": "/word-tools/7-letter-word-finder/",
+      "title": "7-Letter Word Finder — Bingo Candidates — Kefiw",
+      "h1": "7-Letter Word Finder",
+      "current_word_count": 118,
+      "current": {
+        "description": "Find every 7-letter word matching a pattern. Essential for Scrabble bingo hunting and crossword tight fits.",
+        "keywords": [
+          "7 letter word finder",
+          "7 letter words",
+          "scrabble bingo",
+          "seven letter words"
+        ],
+        "intro": "Enter a 7-character pattern using ? for each unknown letter. In Scrabble, 7-letter plays score a 50-point bingo bonus — this is the tool to find them.",
+        "outcomeLine": "Seven-letter search for bingos and Scrabble study.",
+        "howTo": [
+          "Type exactly 7 characters, using ? for unknowns.",
+          "Switch to Letters mode and enter your rack to find 7-letter bingo candidates."
+        ],
+        "examples": [
+          {
+            "title": "Rack: RSTLNEA",
+            "body": "Switch to Letters mode for bingo candidates like ANTLERS, STERNAL, SALTERN…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is a bingo?",
+            "a": "In Scrabble, playing all seven tiles in a single turn earns a 50-point bonus on top of the word score."
+          },
+          {
+            "q": "Can I use blanks?",
+            "a": "Yes — use ? in Letters mode for each blank on your rack."
+          }
+        ],
+        "relatedIds": [
+          "word-finder",
+          "5-letter-word-finder",
+          "6-letter-word-finder",
+          "scrabble-helper"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "fixed 7-character pattern with `?` / `_` / `.` wildcards, OR a letter rack in Letters mode",
+        "output_type": "array of every dictionary word whose length is 7 and matches the pattern, or every 7-letter word spellable from the rack — the core use case is finding Scrabble bingo candidates",
+        "processing_steps": [
+          "Uses the shared `WordFinder` component with `lockedLength={7}`; length selectors hidden, input capped at 7 characters.",
+          "Default mode is Pattern. Mode persists under `kefiw.word-finder-7.searchBy`.",
+          "Load the chosen word list (ENABLE1 or dict.txt).",
+          "Pattern mode calls the worker's `pattern` handler; Letters mode calls `unscramble` with min=max=7."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`).",
+          "Broader English dictionary (`public/data/dict.txt`)."
+        ],
+        "fallback_behavior": "Empty input returns no results.",
+        "known_limitations": [
+          "Hard-locked to 7 letters.",
+          "No Scrabble board context (hooks, premium squares, parallel plays) — this is a word-list filter, not a rack helper. Use Scrabble Helper for actual play ranking with the +50 bingo bonus.",
+          "Single-character wildcards only in Pattern mode.",
+          "No proper nouns, abbreviations, or acronyms."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "7-character input (maxLength 7, font-mono, autofocused)"
+          ],
+          "filters": [
+            "word list: Game list | Full list",
+            "search by: Letters | Pattern (persisted per length)",
+            "show scores toggle"
+          ],
+          "outputs": [
+            "Summary / stats / result list as with other WordFinder variants; Scrabble/WWF best-score cells highlight bingo candidates when scores are on",
+            "Next-step card linking to Scrabble Helper and Anagram Solver"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "7-letter pattern and letter-rack search — the standard Scrabble bingo length",
+            "Game list and full dictionary word lists",
+            "Optional Scrabble/WWF scoring (though scores here do NOT include the +50 bingo bonus; that is applied only in Scrabble Helper)"
+          ],
+          "claim_forbidden": [
+            "Applies the Scrabble bingo bonus (+50) — this tool scores tiles only, not plays; use Scrabble Helper for bonus-aware ranking",
+            "Models a Scrabble board or premium squares",
+            "Regex patterns",
+            "Proper nouns or abbreviations"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cS-wildcard-patterns-word-finder",
+      "slug": "wildcard-patterns-in-word-finder",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/wildcard-patterns-in-word-finder/",
+      "title": "Wildcard Patterns in Word Finder — ? and * Explained",
+      "h1": "Wildcard Patterns in Word Finder",
+      "subhead": "How the ? and * wildcards really work, with worked examples.",
+      "current_word_count": 304,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Learn how the ? (single letter) and * (any run of letters) wildcards work in word-finding tools, with pattern examples for Scrabble, Wordle, and crosswords.",
+        "keywords": [
+          "wildcard pattern word finder",
+          "? wildcard word search",
+          "* wildcard word finder",
+          "pattern match words"
+        ],
+        "outcomeLine": "Master two symbols and you can describe almost any word-shape search.",
+        "intro": "Wildcards turn a word finder into a pattern engine. Two symbols — ? for a single unknown letter and * for any number of letters — cover almost every real search you need.",
+        "keyPoints": [
+          "? stands for exactly one letter. \"C?T\" matches CAT, COT, CUT — but not CART.",
+          "* stands for zero or more letters. \"C*T\" matches CT, CAT, CART, CONTEST.",
+          "Mix them: \"?A*E\" matches any word whose second letter is A and last letter is E.",
+          "Anchors matter: \"*ING\" finds ING-endings; \"ING*\" finds ING-starters.",
+          "For Wordle-style searches, ? is almost always what you want — fixed length, unknown letters."
+        ],
+        "examples": [
+          {
+            "title": "C?T",
+            "body": "Three letters, middle unknown. Matches CAT, COT, CUT."
+          },
+          {
+            "title": "C*T",
+            "body": "Starts C, ends T, any middle. Matches CT, CAT, COAST, CONTEST, CONFIDENT."
+          },
+          {
+            "title": "?A??E",
+            "body": "Five letters, second A, fifth E. Useful Wordle pattern when you know two green letters."
+          },
+          {
+            "title": "*TION",
+            "body": "Any word ending in TION — good for finding long suffix words."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-finder",
+            "note": "The general wildcard-pattern tool. Supports ? and * for any length."
+          },
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "Locks length to 5. Use ? only (no * needed) for Wordle-style patterns."
+          },
+          {
+            "toolId": "crossword-solver",
+            "note": "Takes the grid slot pattern with dots or ?s for blank squares."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is the difference between ? and *?",
+            "a": "? is exactly one letter. * is any number of letters, including zero. Use ? when you know the word's length; use * when you don't."
+          },
+          {
+            "q": "Can I combine wildcards with known letters?",
+            "a": "Yes — that is the point. \"PR??Y\" finds 5-letter words starting PR and ending Y. The more letters you pin down, the fewer matches you get."
+          }
+        ],
+        "relatedIds": [
+          "word-finder",
+          "crossword-solver",
+          "wordle-solver",
+          "cS-5-letter-word-finder-guide",
+          "cS-crossword-pattern-logic"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-5-letter-word-finder-guide",
+      "slug": "how-to-use-a-5-letter-word-finder",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-use-a-5-letter-word-finder/",
+      "title": "How to Use a 5-Letter Word Finder — Wordle and Beyond",
+      "h1": "How to Use a 5-Letter Word Finder",
+      "subhead": "From a few known letters to a clean shortlist.",
+      "current_word_count": 307,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Step-by-step guide to using a 5-letter word finder for Wordle, Quordle, and other fixed-length word puzzles.",
+        "keywords": [
+          "5 letter word finder how to",
+          "five letter word finder guide",
+          "wordle word finder"
+        ],
+        "outcomeLine": "Feed in what you know, read out what fits — that is the whole workflow.",
+        "intro": "A 5-letter word finder is purpose-built for Wordle-style puzzles. Lock the length, pin the letters you know, and let the tool enumerate the remaining candidates.",
+        "keyPoints": [
+          "Enter one ? for each unknown position — \"?A??E\" means five letters with A in slot 2 and E in slot 5.",
+          "Use the \"contains\" field for yellow letters: letter must appear, but not in this position.",
+          "Use the \"excludes\" field for grey letters: these letters cannot appear anywhere.",
+          "Starter words do not matter as much as narrowing well — pick the starter that exposes frequent letters (E, A, R, O, T).",
+          "A good second guess removes half the remaining list, not just confirms one more letter."
+        ],
+        "examples": [
+          {
+            "title": "Day 1 — Green T in slot 3",
+            "body": "Pattern \"??T??\". Maybe 300+ matches — too broad. Combine with yellow/excludes to shrink."
+          },
+          {
+            "title": "Day 2 — Green S, T + yellow A",
+            "body": "Pattern \"S?T??\" with contains \"A\". Drops the list to ~30 candidates. Pickable."
+          },
+          {
+            "title": "Day 3 — Near solve",
+            "body": "Pattern \"STA??\" with excludes \"RIOU\". Usually one or two candidates."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "Length is locked to 5. Best choice for Wordle, Quordle, Octordle, Squardle."
+          },
+          {
+            "toolId": "wordle-solver",
+            "note": "Same engine, with a grid UI that mirrors the Wordle colour feedback."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "Generic wildcard finder — switch here if you need a non-5 length."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What starter word does a solver recommend?",
+            "a": "CRANE, SLATE, RAISE, and SOARE are all evidence-based strong starters — they expose high-frequency letters across five slots."
+          },
+          {
+            "q": "Is using a finder cheating?",
+            "a": "It depends on how you use it. Narrowing after you have spent your own guesses is a learning aid; getting an answer before your first guess is not Wordle."
+          }
+        ],
+        "relatedIds": [
+          "5-letter-word-finder",
+          "wordle-solver",
+          "cS-wildcard-patterns-word-finder",
+          "cS-wordle-green-yellow-gray",
+          "cE-wordle-strategy"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-wordle-green-yellow-gray",
+      "slug": "wordle-green-yellow-gray-explained",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/wordle-green-yellow-gray-explained/",
+      "title": "Wordle Green, Yellow, Gray — Exactly What They Mean",
+      "h1": "Wordle Green, Yellow, Gray",
+      "subhead": "The three colours, the subtleties, and the duplicate-letter trap.",
+      "current_word_count": 351,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Plain-English explanation of Wordle's green, yellow, and gray feedback colours, including how duplicate letters are handled.",
+        "keywords": [
+          "wordle green yellow gray",
+          "wordle colours explained",
+          "wordle duplicate letters"
+        ],
+        "outcomeLine": "Read the colours correctly and you never waste a guess on a dead branch.",
+        "intro": "Wordle gives you three signals per letter. Understanding exactly what each colour means — especially with duplicate letters — is the difference between confident solves and wasted guesses.",
+        "keyPoints": [
+          "Green: the letter is in the word AND in this exact position. Lock it; it will not move.",
+          "Yellow: the letter is in the word but NOT in this position. It is elsewhere. Move it.",
+          "Gray: the letter is NOT in the word — with one big exception for duplicates.",
+          "Duplicate trap: if you guess two Es and only one is in the word, one goes green/yellow and the other goes gray. The gray one does NOT mean \"no E anywhere\".",
+          "Once a letter is green, keep it green in every subsequent guess unless you are deliberately probing."
+        ],
+        "examples": [
+          {
+            "title": "Clean case",
+            "body": "Guess SLATE, word is BLAST. L green, A green, S yellow (wrong position), T yellow, E gray. Next guess places S and T correctly."
+          },
+          {
+            "title": "Duplicate letter",
+            "body": "Guess LEVEL, word is EARLY. First L gray, first E yellow, V gray, second E gray, second L yellow. The second E being gray does NOT mean \"no E\"; you already got a yellow E."
+          },
+          {
+            "title": "Green first",
+            "body": "Letters locked green stay in position. Guessing around them focuses on remaining slots."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "wordle-solver",
+            "note": "Takes the exact green/yellow/gray feedback and produces the narrowed list."
+          },
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "If you prefer pattern-style entry (??T??, contains A, excludes RIO), this is the tool."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why did my repeated letter go gray when the word has one?",
+            "a": "Wordle only highlights the copies that match. If the word has one E and you guess two, one is coloured and the other is gray as a \"no second E\" signal, not \"no E anywhere\"."
+          },
+          {
+            "q": "Can a letter turn green on one guess and gray on the next?",
+            "a": "No. Green means \"correct letter, correct position\" — once green, always green. If you see this, you are misreading a later guess."
+          }
+        ],
+        "relatedIds": [
+          "wordle-solver",
+          "5-letter-word-finder",
+          "cS-5-letter-word-finder-guide",
+          "cE-wordle-strategy"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-crossword-pattern-logic",
+      "slug": "crossword-pattern-logic",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/crossword-pattern-logic/",
+      "title": "Crossword Pattern Logic — From Grid Slot to Shortlist",
+      "h1": "Crossword Pattern Logic",
+      "subhead": "Turning a half-solved grid into a precise solver query.",
+      "current_word_count": 314,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How crossword solvers use patterns from the grid and how to translate intersecting letters into accurate solver input.",
+        "keywords": [
+          "crossword pattern logic",
+          "crossword solver pattern",
+          "crossword grid pattern"
+        ],
+        "outcomeLine": "Read the grid, type the pattern, pick the entry — crossword solving becomes mechanical.",
+        "intro": "A crossword solver is not a magic answer machine — it is a pattern-match engine. The more grid intersections you have, the more constrained the pattern, and the shorter the output list.",
+        "keyPoints": [
+          "Each blank square is a ? (or .) in the pattern. Each filled square is the letter already there.",
+          "Crossings are gold: a single confirmed letter from the perpendicular word cuts candidates dramatically.",
+          "Clue category matters: the solver cannot read the clue, so plug the category (country, verb, nautical term) into your head, not the search.",
+          "Watch for British vs. American spellings when the source crossword is from the NYT, Times, or Guardian — the dictionary matters.",
+          "If no match, one of your existing letters is wrong. Re-check the crossings before retrying."
+        ],
+        "examples": [
+          {
+            "title": "Pattern C?????E (7 letters)",
+            "body": "Starts C, ends E. Dozens of candidates. Add one more crossing letter and the list collapses."
+          },
+          {
+            "title": "Pattern ?OA?T (5 letters)",
+            "body": "Almost certainly COAST, ROAST, TOAST, or BOAST. Clue context picks one."
+          },
+          {
+            "title": "Crossing check",
+            "body": "Stuck with \"???Q?ET\" and no match? The Q is likely wrong — recheck the down-word that put it there."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "crossword-solver",
+            "note": "Built for this exact workflow — pattern in, candidates out, sorted by length or frequency."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "Use when you need a longer list or custom length/position constraints."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What if the solver returns no matches?",
+            "a": "You have a wrong letter somewhere. Either the clue category is mis-guessed, or one of your crossings is in error. Recheck before assuming the word is obscure."
+          },
+          {
+            "q": "Does it matter which dictionary the solver uses?",
+            "a": "Yes — British cryptics allow British-only spellings (COLOUR, DEFENCE), while American crosswords often do not. Match the solver's dictionary to the puzzle source."
+          }
+        ],
+        "relatedIds": [
+          "crossword-solver",
+          "word-finder",
+          "cS-wildcard-patterns-word-finder",
+          "cE-crossword-pattern-tips"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-hangman-pattern-logic",
+      "slug": "hangman-pattern-logic",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/hangman-pattern-logic/",
+      "title": "Hangman Pattern Logic — Best Next Guess, Every Time",
+      "h1": "Hangman Pattern Logic",
+      "subhead": "Why a solver asks for the pattern, wrong letters, and length — and what it does with them.",
+      "current_word_count": 355,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How hangman solvers combine the revealed-letter pattern, wrong-letter list, and word length to pick optimal next guesses.",
+        "keywords": [
+          "hangman pattern logic",
+          "hangman solver how it works",
+          "best hangman guess"
+        ],
+        "outcomeLine": "Three inputs, one candidate list, the most frequent next letter — that is the whole game.",
+        "intro": "Hangman is a coverage game. Every guess either reveals a position or burns a life. The best next letter is the one that covers the most remaining candidate words — not the one that appears most often in English overall.",
+        "keyPoints": [
+          "Pattern: use _ or ? for unrevealed positions, keep the revealed letters in place. Length is locked by the pattern itself.",
+          "Wrong letters: everything you have already guessed and missed. These are excluded from every position.",
+          "The solver filters every word of the right length that matches the pattern and excludes the wrong-letter set.",
+          "Next best guess = the letter that appears in the most remaining candidates, not the most common letter overall.",
+          "Vowels first is a rule of thumb for short words; for longer words, coverage analysis beats heuristics."
+        ],
+        "examples": [
+          {
+            "title": "Pattern _ A _ _",
+            "body": "Four letters, A in slot 2. Hundreds of matches. After excluding E, I, O, U misses, a targeted consonant is next."
+          },
+          {
+            "title": "Pattern _ A _ _ _, wrong = [E, I, O]",
+            "body": "Five letters, A in slot 2, no E/I/O. Dozens of candidates. Try R, N, S, or T in order of remaining-candidate coverage."
+          },
+          {
+            "title": "Near-solve",
+            "body": "Pattern C _ A _ T — CHART or COAST. Distinguish with H vs. O."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "hangman-solver",
+            "note": "Built for this workflow — pattern, wrong letters, length → best next guess."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "Use when you want to browse the full candidate list, not just the recommended next letter."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why does the solver sometimes recommend an uncommon letter?",
+            "a": "It is choosing coverage over frequency. If the remaining 20 candidates all contain Y, Y is a guaranteed reveal — better than a common letter that only covers half."
+          },
+          {
+            "q": "What if the word is a proper noun?",
+            "a": "Most solver dictionaries exclude proper nouns. If the host is using names, standard-dictionary solvers will return no matches — play heuristically instead."
+          }
+        ],
+        "relatedIds": [
+          "hangman-solver",
+          "word-finder",
+          "cS-wildcard-patterns-word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-5-letter-opening-strategy",
+      "slug": "best-opening-strategy-for-5-letter-word-games",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-opening-strategy-for-5-letter-word-games/",
+      "title": "Best Opening Strategy for 5-Letter Word Games — Wordle and Variants",
+      "h1": "Best Opening Strategy for 5-Letter Word Games",
+      "subhead": "Why starter choice matters less than second-guess quality.",
+      "current_word_count": 306,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Opening strategies for Wordle-style 5-letter games — starter words, second-guess planning, and the \"information-theoretic\" approach.",
+        "keywords": [
+          "wordle opening strategy",
+          "best wordle starter",
+          "5 letter word game strategy"
+        ],
+        "outcomeLine": "Open with a letter-frequency word, then narrow hard on guess two — that is the whole strategy.",
+        "intro": "The best opening word for Wordle has been argued mathematically and casually. The honest answer is: almost any letter-frequency starter works — what matters is how you use the feedback on guess two.",
+        "keyPoints": [
+          "Strong starters: CRANE, SLATE, SOARE, RAISE, ADIEU — all expose 3+ common letters.",
+          "A good starter reveals 2 greens and/or 2 yellows on average. That is enough to plan guess two.",
+          "Guess two should NOT repeat greens — use it to expose new letters, not confirm.",
+          "If guess one shows 0 letters, your second guess should use 5 entirely new letters (e.g. CRANE then MIGHT).",
+          "The difference between top starters and average ones is ~0.1 guesses per game — less than most people think."
+        ],
+        "examples": [
+          {
+            "title": "CRANE → no greens",
+            "body": "Try MIGHT next. Five new letters, covers M/I/G/H/T. Combined coverage after two guesses: 10 distinct letters."
+          },
+          {
+            "title": "CRANE → R green in slot 2, A yellow",
+            "body": "Guess two: keep R, move A, add new letters. Pattern ?R??? contains A excludes CNE. Try \"PRAYS\" or \"DRIPS\"."
+          },
+          {
+            "title": "CRANE → all grey",
+            "body": "Unusual answer. Your second guess should pick from less common letters (U, O, Y, H)."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "wordle-solver",
+            "note": "After your opening guess, plug in the feedback and get the best second-guess candidates."
+          },
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "For pattern-based second-guess planning when you already know greens and yellows."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is there a mathematically optimal starter?",
+            "a": "SALET is the information-theoretic optimum for the standard Wordle answer list. Practical difference vs. CRANE or RAISE is tiny — maybe 0.05 guesses per game."
+          },
+          {
+            "q": "Should I always use the same starter?",
+            "a": "Yes, unless you want to stay sharp. Consistent starters let you build intuition for the second-guess patterns."
+          }
+        ],
+        "relatedIds": [
+          "wordle-solver",
+          "5-letter-word-finder",
+          "cS-5-letter-word-finder-guide",
+          "cS-wordle-green-yellow-gray",
+          "cE-wordle-strategy"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-common-5-letter-starts",
+      "slug": "common-5-letter-starts",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/common-5-letter-starts/",
+      "title": "Common 5-Letter Word Starts — The Opening Clusters",
+      "h1": "Common 5-Letter Word Starts",
+      "subhead": "The first-two-letter patterns that carry 5-letter vocabulary.",
+      "current_word_count": 251,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most common opening letter pairs for 5-letter words, and the rarer ones worth remembering for puzzle shortlists.",
+        "keywords": [
+          "common 5 letter starts",
+          "5 letter word beginnings",
+          "wordle word starts"
+        ],
+        "outcomeLine": "Know the common openings and Wordle or pattern-search starts from a strong shortlist.",
+        "intro": "The first one or two letters of a 5-letter word are surprisingly informative. A handful of opening clusters cover most of the common vocabulary — knowing them makes pattern searches much faster.",
+        "keyPoints": [
+          "S- starts: over 500 5-letter words. STALE, SMART, SHEEP.",
+          "C-, P-, B-, T-, M- each have 200+ 5-letter words.",
+          "2-letter clusters: ST-, CH-, SH-, TH-, TR-, CR-, BR-, BL-, GR- all carry hundreds of words.",
+          "Vowel starts (A-, E-, I-, O-, U-): roughly 100-200 words each, led by A.",
+          "Rare starts (X-, Z-, Q-, J-): 5-10 5-letter words each. If Wordle shows these, the answer is nearly pinned."
+        ],
+        "examples": [
+          {
+            "title": "Pattern CH???",
+            "body": "CHAIR, CHEEK, CHOMP, CHORD, CHURN. Over 60 matches."
+          },
+          {
+            "title": "Pattern ST???",
+            "body": "STORE, STEAM, STACK, STORM, STUFF. Over 100 matches."
+          },
+          {
+            "title": "Pattern Z????",
+            "body": "ZEBRA, ZILCH, ZESTY, ZONAL. Usually under 10 matches."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "Enter CH???, ST???, SH??? and get the filtered list instantly."
+          },
+          {
+            "toolId": "words-starting-with",
+            "note": "For broader vocabulary browsing — any length."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For start + other constraints (starts ST-, contains E)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does Wordle favour common starting letters?",
+            "a": "Somewhat — the official answer list skews toward common vocabulary, so S, C, P, T starts are overrepresented vs. raw dictionary."
+          },
+          {
+            "q": "Is any cluster a dead giveaway?",
+            "a": "JU-, QU-, ZE-, XI- each narrow to under 10 answers. If Wordle reveals these first two, the candidate list is tiny."
+          }
+        ],
+        "relatedIds": [
+          "5-letter-word-finder",
+          "words-starting-with",
+          "word-finder",
+          "cS-common-5-letter-endings",
+          "cS-5-letter-word-finder-guide"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-common-5-letter-endings",
+      "slug": "common-5-letter-endings",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/common-5-letter-endings/",
+      "title": "Common 5-Letter Word Endings — For Wordle and Word Puzzles",
+      "h1": "Common 5-Letter Word Endings",
+      "subhead": "The last-two-letter patterns that cover most of the 5-letter dictionary.",
+      "current_word_count": 271,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most common endings for 5-letter words — useful for Wordle and pattern-based puzzle solving.",
+        "keywords": [
+          "common 5 letter endings",
+          "wordle word endings",
+          "5 letter words ending"
+        ],
+        "outcomeLine": "A dozen endings cover a huge share of 5-letter words — memorise them and pattern-search narrows fast.",
+        "intro": "If you know the last two letters of a 5-letter word, the list shrinks to a handful of candidates. Knowing which 2-letter endings are common lets you guess smart when Wordle gives you the last two greens first.",
+        "keyPoints": [
+          "-Y endings: over 300 5-letter words. DUSTY, HAPPY, FUNNY.",
+          "-ES endings: 5-letter plurals and verbs. GRAPES, TESTS (4 letters), CUBES.",
+          "-ER endings: 5-letter comparatives and agent nouns. OTHER, NEVER, LATER.",
+          "-LY endings: 5-letter adverbs. BADLY, REPLY, ONLY (4 letters), APPLY.",
+          "-CH, -SH, -TH, -NG endings: common consonant cluster finishes."
+        ],
+        "examples": [
+          {
+            "title": "Pattern ???Y",
+            "body": "DUSTY, HAPPY, FUNNY, SORRY, MERRY. Roughly 300+ matches."
+          },
+          {
+            "title": "Pattern ???ER",
+            "body": "OTHER, NEVER, LATER, POWER, COVER. ~150 matches."
+          },
+          {
+            "title": "Rare ending",
+            "body": "??Z and ??X endings are nearly empty for 5-letter words. If Wordle reveals Z or X at the end, you are looking at 10 or fewer candidates."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "Enter ???CH, ???SH, ???Y as pattern — instant filtered list."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For longer ending patterns or combining with other constraints."
+          },
+          {
+            "toolId": "words-ending-with",
+            "note": "When you want the full ending-list, not just 5-letter."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why do some endings feel more common than they are?",
+            "a": "Recognition bias — common endings appear in everyday words, making them feel dominant. -ED and -ING are actually more frequent but 4 or 5+ letters."
+          },
+          {
+            "q": "Which ending gives the shortest Wordle shortlist?",
+            "a": "Rare consonant endings. ???OZ, ???IX, ???UV give near-empty lists. If you see these, the answer is usually one of a handful."
+          }
+        ],
+        "relatedIds": [
+          "5-letter-word-finder",
+          "word-finder",
+          "words-ending-with",
+          "cS-common-5-letter-starts",
+          "cS-5-letter-word-finder-guide"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-repeated-letter-patterns",
+      "slug": "repeated-letter-word-patterns",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/repeated-letter-word-patterns/",
+      "title": "Repeated Letter Word Patterns — The Wordle Trap and How to Read It",
+      "h1": "Repeated Letter Word Patterns",
+      "subhead": "Why the double-letter trap is harder than it looks — and how to search around it.",
+      "current_word_count": 333,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Common repeated-letter patterns in 5-letter words, including the common double-letter positions and Wordle implications.",
+        "keywords": [
+          "repeated letter patterns",
+          "double letter words",
+          "wordle repeated letter"
+        ],
+        "outcomeLine": "Repeated letters are the single hardest Wordle pattern to read — know the common doublers and you stop losing games to them.",
+        "intro": "Most players assume Wordle answers have 5 distinct letters. About 15–20% of answers contain a repeated letter — which is the #1 source of \"I was sure it was X\" failures.",
+        "keyPoints": [
+          "About 1 in 6 Wordle answers has a repeated letter. Common pairs: LL, EE, OO, SS, TT.",
+          "Repeated letter feedback is tricky: if you guess both copies and only one is correct, one goes green/yellow and the other goes grey.",
+          "The grey copy does NOT mean \"no letter here\" — it means \"no SECOND copy of this letter in this position\".",
+          "When stuck, assume a doubled letter before assuming an unusual letter. LL, EE, SS are more likely than Q or X.",
+          "Pattern search: \"EE\" in slots 2-3 plus a known S covers dozens of common answers."
+        ],
+        "examples": [
+          {
+            "title": "Double L",
+            "body": "HELLO, BELLY, HILLS, SMALL, TROLL. Very common — consider when you have one green L and are stuck."
+          },
+          {
+            "title": "Double E",
+            "body": "CHEEK, SHEEP, GREEN, AGREE, BLEED. Mid-word EE is a Wordle staple."
+          },
+          {
+            "title": "Double O",
+            "body": "BLOOM, GHOST (no — single O), SPOON, ROOMY, SCOOP. Common when OO appears in slots 2-3 or 3-4."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "wordle-solver",
+            "note": "Handles repeated-letter feedback correctly — tell it which copy was green vs. grey."
+          },
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "For direct pattern searches like ??EE? or ?LL??."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For wildcard + contains-twice style queries."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How do I search for words with exactly two of a letter?",
+            "a": "Use a wildcard pattern that places the letter in two positions — \"E?E??\" or \"?EE??\" — and browse the output."
+          },
+          {
+            "q": "Are there Wordle answers with three of the same letter?",
+            "a": "Rare but yes — ERROR has three Rs (well, R-R-O-R), and a handful of answers have three of one letter. Plan for two copies; three is edge case."
+          }
+        ],
+        "relatedIds": [
+          "wordle-solver",
+          "5-letter-word-finder",
+          "word-finder",
+          "cS-wordle-green-yellow-gray",
+          "cS-common-5-letter-endings"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-pattern-search-mistakes",
+      "slug": "pattern-search-mistakes-to-avoid",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/pattern-search-mistakes-to-avoid/",
+      "title": "Pattern Search Mistakes to Avoid — The Five Common Errors",
+      "h1": "Pattern Search Mistakes to Avoid",
+      "subhead": "When a pattern search returns nothing — or floods you — the bug is usually in your input.",
+      "current_word_count": 344,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Common mistakes when using pattern-search tools — wrong wildcards, wrong length, forgotten excludes, dictionary mismatch.",
+        "keywords": [
+          "pattern search mistakes",
+          "word finder no matches",
+          "wordle solver problems"
+        ],
+        "outcomeLine": "Most \"no matches\" results are user error, not missing vocabulary — check these five things first.",
+        "intro": "A pattern search is only as good as the pattern you give it. When it returns nothing or too many results, the issue is almost always one of five common errors. Check these in order and you will resolve 95% of stuck searches.",
+        "keyPoints": [
+          "Wrong wildcard: ? is one letter, * is zero or more. Mixing them up is the single most common error.",
+          "Wrong length: the pattern length may not match the actual word length. \"C?T\" is 3 letters — \"CAT\" fits, \"CART\" does not.",
+          "Forgot excludes: in Wordle-style searches, not excluding grey letters returns a flood of non-candidates.",
+          "Dictionary mismatch: British vs. American, Scrabble TWL vs. SOWPODS — the same search runs different results.",
+          "Capitalisation: almost all solvers are case-insensitive, but some strict tools require lowercase."
+        ],
+        "examples": [
+          {
+            "title": "No matches — check the length",
+            "body": "Pattern \"???HT\" expecting NIGHT. Pattern is 5 characters but wildcard assumes 5-letter word. Correct — try removing excludes you set."
+          },
+          {
+            "title": "Too many matches — add excludes",
+            "body": "Wordle with pattern \"?A???\" returns 500+ words. Add excludes for the 3-4 grey letters you already guessed and list drops below 50."
+          },
+          {
+            "title": "Wrong wildcard",
+            "body": "Searching \"C*T\" for 3-letter words returns CAT, COAST, CONTEST. Use \"C?T\" for exactly 3 letters."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-finder",
+            "note": "Main pattern tool — verify wildcard and length first if results look wrong."
+          },
+          {
+            "toolId": "wordle-solver",
+            "note": "For Wordle specifically, the colour-feedback UI reduces wildcard mistakes."
+          },
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "Length is locked to 5 — eliminates one of the five common errors automatically."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why does my pattern return no matches?",
+            "a": "Most often: wrong wildcard or excludes that contradict your pattern. Remove all excludes first, then re-add them one at a time."
+          },
+          {
+            "q": "How do I handle proper nouns?",
+            "a": "Most solver dictionaries exclude them. If you suspect the answer is a name, standard pattern search will fail — fall back to word association."
+          }
+        ],
+        "relatedIds": [
+          "word-finder",
+          "wordle-solver",
+          "5-letter-word-finder",
+          "cS-wildcard-patterns-word-finder",
+          "cS-wordle-green-yellow-gray"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-2-letter-words",
+      "slug": "2-letter-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/2-letter-words/",
+      "title": "2-Letter Words — Every Valid 2-Letter Scrabble Word — Kefiw",
+      "h1": "2-Letter Words",
+      "subhead": "Every valid 2-letter word in the Kefiw word list",
+      "current_word_count": 190,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete list of valid 2-letter words from the ENABLE word list, useful for Scrabble, Words With Friends, and tight board plays.",
+        "keywords": [
+          "2 letter words",
+          "two letter words",
+          "2 letter scrabble words",
+          "valid 2 letter words"
+        ],
+        "outcomeLine": null,
+        "intro": "Two-letter words are the single most important rack-clearing plays in Scrabble and Words With Friends. This is the complete alphabetical list from the Kefiw word list.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Scrabble \"bonus\" short plays",
+            "body": "QI (12), ZA (11), and XU (9) are the highest-scoring plain 2-letter words before bonus squares."
+          },
+          {
+            "title": "Vowel dumps",
+            "body": "If your rack is vowel-heavy, AA, AE, AI, OE, OI help you trade clogged tiles for fresh ones."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many 2-letter words are there in Scrabble?",
+            "a": "The official TWL list has roughly 100 valid 2-letter words; SOWPODS adds a handful more. Kefiw uses the public ENABLE list, which sits close to TWL."
+          },
+          {
+            "q": "Is \"QI\" really a word?",
+            "a": "Yes. QI (the Chinese concept of life force) was added to the official Scrabble dictionaries in the 2000s. It is one of the highest-value 2-letter plays."
+          },
+          {
+            "q": "Are 2-letter words also valid in Words With Friends?",
+            "a": "Most are, but Words With Friends uses its own internal dictionary. Use the Words With Friends Helper for exact validation."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-3-letter-words",
+      "slug": "3-letter-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/3-letter-words/",
+      "title": "3-Letter Words — Every Valid 3-Letter Scrabble Word — Kefiw",
+      "h1": "3-Letter Words",
+      "subhead": "Every valid 3-letter word in the Kefiw word list",
+      "current_word_count": 176,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete list of valid 3-letter words, grouped by starting letter — essential for Scrabble, Words With Friends, and crossword tight spots.",
+        "keywords": [
+          "3 letter words",
+          "three letter words",
+          "3 letter scrabble words",
+          "valid 3 letter words"
+        ],
+        "outcomeLine": null,
+        "intro": "Three-letter words are the bread and butter of tight board play. This is the complete list from the Kefiw word list, grouped for easy skimming.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "High-value 3-letter plays",
+            "body": "ZAX, ZEP, FIZ, JEU, JUS, QIS, XIS — small words, big scores, especially across bonus squares."
+          },
+          {
+            "title": "Common unusual words",
+            "body": "AAL, AAS, AGA, AHI, AIT, ANE — uncommon in speech, fully valid on a Scrabble board."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many 3-letter words exist?",
+            "a": "Around 1,000 in a standard English Scrabble list. Exact count varies slightly between TWL, SOWPODS, and ENABLE."
+          },
+          {
+            "q": "Why are so many 3-letter words unfamiliar?",
+            "a": "Scrabble dictionaries include archaic, regional, and loan-word entries. Knowing the odd 3-letter words is one of the biggest single rating boosts for intermediate players."
+          },
+          {
+            "q": "Can I filter these by starting letter?",
+            "a": "Yes — see the linked letter-specific pages (3-letter words starting with A, B, C…) or use the Word Finder with a prefix pattern."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-double-letters",
+      "slug": "words-with-double-letters",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-double-letters/",
+      "title": "Words With Double Letters — Kefiw",
+      "h1": "Words With Double Letters",
+      "subhead": "Short words with consecutive repeated letters",
+      "current_word_count": 140,
+      "target_word_count": 1200,
+      "current": {
+        "description": "3 to 7 letter words that contain a double letter (like \"tt\", \"ll\", \"oo\"). Useful for Scrabble planning and crossword clues.",
+        "keywords": [
+          "words with double letters",
+          "double letter words",
+          "words with repeated letters"
+        ],
+        "outcomeLine": null,
+        "intro": "Words with a doubled letter are useful when your rack forces you to deal with a pair of the same tile. These are the 3-7 letter options.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Classic vowel doubles",
+            "body": "BEE, FEE, FOOD, GOOD, HOOK, LOOK, MOON, NOON, POOL, ROOM, SOON, TOOL, WOOD."
+          },
+          {
+            "title": "Classic consonant doubles",
+            "body": "ADD, EGG, ILL, INN, ODD, OFF, ALL, BELL, CELL, FALL, FELL, HILL."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Are longer words with double letters also valid?",
+            "a": "Yes — there are thousands. This page focuses on 3-7 letter plays that fit most Scrabble and crossword situations. Use Word Finder for longer."
+          },
+          {
+            "q": "What is the most common double letter in English?",
+            "a": "L, S, T, and E are the most commonly doubled letters in English words."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cS-wildcard-patterns-word-finder": [
+      "word-finder",
+      "crossword-solver",
+      "wordle-solver",
+      "cS-5-letter-word-finder-guide",
+      "cS-crossword-pattern-logic"
+    ],
+    "cS-5-letter-word-finder-guide": [
+      "5-letter-word-finder",
+      "wordle-solver",
+      "cS-wildcard-patterns-word-finder",
+      "cS-wordle-green-yellow-gray"
+    ],
+    "cS-wordle-green-yellow-gray": [
+      "wordle-solver",
+      "5-letter-word-finder",
+      "cS-5-letter-word-finder-guide"
+    ],
+    "cS-crossword-pattern-logic": [
+      "crossword-solver",
+      "word-finder",
+      "cS-wildcard-patterns-word-finder"
+    ],
+    "cS-hangman-pattern-logic": [
+      "hangman-solver",
+      "word-finder",
+      "cS-wildcard-patterns-word-finder"
+    ],
+    "cS-5-letter-opening-strategy": [
+      "wordle-solver",
+      "5-letter-word-finder",
+      "cS-5-letter-word-finder-guide",
+      "cS-wordle-green-yellow-gray"
+    ],
+    "cS-common-5-letter-starts": [
+      "5-letter-word-finder",
+      "word-finder",
+      "cS-common-5-letter-endings",
+      "cS-5-letter-word-finder-guide"
+    ],
+    "cS-common-5-letter-endings": [
+      "5-letter-word-finder",
+      "word-finder",
+      "cS-common-5-letter-starts",
+      "cS-5-letter-word-finder-guide"
+    ],
+    "cS-repeated-letter-patterns": [
+      "wordle-solver",
+      "5-letter-word-finder",
+      "word-finder",
+      "cS-wordle-green-yellow-gray",
+      "cS-common-5-letter-endings"
+    ],
+    "cS-pattern-search-mistakes": [
+      "word-finder",
+      "wordle-solver",
+      "5-letter-word-finder",
+      "cS-wildcard-patterns-word-finder",
+      "cS-wordle-green-yellow-gray"
+    ],
+    "cA-2-letter-words": [
+      "word-finder"
+    ],
+    "cA-3-letter-words": [
+      "word-finder"
+    ],
+    "cA-words-with-double-letters": [
+      "word-finder"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "word-finder",
+          "url": "/word-tools/word-finder/"
+        },
+        {
+          "id": "wordle-solver",
+          "url": "/word-tools/wordle-solver/"
+        },
+        {
+          "id": "crossword-solver",
+          "url": "/word-tools/crossword-solver/"
+        },
+        {
+          "id": "hangman-solver",
+          "url": "/word-tools/hangman-solver/"
+        },
+        {
+          "id": "pattern-solver",
+          "url": "/word-tools/pattern-solver/"
+        },
+        {
+          "id": "5-letter-word-finder",
+          "url": "/word-tools/5-letter-word-finder/"
+        },
+        {
+          "id": "6-letter-word-finder",
+          "url": "/word-tools/6-letter-word-finder/"
+        },
+        {
+          "id": "7-letter-word-finder",
+          "url": "/word-tools/7-letter-word-finder/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cS-wildcard-patterns-word-finder",
+          "url": "/guides/wildcard-patterns-in-word-finder/"
+        },
+        {
+          "id": "cS-5-letter-word-finder-guide",
+          "url": "/guides/how-to-use-a-5-letter-word-finder/"
+        },
+        {
+          "id": "cS-wordle-green-yellow-gray",
+          "url": "/guides/wordle-green-yellow-gray-explained/"
+        },
+        {
+          "id": "cS-crossword-pattern-logic",
+          "url": "/guides/crossword-pattern-logic/"
+        },
+        {
+          "id": "cS-hangman-pattern-logic",
+          "url": "/guides/hangman-pattern-logic/"
+        },
+        {
+          "id": "cS-5-letter-opening-strategy",
+          "url": "/guides/best-opening-strategy-for-5-letter-word-games/"
+        },
+        {
+          "id": "cS-common-5-letter-starts",
+          "url": "/guides/common-5-letter-starts/"
+        },
+        {
+          "id": "cS-common-5-letter-endings",
+          "url": "/guides/common-5-letter-endings/"
+        },
+        {
+          "id": "cS-repeated-letter-patterns",
+          "url": "/guides/repeated-letter-word-patterns/"
+        },
+        {
+          "id": "cS-pattern-search-mistakes",
+          "url": "/guides/pattern-search-mistakes-to-avoid/"
+        },
+        {
+          "id": "cA-2-letter-words",
+          "url": "/word-tools/2-letter-words/"
+        },
+        {
+          "id": "cA-3-letter-words",
+          "url": "/word-tools/3-letter-words/"
+        },
+        {
+          "id": "cA-words-with-double-letters",
+          "url": "/word-tools/words-with-double-letters/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

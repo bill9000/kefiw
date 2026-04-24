@@ -66,7 +66,6 @@ export default function VibeCrypt() {
   const [won, setWon] = useState(false);
   const [decryptions, setDecryptions] = useState(0);
   const [hydrated, setHydrated] = useState(false);
-  const [bruteUsed, setBruteUsed] = useState(0);
 
   function newGame() {
     const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
@@ -78,7 +77,6 @@ export default function VibeCrypt() {
     setRevealed(new Set());
     setSelected(null);
     setWon(false);
-    setBruteUsed(0);
     setFlicker(null);
   }
 
@@ -175,7 +173,6 @@ export default function VibeCrypt() {
     });
     setRevealed((prev) => new Set([...prev, pick]));
     setFlicker(pick);
-    setBruteUsed((n) => n + 1);
     window.setTimeout(() => setFlicker(null), 420);
   }
 
@@ -198,6 +195,24 @@ export default function VibeCrypt() {
     return Array.from(f.entries()).sort((a, b) => b[1] - a[1]);
   }, [encrypted]);
   const maxFreq = freq.length ? freq[0][1] : 1;
+
+  const score = useMemo(() => {
+    if (!quote || reverse.size === 0) return { typed: 0, brute: 0, total: 0, points: 0 };
+    const present = new Set<string>();
+    for (const ch of encrypted) {
+      const u = ch.toUpperCase();
+      if (/[A-Z]/.test(u)) present.add(u);
+    }
+    let typed = 0;
+    let brute = 0;
+    for (const c of present) {
+      const correct = userGuess.get(c) === reverse.get(c);
+      if (!correct) continue;
+      if (revealed.has(c)) brute++;
+      else typed++;
+    }
+    return { typed, brute, total: present.size, points: typed * 10 + brute * 2 };
+  }, [quote, reverse, encrypted, userGuess, revealed]);
 
   // split message into tokens: words and separators
   const tokens = useMemo(() => {
@@ -308,7 +323,13 @@ export default function VibeCrypt() {
             className="mt-4 text-center py-3 rounded-sm"
             style={{ background: 'rgba(34,197,94,0.1)', border: `1px solid ${COLOR_GUESS}`, color: COLOR_GUESS_GLOW }}
           >
-            <div className="text-sm uppercase tracking-[0.25em]">✓ signal decrypted</div>
+            <div className="text-sm uppercase tracking-[0.25em]">✓ signal decrypted · score {score.points}</div>
+            <div className="text-[11px] mt-1 tracking-widest uppercase" style={{ color: 'rgba(148,163,184,0.85)' }}>
+              typed <span style={{ color: COLOR_GUESS_GLOW, fontWeight: 700 }}>{score.typed}</span>
+              {' · '}brute <span style={{ color: COLOR_REVEAL, fontWeight: 700 }}>{score.brute}</span>
+              {' · '}total {score.total}
+              {' · '}typed ×10 · brute ×2
+            </div>
             <div className="text-xs mt-1 italic" style={{ color: 'rgba(226,232,240,0.9)' }}>&ldquo;{quote?.text}&rdquo;</div>
           </motion.div>
         )}
@@ -352,12 +373,27 @@ export default function VibeCrypt() {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2 justify-between">
+      {/* score strip */}
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <div className="rounded-sm border px-3 py-1.5 text-center" style={{ borderColor: 'rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.06)' }}>
+          <div className="text-[9px] uppercase tracking-[0.2em]" style={{ color: 'rgba(148,163,184,0.7)' }}>typed</div>
+          <div className="text-lg font-bold" style={{ color: COLOR_GUESS_GLOW }}>{score.typed}<span className="text-[11px] font-normal" style={{ color: 'rgba(148,163,184,0.6)' }}> / {score.total}</span></div>
+        </div>
+        <div className="rounded-sm border px-3 py-1.5 text-center" style={{ borderColor: 'rgba(250,204,21,0.3)', background: 'rgba(250,204,21,0.06)' }}>
+          <div className="text-[9px] uppercase tracking-[0.2em]" style={{ color: 'rgba(148,163,184,0.7)' }}>brute</div>
+          <div className="text-lg font-bold" style={{ color: COLOR_REVEAL }}>{score.brute}</div>
+        </div>
+        <div className="rounded-sm border px-3 py-1.5 text-center" style={{ borderColor: 'rgba(56,189,248,0.3)', background: 'rgba(56,189,248,0.06)' }}>
+          <div className="text-[9px] uppercase tracking-[0.2em]" style={{ color: 'rgba(148,163,184,0.7)' }}>score</div>
+          <div className="text-lg font-bold" style={{ color: COLOR_SELECT }}>{score.points}</div>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2 justify-between">
         <div className="text-[10px] uppercase tracking-widest" style={{ color: 'rgba(100,116,139,0.75)' }}>
           {selected
             ? <span>selected <span style={{ color: COLOR_SELECT }}>{selected}</span> — type a letter · esc to deselect</span>
             : 'click a letter to begin'}
-          {bruteUsed > 0 && <span className="ml-2">· brute {bruteUsed}</span>}
         </div>
         <div className="flex gap-2">
           <button

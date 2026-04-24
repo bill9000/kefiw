@@ -33,6 +33,43 @@ export function canMakeFromRack(word: string, rack: string): boolean {
   return true;
 }
 
+// Returns which positions of the word were satisfied by a blank tile (greedy
+// left-to-right). Callers use this to apply real-game zero-value blank scoring.
+export function rackFitDetails(word: string, rack: string): { fits: boolean; blankPositions: number[] } {
+  const counts: Record<string, number> = {};
+  let blanks = 0;
+  for (const ch of rack.toLowerCase()) {
+    if (ch === '?') blanks++;
+    else if (/[a-z]/.test(ch)) counts[ch] = (counts[ch] ?? 0) + 1;
+  }
+  const blankPositions: number[] = [];
+  const lower = word.toLowerCase();
+  for (let i = 0; i < lower.length; i++) {
+    const ch = lower[i];
+    if ((counts[ch] ?? 0) > 0) counts[ch]!--;
+    else if (blanks > 0) { blanks--; blankPositions.push(i); }
+    else return { fits: false, blankPositions: [] };
+  }
+  return { fits: true, blankPositions };
+}
+
+// Compute a word's score adjusted for blanks in the rack. Blanks score 0 in
+// real Scrabble / WWF — this removes the overcount the naive wordScore produces.
+export function wordScoreWithBlanks(
+  word: string,
+  rack: string | undefined,
+  values: Record<string, number>,
+): { score: number; blankPositions: number[] } {
+  const base = wordScore(word, values);
+  if (!rack || !rack.includes('?')) return { score: base, blankPositions: [] };
+  const fit = rackFitDetails(word, rack);
+  if (!fit.fits) return { score: base, blankPositions: [] };
+  let penalty = 0;
+  const lower = word.toLowerCase();
+  for (const pos of fit.blankPositions) penalty += values[lower[pos]] ?? 0;
+  return { score: base - penalty, blankPositions: fit.blankPositions };
+}
+
 export function matchesPattern(word: string, pattern: string): boolean {
   if (word.length !== pattern.length) return false;
   for (let i = 0; i < word.length; i++) {

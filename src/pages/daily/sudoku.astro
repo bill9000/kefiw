@@ -1,0 +1,38 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SudokuGame from '~/components/daily/SudokuGame.tsx';
+import Leaderboard from '~/components/daily/Leaderboard.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/sudoku/', label: 'Sudoku' },
+];
+---
+
+<BaseLayout
+  title="Daily Sudoku — Kefiw"
+  description="Solve today's seeded 9×9 sudoku. Difficulty rotates by weekday. New grid every day at 4am ET."
+  canonical="/daily/sudoku/"
+  keywords={["daily sudoku", "free sudoku", "sudoku puzzle", "9x9 grid"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Sudoku</h1>
+      <p class="mt-1 text-slate-600">Every row, column, and 3×3 box holds 1–9 exactly once.</p>
+    </header>
+
+    <SudokuGame client:only="react" />
+
+    <section class="mx-auto mt-8 max-w-md">
+      <h2 class="mb-3 text-lg font-semibold">Today's fastest solvers</h2>
+      <Leaderboard client:only="react" gameId="sudoku" limit={20} />
+      <p class="mt-3 text-center text-xs text-slate-500">
+        <a href="/daily/leaderboard/" class="text-brand-700 hover:underline">All three boards →</a>
+      </p>
+    </section>
+  </article>
+</BaseLayout>

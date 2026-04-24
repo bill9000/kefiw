@@ -1,0 +1,1298 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-22T03:14:14.535Z",
+  "cluster": {
+    "slug": "word-families",
+    "section": "word-tools",
+    "hubSlug": "word-families-and-patterns",
+    "url": "/word-tools/word-families-and-patterns/",
+    "title": "Word Families & Patterns — Kefiw",
+    "h1": "Word Families & Patterns",
+    "subhead": "Find words by prefix, suffix, or letter shape.",
+    "intro": "English words cluster into families by how they start, how they end, and which letters repeat. This cluster groups the prefix, suffix, and letter-shape lists alongside the interactive finders.",
+    "description": "Prefix and suffix word lists (un-, re-, pre-, -ing, -ed, -tion, -ness, -able), plus double-letter, no-vowel, and all-vowel word pages.",
+    "keywords": [
+      "word prefixes",
+      "word suffixes",
+      "word families",
+      "double-letter words"
+    ],
+    "faq": [
+      {
+        "q": "Do prefixes always keep their meaning?",
+        "a": "Mostly, but not always — \"disease\" doesn't mean \"un-ease\" in the modern sense. Treat the prefix list as a strong hint, not a rule."
+      },
+      {
+        "q": "Are these lists Scrabble-legal?",
+        "a": "Drawn from the ENABLE1 list — close to TWL/SOWPODS but not identical. See the Scrabble hub for tournament-dictionary caveats."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "scrabble",
+      "pattern",
+      "unscramble"
+    ]
+  },
+  "tools": [
+    {
+      "id": "words-starting-with",
+      "slug": "words-starting-with",
+      "category": "word-tools",
+      "url": "/word-tools/words-starting-with/",
+      "title": "Words Starting With — Kefiw",
+      "h1": "Words Starting With",
+      "current_word_count": 69,
+      "current": {
+        "description": "Find every English word that starts with a given prefix. Filter by length.",
+        "keywords": [
+          "words starting with",
+          "words that start with",
+          "prefix search"
+        ],
+        "intro": "Enter a prefix and get every English word that begins with it. Useful for crossword puzzles, word games, and writing.",
+        "outcomeLine": "Every word that starts with your chosen letters.",
+        "howTo": [
+          "Type the letters you want words to start with.",
+          "Optionally restrict by length.",
+          "Results appear sorted by length, shortest first."
+        ],
+        "examples": [
+          {
+            "title": "Prefix: ZY",
+            "body": "zygote, zymase, zymurgy, zydeco…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is this case-sensitive?",
+            "a": "No. Input and results are always lowercase."
+          }
+        ],
+        "relatedIds": [
+          "words-ending-with",
+          "words-containing",
+          "word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "prefix string (a-z; non-letters and whitespace stripped, lowercased)",
+        "output_type": "alphabetically-sorted array of every dictionary word whose initial characters match the prefix, filtered to min/max length bounds",
+        "processing_steps": [
+          "Load the full English dictionary on first use via web worker — `dict.txt` (~370,105 words). (This tool does not expose the ENABLE1/full toggle; it always uses the full dictionary.)",
+          "Normalize query: trim, lowercase, strip non-letter characters.",
+          "Filter dictionary to the min/max length range.",
+          "Keep only words where `w.startsWith(prefix)`.",
+          "Sort by length ascending, then alphabetically.",
+          "Client truncates the rendered list to the first 500 and shows a \"Showing first 500 of N\" notice when more exist.",
+          "Debounce input by 130 ms before re-querying the worker."
+        ],
+        "data_sources": [
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries). No ENABLE1 fallback."
+        ],
+        "fallback_behavior": "Empty prefix returns no results. No phonetic or fuzzy-match fallback. Whitespace and punctuation in the input are silently stripped.",
+        "known_limitations": [
+          "Always uses the full dictionary (dict.txt), which includes archaic, technical, and inflected forms that may not be valid Scrabble/WWF plays.",
+          "No game-list toggle — use Word Unscrambler if you need ENABLE1 output.",
+          "No proper nouns, abbreviations, or acronyms.",
+          "No pattern wildcards — prefix must be a literal string.",
+          "Rendered list is capped at 500 even when more matches exist (the full count is shown, but only 500 are displayed).",
+          "No diacritic or non-Latin-script support; non-letter characters are stripped without warning.",
+          "Default min length is 3, so 2-letter matches are hidden unless the user lowers the Min filter."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "prefix (single-line text input, font-mono, autofocused, placeholder \"e.g. ZY\")"
+          ],
+          "filters": [
+            "min length: dropdown 2–8 (default 3)",
+            "max length: dropdown 5–15 (default 15)"
+          ],
+          "outputs": [
+            "Result list (length-grouped, first 500 displayed)",
+            "\"Showing first 500 of N\" notice when results exceed 500",
+            "Summary card: total count + echoed query",
+            "Stats card: results count, shortest with length, longest with length, top length",
+            "Alphabetical-range comparison: first 5 and last 5 alphabetically (when >5 results)",
+            "Length-distribution comparison: count by length (top 4 lengths)",
+            "Takeaway: most common length and longest word",
+            "Next-step card linking to Words Ending With, Words Containing, and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds every English word starting with the given prefix",
+            "Supports min and max length filters",
+            "Uses a broad English dictionary (370k+ entries)",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Uses the ENABLE1 game list",
+            "Supports pattern wildcards or regex",
+            "Includes proper nouns, abbreviations, or acronyms",
+            "Guarantees Scrabble/WWF tournament validity",
+            "Finds words that contain the prefix anywhere (that is Words Containing)"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "words-ending-with",
+      "slug": "words-ending-with",
+      "category": "word-tools",
+      "url": "/word-tools/words-ending-with/",
+      "title": "Words Ending With — Kefiw",
+      "h1": "Words Ending With",
+      "current_word_count": 61,
+      "current": {
+        "description": "Find every English word that ends with a given suffix.",
+        "keywords": [
+          "words ending with",
+          "words that end with",
+          "suffix search"
+        ],
+        "intro": "Enter a suffix and get every English word that ends with it.",
+        "outcomeLine": "Every word ending with your chosen letters.",
+        "howTo": [
+          "Type the ending letters.",
+          "Optionally restrict by length."
+        ],
+        "examples": [
+          {
+            "title": "Suffix: TION",
+            "body": "action, motion, nation, station, creation…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why are some short words missing?",
+            "a": "Very short matches (2 letters) are omitted by default for readability. Use the length filter to include them."
+          }
+        ],
+        "relatedIds": [
+          "words-starting-with",
+          "words-containing",
+          "word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "suffix string (a-z; non-letters and whitespace stripped, lowercased)",
+        "output_type": "alphabetically-sorted array of every dictionary word whose ending characters match the suffix, filtered to min/max length bounds",
+        "processing_steps": [
+          "Load the full English dictionary on first use via web worker — `dict.txt` (~370,105 words). No ENABLE1/full toggle exposed.",
+          "Normalize query: trim, lowercase, strip non-letter characters.",
+          "Filter dictionary to the min/max length range.",
+          "Keep only words where `w.endsWith(suffix)`.",
+          "Sort by length ascending, then alphabetically.",
+          "Client truncates the rendered list to the first 500 and shows a \"Showing first 500 of N\" notice when more exist.",
+          "Debounce input by 130 ms."
+        ],
+        "data_sources": [
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries)."
+        ],
+        "fallback_behavior": "Empty suffix returns no results. Whitespace and punctuation silently stripped. No phonetic fallback (see Rhyme Finder for ending-based rhyme suggestions).",
+        "known_limitations": [
+          "Always uses the full dictionary — includes archaic, technical, and inflected forms.",
+          "No game-list (ENABLE1) toggle on this tool.",
+          "No proper nouns, abbreviations, or acronyms.",
+          "No wildcards — suffix is a literal string.",
+          "Default min length is 3, so 2-letter matches are hidden unless the user lowers Min.",
+          "Rendered list capped at 500.",
+          "Spelling-based only — \"through\" and \"rough\" both end in -ough but sound different. Use Rhyme Finder if sound matters."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "suffix (single-line text input, font-mono, autofocused, placeholder \"e.g. TION\")"
+          ],
+          "filters": [
+            "min length: dropdown 2–8 (default 3)",
+            "max length: dropdown 5–15 (default 15)"
+          ],
+          "outputs": [
+            "Result list (length-grouped, first 500 displayed)",
+            "\"Showing first 500 of N\" notice when results exceed 500",
+            "Summary card: total count + echoed query",
+            "Stats card: results count, shortest, longest, top length",
+            "Alphabetical-range comparison: first 5 and last 5 (when >5 results)",
+            "Length-distribution comparison",
+            "Takeaway: most common length + longest",
+            "Next-step card linking to Words Starting With, Words Containing, and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds every English word ending with the given suffix",
+            "Supports min and max length filters",
+            "Useful for rhyme brainstorming alongside Rhyme Finder",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Finds phonetic rhymes (use Rhyme Finder)",
+            "Supports wildcards or regex",
+            "Includes proper nouns or acronyms",
+            "Uses the ENABLE1 game list"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "words-containing",
+      "slug": "words-containing",
+      "category": "word-tools",
+      "url": "/word-tools/words-containing/",
+      "title": "Words Containing Letters — Kefiw",
+      "h1": "Words Containing",
+      "current_word_count": 67,
+      "current": {
+        "description": "Find English words that contain a specific sequence of letters.",
+        "keywords": [
+          "words containing",
+          "words with letters",
+          "infix search"
+        ],
+        "intro": "Enter a sequence of letters and find every English word that contains it anywhere.",
+        "outcomeLine": "Words that contain a letter, pattern, or cluster anywhere.",
+        "howTo": [
+          "Type the substring you want to search for.",
+          "Optionally restrict by length."
+        ],
+        "examples": [
+          {
+            "title": "Contains: QUA",
+            "body": "aqua, equal, square, quantum, quaint, quart…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can I combine prefix and suffix?",
+            "a": "For now, use Words Starting With or Words Ending With separately. A combined pattern search is planned."
+          }
+        ],
+        "relatedIds": [
+          "words-starting-with",
+          "words-ending-with",
+          "word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "substring (a-z; non-letters and whitespace stripped, lowercased)",
+        "output_type": "alphabetically-sorted array of every dictionary word that contains the substring anywhere, filtered to min/max length bounds",
+        "processing_steps": [
+          "Load the full English dictionary on first use via web worker — `dict.txt` (~370,105 words). No ENABLE1/full toggle exposed.",
+          "Normalize query: trim, lowercase, strip non-letter characters.",
+          "Filter dictionary to the min/max length range.",
+          "Keep only words where `w.includes(substring)`.",
+          "Sort by length ascending, then alphabetically.",
+          "Client truncates the rendered list to the first 500 with a \"Showing first 500 of N\" notice.",
+          "Debounce input by 130 ms."
+        ],
+        "data_sources": [
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries)."
+        ],
+        "fallback_behavior": "Empty substring returns no results. Whitespace and punctuation silently stripped.",
+        "known_limitations": [
+          "Substring must be contiguous — \"QUA\" matches words containing Q-U-A adjacent in that order, not Q and U and A anywhere.",
+          "No wildcards, no regex, no letter-set matching (use Word Finder or Word Unscrambler for those).",
+          "No position constraint — matches can appear at the start, middle, or end. Use Words Starting With or Words Ending With for positional matching.",
+          "Always uses the full dictionary — archaic/technical/inflected words may appear.",
+          "No proper nouns, abbreviations, or acronyms.",
+          "Default min length is 3.",
+          "Rendered list capped at 500 even when the total is much larger."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "substring (single-line text input, font-mono, autofocused, placeholder \"e.g. QUA\")"
+          ],
+          "filters": [
+            "min length: dropdown 2–8 (default 3)",
+            "max length: dropdown 5–15 (default 15)"
+          ],
+          "outputs": [
+            "Result list (length-grouped, first 500 displayed)",
+            "\"Showing first 500 of N\" notice when results exceed 500",
+            "Summary card: total count + echoed query",
+            "Stats card: results, shortest, longest, top length",
+            "Alphabetical-range comparison: first 5 / last 5 (when >5 results)",
+            "Length-distribution comparison",
+            "Takeaway: most common length + longest",
+            "Next-step card linking to Words Starting With, Words Ending With, and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds every English word containing the substring in any position",
+            "Supports min and max length filters",
+            "Good for crosswords, Scrabble bingo brainstorming, and letter-cluster research",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Finds words with letters anywhere (non-adjacent) — use Word Unscrambler",
+            "Finds pattern or positional matches — use Word Finder",
+            "Supports wildcards, regex, or character classes",
+            "Includes proper nouns or acronyms",
+            "Uses the ENABLE1 game list"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "word-finder",
+      "slug": "word-finder",
+      "category": "word-tools",
+      "url": "/word-tools/word-finder/",
+      "title": "Word Finder by Letters — Kefiw",
+      "h1": "Word Finder by Letters",
+      "current_word_count": 109,
+      "current": {
+        "description": "Find words that can be made from a specific set of letters, with optional minimum and maximum length filters.",
+        "keywords": [
+          "word finder",
+          "find words with letters",
+          "word maker"
+        ],
+        "intro": "Enter the letters you have (including blanks as ?) and filter by word length. Useful for Scrabble, Words With Friends, and general word puzzles. For prefix, suffix, or substring searches, use the dedicated Words Starting With, Words Ending With, or Words Containing tools.",
+        "outcomeLine": "Pattern-match with ? and * across the whole dictionary.",
+        "howTo": [
+          "Enter your available letters (2–15 characters).",
+          "Use ? for each blank tile.",
+          "Optionally set a minimum and maximum word length.",
+          "Tap any result to copy it."
+        ],
+        "examples": [
+          {
+            "title": "Input: RSTLNE?",
+            "body": "Returns ELDEST, LETTERS, RELENTS, STERN…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many blanks can I use?",
+            "a": "Up to 2 — same as real Scrabble."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "letters (a-z plus `?` for blanks) OR a fixed-length pattern (a-z plus `?`/`_`/`.` as wildcards)",
+        "output_type": "array of dictionary words matching either the letter rack (with min/max length filters) or the positional pattern",
+        "processing_steps": [
+          "Load the chosen word list on first use: Game list = ENABLE1 or Full list = dict.txt.",
+          "If search mode is \"Letters\": strip whitespace, call the `unscramble` worker with minLen/maxLen — same rack-fit logic as Word Unscrambler but with separate length bounds.",
+          "If search mode is \"Pattern\": pattern length fixes the candidate word length. For each dictionary word of that length, call `matchesPattern` — any position whose pattern char is `?`, `_`, or `.` accepts any letter; other positions must match exactly (case-insensitive).",
+          "Letters mode sorts by length descending then alphabetically; Pattern mode returns in the source word-list order (effectively alphabetical from the dictionary file).",
+          "Optional Scrabble + WWF score display when toggled.",
+          "Lightweight variants (`5-letter-word-finder`, `6-letter-word-finder`, `7-letter-word-finder`) lock the pattern length to 5/6/7 and hide the min/max controls."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`) — \"Full list\" mode."
+        ],
+        "fallback_behavior": "Empty input returns no results. No automatic min-length fallback (unlike Word Unscrambler). No phonetic fallback.",
+        "known_limitations": [
+          "Pattern mode matches exact-length candidates only — a 4-character pattern cannot match a 5-letter word.",
+          "Pattern wildcards (`?`, `_`, `.`) are single-character only — no regex quantifiers, no character classes.",
+          "Letters mode does not support a \"must include these letters\" constraint — use Words Containing for substring matching instead.",
+          "No position-aware scoring, no premium-square modelling.",
+          "Neither word list includes proper nouns, abbreviations, or acronyms.",
+          "Does not deduplicate between the two word lists — switching mode refetches and rebuilds the index."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "letters or pattern (single-line text input, font-mono, autofocused; maxLength is locked on the 5/6/7-letter variants)",
+            "min length: dropdown 2–8 (letters mode only; hidden on locked-length variants)",
+            "max length: dropdown 5–15 (letters mode only; hidden on locked-length variants)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "search by: Letters | Pattern",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Summary card: match count, with the pattern echoed when in Pattern mode",
+            "Stats card: mode, longest, shortest, best Scrabble, best WWF; plus wildcard and fixed-char counts in Pattern mode",
+            "Comparison card: count by word length (top 4 lengths)",
+            "Takeaway (conditional): most common result length",
+            "Result list — grouped by length when scores are off, flat when scores are on",
+            "Next-step card linking to Words Starting With / Ending With / Containing"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Two search modes: Letters (anagram-style with min/max length) and Pattern (positional, fixed length)",
+            "Accepts single-letter wildcards (`?`, `_`, `.`) in Pattern mode",
+            "Supports blanks (`?`) in Letters mode",
+            "Offers a compact game list (ENABLE1) and a broader dictionary (dict.txt)",
+            "Runs entirely in the browser",
+            "Powers the 5-, 6-, and 7-letter variants with the pattern length locked"
+          ],
+          "claim_forbidden": [
+            "Regex-style patterns (quantifiers, character classes)",
+            "Prefix/suffix/substring search — those are separate tools",
+            "Scrabble/WWF board modelling, premium squares, or hook plays",
+            "Proper nouns, slang, or acronyms"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cS-what-prefixes-do",
+      "slug": "what-prefixes-do-in-english",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/what-prefixes-do-in-english/",
+      "title": "What Prefixes Do in English — The Short, Useful Version",
+      "h1": "What Prefixes Do in English",
+      "subhead": "How UN-, RE-, DIS-, PRE-, and friends change a word's meaning.",
+      "current_word_count": 260,
+      "target_word_count": 1200,
+      "current": {
+        "description": "A plain-English guide to the most common English prefixes — meaning, origin, and worked examples.",
+        "keywords": [
+          "english prefixes",
+          "what prefixes do",
+          "common prefixes list"
+        ],
+        "outcomeLine": "Know the ten most common prefixes and you can decode hundreds of words on sight.",
+        "intro": "A prefix attaches to the front of a word and changes its meaning in a predictable way. Ten prefixes carry most of the load in everyday English — learn those and you can read new words without a dictionary.",
+        "keyPoints": [
+          "UN- = not or reverse: UNHAPPY, UNLOCK, UNDO.",
+          "RE- = again or back: REDO, RETURN, REBUILD.",
+          "DIS- = not or apart: DISAGREE, DISCONNECT.",
+          "PRE- = before: PREPAY, PRESCHOOL, PREDICT.",
+          "MIS- = wrong: MISTAKE, MISSPELL, MISUNDERSTAND.",
+          "Others worth knowing: SUB-, OVER-, UNDER-, INTER-, TRANS-."
+        ],
+        "examples": [
+          {
+            "title": "UN- flips meaning",
+            "body": "HAPPY → UNHAPPY (not happy). LOCK → UNLOCK (reverse the lock)."
+          },
+          {
+            "title": "RE- repeats",
+            "body": "WRITE → REWRITE. VIEW → REVIEW (view again)."
+          },
+          {
+            "title": "PRE- = before",
+            "body": "HEAT → PREHEAT (heat beforehand). VIEW → PREVIEW."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "words-starting-with",
+            "note": "Enter the prefix (UN, RE, DIS) and get every word that starts with it, sorted by length."
+          },
+          {
+            "toolId": "words-containing",
+            "note": "Use when you want a prefix plus another letter pattern — e.g. words starting UN- and containing ING."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How do I know which prefix to use — UN- or DIS-?",
+            "a": "Usually convention, not rule. UNHAPPY but DISSATISFIED. When unsure, check a dictionary — English inherited both Germanic (UN-) and Latin (DIS-) prefixes and they rarely interchange."
+          },
+          {
+            "q": "Do prefixes ever change spelling?",
+            "a": "Yes. IN- becomes IM- before B, M, P (IMPOSSIBLE not INPOSSIBLE), and IL-/IR- before L/R (ILLEGAL, IRREGULAR). The rule is phonetic assimilation."
+          }
+        ],
+        "relatedIds": [
+          "words-starting-with",
+          "words-containing",
+          "cS-common-english-beginnings",
+          "cS-what-suffixes-do"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-what-suffixes-do",
+      "slug": "what-suffixes-do-in-english",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/what-suffixes-do-in-english/",
+      "title": "What Suffixes Do in English — Changing Part of Speech",
+      "h1": "What Suffixes Do in English",
+      "subhead": "How -ING, -ED, -LY, -TION, and friends turn one word into another.",
+      "current_word_count": 302,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Plain-English guide to the most common English suffixes — how they change word class and meaning, with examples.",
+        "keywords": [
+          "english suffixes",
+          "what suffixes do",
+          "common suffixes list"
+        ],
+        "outcomeLine": "Suffixes mostly change the part of speech — verb to noun, noun to adjective, adjective to adverb.",
+        "intro": "A suffix attaches to the end of a word and usually changes its part of speech rather than its core meaning. Learn the common suffix patterns and you can turn any noun into an adjective or any verb into a noun.",
+        "keyPoints": [
+          "-ING and -ED form verb tenses: RUN → RUNNING, RUNNED (wait — RAN, irregular). WALK → WALKING, WALKED.",
+          "-TION / -SION turn verbs into nouns: ACT → ACTION, DECIDE → DECISION.",
+          "-LY turns adjectives into adverbs: QUICK → QUICKLY, HAPPY → HAPPILY.",
+          "-NESS and -ITY turn adjectives into nouns: DARK → DARKNESS, ABLE → ABILITY.",
+          "-FUL and -LESS turn nouns into adjectives: HOPE → HOPEFUL / HOPELESS."
+        ],
+        "examples": [
+          {
+            "title": "Verb → noun",
+            "body": "ACT → ACTION. DECIDE → DECISION. ENJOY → ENJOYMENT. Common suffixes: -TION, -SION, -MENT, -ANCE."
+          },
+          {
+            "title": "Adjective → adverb",
+            "body": "QUICK → QUICKLY. HAPPY → HAPPILY (Y becomes I). FULL → FULLY. Drop the double-L when adding -LY."
+          },
+          {
+            "title": "Noun → adjective",
+            "body": "HOPE → HOPEFUL (full of hope) / HOPELESS (without hope). Same root, opposite meaning via suffix."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "words-ending-with",
+            "note": "Enter the suffix (ING, TION, LY) and get every word ending in it."
+          },
+          {
+            "toolId": "words-containing",
+            "note": "For suffix-plus-pattern searches (words ending -ING and containing TR)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why does Y change to I before some suffixes?",
+            "a": "When adding -LY, -ED, -ES, -EST to a word ending in consonant+Y: HAPPY → HAPPILY, CRY → CRIED. Vowel+Y words keep the Y: PLAY → PLAYED."
+          },
+          {
+            "q": "Do suffixes always change part of speech?",
+            "a": "Usually yes, but not always. -HOOD keeps nouns as nouns (CHILD → CHILDHOOD). The general rule is \"suffix changes class,\" with specific exceptions."
+          }
+        ],
+        "relatedIds": [
+          "words-ending-with",
+          "words-containing",
+          "cS-common-english-endings",
+          "cS-what-prefixes-do"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-common-english-endings",
+      "slug": "common-english-word-endings",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/common-english-word-endings/",
+      "title": "Common English Word Endings — Patterns Worth Recognising",
+      "h1": "Common English Word Endings",
+      "subhead": "The high-frequency endings that unlock word-finder and crossword searches.",
+      "current_word_count": 250,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most common English word endings with examples and usage notes for word-finder and crossword work.",
+        "keywords": [
+          "common english word endings",
+          "word endings list",
+          "english suffixes frequency"
+        ],
+        "outcomeLine": "A handful of endings cover most long English words — -ING, -TION, -LY, -NESS, -MENT.",
+        "intro": "A small number of endings account for a huge share of English vocabulary. Recognising them on sight helps in crosswords, word puzzles, and vocabulary building.",
+        "keyPoints": [
+          "-ING is the single most frequent ending — every present participle and many gerunds end in it.",
+          "-TION and -SION dominate formal writing — ACTION, DECISION, POSITION.",
+          "-LY marks most adverbs — QUICKLY, HAPPILY, SIMPLY.",
+          "-NESS and -MENT form abstract nouns — DARKNESS, AGREEMENT.",
+          "-ABLE / -IBLE mark adjectives of capability — READABLE, VISIBLE."
+        ],
+        "examples": [
+          {
+            "title": "-ING words",
+            "body": "RUNNING, THINKING, BUILDING, SOMETHING. Enormous list — combine with length or other letters to narrow."
+          },
+          {
+            "title": "-TION words",
+            "body": "ACTION, NATION, STATION, ATTENTION. Very productive in academic and news text."
+          },
+          {
+            "title": "-ABLE words",
+            "body": "READABLE, DOABLE, PORTABLE, COMFORTABLE. Attaches to most action verbs."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "words-ending-with",
+            "note": "The tool for this exact search — enter -ING, -TION, -LY and get the full list."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "Use *ING, *TION as wildcard patterns if you also need length or position constraints."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Which ending has the most words?",
+            "a": "-ING, by a wide margin — present participle form means almost every verb contributes one. -ED is a close second, then -S/-ES."
+          },
+          {
+            "q": "Are these endings useful for Scrabble?",
+            "a": "Yes for longer plays. -ING, -ED, -ER, -EST are prime \"bingo\" building blocks — they form a 2-3 letter suffix onto an existing stem."
+          }
+        ],
+        "relatedIds": [
+          "words-ending-with",
+          "word-finder",
+          "cS-what-suffixes-do"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-common-english-beginnings",
+      "slug": "common-english-word-beginnings",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/common-english-word-beginnings/",
+      "title": "Common English Word Beginnings — The High-Frequency Prefixes",
+      "h1": "Common English Word Beginnings",
+      "subhead": "The prefixes and initial clusters you see everywhere.",
+      "current_word_count": 284,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Most common English word beginnings and prefixes, ranked by frequency, with examples.",
+        "keywords": [
+          "common english word beginnings",
+          "english word starts",
+          "frequent prefixes"
+        ],
+        "outcomeLine": "UN-, RE-, PRE-, IN-, DIS- cover most real English prefixes — everything else is a long tail.",
+        "intro": "The start of an English word carries most of its identity — and a handful of prefixes account for most of what you see. Knowing which beginnings are common makes word puzzles and crossword patterns much faster to solve.",
+        "keyPoints": [
+          "UN- is the highest-frequency English prefix — attaches to adjectives, verbs, and past participles.",
+          "RE- is second — productive on almost any action verb.",
+          "PRE-, IN-, DIS-, MIS-, OVER-, UNDER- fill out the top tier.",
+          "Initial consonant clusters worth knowing: ST-, CH-, SH-, TH-, TR-, STR- — these appear in thousands of words.",
+          "Rare beginnings (XX-, QU- without vowel) are almost always no-match signals in word-finder searches."
+        ],
+        "examples": [
+          {
+            "title": "UN- words",
+            "body": "UNHAPPY, UNLOCK, UNABLE, UNDO, UNDERSTAND. Broad coverage — combine with other constraints for narrow queries."
+          },
+          {
+            "title": "ST- beginnings",
+            "body": "STAR, STAND, START, STORM, STRIKE, STRONG. Dense cluster of everyday words."
+          },
+          {
+            "title": "Rare beginnings",
+            "body": "MN-, KN-, PS-, PT- — most from Greek or Old English. Mostly quiz-word territory."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "words-starting-with",
+            "note": "Main tool for this — enter the beginning and filter by length."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For beginning + pattern combinations (starts UN- and has 7 letters)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is the difference between a beginning and a prefix?",
+            "a": "A prefix is a meaningful unit you can strip off (UN-HAPPY, RE-BUILD). A beginning is just the first few letters, meaningful or not. All prefixes are beginnings; not all beginnings are prefixes."
+          },
+          {
+            "q": "How do I use this for crossword solving?",
+            "a": "When you have the first 2–3 letters from crossings, filter by that beginning. That alone usually cuts candidates by 90%+."
+          }
+        ],
+        "relatedIds": [
+          "words-starting-with",
+          "word-finder",
+          "cS-what-prefixes-do"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-starting-with-un",
+      "slug": "words-starting-with-un",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-starting-with-un/",
+      "title": "Words Starting With \"Un\" — Kefiw",
+      "h1": "Words Starting With \"Un\"",
+      "subhead": "Negation prefix plays for Scrabble and writing",
+      "current_word_count": 173,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete alphabetical list of valid English words starting with the prefix \"un\", sorted by length. Useful for Scrabble, writing, and crosswords.",
+        "keywords": [
+          "words starting with un",
+          "un words",
+          "un prefix words"
+        ],
+        "outcomeLine": null,
+        "intro": "The \"un-\" prefix is one of the most productive negation markers in English. This is the complete list of ENABLE-list words that begin with it.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "High-scoring un- plays",
+            "body": "UNZIP (17), UNBOX (16), UNJAM (16), UNFIX (16) — all reach 30+ with a bonus square."
+          },
+          {
+            "title": "Long un- verbs",
+            "body": "UNLEARN, UNTEACH, UNHORSE, UNCOVER, UNLATCH — useful 7-letter bingos when combined with a board tile."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "What is the difference between \"un-\" and \"dis-\"?",
+            "a": "\"un-\" usually marks simple negation or reversal; \"dis-\" often marks separation, removal, or opposition. English uses both historically and they are not always interchangeable."
+          },
+          {
+            "q": "Are all \"un-\" words hyphenated?",
+            "a": "No. Most are solid (unhappy, unzip, unlearn). A few compounds use a hyphen (un-American) but are excluded from Scrabble lists."
+          },
+          {
+            "q": "Can I prefix \"un-\" to any verb?",
+            "a": "No — attaching \"un-\" to arbitrary roots is not always valid in Scrabble dictionaries. Check the list before playing."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-starting-with-re",
+      "slug": "words-starting-with-re",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-starting-with-re/",
+      "title": "Words Starting With \"Re\" — Kefiw",
+      "h1": "Words Starting With \"Re\"",
+      "subhead": "Repetition and reversal prefix plays",
+      "current_word_count": 152,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete alphabetical list of valid English words starting with the prefix \"re\", sorted by length. Essential for Scrabble and crossword tight fits.",
+        "keywords": [
+          "words starting with re",
+          "re words",
+          "re prefix words"
+        ],
+        "outcomeLine": null,
+        "intro": "The \"re-\" prefix means \"again\" or \"back\". It is one of the most productive prefixes in English, and in Scrabble one of the most common bingo starters.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Common 4-letter re- plays",
+            "body": "REDO, REED, REEF, REEK, REEL, RELY, REND, RENT, REPO, RESH, REST, RETE, RETS."
+          },
+          {
+            "title": "Bingo candidates",
+            "body": "REPLANT, REFIGHT, REGAINS, REHIRED, RELACED, RENAMED, RETYPED — all 7-letter bingos when the rack cooperates."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Why are there so many \"re-\" words?",
+            "a": "English borrowed the Latin prefix extensively, and modern speakers productively attach \"re-\" to new verbs (re-open, re-enter, re-tweet)."
+          },
+          {
+            "q": "Is every \"re- + verb\" combination valid in Scrabble?",
+            "a": "No. Scrabble dictionaries only accept listed combinations. Check the list before playing."
+          },
+          {
+            "q": "What is the longest valid \"re-\" word?",
+            "a": "Varies — RECONFIRMATIONS and similar 15-letter forms are in many dictionaries."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-starting-with-pre",
+      "slug": "words-starting-with-pre",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-starting-with-pre/",
+      "title": "Words Starting With \"Pre\" — Kefiw",
+      "h1": "Words Starting With \"Pre\"",
+      "subhead": "\"Before\" prefix plays for Scrabble and writing",
+      "current_word_count": 124,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete alphabetical list of valid English words starting with the prefix \"pre\", sorted by length. Useful for Scrabble and vocabulary building.",
+        "keywords": [
+          "words starting with pre",
+          "pre words",
+          "pre prefix words"
+        ],
+        "outcomeLine": null,
+        "intro": "The \"pre-\" prefix denotes \"before\" in time or order. This is the complete ENABLE-list of words beginning with it.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Common pre- plays",
+            "body": "PREACH, PREFAB, PREMIX, PREPAY, PREQUEL, PRESET, PRETEND."
+          },
+          {
+            "title": "Bingo candidates",
+            "body": "PREHEAT, PREFORM, PRESIDE, PREVAIL, PREFACE, PREEMPT — all strong 7-letter plays."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Is \"pre-\" always hyphenated in English?",
+            "a": "In Scrabble-legal English, no — most \"pre-\" words are solid. Hyphenated compounds like \"pre-school\" are written solid as \"preschool\"."
+          },
+          {
+            "q": "What is the difference between \"pre-\" and \"ante-\"?",
+            "a": "\"pre-\" is the productive modern prefix; \"ante-\" is Latinate and less common. ANTE-, ANTI-, and PRE- are all valid Scrabble prefixes."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-double-letters",
+      "slug": "words-with-double-letters",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-double-letters/",
+      "title": "Words With Double Letters — Kefiw",
+      "h1": "Words With Double Letters",
+      "subhead": "Short words with consecutive repeated letters",
+      "current_word_count": 140,
+      "target_word_count": 1200,
+      "current": {
+        "description": "3 to 7 letter words that contain a double letter (like \"tt\", \"ll\", \"oo\"). Useful for Scrabble planning and crossword clues.",
+        "keywords": [
+          "words with double letters",
+          "double letter words",
+          "words with repeated letters"
+        ],
+        "outcomeLine": null,
+        "intro": "Words with a doubled letter are useful when your rack forces you to deal with a pair of the same tile. These are the 3-7 letter options.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Classic vowel doubles",
+            "body": "BEE, FEE, FOOD, GOOD, HOOK, LOOK, MOON, NOON, POOL, ROOM, SOON, TOOL, WOOD."
+          },
+          {
+            "title": "Classic consonant doubles",
+            "body": "ADD, EGG, ILL, INN, ODD, OFF, ALL, BELL, CELL, FALL, FELL, HILL."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Are longer words with double letters also valid?",
+            "a": "Yes — there are thousands. This page focuses on 3-7 letter plays that fit most Scrabble and crossword situations. Use Word Finder for longer."
+          },
+          {
+            "q": "What is the most common double letter in English?",
+            "a": "L, S, T, and E are the most commonly doubled letters in English words."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-no-vowels",
+      "slug": "words-with-no-vowels",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-no-vowels/",
+      "title": "Words With No Vowels — Kefiw",
+      "h1": "Words With No Vowels",
+      "subhead": "Consonant-only words for Scrabble emergencies",
+      "current_word_count": 151,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Every valid English word with no vowels (no A, E, I, O, or U). Y is allowed. Essential for Scrabble when your rack is all consonants.",
+        "keywords": [
+          "words with no vowels",
+          "vowel-less words",
+          "consonant only words",
+          "words without vowels"
+        ],
+        "outcomeLine": null,
+        "intro": "A rack full of consonants is one of the hardest Scrabble situations. These are every valid word — letter Y included — with no traditional vowels.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Classic vowel-less plays",
+            "body": "CWM, CRWTH, CRWTHS, CRYPT, RHYTHM, MYTHS, NYMPHS, HYMNS, PYGMY."
+          },
+          {
+            "title": "Short defensive plays",
+            "body": "BY, MY, SHY, SKY, PLY, WRY, SPRY — quick rack-clearers that score fine."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Is Y considered a vowel?",
+            "a": "Y is a sometimes-vowel. In this list we treat it as a consonant (since the question is \"when can you play without an A/E/I/O/U?\"), which matches Scrabble and crossword usage."
+          },
+          {
+            "q": "What is the longest word with no traditional vowels?",
+            "a": "RHYTHMS (7 letters) and SYMPHS and CRWTHS are among the longest. A few 8-letter forms like RHYTHMIC exist but include no A/E/I/O/U."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-words-with-all-vowels",
+      "slug": "words-with-all-vowels",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/words-with-all-vowels/",
+      "title": "Words With All 5 Vowels — Kefiw",
+      "h1": "Words With All Five Vowels",
+      "subhead": "Words containing A, E, I, O, and U",
+      "current_word_count": 146,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Every valid English word that contains at least one of each vowel: A, E, I, O, and U. Useful for Scrabble, crossword clues, and vocabulary puzzles.",
+        "keywords": [
+          "words with all vowels",
+          "all 5 vowels words",
+          "aeiou words",
+          "words containing every vowel"
+        ],
+        "outcomeLine": null,
+        "intro": "Words containing every vowel at once are rare and satisfying. This is the complete list from the ENABLE word list.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Short ones",
+            "body": "EULOGIA, AUTHORITIES, SEQUOIA, MIAOWED, OURIE — many clear a rack nicely."
+          },
+          {
+            "title": "Bingo candidates",
+            "body": "AUREOLE, AERATION, AUDITION, and EQUATION bases; extend with suffixes for 8+ letter plays."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Why are these useful in Scrabble?",
+            "a": "When your rack has three or four vowels, a word containing all five of them clears them in a single move — saving you trade turns."
+          },
+          {
+            "q": "Are these valid in Words With Friends?",
+            "a": "Most are — WWF shares the bulk of the English lexicon with Scrabble. Always confirm with the Words With Friends Helper for a specific play."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cS-what-prefixes-do": [
+      "words-starting-with",
+      "words-containing",
+      "cS-common-english-beginnings",
+      "cS-what-suffixes-do"
+    ],
+    "cS-what-suffixes-do": [
+      "words-ending-with",
+      "words-containing",
+      "cS-common-english-endings",
+      "cS-what-prefixes-do"
+    ],
+    "cS-common-english-endings": [
+      "words-ending-with",
+      "word-finder",
+      "cS-what-suffixes-do"
+    ],
+    "cS-common-english-beginnings": [
+      "words-starting-with",
+      "word-finder",
+      "cS-what-prefixes-do"
+    ],
+    "cA-words-starting-with-un": [
+      "word-finder"
+    ],
+    "cA-words-starting-with-re": [
+      "word-finder"
+    ],
+    "cA-words-starting-with-pre": [
+      "word-finder"
+    ],
+    "cA-words-with-double-letters": [
+      "word-finder"
+    ],
+    "cA-words-with-no-vowels": [
+      "word-finder"
+    ],
+    "cA-words-with-all-vowels": [
+      "word-finder"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "words-starting-with",
+          "url": "/word-tools/words-starting-with/"
+        },
+        {
+          "id": "words-ending-with",
+          "url": "/word-tools/words-ending-with/"
+        },
+        {
+          "id": "words-containing",
+          "url": "/word-tools/words-containing/"
+        },
+        {
+          "id": "word-finder",
+          "url": "/word-tools/word-finder/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cS-what-prefixes-do",
+          "url": "/guides/what-prefixes-do-in-english/"
+        },
+        {
+          "id": "cS-what-suffixes-do",
+          "url": "/guides/what-suffixes-do-in-english/"
+        },
+        {
+          "id": "cS-common-english-endings",
+          "url": "/guides/common-english-word-endings/"
+        },
+        {
+          "id": "cS-common-english-beginnings",
+          "url": "/guides/common-english-word-beginnings/"
+        },
+        {
+          "id": "cA-words-starting-with-un",
+          "url": "/word-tools/words-starting-with-un/"
+        },
+        {
+          "id": "cA-words-starting-with-re",
+          "url": "/word-tools/words-starting-with-re/"
+        },
+        {
+          "id": "cA-words-starting-with-pre",
+          "url": "/word-tools/words-starting-with-pre/"
+        },
+        {
+          "id": "cA-words-with-double-letters",
+          "url": "/word-tools/words-with-double-letters/"
+        },
+        {
+          "id": "cA-words-with-no-vowels",
+          "url": "/word-tools/words-with-no-vowels/"
+        },
+        {
+          "id": "cA-words-with-all-vowels",
+          "url": "/word-tools/words-with-all-vowels/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

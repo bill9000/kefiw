@@ -250,16 +250,16 @@ export default function VibeLink() {
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
           <span className="text-xs uppercase tracking-[0.3em] text-cyan-400/80">VibeLink</span>
-          <span className="ml-2 text-xs tracking-[0.25em] text-slate-500">// {puzzle.title}</span>
+          <span className="ml-2 text-xs tracking-[0.25em] text-slate-300">// {puzzle.title}</span>
         </div>
         <div className="flex items-center gap-3 text-xs">
-          <div className="text-slate-400">
+          <div className="text-slate-300">
             WINS <span className="tabular-nums text-cyan-200">{stats.wins}</span>
           </div>
-          <div className="text-slate-400">
+          <div className="text-slate-300">
             STREAK <span className="tabular-nums text-cyan-200">{stats.streak}</span>
           </div>
-          <div className="text-slate-400">
+          <div className="text-slate-300">
             BEST <span className="tabular-nums text-cyan-200">{stats.best}</span>
           </div>
         </div>
@@ -267,7 +267,7 @@ export default function VibeLink() {
 
       {/* Lives */}
       <div className="relative flex items-center justify-center gap-2 pb-3">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-slate-500">POWER CELLS</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-slate-300">POWER CELLS</span>
         <div className="flex gap-1.5">
           {[0, 1, 2, 3].map((i) => {
             const spent = i >= lives;
@@ -423,7 +423,7 @@ export default function VibeLink() {
       </div>
 
       {/* Legend */}
-      <div className="relative flex flex-wrap items-center justify-center gap-2 px-4 pb-5 text-[10px] uppercase tracking-[0.25em] text-slate-500">
+      <div className="relative flex flex-wrap items-center justify-center gap-2 px-4 pb-5 text-[10px] uppercase tracking-[0.25em] text-slate-300">
         {([1, 2, 3, 4] as Level[]).map((lv) => {
           const m = LEVEL_META[lv];
           return (
@@ -432,7 +432,7 @@ export default function VibeLink() {
                 className="inline-block h-2 w-2 rounded-sm"
                 style={{ background: m.color, boxShadow: `0 0 6px ${m.color}` }}
               />
-              <span className="text-slate-400">L{lv} {m.name}</span>
+              <span className="text-slate-300">L{lv} {m.name}</span>
             </span>
           );
         })}
@@ -467,7 +467,7 @@ export default function VibeLink() {
               <div className={`mb-1 text-xl font-bold ${won ? 'text-cyan-100' : 'text-rose-100'}`}>
                 {puzzle.title}
               </div>
-              <div className="mb-4 text-[11px] uppercase tracking-[0.25em] text-slate-400">
+              <div className="mb-4 text-[11px] uppercase tracking-[0.25em] text-slate-300">
                 {won
                   ? `Streak: ${stats.streak} · Best: ${stats.best}`
                   : `Streak reset · Total wins: ${stats.wins}`}

@@ -1,0 +1,54 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Methodology — Kefiw"
+  description="How Kefiw builds tools and guides: deterministic formulas, local-browser processing, rule models, assumptions, rounding, examples, and source discipline."
+  canonical="/methodology/"
+  keywords={['methodology', 'how kefiw works', 'deterministic tools', 'formula methodology']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Methodology</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw favors deterministic pages with visible formulas, clear assumptions, and practical examples over vague promise-heavy tool copy.
+    </p>
+
+    <TrustNav current="/methodology/" />
+
+    <h2>How tool pages are built</h2>
+    <p>
+      A tool page starts with the task a user is actually trying to complete. For a calculator, that usually means checking a formula, comparing options, or avoiding manual arithmetic. For a game helper, it usually means learning the rules, narrowing possibilities, spotting patterns, or improving strategy without removing the challenge entirely. For a text utility, it often means cleaning, formatting, or counting content quickly and privately.
+    </p>
+
+    <h2>The standard tool structure</h2>
+    <ul>
+      <li>short plain-language intro</li>
+      <li>explicit inputs and how the result is calculated</li>
+      <li>examples and worked scenarios</li>
+      <li>common mistakes, limitations, and next-step links</li>
+      <li>review and methodology block with role scope</li>
+    </ul>
+
+    <h2>Deterministic where possible</h2>
+    <p>
+      Kefiw prefers formulas, rules, thresholds, and search logic that can be explained and repeated. If a page uses a heuristic or simplified model, that should be stated directly. Users should be able to tell whether they are seeing exact arithmetic, a practical estimate, a game-rule search, or a higher-uncertainty shortcut.
+    </p>
+
+    <h2>Rounding and assumptions</h2>
+    <p>
+      Rounding is part of the result, not an afterthought. A page should make clear whether it is rounding for readability, matching a domain convention, or preserving exact output when precision matters. Inputs, defaults, and assumptions should be visible enough that a user can judge whether the tool fits the task they have in mind.
+    </p>
+
+    <h2>Guides are written differently from tools</h2>
+    <p>
+      A guide exists when the user needs more than a result. That is where Kefiw explains tradeoffs, edge cases, traps, and the practical skill around the tool. A rhyme finder returns rhyme ideas. A guide should explain why a writer uses it, what they are usually writing, how to avoid forced rhymes, and what related tool helps next.
+    </p>
+
+    <h2>Privacy and local processing</h2>
+    <p>
+      Many pages run entirely in the browser. That matters because users often paste sensitive text, experiment with numbers, or work through decisions they would rather keep on-device. When a page depends on local-only processing, that is part of the page&rsquo;s value and should be stated plainly.
+    </p>
+  </article>
+</BaseLayout>

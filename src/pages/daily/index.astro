@@ -1,0 +1,53 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import DailyHub from '~/components/daily/DailyHub.tsx';
+import { DAILY_PIPELINES } from '~/data/daily-pipelines';
+import { DAILY_GAMES } from '~/data/daily-games';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+];
+const activePipelines = DAILY_PIPELINES.filter((p) => p.active);
+---
+
+<BaseLayout
+  title="Daily Kefiw — today's word, letters & grid"
+  description="Three puzzles, one run: Five-Letter Hunt, Hive, and Sudoku. New set every day at 4am ET. Free, no login required."
+  canonical="/daily/"
+  keywords={["daily word puzzle", "daily sudoku", "hive letters", "five letter word game", "daily kefiw"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Daily Kefiw</h1>
+      <p class="mt-1 text-lg text-slate-700">Three puzzles, one run. Come back tomorrow for a fresh set.</p>
+      <p class="mt-2 max-w-3xl text-slate-600">
+        One Five-Letter Hunt, one Hive, one Sudoku — same for every player, same day.
+        New puzzles drop at 4:00 AM Eastern Time. Play in any order.
+      </p>
+    </header>
+
+    <DailyHub client:load pipelines={activePipelines} games={DAILY_GAMES} />
+
+    <section class="mt-8 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div>
+        <h2 class="text-lg font-semibold">Today's leaderboard</h2>
+        <p class="text-sm text-slate-600">See where you stand across all three games.</p>
+      </div>
+      <a href="/daily/leaderboard/" class="rounded bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">View board →</a>
+    </section>
+
+    <section class="mt-10 border-t border-slate-200 pt-6">
+      <h2 class="text-xl font-semibold">How scoring works</h2>
+      <ul class="mt-3 space-y-2 text-sm text-slate-700">
+        <li><strong>Five-Letter Hunt</strong>: six guesses to crack the daily word. Fewer guesses rank higher.</li>
+        <li><strong>Hive</strong>: find words using the seven letters; the center letter must appear in every word. Scoring mirrors the NYT Spelling Bee tier system. Reaching the <strong>Good</strong> tier or higher clears the day.</li>
+        <li><strong>Sudoku</strong>: solve the 9×9 grid. Difficulty rotates by weekday — easy on Sun/Mon, medium Tue–Thu, hard Fri/Sat. Faster solves rank higher.</li>
+        <li><strong>Streak</strong>: clear a game (or the full pipeline) today and every prior day without a break. Missing a day resets it.</li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>

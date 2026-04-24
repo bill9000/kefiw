@@ -14,10 +14,9 @@ export interface KeyStat {
   value: string;
 }
 
-export interface WhenToUseItem {
-  toolId: string;
-  note: string;
-}
+export type WhenToUseItem =
+  | { toolId: string; note: string; articleId?: never }
+  | { articleId: string; note: string; toolId?: never };
 
 export interface ContentPageConfig {
   id: string;
@@ -66,6 +65,10 @@ export interface ContentPageConfig {
     stable: { toolId: string; note: string };
     fallback: { toolId: string; note: string };
   };
+  // Writer-AI enrichment — rendered between intro/keypoints and FAQ on guide pages.
+  // Contains markdown prose (H2 sections, paragraphs, inline links).
+  longformMarkdown?: string;
+  metaDescription?: string;
   // cross-linking
   relatedIds?: string[];
   relatedLinks?: ContentCta[];
@@ -112,7 +115,15 @@ import { ARTICLES_HEALTH_PEPTIDE_BIO } from './content/articles-health-peptide-b
 import { ARTICLES_TRIAD_SCENARIOS } from './content/articles-triad-scenarios';
 import { ARTICLES_VIBE_GAMES } from './content/articles-vibe-games';
 
-export const CONTENT_PAGES: ContentPageConfig[] = [
+// Writer-AI V3 enhancement overrides (merged in at export time below).
+import { SCRABBLE_ENHANCEMENTS } from './content/scrabble-enhancements';
+import {
+  SCRABBLE_ARTICLE_PATCHES,
+  SCRABBLE_NEW_GUIDES,
+  type ArticlePatch,
+} from './content/scrabble-docs-update';
+
+const RAW_CONTENT_PAGES: ContentPageConfig[] = [
   ...CLUSTER_A,
   ...CLUSTER_E,
   ...SUPPORT_SCRABBLE,
@@ -142,6 +153,34 @@ export const CONTENT_PAGES: ContentPageConfig[] = [
   ...ARTICLES_HEALTH_PEPTIDE_BIO,
   ...ARTICLES_TRIAD_SCENARIOS,
   ...ARTICLES_VIBE_GAMES,
+];
+
+const ENHANCEMENT_OVERRIDES: Record<string, Partial<ContentPageConfig>> = {
+  ...SCRABBLE_ENHANCEMENTS,
+};
+
+// Apply sparse append-style patches (new FAQs, longform sections, relatedIds)
+// AFTER the V3 spread overrides so doc updates layer on top of V3 content.
+function applyArticlePatch(base: ContentPageConfig, patch: ArticlePatch): ContentPageConfig {
+  const faq = patch.appendFaq ? [...(base.faq ?? []), ...patch.appendFaq] : base.faq;
+  const relatedSet = new Set([...(base.relatedIds ?? []), ...(patch.appendRelatedIds ?? [])]);
+  const relatedIds = patch.appendRelatedIds ? Array.from(relatedSet) : base.relatedIds;
+  const longformMarkdown = patch.appendLongform
+    ? (base.longformMarkdown ?? '') + '\n' + patch.appendLongform
+    : base.longformMarkdown;
+  return { ...base, faq, relatedIds, longformMarkdown };
+}
+
+const mergedPages: ContentPageConfig[] = RAW_CONTENT_PAGES.map((p) => {
+  const override = ENHANCEMENT_OVERRIDES[p.id];
+  const afterOverride: ContentPageConfig = override ? { ...p, ...override } : p;
+  const patch = SCRABBLE_ARTICLE_PATCHES[p.id];
+  return patch ? applyArticlePatch(afterOverride, patch) : afterOverride;
+});
+
+export const CONTENT_PAGES: ContentPageConfig[] = [
+  ...mergedPages,
+  ...SCRABBLE_NEW_GUIDES,
 ];
 
 export function contentHref(c: ContentPageConfig): string {

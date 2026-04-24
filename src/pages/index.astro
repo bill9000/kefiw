@@ -10,23 +10,44 @@ import { getPopularTools } from '~/data/popular-tools';
 const popular = getPopularTools({ mode: 'fallback', limit: 5 });
 const clusterSlugs = ['scrabble', 'unscramble', 'pattern', 'rhyme', 'everyday-calculators', 'daily'];
 
+const siteBase = (Astro.site?.toString() ?? 'https://kefiw.com').replace(/\/$/, '');
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Kefiw',
-  url: Astro.site?.toString() ?? 'https://kefiw.com',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: { '@type': 'EntryPoint', urlTemplate: `${Astro.site?.toString() ?? 'https://kefiw.com'}?q={search_term_string}` },
-    'query-input': 'required name=search_term_string',
-  },
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${siteBase}/#organization`,
+      name: 'Kefiw',
+      url: `${siteBase}/`,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteBase}/og-image.png`,
+        width: 1200,
+        height: 630,
+      },
+      description: 'Kefiw is a fast, practical tools site for solving, calculating, and making better everyday decisions. Word tools, calculators, decision helpers, and daily challenges — free and runs in your browser.',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteBase}/#website`,
+      name: 'Kefiw',
+      url: `${siteBase}/`,
+      publisher: { '@id': `${siteBase}/#organization` },
+      inLanguage: 'en',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: `${siteBase}/?q={search_term_string}` },
+        'query-input': 'required name=search_term_string',
+      },
+    },
+  ],
 };
 ---
 <BaseLayout
-  title="Kefiw — Fast, Free Word Tools, Converters & Calculators"
-  description="Word unscramblers, anagram solvers, converters, calculators, and small games. Mobile-first, runs in your browser, no signup."
+  title="Kefiw — Fast Tools for Everyday Wins"
+  description="Kefiw is a fast, practical tools site for solving, calculating, and making better everyday decisions. Word tools, calculators, decision helpers, and daily challenges — all free, no signup."
   canonical="/"
-  keywords={['word tools', 'unscrambler', 'anagram solver', 'converters', 'calculators', 'scrabble']}
+  keywords={['word tools', 'unscrambler', 'anagram solver', 'converters', 'calculators', 'decision tools', 'daily challenges']}
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
 
@@ -57,7 +78,10 @@ const jsonLd = {
       <a href="/converters/" class="btn-ghost">Converters</a>
       <a href="/calculators/" class="btn-ghost">Calculators</a>
       <a href="/finance/" class="btn-ghost">Finance</a>
+      <a href="/health/" class="btn-ghost">Health</a>
+      <a href="/logic/" class="btn-ghost">Logic</a>
       <a href="/games/" class="btn-ghost">Games</a>
+      <a href="/guides/" class="btn-ghost">Guides</a>
     </div>
   </section>
 

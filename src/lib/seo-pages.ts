@@ -178,7 +178,20 @@ interface DroppedEntry {
 
 let built: { pages: SeoPage[]; dropped: DroppedEntry[] } | null = null;
 
+// Memoized — buildSeoPages is called by getStaticPaths() (word-tools/[slug].astro)
+// AND by the sitemap generator. Without this cache each call rescans 172k words
+// through ~486 filter passes. The page set is entirely deterministic from the
+// word list + thresholds, so one computation is enough per build.
+let __seoPagesCache: { pages: SeoPage[]; dropped: DroppedEntry[] } | null = null;
+
 export function buildSeoPages(): { pages: SeoPage[]; dropped: DroppedEntry[] } {
+  if (__seoPagesCache) return __seoPagesCache;
+  const result = computeSeoPages();
+  __seoPagesCache = result;
+  return result;
+}
+
+function computeSeoPages(): { pages: SeoPage[]; dropped: DroppedEntry[] } {
   if (built) return built;
   const pages: SeoPage[] = [];
   const dropped: DroppedEntry[] = [];

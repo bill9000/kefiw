@@ -1,0 +1,56 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Registered Nurse Review — Kefiw"
+  description="What registered nurse review means on Kefiw health pages: safety wording, escalation language, practical guidance boundaries, and what RN review does not claim."
+  canonical="/registered-nurse-review/"
+  keywords={['registered nurse review', 'rn review', 'health content review', 'kefiw rn review']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Registered Nurse Review</h1>
+    <p class="lead text-lg text-slate-700">
+      RN review on Kefiw means health pages are checked for safer wording, clearer escalation language, and better explanation of what a tool can and cannot support.
+    </p>
+
+    <TrustNav current="/registered-nurse-review/" />
+
+    <h2>What RN review covers</h2>
+    <ul>
+      <li>red-flag language and when a page should tell the user not to wait on the tool</li>
+      <li>health-safety wording that avoids casual understatements or false reassurance</li>
+      <li>plain-language explanations of what a user is actually trying to do with a health page</li>
+      <li>scope limits so educational calculators do not read like individualized care</li>
+    </ul>
+
+    <h2>What users are usually trying to do</h2>
+    <p>
+      On health pages, users are usually trying to estimate a number, understand a threshold, compare options, or decide whether a situation feels routine or serious. They are often under time pressure and may already be worried. RN review helps keep those pages practical without slipping into diagnosis or treatment claims.
+    </p>
+
+    <h2>What RN review does not mean</h2>
+    <ul>
+      <li>It does not create a nurse-patient relationship.</li>
+      <li>It does not mean a page offers diagnosis, prescribing, or individualized treatment.</li>
+      <li>It does not mean every health page is appropriate for every person or every setting.</li>
+      <li>It does not override the page&rsquo;s stated limitations, assumptions, or disclaimer language.</li>
+    </ul>
+
+    <h2>Where RN review is most useful</h2>
+    <p>
+      RN review is most useful on health pages that mention triage, thresholds, safety cutoffs, symptom-routing language, or recovery decisions. It is less about changing the arithmetic and more about making sure the surrounding copy does not imply too much or ignore obvious escalation cases.
+    </p>
+
+    <h2>How it works with the other review lanes</h2>
+    <p>
+      RN review is not a replacement for methodology review or engineering review. Health pages still need deterministic math, explicit assumptions, and honest discussion of uncertainty. RN review adds the practical care-safety layer on top of that.
+    </p>
+
+    <h2>When not to rely on the page</h2>
+    <p>
+      Do not rely on a Kefiw health page when the situation is urgent, worsening, unusual, or clearly individualized. Use the page to understand a model or organize a decision, not to delay appropriate medical care. Read the <a href="/health-disclaimer/">health disclaimer</a> for the site-wide boundary.
+    </p>
+  </article>
+</BaseLayout>

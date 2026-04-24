@@ -31,7 +31,8 @@ export type EventType =
   | 'tool_reveal'
   | 'modal_open'
   | 'modal_dismiss'
-  | 'ad_request';
+  | 'ad_request'
+  | 'ad_close';
 
 export interface KfwEvent {
   event_type: EventType;

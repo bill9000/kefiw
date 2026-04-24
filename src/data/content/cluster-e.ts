@@ -306,18 +306,95 @@ export const CLUSTER_E: ContentPageConfig[] = [
     section: 'guides',
     slug: 'rhyme-perfect-vs-near',
     guideCategory: 'Poetry',
-    title: 'Perfect Rhymes vs Near Rhymes — Explained — Kefiw',
+    title: 'Perfect Rhymes vs Near Rhymes: How Different Rhyme Types Change a Line — Kefiw',
     h1: 'Perfect Rhymes vs Near Rhymes',
     subhead: 'How poets and songwriters use different kinds of rhyme',
     description: 'The difference between perfect rhymes, slant rhymes, eye rhymes, and near rhymes — with examples from poetry and song.',
+    metaDescription: 'Learn the difference between perfect rhymes, near rhymes, slant rhymes, and eye rhymes, with practical tips for poems, lyrics, and revision.',
     keywords: ['perfect rhyme', 'near rhyme', 'slant rhyme', 'eye rhyme', 'rhyme types'],
-    intro: 'Not every rhyme is a perfect rhyme. This guide walks through the main categories with examples.',
-    faq: [
-      { q: 'Is "love" / "move" a rhyme?', a: 'It is an eye rhyme — same spelling, different sound. In strict poetic terms it is not a rhyme at all, but it is used for visual effect.' },
-      { q: 'Are near rhymes "cheating"?', a: 'No — many of the best songwriters and poets prefer near rhymes for freshness. Perfect rhyme can feel predictable.' },
+    intro: 'Perfect rhymes create a clean sound match. Near rhymes loosen that match so a poem or lyric can sound more natural, surprising, or conversational. The craft is choosing the rhyme type that fits the line, not forcing every ending into the neatest possible pair.',
+    keyPoints: [
+      'Perfect rhymes are the clearest sound matches and often work well in songs, children\u2019s verse, and comic or memorable lines.',
+      'Near rhymes keep enough sound connection to feel related while leaving room for natural speech.',
+      'Slant rhyme is a broader craft term for imperfect sound matches, especially when consonants echo but vowels shift.',
+      'Eye rhymes look similar on the page but do not rhyme when spoken.',
+      'A spelling-based rhyme tool is a brainstorming aid, not a final sound judge.',
     ],
-    relatedIds: ['rhyme-finder', 'syllable-counter'],
+    examples: [
+      { title: 'Perfect rhyme', body: 'light / night / sight. These words share a clear ending sound.' },
+      { title: 'Near rhyme', body: 'home / alone / room. These may echo enough for a softer, less locked-in effect.' },
+      { title: 'Eye rhyme', body: 'love / move. The spelling looks close, but the vowel sound is different.' },
+      { title: 'Forced rhyme', body: 'A line becomes forced when the sentence exists only to reach the rhyme.' },
+    ],
+    whenToUse: [
+      { toolId: 'rhyme-finder', note: 'Use as a fast spelling-based brainstormer, then read candidates aloud.' },
+      { toolId: 'syllable-counter', note: 'Use after choosing a rhyme to check whether the matching lines feel balanced.' },
+    ],
+    faq: [
+      { q: 'What is a perfect rhyme?', a: 'A perfect rhyme is a pair of words whose stressed vowel and following sounds match clearly. In practical writing, perfect rhymes feel resolved, memorable, and easy to hear, which makes them useful for choruses, couplets, and children\u2019s verse.', faq_intent: 'definition' },
+      { q: 'What is a near rhyme?', a: 'A near rhyme is a partial sound match that echoes another word without matching every sound exactly. Near rhymes help poems and lyrics sound more natural when perfect rhymes feel predictable, childish, or too neat.', faq_intent: 'definition' },
+      { q: 'Are near rhymes and slant rhymes the same?', a: 'Near rhyme and slant rhyme overlap, but slant rhyme is often used more broadly for imperfect sound matches. Both terms describe rhymes that connect by sound without the full closure of a perfect rhyme.', faq_intent: 'comparison' },
+      { q: 'Is an eye rhyme a real rhyme?', a: 'An eye rhyme is a visual rhyme, not a reliable spoken rhyme. Words like love and move look similar, but they do not share the same vowel sound, so they can sound wrong in songs or spoken poems.', faq_intent: 'edge-case' },
+      { q: 'When should I use perfect rhymes?', a: 'Use perfect rhymes when the line needs clarity, comedy, musical closure, or an easy-to-remember ending. They work especially well in repeated hooks, children\u2019s verse, and formal patterns where the rhyme is meant to stand out.', faq_intent: 'how-to' },
+      { q: 'When should I use near rhymes?', a: 'Use near rhymes when the exact rhyme feels forced or too obvious. Near rhymes often suit modern poems, folk lyrics, rap, and conversational writing because they preserve sound connection while keeping the line flexible.', faq_intent: 'how-to' },
+    ],
+    relatedIds: ['rhyme-finder', 'syllable-counter', 'cS-how-to-write-a-rhyming-poem'],
     primaryCta: { href: '/word-tools/rhyme-finder/', label: 'Rhyme Finder' },
+    longformMarkdown: `## What perfect and near rhymes really solve
+
+Rhyme is not only decoration at the end of a line. It tells the ear which words belong together, where the phrase is landing, and how complete the thought should feel. A perfect rhyme gives a strong sense of closure. A near rhyme keeps a connection but leaves the sound a little open.
+
+That difference matters when a writer is choosing a tone. A birthday card might want a simple perfect rhyme because the goal is warmth and quick recognition. A serious poem may need a looser rhyme because an exact pair can sound too tidy for a complicated feeling. A pop chorus may use perfect rhyme because the listener has to catch it on the first pass. A rap verse may use near and slant rhymes because density and motion matter more than neat endings.
+
+The useful question is not "which rhyme is best?" The useful question is "what kind of landing does this line need?"
+
+## How the main rhyme types differ
+
+A perfect rhyme is the tightest common sound match. In strict terms, the stressed vowel and the sounds after it match. Light, night, sight, and right make an easy group because the ending sound is clear and repeated. Perfect rhyme is clean, memorable, and sometimes too expected.
+
+A near rhyme, sometimes called an imperfect rhyme, relaxes the match. The words echo each other without matching every sound. In practice, near rhyme gives the writer more choices and can make the line feel closer to speech. Home and alone may be close enough in a lyric. Room and moon are tighter. Home and room are looser, but they may still create the right emotional distance in a poem.
+
+Slant rhyme is often used as a broad term for imperfect rhyme, especially when consonants echo and vowels move. It is common in modern poetry and rap because it lets sound patterns build without locking every line into a nursery-rhyme effect.
+
+Eye rhyme is different. Eye rhymes look like they should rhyme because the spelling is similar, but they do not sound alike. Love and move are the classic example. They share letters, not pronunciation. This is why any spelling-based list should be checked by ear.
+
+## When to choose a perfect rhyme
+
+Perfect rhyme works best when the line wants a firm click. It can make a chorus easier to remember, give a joke a punch, or make a couplet feel finished. If a song hook ends on light, a perfect rhyme such as night or right may be exactly what the listener expects and enjoys.
+
+Perfect rhyme is also useful for beginners because it teaches structure. If a classroom poem uses an AABB scheme, the repeated sound makes the pattern obvious. In short forms, that clarity can be helpful.
+
+The danger is predictability. Love and above, heart and apart, time and rhyme, day and away: these pairs are not automatically bad, but they have been used so often that they can feel flat unless the surrounding line is fresh. A perfect rhyme that says nothing new is still weak writing.
+
+## When to choose a near or slant rhyme
+
+Near rhyme is useful when meaning matters more than the cleanest match. Suppose a line ends with rain. A perfect rhyme such as plain or train may work, but remain might carry a more reflective tone, and again might push the poem toward memory. If none of the exact matches supports the idea, a looser sound may be better.
+
+Near rhyme also helps avoid twisted syntax. A forced rhyme often happens when the writer chooses the rhyming word first and then bends the sentence around it. The reader can feel the strain. Looser rhyme lets the sentence stay natural.
+
+For rap and spoken-word writing, near rhyme opens even more options. Internal echoes, consonant patterns, repeated vowel colors, and phrase endings can all create musical movement. The rhyme is not only at the line break. It can appear inside the line and across several words.
+
+Rhyme type matters most when it supports the poem\u2019s meaning. If you are starting from a blank page, see [How to Write a Rhyming Poem](/guides/how-to-write-a-rhyming-poem/) for a complete process from subject to revision.
+
+## A worked example
+
+Start with a plain line:
+
+I watched the evening fill with rain.
+
+The obvious spelling-based matches include plain, train, again, remain, and refrain. Each one changes the next line.
+
+Plain might lead to a quiet image: "the street went silver, still and plain." Train adds motion: "I heard the whistle from the train." Again makes the poem cyclical: "and thought of you again." Remain gives a reflective tone: "some things leave, and some remain."
+
+The strongest choice is not the word with the neatest match. It is the word that lets the next line say something worth saying. After choosing it, check rhythm with the [Syllable Counter](/word-tools/syllable-counter/). Lines do not need identical syllable counts, but a large mismatch can make the rhyme land awkwardly.
+
+## How to use tools without losing the poem
+
+A [Rhyme Finder](/word-tools/rhyme-finder/) is a starting point. Kefiw's current Rhyme Finder uses spelling-based ending matches, so it is fast for brainstorming but not a final pronunciation judge. Say the best candidates aloud. If a word only looks like a rhyme, treat it as an eye-rhyme risk and test it carefully.
+
+After choosing a candidate, read the full two-line unit aloud. Does the second line sound like something a person would actually say? Does the rhyme support the image? Does the rhythm carry the thought? If not, change the line ending and search again.
+
+Good rhyme joins sound and meaning. Perfect rhyme gives closure. Near rhyme gives flexibility. Eye rhyme reminds us that the page can lie. The writer's ear makes the final decision.`,
     bodyHtml: `
       <h2>Perfect rhyme</h2>
       <p>A perfect rhyme shares the final stressed vowel and every sound after it. Examples: CAT / HAT, LIGHT / FLIGHT, OCEAN / MOTION. Most nursery rhymes are built on perfect rhyme.</p>
@@ -347,18 +424,94 @@ export const CLUSTER_E: ContentPageConfig[] = [
     section: 'guides',
     slug: 'syllables-counting-rules',
     guideCategory: 'Poetry',
-    title: 'How to Count Syllables — Rules and Edge Cases — Kefiw',
+    title: 'How to Count Syllables: Rules, Examples, and Edge Cases — Kefiw',
     h1: 'How to Count Syllables',
     subhead: 'The rules and the tricky cases',
     description: 'Practical rules for counting syllables, plus common edge cases like silent e, diphthongs, and the -tion suffix.',
+    metaDescription: 'Learn practical syllable-counting rules for words, lines, poems, lyrics, and haiku, including silent e, vowel groups, dialect differences, and tricky words.',
     keywords: ['count syllables', 'syllable rules', 'how to count syllables', 'syllable counting'],
-    intro: 'Counting syllables sounds easy — a vowel per beat — but English has several traps. Here are the rules that cover 95% of cases.',
+    intro: 'Counting syllables means counting vowel sounds, not simply counting vowel letters. Most English words follow patterns that are easy to hear, but silent letters, diphthongs, names, loanwords, and dialect differences create real edge cases.',
+    keyPoints: [
+      'A syllable is usually built around one vowel sound.',
+      'Vowel letters and vowel sounds are not the same thing.',
+      'Silent e often does not add a syllable, but final le can.',
+      'Vowel pairs such as ai, oa, ou, and ee often form one syllable sound.',
+      'Pronunciation can vary, so some words have more than one acceptable count.',
+    ],
+    examples: [
+      { title: 'One syllable', body: 'cake, rain, house, and thought each have one main vowel sound.' },
+      { title: 'Two syllables', body: 'window, river, morning, and garden usually count as two syllables.' },
+      { title: 'Variable count', body: 'fire, poem, and family can shift depending on accent, speed, or poetic choice.' },
+      { title: 'Silent e', body: 'make and hope usually have one syllable because the final e is silent.' },
+    ],
+    whenToUse: [
+      { toolId: 'syllable-counter', note: 'Use for fast draft counts, then check edge cases by reading aloud.' },
+      { toolId: 'haiku-checker', note: 'Use when the target is the 5-7-5 haiku pattern.' },
+      { toolId: 'rhyme-finder', note: 'Use after you know the line length and need a matching ending idea.' },
+    ],
     faq: [
-      { q: 'Why do different tools give different counts?', a: 'English syllable counting is approximate. Automated counters use heuristics; humans often disagree too, especially for compound words and proper nouns.' },
-      { q: 'Does "fire" have 1 or 2 syllables?', a: 'Both are common. In fast speech it is 1 ("fyr"); in slower careful speech it is 2 ("fy-er"). Haiku counts usually treat it as 1.' },
+      { q: 'What is a syllable?', a: 'A syllable is a beat of speech built around one vowel sound. Words can have one syllable, such as rain, or several syllables, such as remember, depending on how many vowel sounds are spoken.', faq_intent: 'definition' },
+      { q: 'How do you count syllables in a word?', a: 'Count the vowel sounds you hear when the word is spoken naturally. Vowel letters can help you find candidates, but silent letters and vowel teams mean spelling alone is not enough.', faq_intent: 'how-to' },
+      { q: 'Does silent e count as a syllable?', a: 'A final silent e usually does not count as its own syllable. Words like cake, make, and hope have one syllable, while words ending in consonant plus le, such as table, may add a syllable.', faq_intent: 'edge-case' },
+      { q: 'Why do syllable counters disagree?', a: 'Syllable counters disagree because English pronunciation has exceptions, accents, and variable words. A heuristic counter may count spelling patterns, while a dictionary-based tool may follow a specific pronunciation entry.', faq_intent: 'troubleshooting' },
+      { q: 'Does fire have one or two syllables?', a: 'Fire can be one or two syllables depending on pronunciation and context. In fast speech it may sound like one beat, while careful speech may stretch it into two beats.', faq_intent: 'edge-case' },
+      { q: 'How do I count syllables in a poem line?', a: 'Say the line naturally and count each spoken beat, then compare your count with a tool. If the tool and your ear disagree, choose the count that matches the intended performance.', faq_intent: 'how-to' },
     ],
     relatedIds: ['syllable-counter', 'haiku-checker', 'rhyme-finder'],
     primaryCta: { href: '/word-tools/syllable-counter/', label: 'Syllable Counter' },
+    longformMarkdown: `## What a syllable is
+
+A syllable is a beat of speech. Most syllables are built around one vowel sound, not one vowel letter. That difference explains many of the confusing cases in English. The word rain has two vowel letters, a and i, but one vowel sound, so it has one syllable. The word idea has three vowel sounds for many speakers, so it has three syllables.
+
+For poems, songs, and haiku, syllable counting is useful because it gives the line a measurable shape. If two rhyming lines feel uneven, the problem may not be the rhyme. It may be that one line has several more syllables than the other. Counting gives us a way to see the rhythm before revising it.
+
+Still, syllable count is not the same as meter. Meter also cares about stress: which beats are strong and weak. A line can have the correct number of syllables and still sound awkward if the stresses fall in the wrong places.
+
+## The basic method: count vowel sounds
+
+The simplest method is to say the word naturally and count the beats. Clap once for each beat if that helps. Window becomes win-dow, two beats. Remember becomes re-mem-ber, three beats. Thought stays one beat even though the spelling is long.
+
+A spelling method can help, but it is only a starting point. Look for vowel groups such as a, e, i, o, u, and sometimes y. A group of vowels often makes one sound. Queen has ee, but it is one syllable. House has ou, but it is one syllable. Bread has ea, but it is one syllable.
+
+The [Syllable Counter](/word-tools/syllable-counter/) follows this kind of practical logic. It uses a vowel-group heuristic, not a pronunciation dictionary. That makes it fast for drafting, especially when checking many lines, but edge cases still need the writer's ear.
+
+## Silent e and common endings
+
+Silent e is one of the first rules many writers learn. Cake, hope, time, and make have a final e that changes the vowel but does not add a separate syllable. The final e is visible, not spoken.
+
+There are exceptions around final le. Table, little, candle, and simple often add a syllable because the ending creates a small spoken beat. The word table is ta-ble, two syllables. This is why a pure "count the vowel letters" method breaks down quickly.
+
+Suffixes can also change the count. Walk is one syllable, walking is two, and walked is usually one. Nation is two syllables, not three, because the tion ending compresses into a shun sound. Beautiful is three syllables for many speakers: beau-ti-ful.
+
+When writing a strict form, one difficult word can throw off the whole line. In that case, replace the word, rewrite the line, or decide that the spoken version you intend is the count that matters.
+
+## Edge cases: fire, poem, every, family
+
+Some words have more than one common count. Fire can be one syllable in fast speech or two in careful speech. Poem can sound like one syllable for some speakers and two for others. Every is often pronounced ev-ry, two syllables, even though the spelling suggests ev-er-y. Family may be two or three depending on speed and accent.
+
+These edge cases are not mistakes. They show that syllables belong to spoken language. A song lyric may compress a word to fit a melody. A spoken poem may stretch a word for emphasis. A classroom haiku assignment may prefer the most common dictionary-style count.
+
+The best practice is consistency. If a poem depends on a strict count, pick the pronunciation you intend and keep it stable. If the line will be read aloud, the performance matters more than a theoretical spelling count.
+
+## Counting syllables in lines
+
+A line is more than a row of words. It is a unit of sound. To count a line, read it at a natural pace and mark each spoken beat. Then look for places where the count feels too crowded or too thin.
+
+Take this line:
+
+The moon was low above the road
+
+A natural count is: the / moon / was / low / a-bove / the / road. That gives seven syllables. If the target is five, the line needs trimming. "Low moon over road" may be too compressed for normal speech, but "low moon on the road" gives five beats and keeps the image.
+
+For haiku, line-by-line counting matters more than total counting. A poem can have 17 syllables and still fail the 5-7-5 pattern. Use the [Haiku Checker](/word-tools/haiku-checker/) when the form requires line one to be 5, line two to be 7, and line three to be 5.
+
+## How to use automated counts wisely
+
+Automated syllable counts are draft tools. They are especially useful for spotting obvious problems, comparing several lines, or checking a long poem quickly. They are less reliable for names, foreign words, technical terms, and dialect-specific pronunciations.
+
+A good workflow is simple. Draft the line first. Run it through the [Syllable Counter](/word-tools/syllable-counter/). Read it aloud. If the count and your ear agree, keep moving. If they disagree, inspect the word causing the mismatch.
+
+For rhyming poems, count before and after choosing the rhyme. A perfect rhyme can still fail if one line has six syllables and the next has twelve. Use the [Rhyme Finder](/word-tools/rhyme-finder/) for ending ideas, then return to the syllable count to make sure the sound lands with the right weight.`,
     bodyHtml: `
       <h2>Rule 1: count the vowel sounds</h2>
       <p>A syllable is one vowel sound. Consonants cluster around it. <em>Cat</em> has one vowel sound (A). <em>Doctor</em> has two (DOC-TOR).</p>

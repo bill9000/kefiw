@@ -1,0 +1,45 @@
+---
+import { REVIEW_LINKS } from '~/data/review';
+
+interface Props {
+  current?: string;
+}
+
+const { current = '' } = Astro.props;
+
+const links = [
+  { href: REVIEW_LINKS.hub, label: 'About the Reviewers' },
+  { href: REVIEW_LINKS.nurse, label: 'Registered Nurse Review' },
+  { href: REVIEW_LINKS.engineering, label: 'Engineering Review' },
+  { href: REVIEW_LINKS.science, label: 'Scientific Review' },
+  { href: REVIEW_LINKS.editorial, label: 'Editorial Policy' },
+  { href: REVIEW_LINKS.methodology, label: 'Methodology' },
+  { href: REVIEW_LINKS.sources, label: 'Sources' },
+  { href: REVIEW_LINKS.healthDisclaimer, label: 'Health Disclaimer' },
+];
+---
+
+<nav aria-label="Trust pages" class="mt-6">
+  <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+    <div class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Trust pages</div>
+    <div class="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      {links.map((link) => {
+        const active = link.href === current;
+        return (
+          <a
+            href={link.href}
+            aria-current={active ? 'page' : undefined}
+            class:list={[
+              'rounded-lg border px-3 py-2 text-sm no-underline transition',
+              active
+                ? 'border-brand-500 bg-brand-50 font-semibold text-brand-700'
+                : 'border-slate-200 bg-white text-slate-700 hover:border-brand-500 hover:text-brand-700',
+            ]}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</nav>

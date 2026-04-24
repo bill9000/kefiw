@@ -1,0 +1,2041 @@
+{
+  "$schema_version": 2,
+  "exported_at": "2026-04-22T01:59:13.245Z",
+  "cluster": {
+    "slug": "rhyme",
+    "section": "word-tools",
+    "hubSlug": "rhyme-and-syllable-help",
+    "url": "/word-tools/rhyme-and-syllable-help/",
+    "title": "Rhyme & Syllable Help — Kefiw",
+    "h1": "Rhyme & Syllable Help",
+    "subhead": "Find rhymes, count syllables, and structure your lines.",
+    "intro": "Use this rhyme and syllable hub when the writing is close but the sound is not landing yet. The tools help with the mechanical checks: finding words with similar endings, counting syllables, checking line length, and validating a 5-7-5 haiku shape. The guides explain the craft around those checks so a poem, lyric, or short verse sounds natural instead of forced.",
+    "description": "Find spelling-based rhyme ideas, count syllables, check 5-7-5 haiku structure, and learn how to shape stronger poems, songs, and short verse.",
+    "keywords": [
+      "rhyme finder help",
+      "syllable counter help",
+      "haiku checker"
+    ],
+    "faq": [
+      {
+        "q": "Is the Rhyme Finder phonetic?",
+        "a": "No. The current Rhyme Finder is spelling-based and matches trailing letter patterns from a large English word list. It is useful for brainstorming, but final rhyme choices should be read aloud because English spelling does not always match pronunciation.",
+        "faq_intent": "trust"
+      },
+      {
+        "q": "Which tool should I use first for a poem?",
+        "a": "Start with the Rhyme Finder when you need ending-word ideas, then use the Syllable Counter to test rhythm. If the poem is a haiku, use the Haiku Checker after drafting three lines.",
+        "faq_intent": "how-to"
+      },
+      {
+        "q": "Why do rhyme and syllable tools sometimes disagree with my ear?",
+        "a": "Automated tools use rules, lists, or patterns, while poems are heard through pronunciation, accent, and performance. Treat the tools as drafting aids, then read the line aloud before making the final choice.",
+        "faq_intent": "troubleshooting"
+      },
+      {
+        "q": "Can these tools help with songs and rap lyrics?",
+        "a": "Yes. The tools can help with rhyme options, line length, and draft structure for lyrics. Songs and rap also depend on beat, stress, delivery, and phrasing, so the strongest test is still speaking or singing the line aloud.",
+        "faq_intent": "how-to"
+      }
+    ],
+    "relatedClusterSlugs": [
+      "word-families",
+      "text-cleanup"
+    ],
+    "content_claim_note": "Cluster FAQ corrected to match verified tool_logic: the current Rhyme Finder is spelling-based, not phonetic."
+  },
+  "tools": [
+    {
+      "id": "rhyme-finder",
+      "slug": "rhyme-finder",
+      "category": "word-tools",
+      "url": "/word-tools/rhyme-finder/",
+      "title": "Rhyme Finder — Kefiw",
+      "h1": "Rhyme Finder",
+      "current_word_count": 80,
+      "current": {
+        "description": "Find words that rhyme with your input. Useful for songwriting, poetry, and rap.",
+        "keywords": [
+          "rhyme finder",
+          "rhymes with",
+          "rhyming dictionary"
+        ],
+        "intro": "Enter any word and get a list of words that rhyme with it, grouped by perfect rhyme, near rhyme, and end-sound match.",
+        "outcomeLine": "Perfect, near, and slant rhymes — with syllable counts.",
+        "howTo": [
+          "Enter a single word.",
+          "View perfect rhymes first, then near-rhymes."
+        ],
+        "examples": [
+          {
+            "title": "Rhymes with TIME",
+            "body": "dime, lime, rhyme, prime, chime, climb, crime, sublime…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How are rhymes computed?",
+            "a": "By matching the trailing phoneme pattern of each word. Perfect rhymes share the last stressed vowel and all following sounds."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "words-ending-with"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "single English word (letters a-z; normalized to lowercase)",
+        "output_type": "two arrays — perfect rhymes and near rhymes — each capped at 200 results, sorted by length then alphabetically",
+        "processing_steps": [
+          "Normalize input: lowercase, strip non-letter characters.",
+          "Derive three candidate endings: last 4, last 3, and last 2 letters of the input.",
+          "Scan the ENABLE1 word list (~172k words) for every word ending in the last-4 suffix → perfect rhymes.",
+          "Scan remaining words for those ending in the last-3 suffix → near rhymes.",
+          "Sort each bucket by length ascending, then alphabetically.",
+          "Truncate each bucket to 200 entries before returning."
+        ],
+        "data_sources": [
+          "ENABLE1 public-domain English word list (~172,000 entries, `public/data/enable.txt`), loaded on first use via web worker."
+        ],
+        "fallback_behavior": "No phonetic fallback. All matching is spelling-based. If the input has no letters, both buckets return empty.",
+        "known_limitations": [
+          "Purely spelling-based — NOT phonetic. Words that look alike but sound different (e.g. \"through\" / \"rough\") will be matched as perfect rhymes despite not rhyming.",
+          "Words that sound alike but are spelled differently (e.g. \"eight\" / \"late\") will not be matched.",
+          "ENABLE1 does not include proper nouns, abbreviations, or profanity — so celebrity names, place names, and vulgar rhymes will never appear.",
+          "No multi-word rhymes (e.g. \"carry on\" / \"marathon\").",
+          "No dialect/accent handling. American-English spelling bias.",
+          "Each bucket capped at 200 results; longer words with common endings may hit the cap.",
+          "Stress patterns are ignored — \"happy\" (trochee) and \"reply\" (iamb) can both match \"-y\" endings regardless of where the stressed syllable falls."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "word (single-line text input, autofocused)"
+          ],
+          "filters": [
+            "mode: Quick | Extended — Quick shows perfect only; Extended shows perfect + near"
+          ],
+          "outputs": [
+            "Perfect rhymes chip list with count",
+            "Near rhymes chip list with count (Extended only)",
+            "Summary card: total rhyme count for the input",
+            "Stats card: mode, perfect count, near count (Extended), shortest and longest rhyme",
+            "Takeaway card: which bucket is strongest",
+            "Next-step card with links to Syllable Counter and Haiku Checker",
+            "Copy button per bucket (newline-joined list)"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Uses a large English word list",
+            "Separates results into perfect and near rhymes",
+            "Runs entirely in the browser (no server round-trip)",
+            "Spelling-based matching using trailing letters"
+          ],
+          "claim_forbidden": [
+            "Phonetic / pronunciation-aware rhyme matching",
+            "Includes celebrity or place names",
+            "Handles multi-word rhyming phrases",
+            "Respects stress patterns or meter",
+            "Dialect-specific rhymes (e.g. British vs American)"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": {
+        "description": "Find spelling-based rhyme ideas for poems, songs, rap verses, greeting cards, and short lines of verse.",
+        "meta_description": "Enter a word to find strong ending matches and near ending matches from a large English word list. Useful for brainstorming poems, lyrics, and short verse.",
+        "intro": "Use the Rhyme Finder when you have a line ending but need another word that can land with it. Enter one English word and the tool scans a large word list for matching endings. Quick mode shows the strongest ending matches; Extended mode also shows looser near matches. Because this version is spelling-based, read the best candidates aloud before using them in a poem, song, or rap verse.",
+        "outcomeLine": "Spelling-based ending matches for fast rhyme brainstorming.",
+        "howTo": [
+          "Enter one English word, such as time, light, rain, or heart.",
+          "Use Quick mode for the strongest ending matches.",
+          "Use Extended mode when the obvious matches feel too narrow or predictable.",
+          "Read the best choices aloud and keep the word that fits your meaning, rhythm, and tone."
+        ],
+        "examples": [
+          {
+            "title": "Writing a poem line",
+            "body": "If your line ends with rain, use the results to test plain, train, again, remain, or refrain. Each option changes the image and mood."
+          },
+          {
+            "title": "Writing a chorus",
+            "body": "If a chorus line ends with night, look for simple, singable matches first. Words like light, right, and sight are easy for listeners to hear."
+          },
+          {
+            "title": "Avoiding a forced rhyme",
+            "body": "If the only rhyme makes the sentence sound unnatural, change the line ending and search again. The best rhyme supports the idea instead of taking over the line."
+          },
+          {
+            "title": "Checking an eye-rhyme risk",
+            "body": "Words with the same spelling ending may not rhyme aloud. If a result looks useful, say both words out loud before using it."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is this rhyme finder phonetic?",
+            "a": "No. This rhyme finder is spelling-based, so it matches words by trailing letter patterns rather than pronunciation. It is useful for brainstorming, but English has eye rhymes and false rhymes, so read each result aloud before using it.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "Why does the rhyme finder show words that do not rhyme aloud?",
+            "a": "The tool may show false rhymes because English spelling and sound often disagree. Words with similar endings can sound different, especially endings such as ough, ove, or ear. Treat the list as a draft source, then keep only words that work when spoken.",
+            "faq_intent": "troubleshooting"
+          },
+          {
+            "q": "What is the difference between Quick and Extended mode?",
+            "a": "Quick mode shows the strongest spelling-ending matches, while Extended mode also shows looser near matches. Use Quick when you want a tighter list, and Extended when you need more options for a poem, song, or lyric.",
+            "faq_intent": "comparison"
+          },
+          {
+            "q": "Can I use this rhyme finder for songs or rap lyrics?",
+            "a": "Yes. The rhyme finder can help songwriters and rappers brainstorm ending words quickly. For lyrics, also check rhythm, stress, and delivery because a word that looks right in a list may not fit the beat.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Why are names, places, or slang missing?",
+            "a": "The tool uses the ENABLE1 English word list, which does not include many proper nouns, abbreviations, slang terms, or profanity. If a name or place is missing, search for a nearby common word ending instead.",
+            "faq_intent": "edge-case"
+          },
+          {
+            "q": "How do I choose the best rhyme from the list?",
+            "a": "Choose the rhyme that fits the meaning first, then check the sound and rhythm. A surprising rhyme is useful only when the line still feels natural. If the sentence bends around the rhyme, rewrite the line ending.",
+            "faq_intent": "how-to"
+          }
+        ],
+        "use_cases": [
+          "Finding a second line for a poem or couplet",
+          "Brainstorming chorus endings for a song",
+          "Finding simple rhymes for greeting cards or classroom poems",
+          "Looking for fresher alternatives to an obvious rhyme",
+          "Testing whether a line ending has enough options before committing to it"
+        ],
+        "common_mistakes": [
+          "Assuming a spelling match is always a sound rhyme",
+          "Choosing a rhyme before deciding what the line needs to say",
+          "Forcing word order just to land on a result",
+          "Ignoring syllable count and rhythm after choosing a rhyme",
+          "Using the first obvious rhyme even when it feels clichéd"
+        ],
+        "limitations": [
+          "Spelling-based only, not pronunciation-aware",
+          "No multi-word rhymes",
+          "No proper nouns or profanity from the source list",
+          "No stress-pattern or meter analysis",
+          "No syllable counts in the rhyme output"
+        ],
+        "suggested_tool_enhancements": [
+          "Add a pronunciation dictionary layer for true perfect rhymes.",
+          "Show syllable counts beside each result by reusing the Syllable Counter logic.",
+          "Add a warning badge for endings known to create eye-rhyme traps, such as ough and ove.",
+          "Add a multi-word rhyme mode for lyrics and rap.",
+          "Add a line-builder panel that lets the user test a rhyme inside a sentence."
+        ],
+        "content_strategy": {
+          "why_users_need_this_tool": "Writers use a rhyme finder when they know the idea of a line but need a word ending that supports the sound, rhythm, and emotional direction.",
+          "primary_user_scenarios": [
+            "A student writing a rhyming poem for class",
+            "A songwriter trying to finish a chorus",
+            "A rapper searching for denser sound patterns",
+            "A greeting-card writer looking for a warm, simple ending",
+            "A poet revising a line that sounds forced"
+          ],
+          "related_skill_lessons": [
+            "rhyme type",
+            "rhyme scheme",
+            "forced rhyme",
+            "eye rhyme",
+            "syllable count",
+            "reading aloud"
+          ],
+          "paa_targets": [
+            "How do I find words that rhyme?",
+            "What is a near rhyme?",
+            "Why do some words look like they rhyme?",
+            "How do I write a rhyming poem?",
+            "How do I avoid forced rhymes?"
+          ]
+        }
+      },
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "syllable-counter",
+      "slug": "syllable-counter",
+      "category": "word-tools",
+      "url": "/word-tools/syllable-counter/",
+      "title": "Syllable Counter — Kefiw",
+      "h1": "Syllable Counter",
+      "current_word_count": 78,
+      "current": {
+        "description": "Count the syllables in any word or phrase. Useful for haiku, poetry, and writing.",
+        "keywords": [
+          "syllable counter",
+          "count syllables",
+          "syllables in word"
+        ],
+        "intro": "Type or paste a word, sentence, or paragraph and get an accurate syllable count per word and total.",
+        "outcomeLine": "Per-word and per-line syllable counts for songs and poems.",
+        "howTo": [
+          "Type or paste your text.",
+          "View per-word and total syllable counts."
+        ],
+        "examples": [
+          {
+            "title": "Input: \"kefiw dictionary\"",
+            "body": "kefiw (2) + dictionary (4) = 6 syllables"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How accurate is it?",
+            "a": "Uses a heuristic that is ~95% accurate on common English words. Rare or technical words may be off by one."
+          }
+        ],
+        "relatedIds": [
+          "word-counter",
+          "letter-counter",
+          "rhyme-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — single word, sentence, or paragraph",
+        "output_type": "total syllable count across all words, plus per-word counts and per-line summary when multi-line",
+        "processing_steps": [
+          "Split input on whitespace to get a word list.",
+          "For each word: lowercase, strip non-letter characters.",
+          "If the cleaned word is 3 letters or fewer, count = 1.",
+          "Otherwise: strip trailing silent-e patterns and simple suffix endings.",
+          "Strip a leading \"y\" if present.",
+          "Count matches of the regex /[aeiouy]{1,2}/g — each vowel group = 1 syllable.",
+          "If no vowel groups found, default to 1.",
+          "Sum per-word counts for the total.",
+          "Detect haiku shape automatically: total === 17 and exactly 3 non-empty lines."
+        ],
+        "data_sources": [
+          "No dictionary. Pure regex / heuristic algorithm — `countSyllables()` in `src/lib/text.ts`."
+        ],
+        "fallback_behavior": "Returns at least 1 syllable for any non-empty word, even when no vowel pattern is detected.",
+        "known_limitations": [
+          "Approximately 95% accurate on common English words. Edge cases may disagree.",
+          "No dictionary lookup — exceptions like \"every\" (EV-RY vs EV-ER-Y), \"fire\" (1 or 2), or \"poem\" (POHM vs PO-EM) are resolved by the regex, not pronunciation.",
+          "Loanwords and proper nouns often miscount.",
+          "Compound words may be under-counted if the heuristic collapses vowel groups across the seam.",
+          "No dialect / stress awareness — British and American pronunciations treated identically.",
+          "Non-letter characters (digits, symbols) are stripped, so \"3D\" becomes \"d\" → 1 syllable."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea)"
+          ],
+          "filters": [
+            "mode: Quick | Extended — Extended shows per-word chips in addition to the total"
+          ],
+          "outputs": [
+            "Total syllable count (large numeric display in a card)",
+            "Summary card: total + word count",
+            "Stats card: words, syllables, avg syllables/word, longest word with count, shortest word with count",
+            "Per-line comparison card (only shown when input has 2+ non-empty lines)",
+            "Haiku-detection takeaway (when total === 17 and 3 non-empty lines)",
+            "Per-word chips showing word + syllable count (Extended mode only)",
+            "Next-step card with links to Rhyme Finder and Haiku Checker"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Counts syllables using a vowel-group heuristic",
+            "Provides per-word and total counts",
+            "Detects haiku-shaped input automatically",
+            "Runs in the browser, no server call",
+            "Accurate enough for songwriting and poetry on common English words"
+          ],
+          "claim_forbidden": [
+            "Uses a pronunciation or phonetic dictionary",
+            "Guaranteed accuracy on names or loanwords",
+            "Handles dialect / regional pronunciation",
+            "Respects IPA stress marks"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": {
+        "description": "Count estimated syllables in words, lines, poems, lyrics, and short text using a vowel-group heuristic.",
+        "meta_description": "Paste a word, line, poem, or paragraph to estimate total and per-word syllable counts for poetry, lyrics, haiku, and rhythm checks.",
+        "intro": "Use the Syllable Counter when a line sounds too long, too short, or uneven beside another line. Paste a word, sentence, poem, or lyric and the tool estimates syllables with a vowel-group heuristic. Extended mode shows per-word chips so you can spot which word is changing the rhythm. Counts are practical for drafting, but unusual names, loanwords, and dialect differences may need a manual read-aloud check.",
+        "outcomeLine": "Estimated syllable totals, per-word counts, and line comparisons for draft rhythm.",
+        "howTo": [
+          "Paste a word, line, poem, lyric, or paragraph into the text box.",
+          "Check the total syllable count for the full text.",
+          "Switch to Extended mode to see per-word counts.",
+          "For poems or lyrics, compare line counts and revise words that make the rhythm uneven."
+        ],
+        "examples": [
+          {
+            "title": "Checking a poem line",
+            "body": "The moon was low = 4 estimated syllables. Adding above the road changes the line length and rhythm."
+          },
+          {
+            "title": "Fixing a haiku draft",
+            "body": "If line two has 8 syllables instead of 7, look for one removable word or a shorter synonym before checking again."
+          },
+          {
+            "title": "Testing a lyric phrase",
+            "body": "A chorus line often needs to fit a beat. Count the phrase, then speak it with the melody or rhythm in mind."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How does the syllable counter work?",
+            "a": "The syllable counter estimates syllables by cleaning each word, finding vowel groups, and applying simple English spelling rules. It does not use a pronunciation dictionary, so rare words and names may need a manual check.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "How accurate is this syllable counter?",
+            "a": "The counter is designed to be practical for common English words, but it is still an estimate. Words such as fire, poem, every, names, and loanwords can vary by pronunciation, dialect, or speaking speed.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "Why does my syllable count differ from the tool?",
+            "a": "Counts differ when a word has more than one common pronunciation or when an accent changes the sound. Read the line aloud in the voice you intend to use, then adjust the count if the tool feels off.",
+            "faq_intent": "troubleshooting"
+          },
+          {
+            "q": "Can I count syllables in a whole poem?",
+            "a": "Yes. Paste the poem into the Syllable Counter and keep each poetic line on its own line. The tool can show total counts and line comparisons, which helps with forms, lyrics, and rhythm checks.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Does the syllable counter work for haiku?",
+            "a": "Yes, it can help count individual haiku lines, and it also detects a 17-syllable, three-line shape. For a clearer 5-7-5 pass/fail view, use the Haiku Checker after drafting.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Does the syllable counter use a dictionary?",
+            "a": "No. This tool uses a regex-based heuristic rather than a dictionary or IPA pronunciation source. That makes it fast and private in the browser, but it also means edge cases can be off by one.",
+            "faq_intent": "trust"
+          }
+        ],
+        "use_cases": [
+          "Checking whether two rhyming lines have similar length",
+          "Drafting a 5-7-5 haiku or other syllable-counted form",
+          "Tightening song lyrics to fit a melody or beat",
+          "Finding the word that makes a sentence feel too heavy",
+          "Teaching vowel sounds and syllable awareness"
+        ],
+        "common_mistakes": [
+          "Counting vowel letters instead of vowel sounds",
+          "Forgetting that silent e usually does not add a syllable",
+          "Treating every automated count as final",
+          "Ignoring how fast speech can compress words",
+          "Counting haiku syllables without checking the poem line by line"
+        ],
+        "limitations": [
+          "No pronunciation dictionary",
+          "No dialect-specific counts",
+          "Proper nouns and loanwords may be wrong",
+          "Some words can be validly pronounced with different counts",
+          "Non-English text is not supported as a true syllable system"
+        ],
+        "suggested_tool_enhancements": [
+          "Add a manual override for individual word counts.",
+          "Add dictionary exceptions for common edge cases such as every, fire, poem, and family.",
+          "Add a compare-lines view for poems with target counts.",
+          "Add preset forms such as haiku, tanka, limerick, and common hymn meter.",
+          "Add a warning when a word is likely ambiguous."
+        ],
+        "content_strategy": {
+          "why_users_need_this_tool": "Writers use syllable counts when the line meaning is right but the rhythm feels uneven, crowded, or too short.",
+          "primary_user_scenarios": [
+            "A poet matching the length of two rhyming lines",
+            "A student checking a haiku assignment",
+            "A songwriter fitting words to a melody",
+            "A teacher explaining vowel sounds",
+            "A writer revising a line that sounds clunky aloud"
+          ],
+          "related_skill_lessons": [
+            "vowel sounds",
+            "silent e",
+            "diphthongs",
+            "line rhythm",
+            "poetic meter",
+            "haiku structure"
+          ],
+          "paa_targets": [
+            "How do you count syllables?",
+            "What is a syllable?",
+            "Does fire have one or two syllables?",
+            "How many syllables are in a haiku?",
+            "Why do syllable counters disagree?"
+          ]
+        }
+      },
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "haiku-checker",
+      "slug": "haiku-checker",
+      "category": "word-tools",
+      "url": "/word-tools/haiku-checker/",
+      "title": "Haiku Checker — Kefiw",
+      "h1": "Haiku Checker",
+      "current_word_count": 139,
+      "current": {
+        "description": "Check if your poem follows the 5-7-5 haiku syllable pattern. Free, runs in your browser.",
+        "keywords": [
+          "haiku checker",
+          "haiku syllables",
+          "5 7 5 haiku",
+          "haiku validator"
+        ],
+        "intro": "Paste a three-line poem and see instantly whether each line hits the classic 5-7-5 syllable count. Syllables are estimated with a heuristic tuned for English.",
+        "outcomeLine": "Validates the 5-7-5 structure line by line.",
+        "howTo": [
+          "Type or paste your haiku — one line per line break.",
+          "Each line is scored against its target count (5, 7, 5).",
+          "Green means the target is met."
+        ],
+        "examples": [
+          {
+            "title": "Classic haiku",
+            "body": "An old silent pond / A frog jumps into the pond / Splash! Silence again — 5-7-5, valid."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How accurate is the syllable count?",
+            "a": "English syllable counts are estimated from letter patterns — usually accurate within 1, sometimes off on unusual words."
+          },
+          {
+            "q": "Must it be exactly 5-7-5?",
+            "a": "Modern haiku often bend the rule, but the checker enforces the traditional 5-7-5 structure so you know when you are on target."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "word-counter",
+          "rhyme-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "3 lines of text separated by newlines (pre-filled with an example haiku)",
+        "output_type": "per-line syllable counts with pass/fail against the 5-7-5 target, plus overall pass/fail boolean",
+        "processing_steps": [
+          "Split input by newline into raw lines.",
+          "For each line: split on whitespace, sum `countSyllables()` across all words.",
+          "Filter to non-empty lines (lines with at least one word).",
+          "Check: non-empty lines count === 3 AND line 1 count === 5 AND line 2 count === 7 AND line 3 count === 5.",
+          "Render each line with its count, its target, and a ✓ / over / under badge."
+        ],
+        "data_sources": [
+          "Same heuristic `countSyllables()` from `src/lib/text.ts`. No dictionary."
+        ],
+        "fallback_behavior": "Accepts fewer than 3 non-empty lines (shows partial validation). Extra lines beyond 3 are listed but have no target.",
+        "known_limitations": [
+          "Inherits all limitations of the syllable counter (heuristic ~95% accurate).",
+          "Only validates 5-7-5 shape. Does not detect kigo (seasonal word) or kireji (cutting word).",
+          "Only supports English haiku. Does not support Japanese kana counting (onji vs syllables).",
+          "Does not detect or suggest alternative forms (tanka 5-7-5-7-7, renga, senryu).",
+          "Accepts any text on each line — no quality/meaning check."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "haiku text (3-line textarea, font-serif, pre-filled with example)"
+          ],
+          "filters": [],
+          "outputs": [
+            "Per-line card with colored border (green = target met, red = off by any amount, amber = extra line beyond line 3)",
+            "Per-line count vs target with ✓ / (over) / (under) annotation",
+            "Summary card with \"Valid haiku\" or a diagnostic message",
+            "Stats card: lines count, total syllables, current pattern (e.g. 5-7-5), target pattern",
+            "Per-line comparison card with deltas",
+            "Takeaway card: congrats + kigo/kireji note when valid, or corrective hint when not",
+            "Next-step card with links to Syllable Counter and Rhyme Finder"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Validates the 5-7-5 syllable structure of English haiku",
+            "Shows per-line counts with pass/fail indicators",
+            "Works with any 3-line input (pre-filled with example)"
+          ],
+          "claim_forbidden": [
+            "Detects seasonal words (kigo) or cutting words (kireji)",
+            "Supports Japanese kana / onji counting",
+            "Validates tanka, renga, senryu, or other Japanese forms",
+            "Evaluates poetic quality, imagery, or juxtaposition"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": {
+        "description": "Check whether a three-line English poem follows the 5-7-5 syllable pattern.",
+        "meta_description": "Paste a three-line poem to check the 5-7-5 haiku syllable pattern line by line, with counts, pass/fail indicators, and revision hints.",
+        "intro": "Use the Haiku Checker after you have drafted three short lines and want to test the classic English 5-7-5 shape. The tool counts estimated syllables in each line, compares them to 5, 7, and 5, then shows which lines are on target, over, or under. It checks structure only. It does not judge imagery, season words, cutting words, or poetic quality.",
+        "outcomeLine": "Line-by-line 5-7-5 structure validation for English haiku drafts.",
+        "howTo": [
+          "Write or paste the poem with one haiku line per line break.",
+          "Check the line pattern against 5, 7, and 5 syllables.",
+          "Revise any line marked over or under the target.",
+          "After the count works, read the haiku for image, contrast, and simplicity."
+        ],
+        "examples": [
+          {
+            "title": "Structure check",
+            "body": "Line 1 = 5, line 2 = 7, line 3 = 5. The checker marks the poem valid for the 5-7-5 pattern."
+          },
+          {
+            "title": "Over-counted second line",
+            "body": "If the pattern is 5-8-5, the second line needs one syllable removed or replaced with a shorter phrase."
+          },
+          {
+            "title": "Craft reminder",
+            "body": "A valid 5-7-5 count is only the frame. A strong haiku usually depends on concrete imagery, a moment, and a turn."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What does the Haiku Checker validate?",
+            "a": "The Haiku Checker validates the 5-7-5 syllable structure of a three-line English haiku draft. It checks line counts only, not imagery, season words, cutting words, meaning, or overall poem quality.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Does a haiku have to be exactly 5-7-5?",
+            "a": "A classroom English haiku often uses 5-7-5, but modern English-language haiku may use shorter or looser counts. The checker enforces 5-7-5 so users can see whether they hit that specific pattern.",
+            "faq_intent": "comparison"
+          },
+          {
+            "q": "Why does the Haiku Checker say my line is wrong?",
+            "a": "The line is marked wrong when its estimated syllable count does not match the target for that line. If the line sounds right to you, check for words with variable pronunciation before rewriting.",
+            "faq_intent": "troubleshooting"
+          },
+          {
+            "q": "Can the Haiku Checker detect kigo or kireji?",
+            "a": "No. The checker does not detect seasonal words, cutting words, image quality, or juxtaposition. It only counts estimated English syllables and compares the three lines to the 5-7-5 target.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "How do I fix a haiku line with too many syllables?",
+            "a": "Remove filler words first, then replace long words with shorter concrete words. A strong haiku usually gains power from compression, so cutting one adjective or explanation often improves both count and image.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Should haiku rhyme?",
+            "a": "Haiku normally does not need rhyme, and end rhyme can make a short haiku feel forced. Focus on the syllable shape, the image, and the turn before adding any extra sound pattern.",
+            "faq_intent": "comparison"
+          }
+        ],
+        "use_cases": [
+          "Checking a classroom 5-7-5 haiku assignment",
+          "Revising a three-line nature poem for line length",
+          "Testing whether a short poem fits the classic English pattern",
+          "Finding which line is over or under before rewriting",
+          "Teaching the difference between structure and poetic quality"
+        ],
+        "common_mistakes": [
+          "Treating 5-7-5 as the whole craft of haiku",
+          "Adding filler words only to reach the count",
+          "Writing an abstract explanation instead of a concrete image",
+          "Forcing rhyme into a form that usually does not need it",
+          "Ignoring words whose syllable counts vary by accent or speed"
+        ],
+        "limitations": [
+          "Checks only English 5-7-5 syllable structure",
+          "No Japanese onji or kana support",
+          "No detection of kigo, kireji, senryu, tanka, or haiku quality",
+          "Syllable counts inherit the heuristic limits of the Syllable Counter",
+          "Extra lines are displayed but are not part of the target pattern"
+        ],
+        "suggested_tool_enhancements": [
+          "Add optional presets for tanka 5-7-5-7-7 and other short forms.",
+          "Add a revision helper that highlights likely removable filler words.",
+          "Add a seasonal-word prompt library without claiming automatic detection.",
+          "Add manual syllable overrides for ambiguous words.",
+          "Add a “craft checklist” after the structural pass: image, season, contrast, cut."
+        ],
+        "content_strategy": {
+          "why_users_need_this_tool": "Haiku writers use a checker when they have a short draft and need to know which line breaks the 5-7-5 pattern.",
+          "primary_user_scenarios": [
+            "A student checking homework before turning it in",
+            "A teacher demonstrating the 5-7-5 pattern",
+            "A poet revising a compact nature image",
+            "A beginner learning why count and craft are different",
+            "A writer trimming filler from a short poem"
+          ],
+          "related_skill_lessons": [
+            "5-7-5 structure",
+            "concrete imagery",
+            "seasonal reference",
+            "cut or turn",
+            "compression",
+            "line breaks"
+          ],
+          "paa_targets": [
+            "What is a haiku?",
+            "How many syllables are in a haiku?",
+            "Does a haiku have to be 5-7-5?",
+            "Do haiku rhyme?",
+            "How do I write a good haiku?"
+          ]
+        }
+      },
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "word-counter",
+      "slug": "word-counter",
+      "category": "word-tools",
+      "url": "/word-tools/word-counter/",
+      "title": "Word Counter — Kefiw",
+      "h1": "Word Counter",
+      "current_word_count": 59,
+      "current": {
+        "description": "Count words, sentences, paragraphs, and reading time in any text.",
+        "keywords": [
+          "word counter",
+          "count words",
+          "word count tool"
+        ],
+        "intro": "Paste any text and get word, sentence, paragraph, and reading-time stats instantly.",
+        "outcomeLine": "Words, characters, lines, and sentences — everything text counts.",
+        "howTo": [
+          "Paste your text.",
+          "Stats update as you type."
+        ],
+        "examples": [
+          {
+            "title": "Typical essay",
+            "body": "500 words ≈ 2.5 min read. 1500 words ≈ 7 min read."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How is reading time calculated?",
+            "a": "At 200 words per minute (average adult silent reading speed)."
+          }
+        ],
+        "relatedIds": [
+          "letter-counter",
+          "syllable-counter",
+          "case-converter"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — any length, single or multi-line",
+        "output_type": "multi-metric text statistics including word / character / sentence / paragraph counts and reading/speaking time estimates",
+        "processing_steps": [
+          "Split input on whitespace for word count.",
+          "Count characters including spaces, and again excluding spaces.",
+          "Split on sentence-ending punctuation (. ! ?) to approximate sentence count.",
+          "Split on blank-line gaps for paragraph count.",
+          "Derive longest word by character length.",
+          "Derive average word length (chars / words) and average words per sentence.",
+          "Estimate reading time based on standard words-per-minute (WPM) reading speed.",
+          "Estimate speaking time based on a slower WPM speaking-aloud rate."
+        ],
+        "data_sources": [
+          "No dictionary. Pure string analysis — `textStats()` in `src/lib/outcomes.ts`."
+        ],
+        "fallback_behavior": "Empty input returns zeros. Any non-space content yields at least 1 word.",
+        "known_limitations": [
+          "Sentence detection is punctuation-based — abbreviations (\"Dr.\", \"e.g.\") and ellipses may inflate the count.",
+          "Paragraph detection requires blank-line separators — single-line-break text counts as one paragraph.",
+          "Reading / speaking times are estimates based on average-reader WPM, not personalized.",
+          "No language detection — all text treated as English-ish for WPM.",
+          "Non-Latin scripts (Chinese, Japanese, Thai) without explicit whitespace may undercount words.",
+          "Longest word may include attached punctuation if not surrounded by whitespace."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea, h-48 — tall by default)"
+          ],
+          "filters": [],
+          "outputs": [
+            "Stat grid: Words, Characters, No spaces, Sentences, Paragraphs, Reading time (6-column responsive grid)",
+            "Summary card: word count + reading time label",
+            "Stats card: characters, characters-no-spaces, sentences, paragraphs, avg word length, avg words per sentence, longest word with length",
+            "Takeaway: reading vs speaking-aloud time comparison",
+            "Takeaway (conditional): readability hint when avg sentence > 20 words",
+            "Next-step card with links to Syllable Counter and Reading Time Calculator"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Counts words, characters, sentences, paragraphs in any English text",
+            "Estimates reading and speaking-aloud time",
+            "Runs in the browser; text never leaves the device",
+            "Flags long-sentence readability issues"
+          ],
+          "claim_forbidden": [
+            "Detects grammar, spelling, or style issues",
+            "Works on non-whitespace-delimited languages (Chinese, Japanese)",
+            "Provides per-reader personalized reading speed"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": {
+        "description": "Count words, characters, sentences, paragraphs, and estimated reading or speaking time in pasted text.",
+        "meta_description": "Paste text to count words, characters, sentences, paragraphs, average sentence length, and estimated reading or speaking time in the browser.",
+        "intro": "Use the Word Counter when a draft must fit a limit, a post feels too long, or a script needs an estimated reading time. Paste any text and the tool counts words, characters, sentences, paragraphs, and time estimates in the browser. The results are best for English-style text with spaces between words. Sentence and paragraph counts are approximate because punctuation and line breaks vary by draft.",
+        "outcomeLine": "Fast browser-based text statistics for drafts, posts, scripts, and assignments.",
+        "howTo": [
+          "Paste or type your text into the text area.",
+          "Watch the word, character, sentence, paragraph, and time estimates update.",
+          "Use reading time for articles and speaking time for scripts or presentations.",
+          "Check the long-sentence hint if the draft feels hard to read."
+        ],
+        "examples": [
+          {
+            "title": "Essay or assignment limit",
+            "body": "Paste the draft to see whether it is near a 500-word, 1,000-word, or 1,500-word target."
+          },
+          {
+            "title": "Blog reading time",
+            "body": "A 1,200-word article reads at roughly six minutes using a 200 words-per-minute estimate."
+          },
+          {
+            "title": "Script timing",
+            "body": "Speaking time is slower than reading time, so a script may need fewer words than an article of the same length."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How does the word counter count words?",
+            "a": "The word counter splits text on whitespace, so each separated text chunk counts as a word. This works well for English-style writing, but languages without spaces between words may be undercounted.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "How is reading time calculated?",
+            "a": "Reading time is estimated from the word count and a standard words-per-minute rate. It is a helpful planning number, not a personalized measure of how fast every reader will move through the text.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Does the word counter keep my text private?",
+            "a": "The tool runs in the browser, so the text can be analyzed without a server round-trip. That makes it suitable for quick draft checks, though users should still avoid pasting sensitive information into unnecessary tools.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "Why is the sentence count different from my document editor?",
+            "a": "Sentence counts can differ because the tool uses punctuation patterns to estimate sentence breaks. Abbreviations, ellipses, headings, and unusual punctuation may cause counts to differ from a document editor.",
+            "faq_intent": "troubleshooting"
+          },
+          {
+            "q": "Can I use the word counter for poems or lyrics?",
+            "a": "Yes, but word count is only one layer for poems and lyrics. For sound and rhythm, use the Syllable Counter after checking length, especially when line timing matters more than total words.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "What is the difference between characters with spaces and without spaces?",
+            "a": "Characters with spaces include every letter, punctuation mark, and space, while characters without spaces remove the spaces. Some forms and social platforms use one or the other, so both counts are useful.",
+            "faq_intent": "comparison"
+          }
+        ],
+        "use_cases": [
+          "Checking essays, posts, bios, and descriptions against word limits",
+          "Estimating article reading time",
+          "Estimating script or speech length",
+          "Spotting long-sentence readability issues",
+          "Comparing draft versions after editing"
+        ],
+        "common_mistakes": [
+          "Treating estimated reading time as exact for every reader",
+          "Expecting grammar or style checking from a counting tool",
+          "Using sentence counts as exact when abbreviations are present",
+          "Forgetting that poems and scripts depend on rhythm, not just word count",
+          "Counting non-space-delimited languages as if they were English"
+        ],
+        "limitations": [
+          "Whitespace-based word counting",
+          "Punctuation-based sentence counting",
+          "Blank-line paragraph detection",
+          "No grammar or style correction",
+          "No language-specific segmentation for Chinese, Japanese, Thai, or similar scripts"
+        ],
+        "suggested_tool_enhancements": [
+          "Expose the exact reading and speaking WPM assumptions in the UI.",
+          "Add adjustable reading-speed and speaking-speed controls.",
+          "Add export/copy for the full stats panel.",
+          "Add platform presets for meta descriptions, social posts, and ad copy.",
+          "Add a script mode with target duration and words-to-cut guidance."
+        ],
+        "content_strategy": {
+          "why_users_need_this_tool": "Writers use a word counter when the draft must fit a limit, estimate time, or reveal whether the text has become too dense.",
+          "primary_user_scenarios": [
+            "A student checking an assignment limit",
+            "A blogger estimating read time",
+            "A speaker timing a script",
+            "A marketer trimming a short description",
+            "A poet comparing line and draft length before syllable checks"
+          ],
+          "related_skill_lessons": [
+            "word count",
+            "reading time",
+            "speaking time",
+            "sentence length",
+            "paragraph structure",
+            "draft trimming"
+          ],
+          "paa_targets": [
+            "How do I count words in text?",
+            "How long does it take to read 500 words?",
+            "What counts as a word?",
+            "How many words are in a paragraph?",
+            "How do I estimate speaking time?"
+          ]
+        }
+      },
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cE-rhyme-perfect-vs-near",
+      "slug": "rhyme-perfect-vs-near",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/rhyme-perfect-vs-near/",
+      "title": "Perfect Rhymes vs Near Rhymes — Explained — Kefiw",
+      "h1": "Perfect Rhymes vs Near Rhymes",
+      "subhead": "How poets and songwriters use different kinds of rhyme",
+      "current_word_count": 101,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The difference between perfect rhymes, slant rhymes, eye rhymes, and near rhymes — with examples from poetry and song.",
+        "keywords": [
+          "perfect rhyme",
+          "near rhyme",
+          "slant rhyme",
+          "eye rhyme",
+          "rhyme types"
+        ],
+        "outcomeLine": null,
+        "intro": "Not every rhyme is a perfect rhyme. This guide walks through the main categories with examples.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Is \"love\" / \"move\" a rhyme?",
+            "a": "It is an eye rhyme — same spelling, different sound. In strict poetic terms it is not a rhyme at all, but it is used for visual effect."
+          },
+          {
+            "q": "Are near rhymes \"cheating\"?",
+            "a": "No — many of the best songwriters and poets prefer near rhymes for freshness. Perfect rhyme can feel predictable."
+          }
+        ],
+        "relatedIds": [
+          "rhyme-finder",
+          "syllable-counter"
+        ]
+      },
+      "enhanced": {
+        "title": "Perfect Rhymes vs Near Rhymes: How Different Rhyme Types Change a Line",
+        "meta_description": "Learn the difference between perfect rhymes, near rhymes, slant rhymes, and eye rhymes, with practical tips for poems, lyrics, and revision.",
+        "intro": "Perfect rhymes create a clean sound match. Near rhymes loosen that match so a poem or lyric can sound more natural, surprising, or conversational. The craft is choosing the rhyme type that fits the line, not forcing every ending into the neatest possible pair.",
+        "keyPoints": [
+          "Perfect rhymes are the clearest sound matches and often work well in songs, children’s verse, and comic or memorable lines.",
+          "Near rhymes keep enough sound connection to feel related while leaving room for natural speech.",
+          "Slant rhyme is a broader craft term for imperfect sound matches, especially when consonants echo but vowels shift.",
+          "Eye rhymes look similar on the page but do not rhyme when spoken.",
+          "A spelling-based rhyme tool is a brainstorming aid, not a final sound judge."
+        ],
+        "examples": [
+          {
+            "title": "Perfect rhyme",
+            "body": "light / night / sight. These words share a clear ending sound."
+          },
+          {
+            "title": "Near rhyme",
+            "body": "home / alone / room. These may echo enough for a softer, less locked-in effect."
+          },
+          {
+            "title": "Eye rhyme",
+            "body": "love / move. The spelling looks close, but the vowel sound is different."
+          },
+          {
+            "title": "Forced rhyme",
+            "body": "A line becomes forced when the sentence exists only to reach the rhyme."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "rhyme-finder",
+            "note": "Use as a fast spelling-based brainstormer, then read candidates aloud."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "Use after choosing a rhyme to check whether the matching lines feel balanced."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is a perfect rhyme?",
+            "a": "A perfect rhyme is a pair of words whose stressed vowel and following sounds match clearly. In practical writing, perfect rhymes feel resolved, memorable, and easy to hear, which makes them useful for choruses, couplets, and children’s verse.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "What is a near rhyme?",
+            "a": "A near rhyme is a partial sound match that echoes another word without matching every sound exactly. Near rhymes help poems and lyrics sound more natural when perfect rhymes feel predictable, childish, or too neat.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Are near rhymes and slant rhymes the same?",
+            "a": "Near rhyme and slant rhyme overlap, but slant rhyme is often used more broadly for imperfect sound matches. Both terms describe rhymes that connect by sound without the full closure of a perfect rhyme.",
+            "faq_intent": "comparison"
+          },
+          {
+            "q": "Is an eye rhyme a real rhyme?",
+            "a": "An eye rhyme is a visual rhyme, not a reliable spoken rhyme. Words like love and move look similar, but they do not share the same vowel sound, so they can sound wrong in songs or spoken poems.",
+            "faq_intent": "edge-case"
+          },
+          {
+            "q": "When should I use perfect rhymes?",
+            "a": "Use perfect rhymes when the line needs clarity, comedy, musical closure, or an easy-to-remember ending. They work especially well in repeated hooks, children’s verse, and formal patterns where the rhyme is meant to stand out.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "When should I use near rhymes?",
+            "a": "Use near rhymes when the exact rhyme feels forced or too obvious. Near rhymes often suit modern poems, folk lyrics, rap, and conversational writing because they preserve sound connection while keeping the line flexible.",
+            "faq_intent": "how-to"
+          }
+        ]
+      },
+      "longform_markdown": "## What perfect and near rhymes really solve\n\nRhyme is not only decoration at the end of a line. It tells the ear which words belong together, where the phrase is landing, and how complete the thought should feel. A perfect rhyme gives a strong sense of closure. A near rhyme keeps a connection but leaves the sound a little open.\n\nThat difference matters when a writer is choosing a tone. A birthday card might want a simple perfect rhyme because the goal is warmth and quick recognition. A serious poem may need a looser rhyme because an exact pair can sound too tidy for a complicated feeling. A pop chorus may use perfect rhyme because the listener has to catch it on the first pass. A rap verse may use near and slant rhymes because density and motion matter more than neat endings.\n\nThe useful question is not “which rhyme is best?” The useful question is “what kind of landing does this line need?”\n\n## How the main rhyme types differ\n\nA perfect rhyme is the tightest common sound match. In strict terms, the stressed vowel and the sounds after it match. Light, night, sight, and right make an easy group because the ending sound is clear and repeated. Perfect rhyme is clean, memorable, and sometimes too expected.\n\nA near rhyme, sometimes called an imperfect rhyme, relaxes the match. The words echo each other without matching every sound. In practice, near rhyme gives the writer more choices and can make the line feel closer to speech. Home and alone may be close enough in a lyric. Room and moon are tighter. Home and room are looser, but they may still create the right emotional distance in a poem.\n\nSlant rhyme is often used as a broad term for imperfect rhyme, especially when consonants echo and vowels move. It is common in modern poetry and rap because it lets sound patterns build without locking every line into a nursery-rhyme effect.\n\nEye rhyme is different. Eye rhymes look like they should rhyme because the spelling is similar, but they do not sound alike. Love and move are the classic example. They share letters, not pronunciation. This is why any spelling-based list should be checked by ear.\n\n## When to choose a perfect rhyme\n\nPerfect rhyme works best when the line wants a firm click. It can make a chorus easier to remember, give a joke a punch, or make a couplet feel finished. If a song hook ends on light, a perfect rhyme such as night or right may be exactly what the listener expects and enjoys.\n\nPerfect rhyme is also useful for beginners because it teaches structure. If a classroom poem uses an AABB scheme, the repeated sound makes the pattern obvious. In short forms, that clarity can be helpful.\n\nThe danger is predictability. Love and above, heart and apart, time and rhyme, day and away: these pairs are not automatically bad, but they have been used so often that they can feel flat unless the surrounding line is fresh. A perfect rhyme that says nothing new is still weak writing.\n\n## When to choose a near or slant rhyme\n\nNear rhyme is useful when meaning matters more than the cleanest match. Suppose a line ends with rain. A perfect rhyme such as plain or train may work, but remain might carry a more reflective tone, and again might push the poem toward memory. If none of the exact matches supports the idea, a looser sound may be better.\n\nNear rhyme also helps avoid twisted syntax. A forced rhyme often happens when the writer chooses the rhyming word first and then bends the sentence around it. The reader can feel the strain. Looser rhyme lets the sentence stay natural.\n\nFor rap and spoken-word writing, near rhyme opens even more options. Internal echoes, consonant patterns, repeated vowel colors, and phrase endings can all create musical movement. The rhyme is not only at the line break. It can appear inside the line and across several words.\n\n## A worked example\n\nStart with a plain line:\n\nI watched the evening fill with rain.\n\nThe obvious spelling-based matches include plain, train, again, remain, and refrain. Each one changes the next line.\n\nPlain might lead to a quiet image: “the street went silver, still and plain.” Train adds motion: “I heard the whistle from the train.” Again makes the poem cyclical: “and thought of you again.” Remain gives a reflective tone: “some things leave, and some remain.”\n\nThe strongest choice is not the word with the neatest match. It is the word that lets the next line say something worth saying. After choosing it, check rhythm with the [Syllable Counter](/word-tools/syllable-counter/). Lines do not need identical syllable counts, but a large mismatch can make the rhyme land awkwardly.\n\n## How to use tools without losing the poem\n\nA [Rhyme Finder](/word-tools/rhyme-finder/) is a starting point. Kefiw’s current Rhyme Finder uses spelling-based ending matches, so it is fast for brainstorming but not a final pronunciation judge. Say the best candidates aloud. If a word only looks like a rhyme, treat it as an eye-rhyme risk and test it carefully.\n\nAfter choosing a candidate, read the full two-line unit aloud. Does the second line sound like something a person would actually say? Does the rhyme support the image? Does the rhythm carry the thought? If not, change the line ending and search again.\n\nGood rhyme joins sound and meaning. Perfect rhyme gives closure. Near rhyme gives flexibility. Eye rhyme reminds us that the page can lie. The writer’s ear makes the final decision.",
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ],
+      "longform_word_count_estimate": 934
+    },
+    {
+      "id": "cE-syllables-counting-rules",
+      "slug": "syllables-counting-rules",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/syllables-counting-rules/",
+      "title": "How to Count Syllables — Rules and Edge Cases — Kefiw",
+      "h1": "How to Count Syllables",
+      "subhead": "The rules and the tricky cases",
+      "current_word_count": 106,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Practical rules for counting syllables, plus common edge cases like silent e, diphthongs, and the -tion suffix.",
+        "keywords": [
+          "count syllables",
+          "syllable rules",
+          "how to count syllables",
+          "syllable counting"
+        ],
+        "outcomeLine": null,
+        "intro": "Counting syllables sounds easy — a vowel per beat — but English has several traps. Here are the rules that cover 95% of cases.",
+        "keyPoints": [],
+        "examples": [],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Why do different tools give different counts?",
+            "a": "English syllable counting is approximate. Automated counters use heuristics; humans often disagree too, especially for compound words and proper nouns."
+          },
+          {
+            "q": "Does \"fire\" have 1 or 2 syllables?",
+            "a": "Both are common. In fast speech it is 1 (\"fyr\"); in slower careful speech it is 2 (\"fy-er\"). Haiku counts usually treat it as 1."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "haiku-checker",
+          "rhyme-finder"
+        ]
+      },
+      "enhanced": {
+        "title": "How to Count Syllables: Rules, Examples, and Edge Cases",
+        "meta_description": "Learn practical syllable-counting rules for words, lines, poems, lyrics, and haiku, including silent e, vowel groups, dialect differences, and tricky words.",
+        "intro": "Counting syllables means counting vowel sounds, not simply counting vowel letters. Most English words follow patterns that are easy to hear, but silent letters, diphthongs, names, loanwords, and dialect differences create real edge cases.",
+        "keyPoints": [
+          "A syllable is usually built around one vowel sound.",
+          "Vowel letters and vowel sounds are not the same thing.",
+          "Silent e often does not add a syllable, but final le can.",
+          "Vowel pairs such as ai, oa, ou, and ee often form one syllable sound.",
+          "Pronunciation can vary, so some words have more than one acceptable count."
+        ],
+        "examples": [
+          {
+            "title": "One syllable",
+            "body": "cake, rain, house, and thought each have one main vowel sound."
+          },
+          {
+            "title": "Two syllables",
+            "body": "window, river, morning, and garden usually count as two syllables."
+          },
+          {
+            "title": "Variable count",
+            "body": "fire, poem, and family can shift depending on accent, speed, or poetic choice."
+          },
+          {
+            "title": "Silent e",
+            "body": "make and hope usually have one syllable because the final e is silent."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "syllable-counter",
+            "note": "Use for fast draft counts, then check edge cases by reading aloud."
+          },
+          {
+            "toolId": "haiku-checker",
+            "note": "Use when the target is the 5-7-5 haiku pattern."
+          },
+          {
+            "toolId": "rhyme-finder",
+            "note": "Use after you know the line length and need a matching ending idea."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is a syllable?",
+            "a": "A syllable is a beat of speech built around one vowel sound. Words can have one syllable, such as rain, or several syllables, such as remember, depending on how many vowel sounds are spoken.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "How do you count syllables in a word?",
+            "a": "Count the vowel sounds you hear when the word is spoken naturally. Vowel letters can help you find candidates, but silent letters and vowel teams mean spelling alone is not enough.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Does silent e count as a syllable?",
+            "a": "A final silent e usually does not count as its own syllable. Words like cake, make, and hope have one syllable, while words ending in consonant plus le, such as table, may add a syllable.",
+            "faq_intent": "edge-case"
+          },
+          {
+            "q": "Why do syllable counters disagree?",
+            "a": "Syllable counters disagree because English pronunciation has exceptions, accents, and variable words. A heuristic counter may count spelling patterns, while a dictionary-based tool may follow a specific pronunciation entry.",
+            "faq_intent": "troubleshooting"
+          },
+          {
+            "q": "Does fire have one or two syllables?",
+            "a": "Fire can be one or two syllables depending on pronunciation and context. In fast speech it may sound like one beat, while careful speech may stretch it into two beats.",
+            "faq_intent": "edge-case"
+          },
+          {
+            "q": "How do I count syllables in a poem line?",
+            "a": "Say the line naturally and count each spoken beat, then compare your count with a tool. If the tool and your ear disagree, choose the count that matches the intended performance.",
+            "faq_intent": "how-to"
+          }
+        ]
+      },
+      "longform_markdown": "## What a syllable is\n\nA syllable is a beat of speech. Most syllables are built around one vowel sound, not one vowel letter. That difference explains many of the confusing cases in English. The word rain has two vowel letters, a and i, but one vowel sound, so it has one syllable. The word idea has three vowel sounds for many speakers, so it has three syllables.\n\nFor poems, songs, and haiku, syllable counting is useful because it gives the line a measurable shape. If two rhyming lines feel uneven, the problem may not be the rhyme. It may be that one line has several more syllables than the other. Counting gives us a way to see the rhythm before revising it.\n\nStill, syllable count is not the same as meter. Meter also cares about stress: which beats are strong and weak. A line can have the correct number of syllables and still sound awkward if the stresses fall in the wrong places.\n\n## The basic method: count vowel sounds\n\nThe simplest method is to say the word naturally and count the beats. Clap once for each beat if that helps. Window becomes win-dow, two beats. Remember becomes re-mem-ber, three beats. Thought stays one beat even though the spelling is long.\n\nA spelling method can help, but it is only a starting point. Look for vowel groups such as a, e, i, o, u, and sometimes y. A group of vowels often makes one sound. Queen has ee, but it is one syllable. House has ou, but it is one syllable. Bread has ea, but it is one syllable.\n\nThe [Syllable Counter](/word-tools/syllable-counter/) follows this kind of practical logic. It uses a vowel-group heuristic, not a pronunciation dictionary. That makes it fast for drafting, especially when checking many lines, but edge cases still need the writer’s ear.\n\n## Silent e and common endings\n\nSilent e is one of the first rules many writers learn. Cake, hope, time, and make have a final e that changes the vowel but does not add a separate syllable. The final e is visible, not spoken.\n\nThere are exceptions around final le. Table, little, candle, and simple often add a syllable because the ending creates a small spoken beat. The word table is ta-ble, two syllables. This is why a pure “count the vowel letters” method breaks down quickly.\n\nSuffixes can also change the count. Walk is one syllable, walking is two, and walked is usually one. Nation is two syllables, not three, because the tion ending compresses into a shun sound. Beautiful is three syllables for many speakers: beau-ti-ful.\n\nWhen writing a strict form, one difficult word can throw off the whole line. In that case, replace the word, rewrite the line, or decide that the spoken version you intend is the count that matters.\n\n## Edge cases: fire, poem, every, family\n\nSome words have more than one common count. Fire can be one syllable in fast speech or two in careful speech. Poem can sound like one syllable for some speakers and two for others. Every is often pronounced ev-ry, two syllables, even though the spelling suggests ev-er-y. Family may be two or three depending on speed and accent.\n\nThese edge cases are not mistakes. They show that syllables belong to spoken language. A song lyric may compress a word to fit a melody. A spoken poem may stretch a word for emphasis. A classroom haiku assignment may prefer the most common dictionary-style count.\n\nThe best practice is consistency. If a poem depends on a strict count, pick the pronunciation you intend and keep it stable. If the line will be read aloud, the performance matters more than a theoretical spelling count.\n\n## Counting syllables in lines\n\nA line is more than a row of words. It is a unit of sound. To count a line, read it at a natural pace and mark each spoken beat. Then look for places where the count feels too crowded or too thin.\n\nTake this line:\n\nThe moon was low above the road\n\nA natural count is: the / moon / was / low / a-bove / the / road. That gives seven syllables. If the target is five, the line needs trimming. “Low moon over road” may be too compressed for normal speech, but “low moon on the road” gives five beats and keeps the image.\n\nFor haiku, line-by-line counting matters more than total counting. A poem can have 17 syllables and still fail the 5-7-5 pattern. Use the [Haiku Checker](/word-tools/haiku-checker/) when the form requires line one to be 5, line two to be 7, and line three to be 5.\n\n## How to use automated counts wisely\n\nAutomated syllable counts are draft tools. They are especially useful for spotting obvious problems, comparing several lines, or checking a long poem quickly. They are less reliable for names, foreign words, technical terms, and dialect-specific pronunciations.\n\nA good workflow is simple. Draft the line first. Run it through the [Syllable Counter](/word-tools/syllable-counter/). Read it aloud. If the count and your ear agree, keep moving. If they disagree, inspect the word causing the mismatch.\n\nFor rhyming poems, count before and after choosing the rhyme. A perfect rhyme can still fail if one line has six syllables and the next has twelve. Use the [Rhyme Finder](/word-tools/rhyme-finder/) for ending ideas, then return to the syllable count to make sure the sound lands with the right weight.",
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ],
+      "longform_word_count_estimate": 905
+    },
+    {
+      "id": "cS-how-to-use-rhyme-finder",
+      "slug": "how-to-use-a-rhyme-finder",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-use-a-rhyme-finder/",
+      "title": "How to Use a Rhyme Finder — Perfect, Near, and Slant Rhymes",
+      "h1": "How to Use a Rhyme Finder",
+      "subhead": "The three rhyme modes and when each one actually works in a song or poem.",
+      "current_word_count": 343,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Practical walkthrough of a rhyme finder — perfect vs. near vs. slant rhymes, syllable matching, and how to write lines that land.",
+        "keywords": [
+          "how to use rhyme finder",
+          "rhyme finder guide",
+          "perfect near slant rhyme"
+        ],
+        "outcomeLine": "Pick the rhyme mode that matches the line, not the one that returns the most words.",
+        "intro": "A rhyme finder returns three kinds of output: perfect rhymes (same stressed vowel and everything after), near rhymes (close but not exact), and slant rhymes (matching consonants, different vowels). Knowing which to use comes down to the line's weight.",
+        "keyPoints": [
+          "Perfect rhymes match the stressed vowel and every sound after it — CAT/HAT, BELIEVE/RECEIVE.",
+          "Near rhymes relax the vowel match slightly — LOVE/MOVE, TIME/LINE. Common in pop and folk.",
+          "Slant rhymes match consonants but shift the vowel — WORM/WARM, SOUL/ROLL. Common in hip-hop and modern poetry.",
+          "Syllable count matters: a 2-syllable line usually wants a 2-syllable rhyme, not a 1-syllable one.",
+          "The end of a phrase carries the rhyme — pick the word you want readers to land on, then find its rhyme."
+        ],
+        "examples": [
+          {
+            "title": "Pop chorus",
+            "body": "Perfect rhymes for singability — LIGHT/NIGHT/RIGHT/SIGHT. Clear and easy to sing."
+          },
+          {
+            "title": "Hip-hop bar",
+            "body": "Slant and multi-syllable rhymes for density — CARRY ON / MARATHON. Consonant pattern matches, vowel moves."
+          },
+          {
+            "title": "Poem",
+            "body": "Near rhymes for emotional distance — HOME/ROOM creates tension a perfect rhyme would resolve."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "rhyme-finder",
+            "note": "Paste a word, choose perfect / near / slant, get candidates with syllable counts."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "Use before picking a rhyme — match the syllable count of your line ending."
+          },
+          {
+            "toolId": "haiku-checker",
+            "note": "If you are writing haiku, rhyme matters less than the 5-7-5 syllable structure. Use this instead."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are near and slant rhymes the same thing?",
+            "a": "Close but not identical. Near rhymes relax the vowel slightly while keeping most sounds; slant rhymes match consonants but shift the vowel more aggressively. In practice the terms overlap."
+          },
+          {
+            "q": "Why do some rhymes feel forced?",
+            "a": "Usually because the rhyming word does not fit the line's meaning — you picked the rhyme first and the sentence second. Write the idea, then look for a rhyme that supports it."
+          }
+        ],
+        "relatedIds": [
+          "rhyme-finder",
+          "syllable-counter",
+          "haiku-checker",
+          "cE-rhyme-perfect-vs-near",
+          "cE-syllables-counting-rules"
+        ]
+      },
+      "enhanced": {
+        "title": "How to Use a Rhyme Finder to Write Better Poems and Lyrics",
+        "meta_description": "Learn how to use a rhyme finder for poems, songs, and rap lyrics without forcing lines, losing meaning, or ignoring rhythm.",
+        "intro": "A rhyme finder is most useful after you know what the line is trying to say. It can open options, but the writer still chooses the word that fits the meaning, rhythm, and voice.",
+        "keyPoints": [
+          "Start with the idea or image before searching for rhymes.",
+          "Search the important landing word, not necessarily the first draft’s last word.",
+          "Treat spelling-based results as brainstorming and check them aloud.",
+          "Choose meaning first, sound second, and cleverness last.",
+          "Use syllable counting after choosing a rhyme so the line still moves naturally."
+        ],
+        "examples": [
+          {
+            "title": "Poem revision",
+            "body": "Change “I feel sad in the rain” into a concrete image, then search rain only if that word still belongs at the line ending."
+          },
+          {
+            "title": "Song chorus",
+            "body": "Use simple, clear matches when the listener needs to understand the hook immediately."
+          },
+          {
+            "title": "Rap draft",
+            "body": "Use results to spark ending words, then build internal echoes and phrase-level sound patterns around them."
+          },
+          {
+            "title": "Greeting card",
+            "body": "Pick a natural rhyme over a clever one. Warmth matters more than surprise."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "rhyme-finder",
+            "note": "Use to brainstorm spelling-based ending matches and near matches."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "Use to compare line length after choosing a rhyme."
+          },
+          {
+            "toolId": "haiku-checker",
+            "note": "Use instead when writing a 5-7-5 haiku, where rhyme is usually not the main goal."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How do I use a rhyme finder?",
+            "a": "Write the idea first, choose the word that should land at the line ending, then search that word for rhyme options. Keep the result that supports the meaning and sounds natural aloud.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Why do rhyme finder results sometimes sound forced?",
+            "a": "Results sound forced when the writer picks a rhyming word before shaping the sentence. A useful rhyme should support the line’s meaning, not make the sentence sound twisted or unnatural.",
+            "faq_intent": "troubleshooting"
+          },
+          {
+            "q": "Should I use the first rhyme I find?",
+            "a": "Not usually. The first rhyme is often obvious, and obvious can be either useful or flat. Test several options, then choose the word that creates the best image, tone, and rhythm.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Can a rhyme finder help me write a poem?",
+            "a": "Yes, a rhyme finder can help with one part of poem writing: sound. A good poem also needs a subject, image, line breaks, rhythm, and revision, so use the tool as a draft helper.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "How do I avoid forced rhymes?",
+            "a": "Avoid forced rhymes by writing the sentence naturally before choosing the rhyme. If the rhyming word makes the line awkward, change the landing word, use a near rhyme, or rewrite the couplet.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "What should I do after finding a rhyme?",
+            "a": "After finding a rhyme, place it inside the full line and read both lines aloud. Then check syllable count and rhythm so the rhyme lands cleanly instead of feeling pasted on.",
+            "faq_intent": "how-to"
+          }
+        ]
+      },
+      "longform_markdown": "## Start with the writing problem, not the tool\n\nA rhyme finder is useful when a line is almost working. Maybe the first line of a couplet is strong, but the second line has no ending. Maybe a song chorus has the right emotion but no memorable hook. Maybe a rap verse needs more sound options. Maybe a classroom poem needs a rhyme scheme and the obvious words feel stale.\n\nThe tool solves one problem: it gives possible ending words. It does not decide the poem’s subject, the line’s image, the speaker’s voice, or the rhythm. Those choices still belong to the writer.\n\nThat is why the best workflow starts before the search box. Ask what the line is trying to do. Is it naming an image? Turning a thought? Closing a joke? Making a chorus easy to remember? Once the job of the line is clear, a rhyme list becomes useful instead of random.\n\n## Choose the right landing word\n\nThe last word of a line carries weight. Readers and listeners hear it as the landing point. Before searching, check whether the current last word is really the word that deserves that position.\n\nSuppose the draft says:\n\nI watched the rain fall outside my window.\n\nIf window is the line ending, the rhyme options may push the poem in a narrow direction. But maybe the real energy is rain. A small revision changes the search:\n\nI watched the evening fill with rain.\n\nNow rain becomes the landing word. The [Rhyme Finder](/word-tools/rhyme-finder/) can produce spelling-based ending matches and looser near matches. Those results might include words that point toward weather, memory, travel, or loss. The search is stronger because the line ending is stronger.\n\n## Use results as a possibility list\n\nKefiw’s current Rhyme Finder is spelling-based. It scans a large English word list and groups matches by trailing letter patterns. That makes it fast for brainstorming, but it is not a pronunciation dictionary. Some results may look like rhymes without sounding like rhymes.\n\nThis is not a reason to avoid the tool. It is a reason to use it correctly. Treat the results as a possibility list. Pull out words that create useful directions. Then say them aloud with the original line ending.\n\nIf the words share spelling but not sound, you have found an eye-rhyme risk. The guide on [why some words look like they rhyme](/guides/why-some-words-look-like-they-rhyme/) explains that problem in more detail. In short: English spelling is not a perfect map of pronunciation.\n\n## Pick meaning before cleverness\n\nA clever rhyme can still be a bad line. The strongest rhyme is the one that makes the poem say something sharper, clearer, or more surprising.\n\nTake the ending rain. Plain may create a quiet scene. Train adds distance and movement. Again brings memory. Remain sounds reflective. Refrain points toward music. The “best” word depends on the poem’s direction.\n\nA forced rhyme usually appears when the writer chooses the rhyme first and invents a sentence to reach it. The grammar gets strange. The image becomes vague. The line says less than the previous draft. When that happens, the fix is not to search longer. The fix is to rewrite the thought.\n\nA useful test: cover the rhyming word. Does the rest of the line still sound like something worth saying? If not, the rhyme is doing too much work.\n\n## Match rhythm after choosing the rhyme\n\nRhyme and rhythm work together. A pair of words may rhyme, but the lines around them can still feel unbalanced. This happens when one line has many more syllables than the other or when the stresses fall awkwardly.\n\nAfter choosing a rhyme, run the lines through the [Syllable Counter](/word-tools/syllable-counter/). The counts do not need to be identical, but they should make sense for the form. In a song, the line has to fit a melody. In a poem, it has to feel deliberate when read aloud. In rap, it has to sit inside the beat.\n\nFor a short rhyming couplet, similar line lengths often help the rhyme land. For a looser modern poem, uneven counts may be fine if the voice supports them. The tool gives numbers; the ear decides whether the numbers work.\n\n## Use the tool differently for poems, songs, and rap\n\nA poem often needs the rhyme to serve an image. If the line becomes abstract only to reach a rhyme, step back and find a more concrete word. A good poem usually benefits from detail: cup, window, gravel, moth, rain, shoe. Concrete nouns give the rhyme something to hold.\n\nA song often needs clarity. The listener hears the line once, especially in a chorus. Simple perfect-sounding rhymes can work well there because they are easy to remember. In verses, looser rhymes may feel more conversational.\n\nRap often needs density and motion. One-word end rhymes are only the beginning. Use the rhyme list to spark words, then build internal echoes, repeated consonants, phrase rhymes, and rhythmic placement around the beat.\n\nA greeting card or classroom poem usually needs warmth and readability. In that case, natural wording beats complexity.\n\n## A simple poem-writing workflow\n\nStart with one subject: a storm outside the window, a person leaving, a dog at the door, a summer street. Write one plain sentence about it. Then choose the word that deserves the line ending. Search that word in the [Rhyme Finder](/word-tools/rhyme-finder/). Pick three candidates that change the poem in different directions.\n\nWrite one possible next line for each candidate. Read all versions aloud. Keep the one where meaning, sound, and rhythm support each other. If none works, change the original line ending and search again.\n\nA rhyme finder does not replace the poem. It gives the writer more doors to open. The craft is choosing which door leads somewhere worth going.",
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ],
+      "longform_word_count_estimate": 964
+    },
+    {
+      "id": "cS-count-syllables-in-a-line",
+      "slug": "how-to-count-syllables-in-a-line",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-count-syllables-in-a-line/",
+      "title": "How to Count Syllables in a Line — For Songs, Poems, and Haiku",
+      "h1": "How to Count Syllables in a Line",
+      "subhead": "Clap, mark vowels, or use a tool — three methods that agree 95% of the time.",
+      "current_word_count": 323,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Three methods to count syllables in a line of poetry or song lyrics, with examples and edge cases.",
+        "keywords": [
+          "how to count syllables in a line",
+          "syllable counting",
+          "syllables in poetry"
+        ],
+        "outcomeLine": "One syllable per vowel sound, compound vowels count once — almost every line resolves by that rule.",
+        "intro": "Counting syllables is about counting vowel sounds, not vowel letters. Most lines give the same answer whether you clap, mark the vowels, or use a tool — but a few common traps make disagreements occasional.",
+        "keyPoints": [
+          "Count vowel sounds, not letters. QUEEN has two vowels letters (E+E) but one vowel sound — one syllable.",
+          "Clap method: say the line naturally, clap once per beat. Each clap = one syllable.",
+          "Mark method: underline every vowel cluster, count the underlines.",
+          "Silent E at end of word does not add a syllable: CAKE = 1, HATE = 1.",
+          "Compound vowels (EA, OU, OI) almost always count as one syllable — BREAD = 1, HOUSE = 1."
+        ],
+        "examples": [
+          {
+            "title": "Simple line",
+            "body": "\"The cat sat on the mat\" — THE-CAT-SAT-ON-THE-MAT = 6 syllables. Every word one syllable."
+          },
+          {
+            "title": "Trickier line",
+            "body": "\"Fireflies danced over the meadow\" — FIRE-FLIES-DANCED-O-VER-THE-MEA-DOW = 8. FIRE is one syllable, FIREFLIES is two."
+          },
+          {
+            "title": "Edge case",
+            "body": "\"Every evening in the garden\" — EV-RY-EVE-NING-IN-THE-GAR-DEN = 8. \"Every\" is usually pronounced EV-RY (2), not EV-ER-Y (3)."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "syllable-counter",
+            "note": "Paste a line or a whole poem — gets per-word and total counts."
+          },
+          {
+            "toolId": "haiku-checker",
+            "note": "For haiku specifically — validates the 5-7-5 structure across three lines."
+          },
+          {
+            "toolId": "rhyme-finder",
+            "note": "After counting, match the syllable count when picking a rhyme for the next line."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What if my count differs from the tool?",
+            "a": "Usually a dialect difference. FIRE is 1 or 2 depending on accent. POEM is 1 (POHM) or 2 (PO-EM). Pick the pronunciation that fits your line's rhythm."
+          },
+          {
+            "q": "Do dictionaries always agree on syllable counts?",
+            "a": "Mostly — but not always. Merriam-Webster and Cambridge occasionally disagree on borderline cases. For strict forms, pick one dictionary and stay consistent."
+          }
+        ],
+        "relatedIds": [
+          "syllable-counter",
+          "haiku-checker",
+          "rhyme-finder",
+          "cE-syllables-counting-rules",
+          "cS-how-to-write-a-haiku"
+        ]
+      },
+      "enhanced": {
+        "title": "How to Count Syllables in a Line for Poems, Lyrics, and Haiku",
+        "meta_description": "Learn three practical ways to count syllables in a line, with examples for poems, song lyrics, haiku, rhythm, and common edge cases.",
+        "intro": "Counting syllables in a line helps writers hear whether a poem, lyric, or haiku is balanced. The goal is not only a number. The goal is to make the line sound intentional when spoken.",
+        "keyPoints": [
+          "Count spoken beats, not vowel letters.",
+          "Use the clap method when you need a quick ear check.",
+          "Use the vowel-group method when you want to inspect the spelling.",
+          "Use a tool when you need fast comparison across several lines.",
+          "Resolve disagreements by reading the line aloud in the intended voice."
+        ],
+        "examples": [
+          {
+            "title": "Six-beat line",
+            "body": "The cat sat on the mat = six one-syllable words."
+          },
+          {
+            "title": "Seven-beat image",
+            "body": "The moon was low above the road = seven syllables in a natural reading."
+          },
+          {
+            "title": "Haiku line",
+            "body": "old pond in moonlight can work as a five-syllable first line depending on pronunciation."
+          },
+          {
+            "title": "Lyric check",
+            "body": "A line may need fewer words if the melody has fewer available beats."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "syllable-counter",
+            "note": "Use for full-line and per-word counts."
+          },
+          {
+            "toolId": "haiku-checker",
+            "note": "Use for a line-by-line 5-7-5 check."
+          },
+          {
+            "toolId": "rhyme-finder",
+            "note": "Use after the line length feels right and you need a matching ending."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How do you count syllables in a line?",
+            "a": "Read the line aloud and count each spoken beat, usually one beat per vowel sound. Then check tricky words separately because spelling, accent, and speed can change the final count.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "What is the clap method for syllables?",
+            "a": "The clap method means saying the line naturally and clapping once for each spoken beat. It works well for beginners because it follows sound rather than spelling.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Why does line syllable count matter in poetry?",
+            "a": "Syllable count affects rhythm, balance, and how strongly the end of a line lands. Matching or deliberately varying line length can make rhymes, haiku, and song lyrics feel more controlled.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Should rhyming lines have the same syllable count?",
+            "a": "Rhyming lines do not always need the same syllable count, but similar counts often make simple couplets and lyrics feel smoother. Uneven counts can work when the rhythm is intentional.",
+            "faq_intent": "comparison"
+          },
+          {
+            "q": "How many syllables should a haiku line have?",
+            "a": "A classic English classroom haiku uses 5 syllables in line one, 7 in line two, and 5 in line three. Modern haiku may be looser, but 5-7-5 remains a common teaching pattern.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "What if my syllable count sounds different from the tool?",
+            "a": "Use the count that matches your intended spoken version. Automated tools estimate patterns, but performance, accent, and word choice can make a human reading more appropriate for the final draft.",
+            "faq_intent": "troubleshooting"
+          }
+        ]
+      },
+      "longform_markdown": "## Why line syllables matter\n\nA line of poetry or lyric is not just a sentence broken at a margin. It is a sound unit. The number of syllables affects how fast the line moves, how heavy it feels, and how strongly the last word lands.\n\nThis matters most when a form has a target. A haiku line may need 5 or 7 syllables. A song lyric may need to fit a melody. A rhyming couplet may sound smoother when the two lines have similar length. Even in free verse, syllable count can explain why one line feels rushed and another feels slow.\n\nCounting does not make the poem good by itself. It gives the writer a way to diagnose rhythm. Once the problem is visible, revision becomes easier.\n\n## Method one: the clap method\n\nThe clap method is the quickest ear-based method. Say the line naturally and clap once for each spoken beat. Do not over-pronounce the line just to make the count fit. The goal is to hear how the line would actually be spoken.\n\nFor example:\n\nThe cat sat on the mat\n\nEach word has one syllable, so the line has six syllables. The claps are easy.\n\nNow try:\n\nThe moon was low above the road\n\nA natural reading gives: the / moon / was / low / a-bove / the / road. That is seven syllables. Above has two beats, even though it is one word.\n\nThe clap method is especially useful for beginners and for performance writing. If the poem will be spoken, sung, or rapped, the ear matters more than a spelling rule.\n\n## Method two: mark the vowel sounds\n\nThe mark method starts from spelling but aims at sound. Underline or notice each vowel group, then decide whether that group creates a separate spoken beat. Queen has the vowel group ee, but it is one syllable. House has ou, but it is one syllable. Meadow has two syllables because the word is spoken mea-dow.\n\nSilent e usually does not add a syllable. Make, hope, time, and name have one syllable. A final le ending may add one: table is ta-ble, and little is lit-tle.\n\nThis method is helpful when a line feels wrong but you do not know why. Mark each word, find the longest or trickiest one, and test whether replacing it fixes the rhythm.\n\n## Method three: use a syllable counter\n\nA tool is useful when you have several lines to compare. Paste the draft into the [Syllable Counter](/word-tools/syllable-counter/) and look at the total, per-line comparison, and per-word counts. In Extended mode, the per-word chips can reveal the word that is stretching the line.\n\nThis is especially helpful for revision. If a line is supposed to have seven syllables and the tool estimates nine, look for filler words first. Articles, extra adjectives, and explanation words are often easy to cut.\n\nTools are not final judges. Kefiw’s Syllable Counter uses a vowel-group heuristic, not a pronunciation dictionary. It is fast and practical, but words such as fire, poem, every, and family may depend on pronunciation.\n\n## Counting for poems and rhyme\n\nIn a rhyming poem, syllable count controls how the rhyme lands. A rhyme at the end of a short line feels different from the same rhyme at the end of a long line. If one line is compact and the next is crowded, the rhyme can feel late or forced.\n\nTake a simple pair:\n\nThe moon was low, the road was wide\nI kept your letter at my side\n\nThe lines have a similar pace. The rhyme of wide and side lands clearly because the rhythm supports it.\n\nIf the second line becomes much longer, the rhyme may still be correct but less satisfying. That is why the [Rhyme Finder](/word-tools/rhyme-finder/) and syllable checks work well together. Find a possible ending, then test the line that carries it.\n\n## Counting for songs and rap\n\nLyrics live inside time. A line that looks fine on the page may have too many syllables for the melody or beat. Sing the line, tap the pulse, and notice which words get squeezed. Those squeezed words often need to be cut or replaced.\n\nRap adds another layer because syllables can be placed quickly, stretched, compressed, or grouped into internal rhyme. A written syllable count is still useful, but delivery changes how the line feels. Count the draft, then perform it at speed.\n\nFor choruses, simpler counts often help. A listener should be able to catch the hook quickly. Verses can carry more variation.\n\n## Counting for haiku\n\nFor the common English classroom haiku, the target is 5 syllables, then 7, then 5. Total syllables are not enough. A poem with 17 syllables can still miss the haiku shape if the line pattern is 6-6-5 or 4-8-5.\n\nThe [Haiku Checker](/word-tools/haiku-checker/) is built for that specific job. It compares each line to its target and shows which line is over or under.\n\nAfter the count works, revise for image. A haiku that only explains an emotion can meet 5-7-5 and still feel weak. A concrete image usually carries more power than a statement about how the writer feels.\n\n## What to do when counts disagree\n\nDisagreement is normal. English has dialects, compressed speech, and words with more than one accepted pronunciation. If a tool gives one count and your ear gives another, read the line aloud at the pace you intend.\n\nFor strict assignments, use the count your teacher or style guide expects. For poems and lyrics, use the count that fits the performance. The number is a guide. The final test is whether the line sounds deliberate.",
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ],
+      "longform_word_count_estimate": 939
+    },
+    {
+      "id": "cS-how-to-write-a-haiku",
+      "slug": "how-to-write-a-haiku",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-write-a-haiku/",
+      "title": "How to Write a Haiku — Structure, Subject, and the 5-7-5 Trap",
+      "h1": "How to Write a Haiku",
+      "subhead": "The syllable pattern, the seasonal word, and why good haiku usually break at least one rule.",
+      "current_word_count": 343,
+      "target_word_count": 1200,
+      "current": {
+        "description": "A practical guide to writing a haiku in English — the 5-7-5 syllable structure, seasonal word (kigo), and the cut (kireji) concept.",
+        "keywords": [
+          "how to write a haiku",
+          "haiku structure",
+          "haiku syllables"
+        ],
+        "outcomeLine": "Start with 5-7-5 syllables and a single concrete image — refine later.",
+        "intro": "A haiku is a three-line poem with a 5-7-5 syllable structure in English. The form is simple; the craft is picking one concrete image and letting it carry the whole poem.",
+        "keyPoints": [
+          "Line 1: 5 syllables. Line 2: 7 syllables. Line 3: 5 syllables.",
+          "Traditional haiku includes a seasonal word (kigo) — \"cherry blossom\" for spring, \"snow\" for winter.",
+          "A cut (kireji) separates two images — the turn in the poem, often between lines 2 and 3.",
+          "English haiku often drop the kigo requirement. They almost always keep the syllable count and the concrete-image rule.",
+          "One idea, one image. Abstract statements (\"love is beautiful\") do not haiku well."
+        ],
+        "examples": [
+          {
+            "title": "Classic form",
+            "body": "\"An old silent pond... / A frog jumps into the pond, / splash! Silence again.\" — Bashō. 5-7-5, seasonal imagery, the cut at \"splash\"."
+          },
+          {
+            "title": "Modern haiku",
+            "body": "\"kitchen window / the neighbour's tomatoes / touching my side\" — concrete image, implicit season, 5-7-5 approximate."
+          },
+          {
+            "title": "Common mistake",
+            "body": "\"I feel sad today / because my cat ran away / I miss him so much\" — 5-7-5 but abstract and narrative. A haiku wants an image, not an explanation."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "haiku-checker",
+            "note": "Validates the 5-7-5 count line by line. Catches miscounts before you share the poem."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "For individual lines when the haiku checker flags a problem."
+          },
+          {
+            "toolId": "rhyme-finder",
+            "note": "Haiku do not rhyme, but if you are playing with sound patterns inside lines, this helps."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does a haiku have to be 5-7-5 exactly?",
+            "a": "In English, modern poets often bend the count. Japanese haiku use \"on\" units, which do not map cleanly to English syllables. Stay close to 5-7-5 unless you know why you are breaking it."
+          },
+          {
+            "q": "Do haiku have to rhyme?",
+            "a": "No. Rhyme is foreign to the Japanese form and usually forced-sounding in English. Focus on image, sound, and the cut."
+          }
+        ],
+        "relatedIds": [
+          "haiku-checker",
+          "syllable-counter",
+          "rhyme-finder",
+          "cS-count-syllables-in-a-line",
+          "cE-syllables-counting-rules"
+        ]
+      },
+      "enhanced": {
+        "title": "How to Write a Haiku: Structure, Image, Season, and the 5-7-5 Trap",
+        "meta_description": "Learn how to write an English haiku with 5-7-5 structure, concrete imagery, seasonal reference, a cut or turn, and practical revision steps.",
+        "intro": "A haiku is often taught as a three-line 5-7-5 poem, but the count is only the frame. A stronger haiku usually captures one concrete moment, often from nature, with a turn or contrast that lets the reader feel more than the poem explains.",
+        "keyPoints": [
+          "A common English teaching pattern is 5 syllables, 7 syllables, 5 syllables.",
+          "Traditional haiku often include a seasonal reference and a cut or turn.",
+          "Concrete images usually work better than abstract feelings.",
+          "A valid count does not guarantee a strong haiku.",
+          "Revision often means cutting explanation and sharpening the image."
+        ],
+        "examples": [
+          {
+            "title": "Image-first draft",
+            "body": "winter bus stop / one mitten fills with rain / before the light changes"
+          },
+          {
+            "title": "Count-only mistake",
+            "body": "I am very sad / because it is raining now / I miss summertime. The count may work, but the poem explains instead of showing."
+          },
+          {
+            "title": "Revision move",
+            "body": "Replace “I am lonely” with a visible detail, such as one cup left beside the sink."
+          },
+          {
+            "title": "Tool use",
+            "body": "Draft first, use the Haiku Checker for 5-7-5, then revise for image and contrast."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "haiku-checker",
+            "note": "Use to validate the 5-7-5 line pattern."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "Use to inspect a single line or ambiguous word."
+          },
+          {
+            "toolId": "rhyme-finder",
+            "note": "Use only for optional sound play, since haiku generally does not need rhyme."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How do you write a haiku?",
+            "a": "Write a haiku by choosing one concrete moment, shaping it into three short lines, and checking the 5-7-5 syllable pattern if that is your target. Then revise for image, contrast, and compression.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "What is the structure of a haiku?",
+            "a": "The common English haiku structure is three lines with 5, 7, and 5 syllables. Traditional haiku also often use seasonal reference, concrete imagery, and a cut or turn between two parts.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Does a haiku have to be about nature?",
+            "a": "Traditional haiku often focuses on nature or seasonal moments, but modern English haiku can also capture human scenes. The key is usually a concrete moment rather than an abstract explanation.",
+            "faq_intent": "comparison"
+          },
+          {
+            "q": "Do haiku have to rhyme?",
+            "a": "Haiku usually does not rhyme, and forced end rhyme can distract from the image. Sound still matters, but it normally comes from rhythm, word choice, silence, and contrast rather than a rhyme scheme.",
+            "faq_intent": "comparison"
+          },
+          {
+            "q": "What makes a haiku good?",
+            "a": "A good haiku usually presents a clear moment, sensory detail, and a turn that lets the reader feel the connection. The syllable count helps shape the poem, but image and compression carry the craft.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Why is 5-7-5 called a trap?",
+            "a": "The 5-7-5 trap happens when a writer adds filler only to hit the count. The poem may become technically valid but weaker because it explains too much or loses its sharp image.",
+            "faq_intent": "troubleshooting"
+          }
+        ]
+      },
+      "longform_markdown": "## What a haiku is in English\n\nA haiku is often introduced as a three-line poem with 5 syllables in the first line, 7 in the second, and 5 in the third. That pattern is a useful starting point, especially in English classrooms. It gives the poem a small frame and forces the writer to compress.\n\nBut haiku is more than arithmetic. A strong haiku usually presents a concrete moment, often connected to nature or season, and lets the reader feel a relationship between two images. It does not explain everything. It leaves space.\n\nThat is the challenge. The count is easy to test. The craft is harder: choosing the right image, cutting away filler, and finding a turn that makes the poem open instead of merely ending.\n\n## Start with one concrete moment\n\nBegin with something visible, audible, or physical. A haiku works best when it gives the reader something to notice. Instead of starting with “I feel lonely,” start with the object or scene that carries loneliness:\n\none cup by the sink\nrainwater in the dog bowl\nno car in the drive\n\nThat draft may not be polished, and the count may not be right yet, but it has concrete material. The reader can see the kitchen, the rain, and the empty driveway.\n\nGood haiku subjects are often small: a leaf stuck to a shoe, a porch light in fog, a bee inside a bus window, the first mosquito of summer. The smallness is part of the power.\n\n## Understand the 5-7-5 pattern\n\nThe common English teaching pattern is:\n\nLine 1: 5 syllables\nLine 2: 7 syllables\nLine 3: 5 syllables\n\nThe [Haiku Checker](/word-tools/haiku-checker/) is built to test that exact structure. Paste three lines, and it shows whether each line hits its target. If line two has 8 syllables, the checker points you to the line that needs revision.\n\nA 17-syllable total is not enough. The pattern matters line by line. A poem with 6, 6, and 5 syllables still totals 17, but it does not match 5-7-5.\n\nAt the same time, modern English-language haiku often bends the count. The tool enforces the traditional classroom target so the writer can know whether the draft matches that goal. Breaking the pattern is a craft choice, not an accident.\n\n## Use season and contrast\n\nTraditional haiku often includes a seasonal reference, sometimes called kigo. In English, this does not have to be a formal seasonal word. Snow, cherry blossom, cicada, heat lightning, school bus, pumpkin stem, and wet leaves can all suggest season.\n\nA haiku also often contains a cut or turn. In Japanese poetics this is associated with kireji, but in English it may appear as punctuation, a line break, or a shift between two images. The turn lets the poem move.\n\nFor example:\n\nempty playground\nin the drinking fountain\none yellow leaf\n\nThe poem does not explain autumn, childhood, or absence. The images carry the feeling. The seasonal clue and the empty place work together.\n\n## Avoid the 5-7-5 trap\n\nThe 5-7-5 trap happens when the writer treats the syllable count as the whole poem. To reach 5, 7, and 5, the draft fills with padding: very, really, so much, today, right now. The count becomes correct, but the poem gets weaker.\n\nA count-only draft might say:\n\nI am sad today\nbecause the cold rain is here\nwinter makes me blue\n\nThe pattern may be close, but the poem tells the reader what to feel. A stronger revision uses image:\n\nwinter bus stop\nrain darkens the paper bag\naround my sandwich\n\nThis version gives the reader a scene. It does not need to announce sadness.\n\nWhen a haiku line is short by one syllable, resist adding filler first. Look for a sharper image or a more precise noun. When a line is too long, cut explanation before cutting the image.\n\n## Revise with syllables and sound\n\nAfter drafting, use the [Syllable Counter](/word-tools/syllable-counter/) to inspect individual lines or confusing words. Words like fire, poem, and every can shift depending on pronunciation. If the count seems wrong, read the line aloud and decide how it will be spoken.\n\nHaiku generally does not need rhyme. In fact, end rhyme can make such a short poem sound artificial. If you use the [Rhyme Finder](/word-tools/rhyme-finder/) for a haiku, use it lightly for sound play inside a line, not as a requirement.\n\nSound still matters. Repeated consonants, soft vowels, and line breaks can create music without formal rhyme. Read the poem aloud after the count is correct. Notice where the silence falls.\n\n## A practical haiku workflow\n\nFirst, choose a small moment. Second, write it plainly in three short lines. Third, remove explanation and replace it with sensory detail. Fourth, check the 5-7-5 pattern with the [Haiku Checker](/word-tools/haiku-checker/). Fifth, revise the image again.\n\nThe order matters. If you start with the count, you may write filler. If you start with the image, the count becomes a shaping tool.\n\nA haiku is small, but it is not thin. The best versions feel as if the poem notices one thing so clearly that the reader notices more than the words say.",
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ],
+      "longform_word_count_estimate": 855
+    },
+    {
+      "id": "cS-why-words-look-like-rhymes",
+      "slug": "why-some-words-look-like-they-rhyme",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/why-some-words-look-like-they-rhyme/",
+      "title": "Why Some Words Look Like They Rhyme — Eye Rhymes and False Rhymes",
+      "h1": "Why Some Words Look Like They Rhyme",
+      "subhead": "Spelling rhymes, sound rhymes, and the gap between them.",
+      "current_word_count": 305,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Why some words look like rhymes but are not — eye rhymes, dialect differences, and historical pronunciation shifts.",
+        "keywords": [
+          "eye rhyme",
+          "words that look like rhymes",
+          "false rhyme english"
+        ],
+        "outcomeLine": "English spelling lies about pronunciation — trust your ear, not the page.",
+        "intro": "English spelling is inconsistent. Words that share endings on the page often do not share sounds — LOVE and MOVE, BOUGH and COUGH. These are called eye rhymes: they rhyme visually, not sonically.",
+        "keyPoints": [
+          "Eye rhyme: same spelling, different pronunciation. LOVE / MOVE, COUGH / ROUGH / DOUGH.",
+          "English had massive pronunciation shifts (Great Vowel Shift, 1400s-1700s) but spelling did not catch up.",
+          "Some older poems use eye rhymes intentionally — modern readers hear them as near-rhymes or misses.",
+          "Regional accents affect rhyme: MERRY/MARRY/MARY is one sound in most US accents, three in most UK accents.",
+          "A reliable rhyme check is the pronunciation, not the spelling. Say it out loud."
+        ],
+        "examples": [
+          {
+            "title": "Classic eye rhyme",
+            "body": "LOVE and MOVE. Same -OVE ending, completely different vowel sound. Early modern English had them closer."
+          },
+          {
+            "title": "OUGH family",
+            "body": "THROUGH (thru), TOUGH (tuf), THOUGH (tho), COUGH (cof), BOUGH (bow). Six different pronunciations."
+          },
+          {
+            "title": "Accent-dependent",
+            "body": "DANCE / CHANCE rhyme in US English. In UK English, they might not (BATH-trap split)."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "rhyme-finder",
+            "note": "Uses phonetic matching — catches true rhymes even when spellings differ. Avoids eye-rhyme traps."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "For checking that the words at the end of each line match by count as well as by sound."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are eye rhymes acceptable in poetry?",
+            "a": "Yes — formal poets use them deliberately. But in modern song lyrics or spoken poetry, an eye rhyme usually sounds like a failed rhyme to listeners."
+          },
+          {
+            "q": "How do I know a true rhyme from an eye rhyme?",
+            "a": "Say both words aloud. If the stressed vowel and everything after it sound identical, it is a true rhyme. If they only look similar, it is an eye rhyme."
+          }
+        ],
+        "relatedIds": [
+          "rhyme-finder",
+          "syllable-counter",
+          "cE-rhyme-perfect-vs-near",
+          "cS-how-to-use-rhyme-finder"
+        ]
+      },
+      "enhanced": {
+        "title": "Why Some Words Look Like They Rhyme: Eye Rhymes, False Rhymes, and English Spelling",
+        "meta_description": "Learn why some English words look like rhymes but do not sound alike, including eye rhymes, false rhymes, spelling traps, accents, and revision tips.",
+        "intro": "English spelling often preserves history better than sound. That is why two words can share the same ending on the page but fail as spoken rhymes. These visual matches are useful to understand because a rhyme that looks right can still sound wrong.",
+        "keyPoints": [
+          "Eye rhymes look similar but do not sound alike.",
+          "English spelling has many endings with multiple pronunciations.",
+          "Accent and dialect can change whether two words rhyme.",
+          "A spelling-based rhyme finder can surface useful ideas but may also surface false rhymes.",
+          "The safest test is reading the pair aloud in the voice you intend."
+        ],
+        "examples": [
+          {
+            "title": "Eye rhyme",
+            "body": "love / move look similar, but the vowel sound differs."
+          },
+          {
+            "title": "OUGH trap",
+            "body": "through, rough, though, cough, and bough share spelling patterns but not one pronunciation."
+          },
+          {
+            "title": "Accent-dependent rhyme",
+            "body": "Some speakers merge words that other speakers keep separate, so a rhyme may work in one accent and not another."
+          },
+          {
+            "title": "Tool check",
+            "body": "If a spelling-based result looks promising, say it with the original word before using it."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "rhyme-finder",
+            "note": "Use for spelling-based brainstorming, then check sound by ear."
+          },
+          {
+            "toolId": "syllable-counter",
+            "note": "Use after choosing a spoken rhyme to compare line length."
+          },
+          {
+            "toolId": "cE-rhyme-perfect-vs-near",
+            "note": "Use this guide to decide whether the pair is perfect, near, slant, or only visual."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is an eye rhyme?",
+            "a": "An eye rhyme is a pair of words that look like they rhyme because of spelling but do not sound alike when pronounced. Love and move are a common example.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Why do some words look like they rhyme but do not?",
+            "a": "Some words look like rhymes because English spelling does not always track modern pronunciation. Historical sound changes, borrowed words, and irregular spelling patterns leave many endings visually similar but phonetically different.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Are eye rhymes acceptable in poems?",
+            "a": "Eye rhymes can be acceptable when used deliberately, especially in page-based poetry. In songs, rap, and spoken poems, they often sound like failed rhymes unless the performance makes the choice clear.",
+            "faq_intent": "comparison"
+          },
+          {
+            "q": "How can I tell if two words really rhyme?",
+            "a": "Say both words aloud and compare the stressed vowel and the sounds after it. If only the spelling matches, the pair may be an eye rhyme rather than a reliable spoken rhyme.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Can accents change whether words rhyme?",
+            "a": "Yes. Accents can merge or separate vowel sounds, so a pair that rhymes for one speaker may not rhyme for another. For performance writing, use the pronunciation of the intended speaker.",
+            "faq_intent": "edge-case"
+          },
+          {
+            "q": "Why can a spelling-based rhyme finder return false rhymes?",
+            "a": "A spelling-based rhyme finder matches written endings, so it can return words that share letters but not sounds. Use those results as brainstorming, then read the pair aloud before keeping it.",
+            "faq_intent": "troubleshooting"
+          }
+        ]
+      },
+      "longform_markdown": "## The page can fool the ear\n\nSome words look like they should rhyme because their endings match on the page. Then we say them aloud and the rhyme disappears. That mismatch is common in English because spelling and pronunciation do not move together neatly.\n\nAn eye rhyme is a visual rhyme. The words appear to rhyme, but the sounds do not match. Love and move are a familiar example. The ending looks similar, but the vowel sound is different. Through and rough create the same problem. The letters suggest a connection that the ear does not hear.\n\nThis matters for poems, lyrics, and any tool that finds rhymes from spelling. A written list can produce useful ideas, but the final test is sound.\n\n## Why English spelling creates false rhymes\n\nEnglish spelling reflects many layers of history. Some spellings preserve older pronunciations. Some words were borrowed from other languages. Some sound changes affected speech while the spelling stayed fixed. The result is a language where the same letter pattern can produce several sounds.\n\nThe ough family is the classic trap. Through, though, rough, cough, bough, and thought all contain ough, but they do not share one ending sound. A writer who matches only the letters may think the words belong together. A listener hears separate sounds.\n\nOther endings create similar problems. Love and move share ove. Head and bead share ead. Ear can sound different in bear, hear, and heart. The page looks orderly; the voice is less predictable.\n\n## Eye rhyme, near rhyme, and failed rhyme\n\nAn eye rhyme is not automatically a mistake. In page-based poetry, a poet may use a visual echo deliberately. Older poems may also contain pairs that once sounded closer or were accepted within the poet’s accent.\n\nNear rhyme is different. A near rhyme is a partial sound match. It works by ear even though it does not match perfectly. For example, a poet may use similar consonants, related vowels, or a shared final sound to create a softer echo. The guide to [perfect rhymes vs near rhymes](/guides/rhyme-perfect-vs-near/) covers these categories in more detail.\n\nA failed rhyme happens when the poem seems to promise a sound match but the listener hears none. In songs and spoken poems, this is especially noticeable because the ear leads the experience. If a pair only works visually, it may not satisfy the listener.\n\n## Accent and dialect can change the answer\n\nNot every rhyme question has one universal answer. Accents affect vowels, r sounds, and word endings. Some speakers pronounce words as the same sound while others keep them separate. A rhyme that works in one accent may be only a near rhyme in another.\n\nThis is not a flaw in the poem. It is part of spoken language. Songwriters often write for their own pronunciation. A performer may bend a vowel to make a rhyme land. A regional poem may depend on the local sound.\n\nWhen writing for performance, use the intended speaker’s pronunciation. When writing for a broad audience, avoid pairs that depend on a very specific accent unless that is part of the voice.\n\n## How tools fit into the problem\n\nKefiw’s [Rhyme Finder](/word-tools/rhyme-finder/) is spelling-based. It scans a large English word list for matching endings and looser ending patterns. That makes it fast for brainstorming, but it also means it can return eye-rhyme risks.\n\nThis is different from a pronunciation-aware rhyme engine. A phonetic tool would compare sounds. A spelling-based tool compares letters. Both can be useful, but they should be described honestly.\n\nThe best workflow is to use the tool for ideas, then test the best candidates aloud. If a result looks right but sounds wrong, mark it as an eye rhyme and move on. If it sounds close but not exact, decide whether a near rhyme fits the tone.\n\n## A practical test for real rhymes\n\nUse a three-step test. First, say the original word naturally. Second, say the candidate word naturally. Third, compare the stressed vowel and the sounds after it. If they match clearly, the pair is close to a perfect rhyme. If they echo but do not match, it may be a near or slant rhyme. If they only look similar, it is an eye rhyme.\n\nNow put the words inside the full lines. Sometimes two words rhyme in isolation but feel awkward in context because the rhythm does not support them. Use the [Syllable Counter](/word-tools/syllable-counter/) after choosing the pair to check whether the lines carry the rhyme with similar weight.\n\n## How to revise an eye-rhyme problem\n\nIf a rhyme fails aloud, do not only search for another word. First ask whether the ending word should change. A stronger line ending may open better options.\n\nFor example, a line ending in love often pushes writers toward obvious or false choices. A revision might move the emotional word earlier and end on a concrete image instead: glove, door, rain, cup, light. Concrete endings often create better sound choices and stronger images.\n\nIf the poem is meant to be read silently, an eye rhyme can remain as a visual effect. If it is meant to be sung or spoken, choose the sound over the spelling. Rhyme belongs to the ear first.",
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ],
+      "longform_word_count_estimate": 872
+    }
+  ],
+  "link_map": {
+    "cE-rhyme-perfect-vs-near": [
+      "rhyme-finder",
+      "syllable-counter"
+    ],
+    "cE-syllables-counting-rules": [
+      "syllable-counter",
+      "haiku-checker",
+      "rhyme-finder"
+    ],
+    "cS-how-to-use-rhyme-finder": [
+      "rhyme-finder",
+      "syllable-counter",
+      "haiku-checker",
+      "cE-rhyme-perfect-vs-near",
+      "cE-syllables-counting-rules"
+    ],
+    "cS-count-syllables-in-a-line": [
+      "syllable-counter",
+      "haiku-checker",
+      "rhyme-finder",
+      "cE-syllables-counting-rules",
+      "cS-how-to-write-a-haiku"
+    ],
+    "cS-how-to-write-a-haiku": [
+      "haiku-checker",
+      "syllable-counter",
+      "rhyme-finder",
+      "cS-count-syllables-in-a-line",
+      "cE-syllables-counting-rules"
+    ],
+    "cS-why-words-look-like-rhymes": [
+      "rhyme-finder",
+      "syllable-counter",
+      "cE-rhyme-perfect-vs-near",
+      "cS-how-to-use-rhyme-finder"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "rhyme-finder",
+          "url": "/word-tools/rhyme-finder/"
+        },
+        {
+          "id": "syllable-counter",
+          "url": "/word-tools/syllable-counter/"
+        },
+        {
+          "id": "haiku-checker",
+          "url": "/word-tools/haiku-checker/"
+        },
+        {
+          "id": "word-counter",
+          "url": "/word-tools/word-counter/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cE-rhyme-perfect-vs-near",
+          "url": "/guides/rhyme-perfect-vs-near/"
+        },
+        {
+          "id": "cE-syllables-counting-rules",
+          "url": "/guides/syllables-counting-rules/"
+        },
+        {
+          "id": "cS-how-to-use-rhyme-finder",
+          "url": "/guides/how-to-use-a-rhyme-finder/"
+        },
+        {
+          "id": "cS-count-syllables-in-a-line",
+          "url": "/guides/how-to-count-syllables-in-a-line/"
+        },
+        {
+          "id": "cS-how-to-write-a-haiku",
+          "url": "/guides/how-to-write-a-haiku/"
+        },
+        {
+          "id": "cS-why-words-look-like-rhymes",
+          "url": "/guides/why-some-words-look-like-they-rhyme/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  },
+  "enhanced_at": "2026-04-22T00:00:00-05:00",
+  "enhancement_summary": {
+    "status": "enhanced_from_V2",
+    "source_file": "rhyme-V2.json",
+    "core_decision": "Preserve current snapshots and fill enhanced/longform_markdown with copy that respects verified tool_logic.",
+    "major_corrections": [
+      "Corrected Rhyme Finder copy to say spelling-based matching, not phonetic or pronunciation-dictionary matching.",
+      "Corrected Rhyme Finder output language to avoid claiming slant-rhyme mode or syllable counts that do not exist in ui_fields.",
+      "Corrected the eye-rhyme article guidance so it no longer says the current Rhyme Finder catches true rhymes by phonetics.",
+      "Separated tool-page copy from deeper guide content so tool pages stay fast and guides carry the 800-1200 word authority body.",
+      "Added user-scenario, craft, troubleshooting, and PAA-style FAQ layers to each tool and article."
+    ],
+    "remaining_product_opportunities": [
+      "Add a pronunciation dictionary or phoneme layer before claiming true perfect rhymes.",
+      "Add syllable counts beside rhyme results if the page wants to promise syllable-aware rhyme selection.",
+      "Add true slant-rhyme and multi-word rhyme features before describing them as tool modes.",
+      "Add live SERP/PAA collection fields if you want the FAQ set to be based on current search results rather than search-intent modeling."
+    ]
+  },
+  "cluster_enhanced": {
+    "title": "Rhyme & Syllable Help — Kefiw",
+    "meta_description": "Find spelling-based rhyme ideas, count syllables, check 5-7-5 haiku structure, and learn how to shape stronger poems, songs, and short verse.",
+    "intro": "Use this rhyme and syllable hub when the writing is close but the sound is not landing yet. The tools help with the mechanical checks: finding words with similar endings, counting syllables, checking line length, and validating a 5-7-5 haiku shape. The guides explain the craft around those checks so a poem, lyric, or short verse sounds natural instead of forced.",
+    "faq": [
+      {
+        "q": "Is the Rhyme Finder phonetic?",
+        "a": "No. The current Rhyme Finder is spelling-based and matches trailing letter patterns from a large English word list. It is useful for brainstorming, but final rhyme choices should be read aloud because English spelling does not always match pronunciation.",
+        "faq_intent": "trust"
+      },
+      {
+        "q": "Which tool should I use first for a poem?",
+        "a": "Start with the Rhyme Finder when you need ending-word ideas, then use the Syllable Counter to test rhythm. If the poem is a haiku, use the Haiku Checker after drafting three lines.",
+        "faq_intent": "how-to"
+      },
+      {
+        "q": "Why do rhyme and syllable tools sometimes disagree with my ear?",
+        "a": "Automated tools use rules, lists, or patterns, while poems are heard through pronunciation, accent, and performance. Treat the tools as drafting aids, then read the line aloud before making the final choice.",
+        "faq_intent": "troubleshooting"
+      },
+      {
+        "q": "Can these tools help with songs and rap lyrics?",
+        "a": "Yes. The tools can help with rhyme options, line length, and draft structure for lyrics. Songs and rap also depend on beat, stress, delivery, and phrasing, so the strongest test is still speaking or singing the line aloud.",
+        "faq_intent": "how-to"
+      }
+    ],
+    "authority_angles": [
+      "why writers use rhyme tools when a line is stuck",
+      "how rhyme, syllable count, rhythm, and meaning work together",
+      "how to avoid forced rhyme and eye-rhyme traps",
+      "how haiku structure differs from haiku quality",
+      "how automated counts help but do not replace reading aloud"
+    ]
+  },
+  "recommended_new_articles": [
+    {
+      "id": "cS-how-to-write-a-rhyming-poem",
+      "slug": "how-to-write-a-rhyming-poem",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-write-a-rhyming-poem/",
+      "title": "How to Write a Rhyming Poem — Meaning, Sound, Rhythm, and Revision",
+      "h1": "How to Write a Rhyming Poem",
+      "subhead": "Start with the idea, choose a rhyme scheme, match the rhythm, and revise forced rhymes.",
+      "target_word_count": 1200,
+      "why_add": "This directly captures the user intent behind the Rhyme Finder: not just finding a rhyming word, but finishing a better poem.",
+      "relatedIds": [
+        "rhyme-finder",
+        "syllable-counter",
+        "cS-how-to-use-rhyme-finder",
+        "cE-rhyme-perfect-vs-near",
+        "cS-why-words-look-like-rhymes"
+      ],
+      "proposed_outline": [
+        "## Start with one subject or moment",
+        "## Choose a rhyme scheme that fits the tone",
+        "## Write the idea before searching for rhymes",
+        "## Match syllable count and rhythm",
+        "## Avoid cliché and forced rhymes",
+        "## Revise by reading aloud"
+      ]
+    }
+  ],
+  "schema_recommendations": [
+    {
+      "field": "cluster.current/faq",
+      "issue": "The existing cluster FAQ says the Rhyme Finder uses a pronunciation dictionary, but the verified tool_logic says no phonetic fallback and spelling-based matching only.",
+      "fix": "Use cluster_enhanced.faq or update future exports to say spelling-based matching."
+    },
+    {
+      "field": "tools[].current",
+      "issue": "Some baseline copy still claims slant rhymes and syllable counts for Rhyme Finder, but ui_fields only shows perfect and near buckets with no syllable count output.",
+      "fix": "Keep current for diffing, but render enhanced fields on the live page."
+    },
+    {
+      "field": "articles[].current.whenToUse",
+      "issue": "The eye-rhyme article says the Rhyme Finder uses phonetic matching; this conflicts with tool_logic.",
+      "fix": "Use enhanced.whenToUse and longform_markdown, which describe it as spelling-based brainstorming."
+    },
+    {
+      "field": "enhancement_brief.longform_rules.target_length",
+      "issue": "Brief says target 1,200+ words in goal but 800-1200 in longform rules.",
+      "fix": "Choose one target range. Recommended: 900-1,300 words for support guides, 300-700 words for tool pages."
+    },
+    {
+      "field": "future_schema",
+      "issue": "No explicit field separates true tool capabilities from broader educational concepts.",
+      "fix": "Add content_claim_scope with values such as tool_capability, educational_context, and future_enhancement."
+    }
+  ]
+}

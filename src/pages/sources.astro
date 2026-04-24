@@ -1,0 +1,48 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Sources — Kefiw"
+  description="The source families behind Kefiw pages: public dictionaries, official rules, standards bodies, reference documentation, and domain sources chosen by page type."
+  canonical="/sources/"
+  keywords={['sources', 'references', 'kefiw sources', 'tool sources']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Sources</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw uses source families that fit the page type. The right source for a rhyme finder is not the right source for a calculator, health page, or game-rule explainer.
+    </p>
+
+    <TrustNav current="/sources/" />
+
+    <h2>Source families used on the site</h2>
+    <ul>
+      <li><strong>Word and puzzle pages:</strong> public dictionaries, official rules where available, and clearly labeled rule-model assumptions when dictionaries differ.</li>
+      <li><strong>Calculator and converter pages:</strong> published formulas, unit standards, and domain references appropriate to the calculation.</li>
+      <li><strong>Health pages:</strong> official or professional guidance, established formulas, and clearly stated model limits rather than diagnosis claims.</li>
+      <li><strong>Guide pages:</strong> the same underlying sources plus practical framing that explains how users actually apply the tool.</li>
+    </ul>
+
+    <h2>How sources are chosen</h2>
+    <p>
+      Kefiw prefers primary or official sources when the page depends on current rules, thresholds, or standards. When a page uses a simplified model or a public word list instead of an official proprietary dictionary, the page should say so. Source quality matters, but matching the source to the task matters too.
+    </p>
+
+    <h2>Why source limits are disclosed</h2>
+    <p>
+      A tool can be useful without being universal. A spelling-based rhyme finder can still help a songwriter even though it is not a pronunciation model. A public dictionary can still help with word games even though an official tournament dictionary may differ. Kefiw tries to keep those boundaries visible instead of hiding them under generic accuracy claims.
+    </p>
+
+    <h2>What users are usually trying to do</h2>
+    <p>
+      Users checking the sources page are usually trying to decide whether the site is credible enough for the task they have in front of them. They want to know whether the tool is based on a real formula, whether the rule explanation comes from an official standard, and whether the page is honest about uncertainty.
+    </p>
+
+    <h2>Where to look next</h2>
+    <p>
+      Read the <a href="/methodology/">methodology</a> page for how sources flow into actual page design, and the <a href="/editorial-policy/">editorial policy</a> for how those sources are turned into claims, examples, and disclaimers.
+    </p>
+  </article>
+</BaseLayout>

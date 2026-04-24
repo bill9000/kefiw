@@ -1,0 +1,55 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="About the Reviewers — Kefiw"
+  description="Meet the review roles behind Kefiw: registered nurse review, engineering review, scientific review, and the editorial policy that defines what each one covers."
+  canonical="/about-the-reviewers/"
+  keywords={['about the reviewers', 'kefiw reviewers', 'registered nurse review', 'engineering review', 'scientific review']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">About the Reviewers</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw uses role-based human review so users can see who is responsible for the math, the evidence framing, and the safety wording.
+    </p>
+
+    <TrustNav current="/about-the-reviewers/" />
+
+    <h2>Why this exists</h2>
+    <p>
+      Most tool sites say a page is &ldquo;reviewed&rdquo; without saying what that means. Kefiw does the opposite. The review label should tell you whether a page was checked for implementation accuracy, evidence framing, health-safety wording, or some combination of those. That matters because a word-game helper, a percentage calculator, and a health-routing page do not carry the same risk.
+    </p>
+
+    <h2>The three review lanes</h2>
+    <ul>
+      <li><strong>Registered nurse review</strong> covers health-safety wording, escalation language, and red-flag copy on health pages.</li>
+      <li><strong>Engineering review</strong> covers formulas, calculations, input handling, browser behavior, unit conversions, and implementation correctness.</li>
+      <li><strong>Scientific review</strong> covers source quality, evidence framing, assumptions, uncertainty, and clear explanation of limits.</li>
+    </ul>
+
+    <h2>How the roles work together</h2>
+    <p>
+      The same page can carry more than one review lane. A health calculator may be engineered for deterministic math, reviewed scientifically for how the underlying model is framed, and checked by an RN so the safety wording is clear and not overstated. A word tool or game helper usually does not need RN review, but it still benefits from engineering review for search logic and scientific review for claim discipline.
+    </p>
+
+    <h2>What users are usually trying to do</h2>
+    <p>
+      People rarely come to Kefiw looking for abstract definitions. They are usually trying to solve a puzzle, write a line that sounds right, check a formula, compare two options, or understand whether a tool result is safe to rely on. The review system exists to make those tasks clearer and less misleading.
+    </p>
+
+    <h2>What a review label does not mean</h2>
+    <ul>
+      <li>It does not mean a page is personalized to your situation.</li>
+      <li>It does not mean a tool replaces a clinician, lawyer, accountant, financial adviser, or any other licensed professional.</li>
+      <li>It does not mean a single reviewer approves every sentence on the site for every possible use case.</li>
+      <li>It does mean the page has an identified review scope, which is documented in plain language.</li>
+    </ul>
+
+    <h2>Read the details</h2>
+    <p>
+      Use the pages below to see the boundaries of each role, then read the <a href="/editorial-policy/">editorial policy</a>, <a href="/methodology/">methodology</a>, and <a href="/sources/">sources</a> pages for the process behind them.
+    </p>
+  </article>
+</BaseLayout>

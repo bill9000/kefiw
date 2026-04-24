@@ -1,12 +1,14 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
+import AuthorityPanel from '~/components/AuthorityPanel.astro';
 import FAQ from '~/components/FAQ.astro';
 import RelatedTools from '~/components/RelatedTools.astro';
 import StartHere from '~/components/StartHere.astro';
 import ToolTips from '~/components/ToolTips.astro';
 import FollowUpTools from '~/components/FollowUpTools.astro';
 import AdSlot from '~/components/ads/AdSlot.tsx';
+import { reviewPanelForArea } from '~/data/review';
 import type { ToolConfig } from '~/data/tools';
 import { CATEGORIES, toolHref } from '~/data/tools';
 import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
@@ -15,6 +17,7 @@ interface Props { tool: ToolConfig; }
 const { tool } = Astro.props;
 const cat = CATEGORIES[tool.category];
 const cluster = tool.clusterId ? CLUSTERS_BY_SLUG[tool.clusterId] : undefined;
+const reviewConfig = reviewPanelForArea(tool.category);
 const crumbs = [
   { href: '/', label: 'Home' },
   { href: `/${cat.slug}/`, label: cat.title },
@@ -80,6 +83,50 @@ const webAppJsonLd = {
         </div>
       ))}
     </section>
+
+    {(tool.useCases ?? []).length > 0 && (
+      <section aria-label="Use cases" class="mt-8 max-w-3xl">
+        <h2 class="mb-3 text-xl font-semibold">What users are actually trying to do</h2>
+        <ul class="grid gap-2 sm:grid-cols-2">
+          {tool.useCases!.map((uc) => (
+            <li class="flex gap-2 rounded-md border border-slate-200 bg-white p-3 text-sm text-slate-800">
+              <span class="mt-0.5 text-brand-600">▸</span>
+              <span>{uc}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <AuthorityPanel config={reviewConfig} />
+
+    {(tool.commonMistakes ?? []).length > 0 && (
+      <section aria-label="Common mistakes" class="mt-8 max-w-3xl">
+        <h2 class="mb-3 text-xl font-semibold">Common mistakes</h2>
+        <ul class="space-y-2">
+          {tool.commonMistakes!.map((m) => (
+            <li class="flex gap-2 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-slate-800">
+              <span class="mt-0.5 text-amber-700">!</span>
+              <span>{m}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {(tool.limitations ?? []).length > 0 && (
+      <section aria-label="Limitations" class="mt-8 max-w-3xl">
+        <h2 class="mb-3 text-xl font-semibold">Limitations</h2>
+        <ul class="space-y-2">
+          {tool.limitations!.map((lim) => (
+            <li class="flex gap-2 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+              <span class="mt-0.5 text-slate-500">·</span>
+              <span>{lim}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     <div class="my-6">
       <AdSlot client:idle zoneId="EPSILON" />

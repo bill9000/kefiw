@@ -1,8 +1,18 @@
 export type ToolCategory = 'word-tools' | 'converters' | 'calculators' | 'games' | 'health' | 'logic' | 'finance';
 
+export type FaqIntent =
+  | 'definition'
+  | 'comparison'
+  | 'edge-case'
+  | 'how-to'
+  | 'troubleshooting'
+  | 'cost'
+  | 'trust';
+
 export interface FaqItem {
   q: string;
   a: string;
+  faq_intent?: FaqIntent;
 }
 
 export interface ExampleBlock {
@@ -37,6 +47,13 @@ export interface ToolConfig {
   outcomeLine?: string;
   followUps?: FollowUp[];
   packetId?: string;
+  // Writer-AI enrichment (rendered on tool page if present)
+  useCases?: string[];
+  commonMistakes?: string[];
+  limitations?: string[];
+  metaDescription?: string;
+  // Backlog-only — not rendered on the page. Surfaced in docs/reports.
+  suggestedEnhancements?: string[];
 }
 
 export const CATEGORIES: Record<ToolCategory, { title: string; slug: string; blurb: string }> = {
@@ -77,7 +94,7 @@ export const CATEGORIES: Record<ToolCategory, { title: string; slug: string; blu
   },
 };
 
-export const TOOLS: ToolConfig[] = [
+const RAW_TOOLS: ToolConfig[] = [
   // ---------- WORD TOOLS ----------
   {
     id: 'word-unscrambler',
@@ -516,20 +533,60 @@ export const TOOLS: ToolConfig[] = [
     slug: 'rhyme-finder',
     title: 'Rhyme Finder — Kefiw',
     h1: 'Rhyme Finder',
-    description: 'Find words that rhyme with your input. Useful for songwriting, poetry, and rap.',
+    description: 'Find spelling-based rhyme ideas for poems, songs, rap verses, greeting cards, and short lines of verse.',
+    metaDescription: 'Enter a word to find strong ending matches and near ending matches from a large English word list. Useful for brainstorming poems, lyrics, and short verse.',
     keywords: ['rhyme finder', 'rhymes with', 'rhyming dictionary'],
-    intro: 'Enter any word and get a list of words that rhyme with it, grouped by perfect rhyme, near rhyme, and end-sound match.',
+    intro: 'Use the Rhyme Finder when you have a line ending but need another word that can land with it. Enter one English word and the tool scans a large word list for matching endings. Quick mode shows the strongest ending matches; Extended mode also shows looser near matches. Because this version is spelling-based, read the best candidates aloud before using them in a poem, song, or rap verse.',
+    outcomeLine: 'Spelling-based ending matches for fast rhyme brainstorming.',
     howTo: [
-      'Enter a single word.',
-      'View perfect rhymes first, then near-rhymes.',
+      'Enter one English word, such as time, light, rain, or heart.',
+      'Use Quick mode for the strongest ending matches.',
+      'Use Extended mode when the obvious matches feel too narrow or predictable.',
+      'Read the best choices aloud and keep the word that fits your meaning, rhythm, and tone.',
     ],
     examples: [
-      { title: 'Rhymes with TIME', body: 'dime, lime, rhyme, prime, chime, climb, crime, sublime…' },
+      { title: 'Writing a poem line', body: 'If your line ends with rain, use the results to test plain, train, again, remain, or refrain. Each option changes the image and mood.' },
+      { title: 'Writing a chorus', body: 'If a chorus line ends with night, look for simple, singable matches first. Words like light, right, and sight are easy for listeners to hear.' },
+      { title: 'Avoiding a forced rhyme', body: 'If the only rhyme makes the sentence sound unnatural, change the line ending and search again. The best rhyme supports the idea instead of taking over the line.' },
+      { title: 'Checking an eye-rhyme risk', body: 'Words with the same spelling ending may not rhyme aloud. If a result looks useful, say both words out loud before using it.' },
     ],
     faq: [
-      { q: 'How are rhymes computed?', a: 'By matching the trailing phoneme pattern of each word. Perfect rhymes share the last stressed vowel and all following sounds.' },
+      { q: 'Is this rhyme finder phonetic?', a: 'No. This rhyme finder is spelling-based, so it matches words by trailing letter patterns rather than pronunciation. It is useful for brainstorming, but English has eye rhymes and false rhymes, so read each result aloud before using it.', faq_intent: 'trust' },
+      { q: 'Why does the rhyme finder show words that do not rhyme aloud?', a: 'The tool may show false rhymes because English spelling and sound often disagree. Words with similar endings can sound different, especially endings such as ough, ove, or ear. Treat the list as a draft source, then keep only words that work when spoken.', faq_intent: 'troubleshooting' },
+      { q: 'What is the difference between Quick and Extended mode?', a: 'Quick mode shows the strongest spelling-ending matches, while Extended mode also shows looser near matches. Use Quick when you want a tighter list, and Extended when you need more options for a poem, song, or lyric.', faq_intent: 'comparison' },
+      { q: 'Can I use this rhyme finder for songs or rap lyrics?', a: 'Yes. The rhyme finder can help songwriters and rappers brainstorm ending words quickly. For lyrics, also check rhythm, stress, and delivery because a word that looks right in a list may not fit the beat.', faq_intent: 'how-to' },
+      { q: 'Why are names, places, or slang missing?', a: 'The tool uses the ENABLE1 English word list, which does not include many proper nouns, abbreviations, slang terms, or profanity. If a name or place is missing, search for a nearby common word ending instead.', faq_intent: 'edge-case' },
+      { q: 'How do I choose the best rhyme from the list?', a: 'Choose the rhyme that fits the meaning first, then check the sound and rhythm. A surprising rhyme is useful only when the line still feels natural. If the sentence bends around the rhyme, rewrite the line ending.', faq_intent: 'how-to' },
     ],
-    relatedIds: ['syllable-counter', 'words-ending-with'],
+    useCases: [
+      'Finding a second line for a poem or couplet',
+      'Brainstorming chorus endings for a song',
+      'Finding simple rhymes for greeting cards or classroom poems',
+      'Looking for fresher alternatives to an obvious rhyme',
+      'Testing whether a line ending has enough options before committing to it',
+    ],
+    commonMistakes: [
+      'Assuming a spelling match is always a sound rhyme',
+      'Choosing a rhyme before deciding what the line needs to say',
+      'Forcing word order just to land on a result',
+      'Ignoring syllable count and rhythm after choosing a rhyme',
+      'Using the first obvious rhyme even when it feels clichéd',
+    ],
+    limitations: [
+      'Spelling-based only, not pronunciation-aware',
+      'No multi-word rhymes',
+      'No proper nouns or profanity from the source list',
+      'No stress-pattern or meter analysis',
+      'No syllable counts in the rhyme output',
+    ],
+    suggestedEnhancements: [
+      'Add a pronunciation dictionary layer for true perfect rhymes.',
+      'Show syllable counts beside each result by reusing the Syllable Counter logic.',
+      'Add a warning badge for endings known to create eye-rhyme traps, such as ough and ove.',
+      'Add a multi-word rhyme mode for lyrics and rap.',
+      'Add a line-builder panel that lets the user test a rhyme inside a sentence.',
+    ],
+    relatedIds: ['syllable-counter', 'words-ending-with', 'cS-how-to-write-a-rhyming-poem', 'cS-how-to-use-rhyme-finder'],
     island: 'RhymeFinder',
     followUps: [
       { toolId: 'syllable-counter', cta: 'Rhyme found. Now check the syllable count matches.' },
@@ -542,20 +599,59 @@ export const TOOLS: ToolConfig[] = [
     slug: 'syllable-counter',
     title: 'Syllable Counter — Kefiw',
     h1: 'Syllable Counter',
-    description: 'Count the syllables in any word or phrase. Useful for haiku, poetry, and writing.',
-    keywords: ['syllable counter', 'count syllables', 'syllables in word'],
-    intro: 'Type or paste a word, sentence, or paragraph and get an accurate syllable count per word and total.',
+    description: 'Count estimated syllables in words, lines, poems, lyrics, and short text using a vowel-group heuristic.',
+    metaDescription: 'Paste a word, line, poem, or paragraph to estimate total and per-word syllable counts for poetry, lyrics, haiku, and rhythm checks.',
+    keywords: ['syllable counter', 'count syllables', 'syllables in word', 'haiku syllable count', 'poem rhythm'],
+    intro: 'Use the Syllable Counter when a line sounds too long, too short, or uneven beside another line. Paste a word, sentence, poem, or lyric and the tool estimates syllables with a vowel-group heuristic. Extended mode shows per-word chips so you can spot which word is changing the rhythm. Counts are practical for drafting, but unusual names, loanwords, and dialect differences may need a manual read-aloud check.',
+    outcomeLine: 'Estimated syllable totals, per-word counts, and line comparisons for draft rhythm.',
     howTo: [
-      'Type or paste your text.',
-      'View per-word and total syllable counts.',
+      'Paste a word, line, poem, lyric, or paragraph into the text box.',
+      'Check the total syllable count for the full text.',
+      'Switch to Extended mode to see per-word counts.',
+      'For poems or lyrics, compare line counts and revise words that make the rhythm uneven.',
     ],
     examples: [
-      { title: 'Input: "kefiw dictionary"', body: 'kefiw (2) + dictionary (4) = 6 syllables' },
+      { title: 'Checking a poem line', body: 'The moon was low = 4 estimated syllables. Adding above the road changes the line length and rhythm.' },
+      { title: 'Fixing a haiku draft', body: 'If line two has 8 syllables instead of 7, look for one removable word or a shorter synonym before checking again.' },
+      { title: 'Testing a lyric phrase', body: 'A chorus line often needs to fit a beat. Count the phrase, then speak it with the melody or rhythm in mind.' },
     ],
     faq: [
-      { q: 'How accurate is it?', a: 'Uses a heuristic that is ~95% accurate on common English words. Rare or technical words may be off by one.' },
+      { q: 'How does the syllable counter work?', a: 'The syllable counter estimates syllables by cleaning each word, finding vowel groups, and applying simple English spelling rules. It does not use a pronunciation dictionary, so rare words and names may need a manual check.', faq_intent: 'definition' },
+      { q: 'How accurate is this syllable counter?', a: 'The counter is designed to be practical for common English words, but it is still an estimate. Words such as fire, poem, every, names, and loanwords can vary by pronunciation, dialect, or speaking speed.', faq_intent: 'trust' },
+      { q: 'Why does my syllable count differ from the tool?', a: 'Counts differ when a word has more than one common pronunciation or when an accent changes the sound. Read the line aloud in the voice you intend to use, then adjust the count if the tool feels off.', faq_intent: 'troubleshooting' },
+      { q: 'Can I count syllables in a whole poem?', a: 'Yes. Paste the poem into the Syllable Counter and keep each poetic line on its own line. The tool can show total counts and line comparisons, which helps with forms, lyrics, and rhythm checks.', faq_intent: 'how-to' },
+      { q: 'Does the syllable counter work for haiku?', a: 'Yes, it can help count individual haiku lines, and it also detects a 17-syllable, three-line shape. For a clearer 5-7-5 pass/fail view, use the Haiku Checker after drafting.', faq_intent: 'how-to' },
+      { q: 'Does the syllable counter use a dictionary?', a: 'No. This tool uses a regex-based heuristic rather than a dictionary or IPA pronunciation source. That makes it fast and private in the browser, but it also means edge cases can be off by one.', faq_intent: 'trust' },
     ],
-    relatedIds: ['word-counter', 'letter-counter', 'rhyme-finder'],
+    useCases: [
+      'Checking whether two rhyming lines have similar length',
+      'Drafting a 5-7-5 haiku or other syllable-counted form',
+      'Tightening song lyrics to fit a melody or beat',
+      'Finding the word that makes a sentence feel too heavy',
+      'Teaching vowel sounds and syllable awareness',
+    ],
+    commonMistakes: [
+      'Counting vowel letters instead of vowel sounds',
+      'Forgetting that silent e usually does not add a syllable',
+      'Treating every automated count as final',
+      'Ignoring how fast speech can compress words',
+      'Counting haiku syllables without checking the poem line by line',
+    ],
+    limitations: [
+      'No pronunciation dictionary',
+      'No dialect-specific counts',
+      'Proper nouns and loanwords may be wrong',
+      'Some words can be validly pronounced with different counts',
+      'Non-English text is not supported as a true syllable system',
+    ],
+    suggestedEnhancements: [
+      'Add a manual override for individual word counts.',
+      'Add dictionary exceptions for common edge cases such as every, fire, poem, and family.',
+      'Add a compare-lines view for poems with target counts.',
+      'Add preset forms such as haiku, tanka, limerick, and common hymn meter.',
+      'Add a warning when a word is likely ambiguous.',
+    ],
+    relatedIds: ['word-counter', 'letter-counter', 'rhyme-finder', 'haiku-checker'],
     island: 'SyllableCounter',
     followUps: [
       { toolId: 'haiku-checker', cta: 'Targeting haiku? Check 5-7-5 directly.' },
@@ -589,15 +685,59 @@ export const TOOLS: ToolConfig[] = [
     slug: 'word-counter',
     title: 'Word Counter — Kefiw',
     h1: 'Word Counter',
-    description: 'Count words, sentences, paragraphs, and reading time in any text.',
-    keywords: ['word counter', 'count words', 'word count tool'],
-    intro: 'Paste any text and get word, sentence, paragraph, and reading-time stats instantly.',
-    howTo: ['Paste your text.', 'Stats update as you type.'],
-    examples: [{ title: 'Typical essay', body: '500 words ≈ 2.5 min read. 1500 words ≈ 7 min read.' }],
-    faq: [
-      { q: 'How is reading time calculated?', a: 'At 200 words per minute (average adult silent reading speed).' },
+    description: 'Count words, characters, sentences, paragraphs, and estimated reading or speaking time in pasted text.',
+    metaDescription: 'Paste text to count words, characters, sentences, paragraphs, average sentence length, and estimated reading or speaking time in the browser.',
+    keywords: ['word counter', 'count words', 'word count tool', 'reading time estimate', 'character count'],
+    intro: 'Use the Word Counter when a draft must fit a limit, a post feels too long, or a script needs an estimated reading time. Paste any text and the tool counts words, characters, sentences, paragraphs, and time estimates in the browser. The results are best for English-style text with spaces between words. Sentence and paragraph counts are approximate because punctuation and line breaks vary by draft.',
+    outcomeLine: 'Fast browser-based text statistics for drafts, posts, scripts, and assignments.',
+    howTo: [
+      'Paste or type your text into the text area.',
+      'Watch the word, character, sentence, paragraph, and time estimates update.',
+      'Use reading time for articles and speaking time for scripts or presentations.',
+      'Check the long-sentence hint if the draft feels hard to read.',
     ],
-    relatedIds: ['letter-counter', 'syllable-counter', 'case-converter'],
+    examples: [
+      { title: 'Essay or assignment limit', body: 'Paste the draft to see whether it is near a 500-word, 1,000-word, or 1,500-word target.' },
+      { title: 'Blog reading time', body: 'A 1,200-word article reads at roughly six minutes using a 200 words-per-minute estimate.' },
+      { title: 'Script timing', body: 'Speaking time is slower than reading time, so a script may need fewer words than an article of the same length.' },
+    ],
+    faq: [
+      { q: 'How does the word counter count words?', a: 'The word counter splits text on whitespace, so each separated text chunk counts as a word. This works well for English-style writing, but languages without spaces between words may be undercounted.', faq_intent: 'definition' },
+      { q: 'How is reading time calculated?', a: 'Reading time is estimated from the word count and a standard words-per-minute rate. It is a helpful planning number, not a personalized measure of how fast every reader will move through the text.', faq_intent: 'definition' },
+      { q: 'Does the word counter keep my text private?', a: 'The tool runs in the browser, so the text can be analyzed without a server round-trip. That makes it suitable for quick draft checks, though users should still avoid pasting sensitive information into unnecessary tools.', faq_intent: 'trust' },
+      { q: 'Why is the sentence count different from my document editor?', a: 'Sentence counts can differ because the tool uses punctuation patterns to estimate sentence breaks. Abbreviations, ellipses, headings, and unusual punctuation may cause counts to differ from a document editor.', faq_intent: 'troubleshooting' },
+      { q: 'Can I use the word counter for poems or lyrics?', a: 'Yes, but word count is only one layer for poems and lyrics. For sound and rhythm, use the Syllable Counter after checking length, especially when line timing matters more than total words.', faq_intent: 'how-to' },
+      { q: 'What is the difference between characters with spaces and without spaces?', a: 'Characters with spaces include every letter, punctuation mark, and space, while characters without spaces remove the spaces. Some forms and social platforms use one or the other, so both counts are useful.', faq_intent: 'comparison' },
+    ],
+    useCases: [
+      'Checking essays, posts, bios, and descriptions against word limits',
+      'Estimating article reading time',
+      'Estimating script or speech length',
+      'Spotting long-sentence readability issues',
+      'Comparing draft versions after editing',
+    ],
+    commonMistakes: [
+      'Treating estimated reading time as exact for every reader',
+      'Expecting grammar or style checking from a counting tool',
+      'Using sentence counts as exact when abbreviations are present',
+      'Forgetting that poems and scripts depend on rhythm, not just word count',
+      'Counting non-space-delimited languages as if they were English',
+    ],
+    limitations: [
+      'Whitespace-based word counting',
+      'Punctuation-based sentence counting',
+      'Blank-line paragraph detection',
+      'No grammar or style correction',
+      'No language-specific segmentation for Chinese, Japanese, Thai, or similar scripts',
+    ],
+    suggestedEnhancements: [
+      'Expose the exact reading and speaking WPM assumptions in the UI.',
+      'Add adjustable reading-speed and speaking-speed controls.',
+      'Add export/copy for the full stats panel.',
+      'Add platform presets for meta descriptions, social posts, and ad copy.',
+      'Add a script mode with target duration and words-to-cut guidance.',
+    ],
+    relatedIds: ['letter-counter', 'syllable-counter', 'case-converter', 'reading-time-calculator'],
     island: 'WordCounter',
     followUps: [
       { toolId: 'reading-time-calculator', cta: 'Got the count? See how long readers will take.' },
@@ -694,20 +834,57 @@ export const TOOLS: ToolConfig[] = [
     slug: 'haiku-checker',
     title: 'Haiku Checker — Kefiw',
     h1: 'Haiku Checker',
-    description: 'Check if your poem follows the 5-7-5 haiku syllable pattern. Free, runs in your browser.',
-    keywords: ['haiku checker', 'haiku syllables', '5 7 5 haiku', 'haiku validator'],
-    intro: 'Paste a three-line poem and see instantly whether each line hits the classic 5-7-5 syllable count. Syllables are estimated with a heuristic tuned for English.',
+    description: 'Check whether a three-line English poem follows the 5-7-5 syllable pattern.',
+    metaDescription: 'Paste a three-line poem to check the 5-7-5 haiku syllable pattern line by line, with counts, pass/fail indicators, and revision hints.',
+    keywords: ['haiku checker', 'haiku syllables', '5 7 5 haiku', 'haiku validator', 'english haiku structure'],
+    intro: 'Use the Haiku Checker after you have drafted three short lines and want to test the classic English 5-7-5 shape. The tool counts estimated syllables in each line, compares them to 5, 7, and 5, then shows which lines are on target, over, or under. It checks structure only. It does not judge imagery, season words, cutting words, or poetic quality.',
+    outcomeLine: 'Line-by-line 5-7-5 structure validation for English haiku drafts.',
     howTo: [
-      'Type or paste your haiku — one line per line break.',
-      'Each line is scored against its target count (5, 7, 5).',
-      'Green means the target is met.',
+      'Write or paste the poem with one haiku line per line break.',
+      'Check the line pattern against 5, 7, and 5 syllables.',
+      'Revise any line marked over or under the target.',
+      'After the count works, read the haiku for image, contrast, and simplicity.',
     ],
     examples: [
-      { title: 'Classic haiku', body: 'An old silent pond / A frog jumps into the pond / Splash! Silence again — 5-7-5, valid.' },
+      { title: 'Structure check', body: 'Line 1 = 5, line 2 = 7, line 3 = 5. The checker marks the poem valid for the 5-7-5 pattern.' },
+      { title: 'Over-counted second line', body: 'If the pattern is 5-8-5, the second line needs one syllable removed or replaced with a shorter phrase.' },
+      { title: 'Craft reminder', body: 'A valid 5-7-5 count is only the frame. A strong haiku usually depends on concrete imagery, a moment, and a turn.' },
     ],
     faq: [
-      { q: 'How accurate is the syllable count?', a: 'English syllable counts are estimated from letter patterns — usually accurate within 1, sometimes off on unusual words.' },
-      { q: 'Must it be exactly 5-7-5?', a: 'Modern haiku often bend the rule, but the checker enforces the traditional 5-7-5 structure so you know when you are on target.' },
+      { q: 'What does the Haiku Checker validate?', a: 'The Haiku Checker validates the 5-7-5 syllable structure of a three-line English haiku draft. It checks line counts only, not imagery, season words, cutting words, meaning, or overall poem quality.', faq_intent: 'definition' },
+      { q: 'Does a haiku have to be exactly 5-7-5?', a: 'A classroom English haiku often uses 5-7-5, but modern English-language haiku may use shorter or looser counts. The checker enforces 5-7-5 so users can see whether they hit that specific pattern.', faq_intent: 'comparison' },
+      { q: 'Why does the Haiku Checker say my line is wrong?', a: 'The line is marked wrong when its estimated syllable count does not match the target for that line. If the line sounds right to you, check for words with variable pronunciation before rewriting.', faq_intent: 'troubleshooting' },
+      { q: 'Can the Haiku Checker detect kigo or kireji?', a: 'No. The checker does not detect seasonal words, cutting words, image quality, or juxtaposition. It only counts estimated English syllables and compares the three lines to the 5-7-5 target.', faq_intent: 'trust' },
+      { q: 'How do I fix a haiku line with too many syllables?', a: 'Remove filler words first, then replace long words with shorter concrete words. A strong haiku usually gains power from compression, so cutting one adjective or explanation often improves both count and image.', faq_intent: 'how-to' },
+      { q: 'Should haiku rhyme?', a: 'Haiku normally does not need rhyme, and end rhyme can make a short haiku feel forced. Focus on the syllable shape, the image, and the turn before adding any extra sound pattern.', faq_intent: 'comparison' },
+    ],
+    useCases: [
+      'Checking a classroom 5-7-5 haiku assignment',
+      'Revising a three-line nature poem for line length',
+      'Testing whether a short poem fits the classic English pattern',
+      'Finding which line is over or under before rewriting',
+      'Teaching the difference between structure and poetic quality',
+    ],
+    commonMistakes: [
+      'Treating 5-7-5 as the whole craft of haiku',
+      'Adding filler words only to reach the count',
+      'Writing an abstract explanation instead of a concrete image',
+      'Forcing rhyme into a form that usually does not need it',
+      'Ignoring words whose syllable counts vary by accent or speed',
+    ],
+    limitations: [
+      'Checks only English 5-7-5 syllable structure',
+      'No Japanese onji or kana support',
+      'No detection of kigo, kireji, senryu, tanka, or haiku quality',
+      'Syllable counts inherit the heuristic limits of the Syllable Counter',
+      'Extra lines are displayed but are not part of the target pattern',
+    ],
+    suggestedEnhancements: [
+      'Add optional presets for tanka 5-7-5-7-7 and other short forms.',
+      'Add a revision helper that highlights likely removable filler words.',
+      'Add a seasonal-word prompt library without claiming automatic detection.',
+      'Add manual syllable overrides for ambiguous words.',
+      'Add a craft checklist after the structural pass: image, season, contrast, cut.',
     ],
     relatedIds: ['syllable-counter', 'word-counter', 'rhyme-finder'],
     island: 'HaikuChecker',
@@ -906,12 +1083,19 @@ export const TOOLS: ToolConfig[] = [
     intro: 'Pick two dates and get the difference in every useful unit.',
     howTo: ['Enter start date.', 'Enter end date.'],
     examples: [{ title: '2026-01-01 to 2026-04-17', body: '106 days, ≈ 15 weeks, ≈ 3 months 16 days' }],
-    faq: [{ q: 'Does it count the end date?', a: 'The total-days figure counts full days between the two dates; it does not include the end date itself.' }],
-    relatedIds: ['age-calculator', 'time-converter'],
+    faq: [
+      { q: 'Does it count the end date?', a: 'The total-days figure counts full days between the two dates; it does not include the end date itself.' },
+      { q: 'Does 3 days mean 72 hours?', a: 'Yes \u2014 3 full days is 72 hours. But "3 days from Monday" in everyday speech usually means "on Thursday" which is actually 3 days later by calendar, not 72 hours from the start of Monday. The difference matters for deadlines.', faq_intent: 'edge-case' },
+      { q: 'How many days are left in the year?', a: 'Use the dedicated [Days Left in the Year](/calculators/days-left-in-year/) tool \u2014 it reports remaining days and percent of the year elapsed, with leap-year handling.', faq_intent: 'how-to' },
+      { q: 'How do you calculate 31 days?', a: 'Enter your start date and add 31 days to it \u2014 the calculator returns the exact end date. Note that "31 days" crosses a month boundary in most months, which is why 31-day and "one month" counts can differ.', faq_intent: 'how-to' },
+      { q: 'What is a Julian day?', a: 'A Julian day is a continuous day count from January 1, 4713 BCE used in astronomy and calendar systems. It is different from "Julian calendar" dates. Most date calculators (including this one) use the Gregorian calendar, not Julian day numbers.', faq_intent: 'definition' },
+    ],
+    relatedIds: ['age-calculator', 'time-converter', 'days-left-in-year', 'hours-calculator'],
     island: 'DateDifferenceCalculator',
     followUps: [
       { toolId: 'age-calculator', cta: 'One of the dates is a birthday? Use the age tool.' },
       { toolId: 'hours-calculator', cta: 'Need sub-day precision? Drop to hours.' },
+      { toolId: 'days-left-in-year', cta: 'Just want days left in the year? Use the dedicated tool.' },
     ],
   },
   {
@@ -1020,6 +1204,7 @@ export const TOOLS: ToolConfig[] = [
     faq: [
       { q: 'Does it handle overnight shifts?', a: 'Yes. If the end time is earlier than the start, it assumes you crossed midnight.' },
       { q: 'Is overtime calculated?', a: 'No. Multiply hours over 40 by your overtime rate separately.' },
+      { q: 'How do I calculate a 7.6-hour day?', a: 'A 7.6-hour workday is 7 hours and 36 minutes (0.6 \u00d7 60 = 36). Decimal hours after the point convert to minutes by multiplying by 60: 7.25 h = 7h 15m, 7.5 h = 7h 30m, 7.75 h = 7h 45m. This calculator shows both decimal hours and HH:MM form so you can read whichever you need.', faq_intent: 'how-to' },
     ],
     relatedIds: ['date-difference-calculator', 'time-converter'],
     island: 'HoursCalculator',
@@ -2700,18 +2885,28 @@ export const TOOLS: ToolConfig[] = [
     h1: 'Sudoku',
     description: 'Play Sudoku in your browser. Easy, medium, hard, and expert boards. Auto-save progress.',
     keywords: ['sudoku', 'play sudoku online', 'sudoku game'],
-    intro: 'Classic Sudoku in your browser. No ads mid-game, no login, progress saved locally.',
+    intro: 'Classic Sudoku — a 9×9 grid split into nine 3×3 boxes. Fill every blank cell with a digit 1–9 so each row, each column, and each 3×3 box contains every digit exactly once. No arithmetic, no diagonals — just those three constraints. Every puzzle has a unique solution, so you never need to guess. Progress saves locally.',
     howTo: [
-      'Pick a difficulty.',
-      'Tap a cell to select it, then tap a number (or press 1–9).',
-      'Your progress is saved in this browser automatically.',
+      'The rules: fill every blank cell with 1–9 so that each of the 9 rows, 9 columns, and nine 3×3 boxes contains every digit exactly once.',
+      'A digit is legal in a cell only if it doesn\'t already appear in that cell\'s row, column, or 3×3 box.',
+      'Tap a blank cell to select it; press 1–9 (or tap the number buttons) to place a digit. Backspace/Delete/0 clears.',
+      'Red highlighting means you broke a rule — undo and rescan. A proper Sudoku is always solvable by logic alone; if you feel like guessing, you missed a deduction.',
+      'Starter technique: pick a digit like 1, scan all nine 3×3 boxes, and place it in any box where only one cell can legally hold it. Repeat for 2 through 9, then loop back — each placement opens new forced moves.',
+      'Pick a difficulty at the top; your progress auto-saves per difficulty.',
     ],
-    examples: [{ title: 'Difficulties', body: 'Easy (~36 clues), Medium (~30), Hard (~26), Expert (~22).' }],
+    examples: [
+      { title: 'The three rules', body: 'Each row: every digit 1–9 once. Each column: every digit 1–9 once. Each 3×3 box: every digit 1–9 once. That is the entire ruleset.' },
+      { title: 'Legal-placement check', body: 'Want to put a 7 in a blank cell? Check its row for a 7 (none → OK), its column (none → OK), its 3×3 box (already a 7 → illegal). Try another digit.' },
+      { title: 'Difficulties', body: 'Easy (~40 clues, 3–7 min), Medium (~32), Hard (~28), Expert (~24 — near the human-solvable minimum).' },
+    ],
     faq: [
-      { q: 'Can I take notes?', a: 'Pencil marks are planned for a future version.' },
-      { q: 'How is the board generated?', a: 'Standard backtracking solver with uniqueness-guaranteed generator.' },
+      { q: 'Is there math in Sudoku?', a: 'No. The digits 1–9 are symbols — you could replace them with letters or shapes and the game would be identical. No addition, no multiplication.' },
+      { q: 'Do diagonals count?', a: 'Not in standard Sudoku. Only rows, columns, and 3×3 boxes have the once-each-digit rule. "Diagonal Sudoku" is a variant, not the default.' },
+      { q: 'Can I take notes?', a: 'Pencil marks are planned for a future version. For now, use mental candidates or scratch paper on hard puzzles.' },
+      { q: 'Why does a cell highlight red?', a: 'Your digit violates one of the three rules — same digit already in the row, column, or 3×3 box.' },
+      { q: 'How is the board generated?', a: 'Backtracking solver fills a full 9×9, then removes cells while verifying uniqueness — every puzzle has exactly one solution.' },
     ],
-    relatedIds: ['daily-word'],
+    relatedIds: ['sudoku-easy', 'daily-word'],
     island: 'Sudoku',
     followUps: [
       { toolId: 'sudoku-medium', cta: 'Warmed up? Step up to medium.' },
@@ -2724,9 +2919,9 @@ export const TOOLS: ToolConfig[] = [
     slug: 'daily-word',
     title: 'Daily Word — Puzzle of the Day',
     h1: 'Daily Word',
-    description: 'A fresh 5-letter anagram every day. Seeded by UTC date so everyone gets the same puzzle.',
+    description: 'A fresh 5-letter anagram every day. New puzzle at 4am Eastern (ET) \u2014 same one for everyone worldwide.',
     keywords: ['daily word game', 'word puzzle', 'word of the day'],
-    intro: 'Unscramble today\'s 5-letter word. Everyone worldwide gets the same puzzle — a new one appears each UTC day.',
+    intro: 'Unscramble today\'s 5-letter word. Everyone worldwide gets the same puzzle \u2014 a new one appears at 4am Eastern (ET) each day.',
     howTo: [
       'Look at the scrambled letters.',
       'Type your guess into the input.',
@@ -2734,10 +2929,10 @@ export const TOOLS: ToolConfig[] = [
       'Come back tomorrow for the next puzzle.',
     ],
     examples: [
-      { title: 'New puzzle at 00:00 UTC daily', body: 'Same 5 letters for every player on the same day — rank yourself by attempts used.' },
+      { title: 'New puzzle at 4am ET daily', body: 'Same 5 letters for every player on the same day — rank yourself by attempts used.' },
     ],
     faq: [
-      { q: 'When does the puzzle change?', a: 'At 00:00 UTC each day.' },
+      { q: 'When does the puzzle change?', a: 'At 4am Eastern Time (ET) each day. That\u2019s 1am Pacific, 9am UK, 10am Central Europe, 5pm in Tokyo \u2014 same puzzle worldwide, just a different local clock.' },
       { q: 'Is my progress saved?', a: 'Yes — saved locally in your browser. Clearing site data resets it.' },
     ],
     relatedIds: ['daily-anagram', 'daily-unscramble', 'word-unscrambler'],
@@ -2755,7 +2950,7 @@ export const TOOLS: ToolConfig[] = [
     h1: 'Daily Anagram',
     description: 'A 6-letter anagram puzzle refreshed every day. Play once, come back tomorrow.',
     keywords: ['daily anagram', 'anagram of the day', 'daily word puzzle'],
-    intro: 'Today\'s anagram: unscramble six letters into a real English word. Same puzzle for everyone — seeded by UTC date.',
+    intro: 'Today\'s anagram: unscramble six letters into a real English word. Same puzzle for everyone \u2014 rolls over at 4am Eastern each day.',
     howTo: [
       'Study the scrambled letters.',
       'Type your guess and press Enter.',
@@ -2781,9 +2976,9 @@ export const TOOLS: ToolConfig[] = [
     slug: 'daily-unscramble',
     title: 'Daily Unscramble — 7-Letter Word of the Day',
     h1: 'Daily Unscramble',
-    description: 'A 7-letter unscramble puzzle each day. Harder than daily-anagram — one word per UTC day.',
+    description: 'A 7-letter unscramble puzzle each day. Harder than daily-anagram — one word per day, refreshed at 4am ET.',
     keywords: ['daily unscramble', 'word unscramble daily', 'daily word puzzle'],
-    intro: 'A tougher daily puzzle: seven scrambled letters, one valid English word. New each day at 00:00 UTC.',
+    intro: 'A tougher daily puzzle: seven scrambled letters, one valid English word. New each day at 4am Eastern (ET).',
     howTo: [
       'Look at the 7 scrambled letters.',
       'Type your guess. Enter to submit.',
@@ -2794,7 +2989,7 @@ export const TOOLS: ToolConfig[] = [
     ],
     faq: [
       { q: 'Why is this harder?', a: 'Seven letters have 5,040 possible orderings vs 720 for six. The solver space is 7x bigger.' },
-      { q: 'When do puzzles reset?', a: '00:00 UTC. Your progress saves for the current day only.' },
+      { q: 'When do puzzles reset?', a: '4am Eastern Time (ET) each day. Your progress saves for the current day only.' },
     ],
     relatedIds: ['daily-word', 'daily-anagram', 'word-unscrambler'],
     island: 'DailyAnagram',
@@ -2811,11 +3006,12 @@ export const TOOLS: ToolConfig[] = [
     h1: 'Easy Sudoku',
     description: 'Play easy Sudoku in your browser. About 36 given clues — ideal for beginners or a quick puzzle.',
     keywords: ['easy sudoku', 'sudoku easy', 'easy sudoku online'],
-    intro: 'Easy Sudoku puzzles with around 36 starting clues — perfect for learning or a 3–5 minute solve. Progress saves locally.',
+    intro: 'Easy Sudoku with ~40 starting clues — the right starting point if you\'re learning. The rules: fill every blank cell with 1–9 so each row, each column, and each 3×3 box contains every digit exactly once. No math, no diagonals. Progress saves locally.',
     howTo: [
-      'Tap a cell to select it.',
-      'Press 1–9 to enter a number; Delete or 0 to clear.',
-      'Conflicts appear in red so you can\'t stay wrong for long.',
+      'Rules recap: each of the 9 rows, 9 columns, and nine 3×3 boxes must contain every digit 1–9 exactly once.',
+      'Tap a blank cell. Press 1–9 to place a digit; Backspace/Delete/0 to clear.',
+      'Easy puzzles are solvable by naked singles alone — find a cell where only one digit is legal (no conflicts in row, column, or box) and place it.',
+      'Red highlighting means the digit breaks a rule. Undo and look again — never guess.',
     ],
     examples: [{ title: 'Easy difficulty', body: '≈ 36 clues, typical solve 3–7 minutes for beginners.' }],
     faq: [
@@ -2837,11 +3033,12 @@ export const TOOLS: ToolConfig[] = [
     h1: 'Medium Sudoku',
     description: 'Play medium Sudoku in your browser. About 30 clues — needs light scanning and candidate elimination.',
     keywords: ['medium sudoku', 'sudoku medium', 'medium sudoku online'],
-    intro: 'Medium Sudoku with ~30 starting clues. You\'ll need to scan rows, columns, and boxes; occasional pencil-mark thinking required.',
+    intro: 'Medium Sudoku with ~32 starting clues. The standard Sudoku rules apply: fill every blank cell with 1–9 so each row, column, and 3×3 box contains every digit exactly once. Expect to scan and do light candidate elimination.',
     howTo: [
-      'Tap a cell to select.',
-      'Enter numbers with the keyboard (1–9).',
-      'Use conflict highlighting as a safety net.',
+      'The three rules: each row, each column, and each 3×3 box must contain every digit 1–9 exactly once.',
+      'Tap a blank cell and press 1–9 to enter a digit (Backspace/Delete/0 clears).',
+      'Start with naked singles (only one legal digit fits the cell), then scan digit-by-digit for hidden singles — a digit that can go in only one cell of a given row, column, or box.',
+      'Red highlight means a rule was broken. Uniqueness is guaranteed, so there is always a logical next step — no guessing needed.',
     ],
     examples: [{ title: 'Medium difficulty', body: '≈ 30 clues, typical solve 7–15 minutes.' }],
     faq: [
@@ -2863,11 +3060,13 @@ export const TOOLS: ToolConfig[] = [
     h1: 'Hard Sudoku',
     description: 'Play hard Sudoku in your browser. Around 26 clues — requires chains, pairs, and patient elimination.',
     keywords: ['hard sudoku', 'sudoku hard', 'hard sudoku online'],
-    intro: 'Hard Sudoku with ~26 starting clues. Expect to apply techniques like naked pairs, pointing pairs, and X-wing.',
+    intro: 'Hard Sudoku with ~28 starting clues. The same three rules apply — 1–9 in every row, column, and 3×3 box exactly once — but expect to need techniques beyond simple scanning: pointing pairs, naked pairs, and occasional X-wings.',
     howTo: [
-      'Tap a cell, enter a number.',
-      'Conflicts highlight — use them to prune wrong paths.',
-      'Pause and come back: your state is saved automatically.',
+      'Rules: each of the 9 rows, 9 columns, and nine 3×3 boxes must contain every digit 1–9 exactly once.',
+      'Tap a cell and press 1–9 (Backspace/Delete/0 to clear). Red means you violated a rule.',
+      'Start with singles. When singles run out, look for pointing pairs: if a digit in a 3×3 box is only possible in cells sharing one row or column, it is eliminated from that row/column elsewhere.',
+      'Every puzzle has one solution — no guessing required. If stuck, rescan each digit 1–9 across every row, column, and box.',
+      'Your state saves automatically — take breaks and come back.',
     ],
     examples: [{ title: 'Hard difficulty', body: '≈ 26 clues, typical solve 15–30 minutes.' }],
     faq: [
@@ -2889,11 +3088,13 @@ export const TOOLS: ToolConfig[] = [
     h1: 'Expert Sudoku',
     description: 'The toughest Sudoku. ~22 clues — requires advanced techniques and patience.',
     keywords: ['expert sudoku', 'sudoku expert', 'hardest sudoku'],
-    intro: 'Expert Sudoku with ~22 starting clues — near the minimum for unique solvability. Advanced techniques required.',
+    intro: 'Expert Sudoku with ~24 starting clues — near the human-solvable minimum. Standard rules: 1–9 in every row, column, and 3×3 box exactly once. At this difficulty you will need XY-wings, swordfish, or uniqueness rectangles to finish without guessing.',
     howTo: [
-      'Bring patience and mental stamina.',
-      'Enter numbers with the keyboard.',
-      'State saves automatically — take breaks.',
+      'Rules (unchanged from Easy): fill every blank cell with 1–9 so each row, each column, and each 3×3 box contains every digit exactly once.',
+      'Tap a cell, press 1–9 to place (Backspace/Delete/0 to clear). Red highlight flags a rule break.',
+      'Expect singles and pairs to run out quickly. When they do, move to chains: if A=3 forces B=7 forces C=3 forces a contradiction, then A≠3.',
+      'Every puzzle is uniquely solvable by logic. If you catch yourself guessing, you\'ve missed a technique — rescan from box 1.',
+      'Take breaks: expert solves often need 30+ minutes; state saves per difficulty.',
     ],
     examples: [{ title: 'Expert difficulty', body: '≈ 22 clues, typical solve 30+ minutes.' }],
     faq: [
@@ -3754,22 +3955,26 @@ export const TOOLS: ToolConfig[] = [
     noindex: true,
     title: 'Reagent Administration & Syringe Units — U-100 Draw | Kefiw',
     h1: 'Reagent Administration · U-100 Syringe Units',
-    description: 'Convert a target reagent administration (mg or mcg) into U-100 insulin syringe units given a known vial concentration. Pipe-reads from the reconstitution tool.',
-    keywords: ['reagent syringe units', 'receptor agonist units calculator', 'administration to units', 'U-100 insulin syringe draw'],
-    intro: 'Units = (amount mg ÷ concentration mg/mL) × 100. Pulls concentration forward from Reagent Reconstitution — or enter it directly.',
+    description: 'Convert a target reagent administration (mg or mcg) into syringe units or mL for any syringe type. Pipe-reads concentration from the reconstitution tool.',
+    keywords: ['reagent syringe units', 'administration to units', 'mg to mL syringe', 'U-100 insulin syringe draw', 'U-40 syringe calculator', 'custom syringe units'],
+    intro: 'Volume (mL) = amount (mg) ÷ concentration (mg/mL). Units = volume × (divisions ÷ syringe volume). Supports U-100, U-40, 0.5 mL and 0.3 mL insulin, tuberculin, plus a custom W mL × Q divisions option.',
     howTo: [
       'Enter concentration (mg/mL) or pipe it from the Reconstitution tool.',
-      'Enter target administration in mg or mcg.',
-      'Read U-100 syringe units — the mark to draw to on a standard insulin pin.',
-      'Cross-check against the Titration Roadmap for weekly escalation.',
+      'Enter target administration in mg.',
+      'Pick the syringe you are actually using — or choose Custom and enter W mL and Q divisions.',
+      'Read volume (mL) and the unit mark to draw to on that specific syringe.',
     ],
     examples: [
-      { title: 'Reagent-A 2.5 mg/mL · 0.25 mg administration', body: 'Draw 10 units on a U-100 pin.' },
-      { title: 'Reagent-B 5 mg/mL · 7.5 mg administration', body: 'Draw 15 units on a U-100 pin.' },
+      { title: 'Reagent-A 2.5 mg/mL · 0.25 mg · U-100', body: 'Volume = 0.10 mL · Draw to 10 units on a U-100 pin.' },
+      { title: 'Reagent-B 5 mg/mL · 7.5 mg · U-100', body: 'Volume = 1.5 mL · exceeds 1 mL U-100 barrel; split or switch syringe.' },
+      { title: 'Custom 0.5 mL / 50 marks · 2 mg/mL · 0.5 mg', body: 'Volume = 0.25 mL · Draw to 25 of 50 marks.' },
+      { title: 'Tuberculin 1 mL / 100 marks · 2 mg/mL · 0.4 mg', body: 'Volume = 0.20 mL · Draw to the 0.20 mL line (20 of 100 marks).' },
     ],
     faq: [
-      { q: 'What if my concentration isn\'t mg/mL?', a: 'Convert first. 1 mg/mL = 1000 mcg/mL. The unit math is identical; only the label changes.' },
-      { q: 'Does the syringe size matter?', a: 'Only U-100 insulin syringes map 100 units = 1 mL. U-40 and tuberculin syringes use different scales and will over- or under-deliver.' },
+      { q: 'How many mL do I pull for a given mg amount?', a: 'Volume (mL) = amount (mg) ÷ concentration (mg/mL). The tool shows the volume prominently alongside the unit count, so you can use whichever figure matches your syringe markings.', faq_intent: 'how-to' },
+      { q: 'What if my syringe is not a U-100?', a: 'Pick the syringe you are using from the dropdown — U-40, 0.5 mL insulin, 0.3 mL insulin, tuberculin 1 mL, or Custom. The units scale automatically to the divisions on that barrel.', faq_intent: 'edge-case' },
+      { q: 'What counts as a "custom" syringe?', a: 'Any syringe where you know the total barrel volume (W mL) and the number of divisions printed on it (Q). The tool computes units = volume × (Q / W), so the answer matches the marks on your specific syringe.', faq_intent: 'how-to' },
+      { q: 'What if my concentration isn\'t mg/mL?', a: 'Convert first. 1 mg/mL = 1000 mcg/mL. The unit math is identical; only the label changes.', faq_intent: 'edge-case' },
     ],
     relatedIds: ['reagent-recon', 'reagent-mcg-ratio', 'transfer-loss'],
     island: 'reagent/ReagentDispense',
@@ -3783,23 +3988,27 @@ export const TOOLS: ToolConfig[] = [
     category: 'health',
     slug: 'reagent-mcg-ratio',
     noindex: true,
-    title: 'mcg per Unit Lookup — U-100 Administration Table | Kefiw',
-    h1: 'mcg per Unit · U-100 Administration Table',
-    description: 'Given vial mass and BAC water volume, generate a full mcg-per-unit table for U-100 syringes. Reference card for every common administration step.',
-    keywords: ['mcg per unit table', 'reagent administration chart', 'U-100 unit conversion', 'reagent mcg per unit'],
-    intro: 'mcg/unit = (mass mg × 1000) ÷ (BAC mL × 100). Printable lookup for the vial you have in hand.',
+    title: 'mcg per Unit Lookup — Syringe Administration Table | Kefiw',
+    h1: 'mcg per Unit · Syringe Administration Table',
+    description: 'Given a concentration (mg/mL) and your syringe (U-100, U-40, 0.5 mL insulin, tuberculin, or custom), generate a full mcg / mg / mL lookup table.',
+    keywords: ['mcg per unit table', 'reagent administration chart', 'syringe unit conversion', 'mg to mL syringe table', 'custom syringe lookup'],
+    intro: 'Syringe-configurable lookup: mcg/unit = concentration × (volume per unit). Pick the syringe you are using — U-100, U-40, 0.5 mL or 0.3 mL insulin, tuberculin, or Custom (W mL × Q divisions) — and the full table regenerates for that barrel.',
     howTo: [
-      'Enter vial mass (mg) and BAC water (mL).',
-      'Read mcg-per-unit and a generated administration table from 1–50 units.',
-      'Print or screenshot as a fridge reference.',
+      'Pipe concentration from Reconstitution or enter mg/mL directly.',
+      'Pick your syringe. For Custom, enter W (mL) and Q (divisions).',
+      'Read mcg-per-tick and the per-draw table with mcg, mg, and mL columns.',
+      'Print or screenshot as a fridge reference for that specific syringe + vial.',
     ],
     examples: [
-      { title: 'Reagent-E 5 mg · 5 mL BAC', body: '10 mcg/unit · 25 units = 250 mcg · 50 units = 500 mcg.' },
-      { title: 'Reagent-C 10 mg · 2 mL BAC', body: '50 mcg/unit · 4 units = 200 mcg · 10 units = 500 mcg.' },
+      { title: 'Reagent-E 1 mg/mL · U-100', body: '10 mcg/unit · 25 u = 250 mcg (0.25 mL) · 50 u = 500 mcg (0.50 mL).' },
+      { title: 'Reagent-C 5 mg/mL · 0.5 mL insulin (50 u)', body: '50 mcg/unit · 10 u = 500 mcg (0.10 mL) · 50 u = 2500 mcg (0.50 mL).' },
+      { title: 'Custom 0.5 mL / 25 divisions · 2 mg/mL', body: '40 mcg/mark · 25 marks = 1000 mcg = 1 mg = 0.5 mL.' },
     ],
     faq: [
-      { q: 'Why mcg per unit instead of mg?', a: 'Most research reagent administrations sit in the 100–1000 mcg range. mg resolution is too coarse and leads to decimal errors on insulin syringes.' },
-      { q: 'Is the table still valid after weeks in the fridge?', a: 'Concentration doesn\'t change, but the reagent degrades. Check Vector Decay for residual-activity estimates past day 28.' },
+      { q: 'Why mcg per unit instead of mg?', a: 'Most research reagent administrations sit in the 100–1000 mcg range. mg resolution is too coarse and leads to decimal errors on insulin syringes.', faq_intent: 'definition' },
+      { q: 'Can I use this with a non-U-100 syringe?', a: 'Yes. Pick your syringe from the dropdown. The mcg-per-tick figure and the per-draw table regenerate based on the barrel\u2019s divisions and volume.', faq_intent: 'edge-case' },
+      { q: 'What is the math behind mcg per unit?', a: 'mcg/unit = concentration(mg/mL) × 1000 ÷ (divisions ÷ barrel volume). For U-100 that simplifies to mg/mL × 10. For other syringes the divisor changes with the barrel.', faq_intent: 'definition' },
+      { q: 'Is the table still valid after weeks in the fridge?', a: 'Concentration doesn\'t change, but the reagent degrades. Check Vector Decay for residual-activity estimates past day 28.', faq_intent: 'edge-case' },
     ],
     relatedIds: ['reagent-recon', 'reagent-dispense', 'vector-decay'],
     island: 'reagent/ReagentMcgRatio',
@@ -4184,7 +4393,362 @@ export const TOOLS: ToolConfig[] = [
       { toolId: 'vector-decay', cta: 'Cold-chain risk? Check thermal decay math.' },
     ],
   },
+
+  // ---------- GOLD & SHOPPING ----------
+  {
+    id: 'gold-value-calculator',
+    category: 'calculators',
+    slug: 'gold-value-calculator',
+    title: 'Gold Value Calculator \u2014 Estimate Melt Value by Weight and Karat',
+    h1: 'Gold Value Calculator',
+    description: 'Estimate the melt value of gold jewelry or bullion by weight, karat, and the current spot price per gram.',
+    metaDescription: 'Calculate gold melt value from weight, karat, and spot price per gram. Supports grams, troy oz, pennyweight, and grains. Includes karat comparison.',
+    keywords: ['gold value calculator', 'gold melt value', 'what is my gold worth', 'gold price per gram calculator', 'gold jewelry calculator'],
+    intro: 'Enter the weight, karat, and the current gold spot price per gram to estimate the melt value. The calculator supports grams, troy ounces, pennyweight, and grains, and shows the equivalent mass at other karats. It does not fetch live prices \u2014 you enter the rate you see.',
+    outcomeLine: 'Weight \u00d7 (karat / 24) \u00d7 spot price = estimated melt value.',
+    howTo: [
+      'Enter the weight of the piece and choose its unit.',
+      'Pick the karat (9K, 10K, 14K, 18K, 22K, 24K, etc.).',
+      'Enter today\u2019s gold spot price per gram in your currency.',
+      'Read the estimated melt value and the equivalent mass at other karats.',
+    ],
+    examples: [
+      { title: '10 g of 22K at $85/g', body: 'Pure gold content: 9.167 g. Estimated value: ~$779.' },
+      { title: '1 troy oz of 14K at $85/g', body: '31.10 g at 58.33% purity = 18.14 g of pure gold \u2248 $1,542.' },
+      { title: 'Dealer expectation', body: 'Dealers typically pay 70\u201390% of melt value; jewelry resale is different from melt.' },
+    ],
+    faq: [
+      { q: 'Does this show the current gold price?', a: 'No. The tool does not fetch live market data. Look up today\u2019s spot price per gram from a source you trust and enter it.', faq_intent: 'trust' },
+      { q: 'How is gold value calculated?', a: 'Multiply the weight in grams by the karat divided by 24 (the purity), then multiply by the spot price per gram. That gives you the melt value \u2014 the pure-gold content at market.', faq_intent: 'definition' },
+      { q: 'What is my gold worth?', a: 'The melt value is your piece\u2019s pure-gold content at the current spot price. Dealers pay less than melt; jewelry retail is higher because of design and markup.', faq_intent: 'definition' },
+      { q: 'How much is 1 gram of gold?', a: '1 gram of 24K gold is worth the current spot price per gram. Less-pure gold is worth a fraction \u2014 22K is 91.67% of spot, 14K is 58.33%, 10K is 41.67%.', faq_intent: 'definition' },
+      { q: 'Can I convert gold to cash?', a: 'Yes, through licensed buyers, pawn shops, or refiners. Expect offers below melt value; get multiple quotes.', faq_intent: 'how-to' },
+      { q: 'What weight unit should I use?', a: 'Jewelry is usually measured in grams. Investment bullion is often quoted in troy ounces (1 troy oz \u2248 31.10 g). Antique US jewelry sometimes uses pennyweight (1 dwt \u2248 1.555 g).', faq_intent: 'comparison' },
+    ],
+    useCases: [
+      'Estimating resale value of inherited gold jewelry',
+      'Sanity-checking a dealer offer against melt value',
+      'Comparing 14K vs 18K vs 22K pricing for a purchase',
+      'Converting between grams and troy ounces for imports/exports',
+      'Learning how karat affects value',
+    ],
+    commonMistakes: [
+      'Expecting retail jewelry price to match melt value (it never does)',
+      'Confusing troy ounces with regular (avoirdupois) ounces',
+      'Using total weight instead of gold weight (stones and clasps do not count)',
+      'Entering price per troy oz in the per-gram field',
+    ],
+    limitations: [
+      'No live price feed \u2014 user-entered spot price only',
+      'Melt value only \u2014 does not model design, making charges, or retail markup',
+      'Single-metal calculation \u2014 does not separate gemstones or non-gold components',
+      'No regional tax or buyer-margin modeling',
+      'Simple purity math \u2014 does not account for alloy-dependent density variations',
+    ],
+    relatedIds: ['gold-karat-converter', 'percent-of-calculator', 'percentage-calculator', 'discount-stacker'],
+    island: 'GoldValueCalculator',
+    followUps: [
+      { toolId: 'gold-karat-converter', cta: 'Need to convert between karats? Use the karat converter.' },
+      { toolId: 'percent-of-calculator', cta: 'Calculating a percentage of something else? Try percent-of.' },
+    ],
+  },
+  {
+    id: 'gold-karat-converter',
+    category: 'calculators',
+    slug: 'gold-karat-converter',
+    title: 'Gold Karat Converter \u2014 24K to 22K, 18K, 14K, and Back',
+    h1: 'Gold Karat Converter',
+    description: 'Convert the mass of a gold piece between karats while keeping the pure-gold content constant. 24K to 22K, 22K to 18K, 14K to 10K \u2014 all covered.',
+    metaDescription: 'Convert gold between karats (24K, 22K, 18K, 14K, 10K). Enter mass and target karat \u2014 the converter preserves pure-gold content and shows alloy delta.',
+    keywords: ['gold karat converter', 'convert 24k to 22k', '24k to 18k gold', '22k to 18k', '14k to pure gold', 'gold purity converter'],
+    intro: 'Convert a gold piece\u2019s mass between karats while keeping the pure-gold content constant. Enter grams, pick a starting karat, and choose a target \u2014 the converter returns the equivalent mass and shows how much alloy is added or removed.',
+    outcomeLine: 'Preserve pure-gold content; see equivalent mass at any target karat.',
+    howTo: [
+      'Enter the mass in grams.',
+      'Pick the starting karat.',
+      'Pick the target karat.',
+      'Read the target mass and the alloy delta.',
+    ],
+    examples: [
+      { title: '10 g of 24K \u2192 22K', body: '10.909 g of 22K contains the same 10 g of pure gold. Adds 0.909 g of alloy.' },
+      { title: '10 g of 22K \u2192 18K', body: '12.222 g of 18K matches the pure-gold content.' },
+      { title: '10 g of 24K \u2192 14K', body: '17.143 g of 14K is needed to carry the same pure gold.' },
+    ],
+    faq: [
+      { q: 'How do you convert 24K gold to 22K gold?', a: 'Keep the pure-gold mass constant and add alloy. Pure gold mass equals starting mass times (starting karat / 24). Target mass equals pure gold times (24 / target karat). 10 g of 24K becomes 10.909 g of 22K.', faq_intent: 'how-to' },
+      { q: 'How much gold is in 14K?', a: '14K gold is 14/24 = 58.33% pure gold by weight. 10 g of 14K contains 5.833 g of pure gold.', faq_intent: 'definition' },
+      { q: 'How do you turn 24K into 18K?', a: 'Mathematically: 10 g of 24K = 13.333 g of 18K. Physically, this requires refining \u2014 alloy metals (copper, silver, zinc) are added. Most people sell and re-buy rather than refine at home.', faq_intent: 'how-to' },
+      { q: 'Is higher karat always better?', a: 'Higher karat means more pure gold but softer metal. 18K and 22K are the common premium jewelry karats because 24K is too soft to hold gemstones or survive daily wear.', faq_intent: 'comparison' },
+      { q: 'What percent of 22K gold is pure gold?', a: '22K gold is 22/24 = 91.67% pure gold. The remainder (8.33%) is alloy metals.', faq_intent: 'definition' },
+    ],
+    useCases: [
+      'Estimating equivalent jewelry weights at different purities',
+      'Checking a seller\u2019s claim that a piece is a certain karat',
+      'Converting between Indian (22K), European (18K), and US (14K) jewelry standards',
+      'Understanding pure-gold content when buying or selling',
+    ],
+    commonMistakes: [
+      'Assuming equal mass at a different karat (purity is the invariant, not mass)',
+      'Forgetting that lower karat means more mass for the same gold',
+      'Thinking you can down-karat a piece at home (you can\u2019t \u2014 it requires refining)',
+    ],
+    limitations: [
+      'Pure-purity math only \u2014 assumes standardized karat definitions',
+      'No alloy composition modeling (rose vs yellow vs white gold share karat but differ in alloy metals)',
+      'No density calculation',
+    ],
+    relatedIds: ['gold-value-calculator', 'percent-of-calculator', 'percentage-calculator'],
+    island: 'GoldKaratConverter',
+    followUps: [
+      { toolId: 'gold-value-calculator', cta: 'Know the karat \u2014 now estimate the value.' },
+    ],
+  },
+  {
+    id: 'discount-stacker',
+    category: 'calculators',
+    slug: 'discount-stacker',
+    title: 'Discount Stacker \u2014 Sale + Coupon + Senior + Cashback',
+    h1: 'Discount Stacker',
+    description: 'Stack a sale, coupon, extra discount, senior or loyalty percent, tax, and cashback rebate in one calculation. See the effective discount and net cost.',
+    metaDescription: 'Stack discounts in order \u2014 sale, coupon, extra, senior, tax, cashback \u2014 and see the effective discount, checkout total, and net cost after rebates.',
+    keywords: ['discount stacker', 'stacked discounts calculator', 'coupon stacker', 'senior discount calculator', 'cashback calculator'],
+    intro: 'Real-world shopping rarely involves one discount. Stack a sale percent, a coupon (percent or dollar), an extra discount, a senior/loyalty percent, sales tax, and a cashback rebate \u2014 the calculator applies them in order and shows the effective discount, the amount due at checkout, and the net cost after cashback.',
+    outcomeLine: 'Layered discounts in order, with tax and cashback accounted for separately.',
+    howTo: [
+      'Enter the original price.',
+      'Enter the sale percent.',
+      'Pick coupon as percent or a flat dollar amount, then enter the value.',
+      'Fill in any extra, senior, loyalty percents if they apply.',
+      'Enter sales tax (applied after discounts).',
+      'Enter cashback percent (applied to the post-tax total as a rebate).',
+    ],
+    examples: [
+      { title: '$100 + 20% sale + $10 coupon + 5% senior + 7% tax + 2% cashback', body: 'Checkout: ~$70.04. Net after cashback: ~$68.64. Effective discount before tax: 31.4%.' },
+      { title: 'Stacked percents are not additive', body: '20% + 10% + 5% looks like 35% off but stacked equals 31.6% off \u2014 each percent applies to the already-reduced price.' },
+      { title: 'Dollar coupon before percent', body: 'A $10 coupon after a 20% sale on a $100 item reduces the remaining $80 to $70 \u2014 not the original $100 to $70.' },
+    ],
+    faq: [
+      { q: 'How do stacked discounts work?', a: 'Stacked percent discounts apply in order and each percent is taken on the price remaining after the previous step. The effective total is always less than the sum of the individual percents.', faq_intent: 'definition' },
+      { q: 'Is a coupon applied before or after a sale discount?', a: 'Store policies vary. This calculator applies the sale first, then the coupon, because most checkout systems work that way \u2014 the coupon reduces the already-discounted price.', faq_intent: 'edge-case' },
+      { q: 'Does cashback lower the checkout price?', a: 'No. Cashback is a rebate earned after payment. You still pay the post-tax total at the register; the cashback amount is credited back later.', faq_intent: 'comparison' },
+      { q: 'Why is the effective discount less than the sum?', a: 'Because each percent discount applies to what is left after the previous one. 20% + 20% is not 40% \u2014 it is 36% off, because the second 20% is taken on the already-reduced 80% balance.', faq_intent: 'definition' },
+      { q: 'How do I calculate a senior discount?', a: 'Enter the senior discount percent in its field. It applies after sale and coupon discounts in this calculator, matching most stacking rules.', faq_intent: 'how-to' },
+    ],
+    useCases: [
+      'Sanity-checking a complicated checkout with multiple discounts',
+      'Comparing two stores\u2019 offers when each has a different discount stack',
+      'Planning a coupon-heavy purchase to see the real savings',
+      'Understanding why stacked percents never match their sum',
+    ],
+    commonMistakes: [
+      'Adding percents to get a fake total discount (they multiply, not add)',
+      'Counting cashback as if it lowers the checkout price',
+      'Applying tax before discounts (it is after)',
+      'Assuming every coupon stacks \u2014 many stores block combining promo codes',
+    ],
+    limitations: [
+      'Applies discounts in a fixed order (sale \u2192 coupon \u2192 extra \u2192 senior)',
+      'Does not model store-specific stacking exclusions',
+      'Does not account for store credit card bonuses beyond the cashback field',
+      'Does not handle per-item vs per-order discount scoping',
+    ],
+    relatedIds: ['discount-calculator', 'tip-calculator', 'percent-change-calculator', 'percent-of-calculator'],
+    island: 'DiscountStacker',
+    followUps: [
+      { toolId: 'discount-calculator', cta: 'Just one discount? Use the simple discount calculator.' },
+      { toolId: 'percent-change-calculator', cta: 'Comparing before/after prices? Use percent change.' },
+    ],
+  },
+
+  // ---------- DATE HELPERS ----------
+  {
+    id: 'days-left-in-year',
+    category: 'calculators',
+    slug: 'days-left-in-year',
+    title: 'Days Left in the Year \u2014 How Many Days Until the New Year',
+    h1: 'Days Left in the Year',
+    description: 'See how many days are left in the current year, how many have elapsed, and the percent of the year complete. Leap-year aware.',
+    metaDescription: 'Instantly see how many days are left in the year, percent elapsed, and weeks remaining. Leap-year aware and updates as the date changes.',
+    keywords: ['days left in the year', 'how many days until new year', 'days remaining in year', 'days left in 2025', 'percent of year elapsed'],
+    intro: 'Instantly see how many days remain in the current year, how many have already passed, and what percent of the year is complete. Leap-year aware \u2014 the tool automatically uses 366 days for leap years.',
+    outcomeLine: 'Days remaining, days elapsed, and percent of the year complete.',
+    howTo: [
+      'Open the page \u2014 today\u2019s date is filled in.',
+      'Read the days-left and percent-elapsed figures.',
+      'Pick any other date to see the same figures for that day.',
+    ],
+    examples: [
+      { title: 'Mid-year check', body: 'By June 30 of a non-leap year, 181 days have elapsed and 184 remain \u2014 the year is 49.6% complete.' },
+      { title: 'Leap year', body: 'In a leap year, February adds one day. July 2 is day 184 of 366.' },
+    ],
+    faq: [
+      { q: 'How many days are left in the year?', a: 'Open the tool \u2014 the top card shows exactly how many days remain in the current year as of today, with the percent of the year elapsed.', faq_intent: 'how-to' },
+      { q: 'How do I know if a year is a leap year?', a: 'A year is a leap year if it divides by 4, except century years which must divide by 400. 2000 was a leap year; 1900 was not; 2024 is; 2100 will not be.', faq_intent: 'definition' },
+      { q: 'How many days in a leap year?', a: 'A leap year has 366 days because February has 29 instead of 28.', faq_intent: 'definition' },
+      { q: 'How many weeks are left in the year?', a: 'Divide the remaining days by 7. The tool shows the exact weeks-remaining figure in its stats panel.', faq_intent: 'how-to' },
+    ],
+    useCases: [
+      'Year-end deadline planning',
+      'Goal tracking (percent of year elapsed vs percent of goal completed)',
+      'Scheduling across the calendar year',
+      'Teaching kids about leap years',
+    ],
+    commonMistakes: [
+      'Forgetting that leap years have 366 days',
+      'Counting today as remaining (this tool counts today as elapsed)',
+    ],
+    limitations: [
+      'Gregorian calendar only',
+      'No timezone adjustments (uses local browser time)',
+    ],
+    relatedIds: ['date-difference-calculator', 'age-calculator', 'age-on-date-calculator', 'hours-calculator'],
+    island: 'DaysLeftInYear',
+    followUps: [
+      { toolId: 'date-difference-calculator', cta: 'Need a specific date gap? Use the date difference calculator.' },
+      { toolId: 'age-calculator', cta: 'Calculate exact age in days, months, and years.' },
+    ],
+  },
+
+  // ---------- RELATIONSHIP FUN ----------
+  {
+    id: 'love-calculator',
+    category: 'games',
+    slug: 'love-calculator',
+    title: 'Love Calculator \u2014 Name Compatibility for Fun',
+    h1: 'Love Calculator',
+    description: 'Enter two names and get a compatibility percentage based on shared letters, vowel balance, and the classic LOVES tally. For fun only.',
+    metaDescription: 'Novelty love calculator \u2014 enter two names, get a transparent compatibility score from shared letters, vowel harmony, and the LOVES tally.',
+    keywords: ['love calculator', 'name compatibility', 'love meter', 'relationship compatibility test', 'love percentage'],
+    intro: 'A deterministic novelty calculator. Enter two names and the tool scores them from three transparent signals: shared letters, vowel harmony, and a LOVES-letter tally. Same names always give the same score \u2014 swap nicknames or full names to see how it changes.',
+    outcomeLine: 'Three transparent signals combined into a reproducible compatibility percentage.',
+    howTo: [
+      'Enter your name.',
+      'Enter their name.',
+      'Read the percentage and the verdict blurb.',
+      'Try nicknames and full legal names to see how the score shifts.',
+    ],
+    examples: [
+      { title: 'Alex + Sam', body: 'Limited letter overlap, similar vowel balance. Score usually lands in the mid-range.' },
+      { title: 'Jordan + Morgan', body: 'More shared letters and common vowels push the score higher.' },
+      { title: 'Kit + Aurora', body: 'Very different letter sets usually score lower \u2014 which can be read as complementary energies.' },
+    ],
+    faq: [
+      { q: 'Is the love calculator real?', a: 'No. It is a novelty tool. It combines letter overlap, vowel balance, and a LOVES tally into a reproducible percent. The formula is deterministic \u2014 it does not know the humans attached to the names.', faq_intent: 'trust' },
+      { q: 'How does the love calculator work?', a: 'It averages three signals: how many unique letters the names share, how close their vowel ratios are, and how many LOVES letters appear in the combined name. The result is smoothed to cluster between 10 and 90 percent.', faq_intent: 'definition' },
+      { q: 'Can I get 100% on the love calculator?', a: 'Not with this one \u2014 the formula caps the score around 90 to keep results honest and playful. Any calculator that always returns 100% is using the score for entertainment, not math.', faq_intent: 'edge-case' },
+      { q: 'Does the love calculator predict marriage?', a: 'No. A letter-based compatibility score cannot predict relationships. Treat it as a conversation starter \u2014 and use [How Long Will We Last?](/games/how-long-will-we-last/) for a signal-based quiz instead.', faq_intent: 'trust' },
+    ],
+    limitations: [
+      'Novelty only \u2014 no real relationship prediction',
+      'Letter-based \u2014 same names always produce the same number',
+      'No handling of non-Latin scripts or accented characters',
+    ],
+    relatedIds: ['flames-calculator', 'how-long-will-we-last'],
+    island: 'LoveCalculator',
+    followUps: [
+      { toolId: 'flames-calculator', cta: 'Try the classic FLAMES game with the same names.' },
+      { toolId: 'how-long-will-we-last', cta: 'Go deeper with an 8-question relationship quiz.' },
+    ],
+  },
+  {
+    id: 'flames-calculator',
+    category: 'games',
+    slug: 'flames-calculator',
+    title: 'FLAMES Calculator \u2014 The Classic Name Game',
+    h1: 'FLAMES Calculator',
+    description: 'The classic 1970s schoolyard game \u2014 cross out shared letters from two names, count what remains, and cycle through FLAMES to find your result.',
+    metaDescription: 'Play the classic FLAMES name game online. Cross out shared letters, count the remainder, and cycle through Friends, Lovers, Affectionate, Marriage, Enemies, Siblings.',
+    keywords: ['flames calculator', 'flames name game', 'flames love game', 'name compatibility flames'],
+    intro: 'FLAMES is a playground game from the 1970s: cross out shared letters in two names, count the remaining letters, and use that count to cycle through the letters F-L-A-M-E-S (Friends, Lovers, Affectionate, Marriage, Enemies, Siblings). The last letter standing is your result.',
+    outcomeLine: 'Cross out shared letters, count the remainder, and cycle through FLAMES.',
+    howTo: [
+      'Enter your name.',
+      'Enter their name.',
+      'The tool crosses out matching letter pairs and shows which letter of FLAMES wins.',
+    ],
+    examples: [
+      { title: 'Alex + Sam', body: 'Shared: A. Remaining letters in ALEX: L, E, X; in SAM: S, M. Total remaining: 5 \u2014 cycles through FLAMES to Enemies.' },
+      { title: 'Pat + Mia', body: 'Shared: A. Remaining: P, T; I, M \u2014 4 letters. Cycles to Marriage.' },
+    ],
+    faq: [
+      { q: 'What does FLAMES stand for?', a: 'F = Friends, L = Lovers, A = Affectionate, M = Marriage, E = Enemies, S = Siblings. The letter that survives the elimination is your verdict.', faq_intent: 'definition' },
+      { q: 'How does the FLAMES game work?', a: 'Write both names. Cross out letters that appear in both (one for one). Count the letters remaining in both names combined. Use that number to cycle through F-L-A-M-E-S, removing a letter each time until only one remains.', faq_intent: 'how-to' },
+      { q: 'Is FLAMES accurate?', a: 'No. FLAMES is a novelty game. It measures letter overlap, not compatibility. Treat the result as entertainment.', faq_intent: 'trust' },
+      { q: 'Why do I keep getting Enemies?', a: 'E sits in a spot that the elimination math hits often for short name pairs. Try full names or nicknames to see different results.', faq_intent: 'troubleshooting' },
+    ],
+    limitations: [
+      'Novelty game \u2014 no real prediction',
+      'Letter-based \u2014 same inputs always produce the same result',
+      'One-for-one letter matching (duplicates are preserved in count)',
+    ],
+    relatedIds: ['love-calculator', 'how-long-will-we-last'],
+    island: 'FlamesCalculator',
+    followUps: [
+      { toolId: 'love-calculator', cta: 'Get a percent score with the Love Calculator.' },
+      { toolId: 'how-long-will-we-last', cta: 'Take the 8-question relationship quiz.' },
+    ],
+  },
+  {
+    id: 'how-long-will-we-last',
+    category: 'games',
+    slug: 'how-long-will-we-last',
+    title: 'How Long Will We Last? \u2014 Relationship Longevity Quiz',
+    h1: 'How Long Will We Last?',
+    description: 'An 8-question novelty quiz that estimates years together from answers about values, conflict, trust, family, and shared life.',
+    metaDescription: 'Fun 8-question relationship longevity quiz \u2014 answer about values, conflict, trust, and shared life to see an estimated years-together figure.',
+    keywords: ['how long will we last', 'relationship longevity quiz', 'will we last quiz', 'relationship predictor', 'how many years together quiz'],
+    intro: 'An 8-question quiz that combines how you answer to produce an estimated years-together figure. Each answer contributes a transparent score; the tool shows which signals pushed the result up and which pulled it down. For fun \u2014 a conversation starter, not a prediction.',
+    outcomeLine: 'Weighted scores across 8 signals \u2192 an estimated years-together figure and which signals matter most.',
+    howTo: [
+      'Enter both names.',
+      'Answer the 8 questions about values, conflict, laughter, distance, future, family, and trust.',
+      'Read the estimated years and the strongest vs weakest signals.',
+      'Change an answer to see how the number shifts.',
+    ],
+    examples: [
+      { title: 'Mostly positive answers', body: 'Strong values alignment, low conflict, solid trust \u2192 often lands in the 20\u201340 years range.' },
+      { title: 'Mixed signals', body: 'Good laughter and future talk, but long-distance and family tension \u2192 often lands in 3\u20138 years.' },
+      { title: 'Early days', body: 'Known under 3 months, unknown values alignment, no cohabitation \u2192 often a short arc with weak signals.' },
+    ],
+    faq: [
+      { q: 'Can a quiz predict how long a relationship will last?', a: 'No quiz can predict relationship longevity. Real outcomes depend on daily choices, timing, and life events a quiz cannot capture. Treat this as a reflection tool, not a forecast.', faq_intent: 'trust' },
+      { q: 'What does the years-together number mean?', a: 'It is a deterministic mapping from your 8 answers to an estimated range. Strong positive answers push toward decades; weak or negative answers push toward months. Changing one answer shifts the number predictably.', faq_intent: 'definition' },
+      { q: 'Which questions matter most?', a: 'Values alignment, conflict style, and trust tend to dominate real research on relationship longevity. This quiz weights every question equally, so results are sensitive to any single weak signal.', faq_intent: 'how-to' },
+      { q: 'Is this a real compatibility test?', a: 'No. Real compatibility assessments used in therapy and research are far more detailed. Use the quiz for fun, then talk about the weakest signal together.', faq_intent: 'trust' },
+    ],
+    limitations: [
+      'Novelty only \u2014 does not predict actual outcomes',
+      'Equal weighting across questions (real relationships are not linear)',
+      'Fixed answer choices \u2014 no free-text nuance',
+      'No cultural, age, or life-stage adjustments',
+    ],
+    relatedIds: ['love-calculator', 'flames-calculator'],
+    island: 'HowLongWillWeLast',
+    followUps: [
+      { toolId: 'love-calculator', cta: 'Try the letter-based Love Calculator.' },
+      { toolId: 'flames-calculator', cta: 'Play the classic FLAMES name game.' },
+    ],
+  },
 ];
+
+// Writer-AI V3 enhancement overrides — merged onto RAW_TOOLS to produce the exported TOOLS.
+import { SCRABBLE_TOOL_ENHANCEMENTS } from './tools-scrabble-enhancements';
+import { SCRABBLE_TOOL_RELATED_ADDITIONS } from './content/scrabble-docs-update';
+
+const TOOL_ENHANCEMENT_OVERRIDES: Record<string, Partial<ToolConfig>> = {
+  ...SCRABBLE_TOOL_ENHANCEMENTS,
+};
+
+export const TOOLS: ToolConfig[] = RAW_TOOLS.map((t) => {
+  const override = TOOL_ENHANCEMENT_OVERRIDES[t.id];
+  const withOverride = override ? { ...t, ...override } : t;
+  const extraRelated = SCRABBLE_TOOL_RELATED_ADDITIONS[t.id];
+  if (extraRelated?.length) {
+    const merged = Array.from(new Set([...(withOverride.relatedIds ?? []), ...extraRelated]));
+    return { ...withOverride, relatedIds: merged };
+  }
+  return withOverride;
+});
 
 // Post-hoc cluster tagging: map tool id -> cluster slug.
 // Tag tools once here instead of inline — keeps the TOOLS literal readable.

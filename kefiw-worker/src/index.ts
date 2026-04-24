@@ -10,6 +10,34 @@
 export interface Env {
   DB: D1Database;
   ALLOWED_ORIGINS: string;
+  DAILY_HMAC_SECRET?: string;
+}
+
+async function hmacSha256Hex(secret: string, msg: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(msg));
+  return Array.from(new Uint8Array(sig), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function computeIntegrity(secret: string, body: DailyScoreSubmit): Promise<string> {
+  const canonical = [
+    body.daily_date,
+    body.game_id,
+    body.device_hash,
+    `cleared=${body.cleared ? 1 : 0}`,
+    `guesses=${body.guesses ?? ""}`,
+    `points=${body.points ?? ""}`,
+    `tier=${body.tier ?? ""}`,
+    `time_sec=${body.time_sec ?? ""}`,
+  ].join("|");
+  return hmacSha256Hex(secret, canonical);
 }
 
 function corsHeaders(origin: string | null, allowed: string): HeadersInit {
@@ -95,9 +123,144 @@ export default {
       return json({ region, gpp_sid: gppSid(region) }, { headers: cors });
     }
 
+    if (url.pathname === "/daily/score" && req.method === "POST") {
+      const body = await req.json<DailyScoreSubmit>().catch(() => null);
+      if (!body || !isValidDailyScore(body)) {
+        return json({ error: "invalid_body" }, { status: 400, headers: cors });
+      }
+      const country = req.headers.get("CF-IPCountry") ?? "XX";
+      const integrity = env.DAILY_HMAC_SECRET
+        ? await computeIntegrity(env.DAILY_HMAC_SECRET, body)
+        : null;
+      await env.DB
+        .prepare(
+          `INSERT INTO daily_scores
+            (daily_date, game_id, device_hash, handle, cleared,
+             guesses, points, tier, time_sec, integrity, submitted_at, country)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+           ON CONFLICT(daily_date, game_id, device_hash) DO UPDATE SET
+             handle=excluded.handle, cleared=excluded.cleared,
+             guesses=excluded.guesses, points=excluded.points, tier=excluded.tier,
+             time_sec=excluded.time_sec, integrity=excluded.integrity,
+             submitted_at=excluded.submitted_at`
+        )
+        .bind(
+          body.daily_date,
+          body.game_id,
+          body.device_hash,
+          body.handle ?? null,
+          body.cleared ? 1 : 0,
+          body.guesses ?? null,
+          body.points ?? null,
+          body.tier ?? null,
+          body.time_sec ?? null,
+          integrity,
+          Date.now(),
+          country
+        )
+        .run();
+      return json({ ok: true }, { headers: cors });
+    }
+
+    if (url.pathname === "/daily/run" && req.method === "POST") {
+      const body = await req.json<DailyRunSubmit>().catch(() => null);
+      if (!body || !body.daily_date || !body.pipeline_id || !body.device_hash) {
+        return json({ error: "invalid_body" }, { status: 400, headers: cors });
+      }
+      const country = req.headers.get("CF-IPCountry") ?? "XX";
+      await env.DB
+        .prepare(
+          `INSERT INTO daily_runs
+            (daily_date, pipeline_id, device_hash, handle, cleared, streak_days, submitted_at, country)
+           VALUES (?,?,?,?,?,?,?,?)
+           ON CONFLICT(daily_date, pipeline_id, device_hash) DO UPDATE SET
+             handle=excluded.handle, cleared=excluded.cleared,
+             streak_days=excluded.streak_days, submitted_at=excluded.submitted_at`
+        )
+        .bind(
+          body.daily_date,
+          body.pipeline_id,
+          body.device_hash,
+          body.handle ?? null,
+          body.cleared ? 1 : 0,
+          body.streak_days ?? null,
+          Date.now(),
+          country
+        )
+        .run();
+      return json({ ok: true }, { headers: cors });
+    }
+
+    if (url.pathname === "/daily/leaderboard" && req.method === "GET") {
+      const dailyDate = url.searchParams.get("date") ?? "";
+      const gameId = url.searchParams.get("game") ?? "";
+      const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit") ?? 50)));
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dailyDate) || !/^[a-z0-9_-]{1,32}$/.test(gameId)) {
+        return json({ error: "invalid_query" }, { status: 400, headers: cors });
+      }
+      const order = gameId === "hunt" || gameId === "sudoku" ? "ASC" : "DESC";
+      const sortKey =
+        gameId === "hunt" ? "guesses" :
+        gameId === "hive" ? "points" :
+        gameId === "sudoku" ? "time_sec" : "points";
+      const { results } = await env.DB
+        .prepare(
+          `SELECT handle, cleared, guesses, points, tier, time_sec, submitted_at
+           FROM daily_scores
+           WHERE daily_date = ? AND game_id = ? AND cleared = 1
+           ORDER BY ${sortKey} ${order}, submitted_at ASC
+           LIMIT ?`
+        )
+        .bind(dailyDate, gameId, limit)
+        .all();
+      return json({ daily_date: dailyDate, game_id: gameId, results }, { headers: cors });
+    }
+
     return json({ error: "not_found" }, { status: 404, headers: cors });
   },
 };
+
+interface DailyScoreSubmit {
+  daily_date: string;
+  game_id: string;
+  device_hash: string;
+  handle?: string | null;
+  cleared: boolean;
+  guesses?: number | null;
+  points?: number | null;
+  tier?: string | null;
+  time_sec?: number | null;
+}
+
+interface DailyRunSubmit {
+  daily_date: string;
+  pipeline_id: string;
+  device_hash: string;
+  handle?: string | null;
+  cleared: boolean;
+  streak_days?: number | null;
+}
+
+const HIVE_TIERS = new Set([
+  "beginner","goodStart","movingUp","good","solid","nice","great","amazing","genius","queenBee",
+]);
+
+function isValidDailyScore(body: DailyScoreSubmit): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(body.daily_date)) return false;
+  if (!/^[a-z0-9_-]{1,32}$/.test(body.game_id)) return false;
+  if (typeof body.device_hash !== "string" || body.device_hash.length < 8 || body.device_hash.length > 128) return false;
+  if (typeof body.cleared !== "boolean") return false;
+  if (body.handle !== null && body.handle !== undefined && body.handle.length > 32) return false;
+  if (body.game_id === "hunt") {
+    if (typeof body.guesses !== "number" || body.guesses < 1 || body.guesses > 6) return false;
+  } else if (body.game_id === "hive") {
+    if (typeof body.points !== "number" || body.points < 0 || body.points > 2000) return false;
+    if (body.tier && !HIVE_TIERS.has(body.tier)) return false;
+  } else if (body.game_id === "sudoku") {
+    if (typeof body.time_sec !== "number" || body.time_sec < 1 || body.time_sec > 86400) return false;
+  }
+  return true;
+}
 
 interface TelemetryEvent {
   tool_id: string;

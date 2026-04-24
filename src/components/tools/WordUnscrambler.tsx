@@ -121,6 +121,7 @@ export default function WordUnscrambler() {
         loading={phase !== 'idle'}
         group={showScores ? undefined : 'length'}
         scores={showScores}
+        rack={letters}
         tool="unscrambler"
         loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
         emptyLabel="Type some letters to begin."

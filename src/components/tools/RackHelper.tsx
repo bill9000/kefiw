@@ -10,6 +10,39 @@ interface Props { valueSet: 'scrabble' | 'wwf'; }
 
 type Mode = 'basic' | 'scored';
 
+// Render a word with blank-tile positions shown differently (lowercase, muted,
+// dotted underline) so users can see which letter was produced by a `?` blank.
+function renderWordWithBlanks(word: string, blankPositions?: number[]) {
+  if (!blankPositions || blankPositions.length === 0) return word;
+  const set = new Set(blankPositions);
+  return (
+    <span>
+      {Array.from(word).map((ch, i) =>
+        set.has(i) ? (
+          <span
+            key={i}
+            className="text-slate-500 lowercase underline decoration-dotted decoration-slate-400"
+            title="Blank tile — scores 0"
+          >
+            {ch.toLowerCase()}
+          </span>
+        ) : (
+          <span key={i}>{ch}</span>
+        ),
+      )}
+    </span>
+  );
+}
+
+// Produce a text representation of the word with blank-position lowercased for copy output.
+function formatWordForCopy(word: string, blankPositions?: number[]): string {
+  if (!blankPositions || blankPositions.length === 0) return word;
+  const set = new Set(blankPositions);
+  return Array.from(word)
+    .map((ch, i) => (set.has(i) ? ch.toLowerCase() : ch))
+    .join('');
+}
+
 const MODE_OPTIONS: readonly { value: Mode; label: string }[] = [
   { value: 'basic', label: 'Basic' },
   { value: 'scored', label: 'Scored' },
@@ -21,7 +54,7 @@ export default function RackHelper({ valueSet }: Props) {
   const [mode, setMode] = useToolSetting<Mode>(storageKey, 'scored');
   const [rack, setRack] = useState('');
   const [boardLetter, setBoardLetter] = useState('');
-  const [results, setResults] = useState<Array<{ word: string; score: number }>>([]);
+  const [results, setResults] = useState<Array<{ word: string; score: number; blankPositions?: number[] }>>([]);
   const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedOnce = useRef(false);
 
@@ -39,7 +72,7 @@ export default function RackHelper({ valueSet }: Props) {
         track('dict_loaded', { source: 'fast', ms: Math.round(performance.now() - t0) });
         setPhase('searching');
       }
-      const { results } = await send<{ results: Array<{ word: string; score: number }> }>('rack', { rack: v, valueSet, limit: 300, dictSource: 'fast', boardLetter: bl });
+      const { results } = await send<{ results: Array<{ word: string; score: number; blankPositions?: number[] }> }>('rack', { rack: v, valueSet, limit: 300, dictSource: 'fast', boardLetter: bl });
       setResults(results);
       setPhase('idle');
     }, 140);
@@ -123,7 +156,12 @@ export default function RackHelper({ valueSet }: Props) {
           <div className="mb-2 flex items-center justify-between">
             <div className="text-sm text-slate-600">{displayed.length} plays found</div>
             <CopyButton
-              value={displayed.map((r) => mode === 'scored' ? `${r.word} (${r.score})` : r.word).join('\n')}
+              value={displayed
+                .map((r) => {
+                  const w = formatWordForCopy(r.word, r.blankPositions);
+                  return mode === 'scored' ? `${w} (${r.score})` : w;
+                })
+                .join('\n')}
               label="Copy all"
               tool={valueSet}
             />
@@ -140,7 +178,7 @@ export default function RackHelper({ valueSet }: Props) {
               <tbody className="divide-y divide-slate-100">
                 {displayed.map((r) => (
                   <tr key={r.word} className="hover:bg-slate-50">
-                    <td className="p-2 font-mono">{r.word}</td>
+                    <td className="p-2 font-mono">{renderWordWithBlanks(r.word, r.blankPositions)}</td>
                     <td className="p-2 text-slate-600">{r.word.length}</td>
                     {mode === 'scored' && <td className="p-2 text-right font-semibold">{r.score}</td>}
                   </tr>

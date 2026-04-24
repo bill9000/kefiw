@@ -1,0 +1,1263 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-22T04:06:50.757Z",
+  "cluster": {
+    "slug": "text-cleanup",
+    "section": "word-tools",
+    "hubSlug": "text-cleanup-tools",
+    "url": "/word-tools/text-cleanup-tools/",
+    "title": "Text Cleanup Tools — Kefiw",
+    "h1": "Text Cleanup Tools",
+    "subhead": "Count, sort, dedupe, and convert text fast.",
+    "intro": "Everyday text chores: counting words, removing duplicate lines, converting case, reversing strings, sorting lists. This cluster collects the small utilities and explains when each is the right call.",
+    "description": "Word counter, letter counter, case converter, reverse text, sort lines, remove duplicate lines, and related text utilities — plus guides for common cleanup workflows.",
+    "keywords": [
+      "text cleanup tools",
+      "word counter",
+      "sort lines",
+      "remove duplicate lines"
+    ],
+    "faq": [
+      {
+        "q": "Does any of this leave my browser?",
+        "a": "No. Every text tool here runs locally — paste sensitive text safely."
+      },
+      {
+        "q": "Is there undo?",
+        "a": "Tools are transforms — your input stays visible. Copy the output, keep the input around if you need to revert."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "rhyme",
+      "everyday-calculators"
+    ]
+  },
+  "tools": [
+    {
+      "id": "word-counter",
+      "slug": "word-counter",
+      "category": "word-tools",
+      "url": "/word-tools/word-counter/",
+      "title": "Word Counter — Kefiw",
+      "h1": "Word Counter",
+      "current_word_count": 423,
+      "current": {
+        "description": "Count words, characters, sentences, paragraphs, and estimated reading or speaking time in pasted text.",
+        "keywords": [
+          "word counter",
+          "count words",
+          "word count tool",
+          "reading time estimate",
+          "character count"
+        ],
+        "intro": "Use the Word Counter when a draft must fit a limit, a post feels too long, or a script needs an estimated reading time. Paste any text and the tool counts words, characters, sentences, paragraphs, and time estimates in the browser. The results are best for English-style text with spaces between words. Sentence and paragraph counts are approximate because punctuation and line breaks vary by draft.",
+        "outcomeLine": "Words, characters, lines, and sentences — everything text counts.",
+        "howTo": [
+          "Paste or type your text into the text area.",
+          "Watch the word, character, sentence, paragraph, and time estimates update.",
+          "Use reading time for articles and speaking time for scripts or presentations.",
+          "Check the long-sentence hint if the draft feels hard to read."
+        ],
+        "examples": [
+          {
+            "title": "Essay or assignment limit",
+            "body": "Paste the draft to see whether it is near a 500-word, 1,000-word, or 1,500-word target."
+          },
+          {
+            "title": "Blog reading time",
+            "body": "A 1,200-word article reads at roughly six minutes using a 200 words-per-minute estimate."
+          },
+          {
+            "title": "Script timing",
+            "body": "Speaking time is slower than reading time, so a script may need fewer words than an article of the same length."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How does the word counter count words?",
+            "a": "The word counter splits text on whitespace, so each separated text chunk counts as a word. This works well for English-style writing, but languages without spaces between words may be undercounted.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "How is reading time calculated?",
+            "a": "Reading time is estimated from the word count and a standard words-per-minute rate. It is a helpful planning number, not a personalized measure of how fast every reader will move through the text.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Does the word counter keep my text private?",
+            "a": "The tool runs in the browser, so the text can be analyzed without a server round-trip. That makes it suitable for quick draft checks, though users should still avoid pasting sensitive information into unnecessary tools.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "Why is the sentence count different from my document editor?",
+            "a": "Sentence counts can differ because the tool uses punctuation patterns to estimate sentence breaks. Abbreviations, ellipses, headings, and unusual punctuation may cause counts to differ from a document editor.",
+            "faq_intent": "troubleshooting"
+          },
+          {
+            "q": "Can I use the word counter for poems or lyrics?",
+            "a": "Yes, but word count is only one layer for poems and lyrics. For sound and rhythm, use the Syllable Counter after checking length, especially when line timing matters more than total words.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "What is the difference between characters with spaces and without spaces?",
+            "a": "Characters with spaces include every letter, punctuation mark, and space, while characters without spaces remove the spaces. Some forms and social platforms use one or the other, so both counts are useful.",
+            "faq_intent": "comparison"
+          }
+        ],
+        "relatedIds": [
+          "letter-counter",
+          "syllable-counter",
+          "case-converter",
+          "reading-time-calculator"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — any length, single or multi-line",
+        "output_type": "multi-metric text statistics including word / character / sentence / paragraph counts and reading/speaking time estimates",
+        "processing_steps": [
+          "Split input on whitespace for word count.",
+          "Count characters including spaces, and again excluding spaces.",
+          "Split on sentence-ending punctuation (. ! ?) to approximate sentence count.",
+          "Split on blank-line gaps for paragraph count.",
+          "Derive longest word by character length.",
+          "Derive average word length (chars / words) and average words per sentence.",
+          "Estimate reading time based on standard words-per-minute (WPM) reading speed.",
+          "Estimate speaking time based on a slower WPM speaking-aloud rate."
+        ],
+        "data_sources": [
+          "No dictionary. Pure string analysis — `textStats()` in `src/lib/outcomes.ts`."
+        ],
+        "fallback_behavior": "Empty input returns zeros. Any non-space content yields at least 1 word.",
+        "known_limitations": [
+          "Sentence detection is punctuation-based — abbreviations (\"Dr.\", \"e.g.\") and ellipses may inflate the count.",
+          "Paragraph detection requires blank-line separators — single-line-break text counts as one paragraph.",
+          "Reading / speaking times are estimates based on average-reader WPM, not personalized.",
+          "No language detection — all text treated as English-ish for WPM.",
+          "Non-Latin scripts (Chinese, Japanese, Thai) without explicit whitespace may undercount words.",
+          "Longest word may include attached punctuation if not surrounded by whitespace."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea, h-48 — tall by default)"
+          ],
+          "filters": [],
+          "outputs": [
+            "Stat grid: Words, Characters, No spaces, Sentences, Paragraphs, Reading time (6-column responsive grid)",
+            "Summary card: word count + reading time label",
+            "Stats card: characters, characters-no-spaces, sentences, paragraphs, avg word length, avg words per sentence, longest word with length",
+            "Takeaway: reading vs speaking-aloud time comparison",
+            "Takeaway (conditional): readability hint when avg sentence > 20 words",
+            "Next-step card with links to Syllable Counter and Reading Time Calculator"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Counts words, characters, sentences, paragraphs in any English text",
+            "Estimates reading and speaking-aloud time",
+            "Runs in the browser; text never leaves the device",
+            "Flags long-sentence readability issues"
+          ],
+          "claim_forbidden": [
+            "Detects grammar, spelling, or style issues",
+            "Works on non-whitespace-delimited languages (Chinese, Japanese)",
+            "Provides per-reader personalized reading speed"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "letter-counter",
+      "slug": "letter-counter",
+      "category": "word-tools",
+      "url": "/word-tools/letter-counter/",
+      "title": "Letter Counter — Kefiw",
+      "h1": "Letter Counter",
+      "current_word_count": 60,
+      "current": {
+        "description": "Count letters, characters (with and without spaces), and letter frequency in any text.",
+        "keywords": [
+          "letter counter",
+          "character counter",
+          "letter frequency"
+        ],
+        "intro": "Paste any text and instantly see character counts, letter frequency, and reading stats.",
+        "outcomeLine": "Letter frequency for cryptograms and game racks.",
+        "howTo": [
+          "Paste text.",
+          "View stats in the output panel."
+        ],
+        "examples": [
+          {
+            "title": "Input: \"Hello World\"",
+            "body": "Characters: 11 (10 without spaces). H:1, e:1, l:3, o:2, W:1, r:1, d:1."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are emoji counted?",
+            "a": "Yes — each emoji counts as one character."
+          }
+        ],
+        "relatedIds": [
+          "word-counter",
+          "syllable-counter",
+          "case-converter"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — any characters, any length",
+        "output_type": "total character counts (with/without spaces), letter/digit/vowel/consonant/punctuation breakdown, and a per-key frequency list sorted by count descending",
+        "processing_steps": [
+          "Compute raw characters: `text.length`.",
+          "Compute characters-without-spaces: `text.replace(/\\s/g, \"\").length`.",
+          "Build frequency via `letterFrequency(text)`: iterate each character, lowercase it, and increment the bucket only when the key matches `/[a-z0-9]/`. Non-ASCII characters (accented letters, emoji, ideographs) are silently excluded from the frequency map.",
+          "Split frequency entries into letters (`/[a-z]/`) and digits (`/[0-9]/`), sort by count descending.",
+          "Sum vowels across `a/e/i/o/u` keys; consonants = letter total − vowels.",
+          "Punctuation count = `text.replace(/[a-zA-Z0-9\\s]/g, \"\").length` — this bucket therefore catches not just ASCII punctuation but also any non-ASCII character (emoji, em-dash, typographic quotes, accented letters)."
+        ],
+        "data_sources": [
+          "No dictionary. Pure string analysis — `letterFrequency()` in `src/lib/text.ts` plus inline arithmetic."
+        ],
+        "fallback_behavior": "Empty input returns all zeros. No language detection.",
+        "known_limitations": [
+          "Letter frequency is case-insensitive: \"A\" and \"a\" share one bucket.",
+          "Only ASCII letters and digits populate the frequency chip list. Accented letters (\"é\", \"ñ\"), non-Latin scripts, and emoji are excluded from the Letters / Vowels / Consonants counts and fall into the Punct. bucket instead.",
+          "The tool page's FAQ claim that \"each emoji counts as one character\" is true only for the Characters total. In the Letters/Digits/Vowels/Consonants breakdown emoji contributes zero; in the Punct. bucket it contributes one per code point (so a ZWJ family emoji 👨‍👩‍👧‍👦 adds 7 to Punct., not 1).",
+          "Digits 0–9 are counted in Characters and in the digits bucket, but never in Letters/Vowels/Consonants.",
+          "No bigram, trigram, or word-frequency analysis.",
+          "No cryptogram-specific helpers (IoC, Kasiski, substitution mapping)."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea, h-36)"
+          ],
+          "filters": [],
+          "outputs": [
+            "Stat grid: Characters, No spaces, Letters, Digits (4-column responsive)",
+            "Frequency chip row: every letter/digit seen, shown as `x × N` sorted by count desc",
+            "Summary card: letter count (plus digit and punctuation counts when nonzero)",
+            "Stats card: Vowels, Consonants, Digits, Punct.",
+            "Comparison card: top 3 letters (when >1 letter)",
+            "Takeaway: vowel percentage + most common letter",
+            "Next-step card linking to Word Counter and Case Converter"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Counts characters with and without spaces",
+            "Breaks letters into vowels and consonants (a/e/i/o/u as vowels)",
+            "Shows per-letter and per-digit frequency sorted by count",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Counts accented letters or emoji as letters — those end up in the Punct. bucket",
+            "Performs cryptogram analysis (IoC, Kasiski, substitution solving)",
+            "Distinguishes uppercase from lowercase in the frequency list",
+            "Supports non-Latin scripts (Cyrillic, Greek, Arabic, CJK) in the letter breakdown",
+            "Counts per-word or per-bigram frequency"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "case-converter",
+      "slug": "case-converter",
+      "category": "word-tools",
+      "url": "/word-tools/case-converter/",
+      "title": "Case Converter — Kefiw",
+      "h1": "Case Converter",
+      "current_word_count": 61,
+      "current": {
+        "description": "Convert text between uppercase, lowercase, title case, sentence case, camelCase, and snake_case.",
+        "keywords": [
+          "case converter",
+          "uppercase lowercase",
+          "title case",
+          "camel case converter"
+        ],
+        "intro": "Switch text between a dozen case styles in a single click.",
+        "outcomeLine": "Swap between UPPER, lower, Title, and sentence case cleanly.",
+        "howTo": [
+          "Paste your text.",
+          "Pick a case style."
+        ],
+        "examples": [
+          {
+            "title": "Hello World",
+            "body": "UPPER: HELLO WORLD, lower: hello world, Title: Hello World, camel: helloWorld, snake: hello_world"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Which Title Case rules?",
+            "a": "Capitalizes the first letter of each word. Does not apply stylebook exceptions."
+          }
+        ],
+        "relatedIds": [
+          "reverse-text",
+          "word-counter",
+          "letter-counter"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — any characters, any length",
+        "output_type": "text converted to one of eight case styles (UPPER, lower, Title, Sentence, camelCase, snake_case, kebab-case, CONSTANT_CASE), plus before/after character-length delta",
+        "processing_steps": [
+          "upper / lower: native `toUpperCase()` / `toLowerCase()` — Unicode-aware via the JS engine.",
+          "Title Case: lowercase the whole string, then uppercase any ASCII letter at a word boundary (`/\\b([a-z])/g`). Does not apply AP / Chicago small-word rules.",
+          "Sentence case: lowercase the whole string, then uppercase the first letter at the start of the string or immediately after `.`, `!`, `?` + whitespace. Only matches ASCII letters.",
+          "camel / snake / kebab / constant: `trim()`, split on any run of non-alphanumeric characters (`/[^a-zA-Z0-9]+/`), drop empty parts, lowercase each token (except camel's leading token), then join with empty string (camel) / `_` (snake) / `-` (kebab) / uppercased `_` join (constant).",
+          "Computes `delta` = output length − input length for the summary."
+        ],
+        "data_sources": [
+          "No dictionary. String transforms in `src/lib/text.ts`."
+        ],
+        "fallback_behavior": "Empty input returns empty output. No error state.",
+        "known_limitations": [
+          "Title Case uppercases every word — no style-guide small-word exceptions (a, an, the, of, in, on, etc.). An editorial Title Case that follows AP or Chicago rules requires a different tool.",
+          "Title and Sentence case match ASCII letters only (`[a-z]`). Accented first letters (\"über\", \"état\") will not be capitalised.",
+          "Sentence case resets only after `.`, `!`, `?` — not after `:` or forced line breaks, so lines after a newline stay lowercase unless the previous line ended with terminal punctuation.",
+          "camel / snake / kebab / constant all split on non-alphanumeric runs. That means apostrophes, hyphens, and diacritic sequences are destroyed: \"don't worry\" → camel `dontWorry`; \"co-op\" → `coOp`; \"café\" → `cafe` only if your input was already ASCII — the accented letter is treated as non-alphanumeric and dropped.",
+          "camelCase preserves the original casing of non-first characters inside each token (after lowercasing it manually). With an already camelCased input (\"helloWorld\") it will return `helloworld`.",
+          "Kebab/snake/constant strip all trailing/leading punctuation; they cannot round-trip a Python-style `__dunder__` identifier."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea, h-36)"
+          ],
+          "filters": [
+            "mode button group: UPPERCASE | lowercase | Title Case | Sentence case | camelCase | snake_case | kebab-case | CONSTANT_CASE (default: Title Case)"
+          ],
+          "outputs": [
+            "Read-only output textarea (h-36, bg-slate-50) with a Copy button",
+            "Summary card: \"Converted N characters to <mode>\"",
+            "Stats card: Characters, Words (regex-based), Lines, Δ length",
+            "Takeaway: length change direction and magnitude (or \"same length\")",
+            "Next-step card linking to Reverse Text and Word Counter"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Eight case styles in one click with a copy button",
+            "Runs entirely in the browser",
+            "Handles multi-line input",
+            "Reports the character-length change after conversion"
+          ],
+          "claim_forbidden": [
+            "Applies AP, Chicago, APA, or any stylebook Title Case",
+            "Preserves accented letters, apostrophes, or hyphens in camel/snake/kebab/constant modes — those are stripped by the non-alphanumeric split",
+            "Respects existing camelCase boundaries (mixed-case input is lowercased first)",
+            "Understands proper nouns or acronyms for Title Case"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "reverse-text",
+      "slug": "reverse-text",
+      "category": "word-tools",
+      "url": "/word-tools/reverse-text/",
+      "title": "Reverse Text — Kefiw",
+      "h1": "Reverse Text",
+      "current_word_count": 47,
+      "current": {
+        "description": "Reverse any text character-by-character, word-by-word, or line-by-line.",
+        "keywords": [
+          "reverse text",
+          "backwards text",
+          "flip text"
+        ],
+        "intro": "Flip any text instantly. Choose between reversing characters, words, or lines.",
+        "outcomeLine": "Flip text character-by-character or line-by-line.",
+        "howTo": [
+          "Paste your text.",
+          "Choose mode: characters, words, or lines."
+        ],
+        "examples": [
+          {
+            "title": "Character reverse",
+            "body": "\"hello world\" → \"dlrow olleh\""
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does it reverse emoji correctly?",
+            "a": "Yes — multi-codepoint emoji (like flags) stay intact."
+          }
+        ],
+        "relatedIds": [
+          "case-converter",
+          "sort-lines",
+          "remove-duplicate-lines"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — any length, single or multi-line",
+        "output_type": "reversed text in one of three modes: character order, word order (preserving whitespace), or line order",
+        "processing_steps": [
+          "Characters mode: `Array.from(s).reverse().join(\"\")` — iterates by Unicode code point, so most BMP emoji and surrogate pairs stay intact as individual glyphs. Code-point-level only.",
+          "Words mode: `s.split(/(\\s+)/).reverse().join(\"\")` — captures whitespace groups so spacing is preserved between reversed words.",
+          "Lines mode: `s.split(\"\\n\").reverse().join(\"\\n\")` — split on LF only (not CRLF-aware).",
+          "Detect palindrome in Characters mode: strip whitespace, lowercase both sides, compare — surfaces a takeaway card when equal and length > 1."
+        ],
+        "data_sources": [
+          "No dictionary. `reverseChars` / `reverseWords` / `reverseLines` in `src/lib/text.ts`."
+        ],
+        "fallback_behavior": "Empty input returns empty output. No error state.",
+        "known_limitations": [
+          "Characters mode iterates by code point, not by grapheme cluster. Zero-width-joiner emoji sequences (👨‍👩‍👧‍👦 family, 🏳️‍🌈 flag), skin-tone modifiers, and regional-indicator flag pairs (🇺🇸 = U+1F1FA + U+1F1F8) are split on reversal and come out as different glyphs or invalid sequences.",
+          "The tool page's FAQ claim that \"multi-codepoint emoji (like flags) stay intact\" is inaccurate — flags specifically DO break because they are two separate regional-indicator code points.",
+          "No CRLF awareness in Lines mode: Windows-style `\\r\\n` line endings leave stray `\\r` characters attached to each reversed line.",
+          "Words mode splits on any whitespace run, including tabs and multiple spaces — preserved exactly in the output, which may look surprising if the input has irregular spacing.",
+          "Palindrome detection is Characters-mode only and ignores punctuation only via whitespace stripping — \"A man, a plan, a canal: Panama\" will not match because commas and colons remain.",
+          "No Unicode normalization (NFC / NFD) — decomposed accented characters may split."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea, h-36)"
+          ],
+          "filters": [
+            "mode button group: Characters | Words | Lines (default: Characters)"
+          ],
+          "outputs": [
+            "Read-only output textarea with Copy button",
+            "Summary card: \"Reversed N <units>\"",
+            "Stats card: Characters, Words, Lines, Mode",
+            "Takeaway (Characters mode only, conditional): \"Palindrome — reads the same forwards and backwards\"",
+            "Next-step card linking to Case Converter and Sort Lines"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Reverses text by character, word, or line",
+            "Preserves whitespace between words in Words mode",
+            "Flags palindromes in Characters mode",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Preserves ZWJ emoji sequences, flag pairs, or skin-tone combinations intact",
+            "Handles Windows (CRLF) line endings cleanly in Lines mode",
+            "Ignores punctuation in palindrome detection",
+            "Performs grapheme-cluster reversal (à la Intl.Segmenter)"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "sort-lines",
+      "slug": "sort-lines",
+      "category": "word-tools",
+      "url": "/word-tools/sort-lines/",
+      "title": "Sort Lines Alphabetically — Kefiw",
+      "h1": "Sort Lines",
+      "current_word_count": 52,
+      "current": {
+        "description": "Sort lines or words alphabetically, numerically, by length, or reverse.",
+        "keywords": [
+          "sort lines",
+          "alphabetical sort",
+          "sort words"
+        ],
+        "intro": "Paste any list of lines or words and sort them alphabetically, numerically, by length, or in reverse.",
+        "outcomeLine": "Sort alphabetical, by length, natural, or reverse.",
+        "howTo": [
+          "Paste lines.",
+          "Pick a sort mode."
+        ],
+        "examples": [
+          {
+            "title": "Alphabetic",
+            "body": "banana, apple, cherry → apple, banana, cherry"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is the sort case-sensitive?",
+            "a": "There is a toggle. Default is case-insensitive."
+          }
+        ],
+        "relatedIds": [
+          "remove-duplicate-lines",
+          "reverse-text"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text split on `\\n` into lines",
+        "output_type": "same lines sorted by one of six orderings, joined back with `\\n`",
+        "processing_steps": [
+          "Split input on `\\n` — blank lines and whitespace-only lines are preserved as sort entries.",
+          "Choose comparator based on mode:",
+          "  alpha-asc / alpha-desc: `localeCompare` with the default browser locale; case-insensitive unless the Case-sensitive checkbox is on.",
+          "  length-asc / length-desc: raw `line.length` (includes whitespace).",
+          "  numeric-asc / numeric-desc: `parseFloat(line) || 0`. Non-numeric lines coerce to 0, so they cluster at the start of the ascending sort.",
+          "Sort a copy of the lines array (non-destructive), then join with `\\n`.",
+          "Client computes unique-line count and duplicate count from the sorted output (using the case-sensitivity toggle) and shows a \"use Remove Duplicate Lines\" takeaway when duplicates exist."
+        ],
+        "data_sources": [
+          "No dictionary. `sortLines()` in `src/lib/text.ts`."
+        ],
+        "fallback_behavior": "Empty input returns empty output. Invalid mode strings are ignored (no-op) — not reachable from the UI.",
+        "known_limitations": [
+          "Numeric sort coerces non-numeric lines to 0. A list mixing \"3 apples\" (parses to 3), \"oranges\" (parses to 0), and \"1.5\" (parses to 1.5) will sort unpredictably relative to each other.",
+          "Length sort counts whitespace characters — lines with trailing spaces may appear \"longer\" than their visible content.",
+          "Alpha sort uses the browser's default locale; users in different locales may get slightly different orderings for diacritics and ligatures.",
+          "Case-sensitivity toggle applies to alpha sort and to the duplicate-detection count, but not to length or numeric modes.",
+          "No natural / version sort (item-2 before item-10) — Length or Numeric modes approximate this but are not true versionsort.",
+          "Blank and whitespace-only lines are preserved; they cluster at the top of ascending alpha and near the bottom of length-desc output."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line font-mono textarea, h-48)"
+          ],
+          "filters": [
+            "mode button group: A → Z | Z → A | Length ↑ | Length ↓ | Numeric ↑ | Numeric ↓ (default: A → Z)",
+            "case-sensitive checkbox (default: off)"
+          ],
+          "outputs": [
+            "Read-only output textarea (font-mono, h-48) with Copy button",
+            "Summary card: \"Sorted N lines (<mode>)\"",
+            "Stats card: Lines, Unique, Duplicates, Case",
+            "Comparison card: First 3 and Last 3 after sort (when >3 lines)",
+            "Takeaway (conditional): \"N duplicates remain — use Remove Duplicate Lines\" or case-sensitivity note",
+            "Next-step card linking to Remove Duplicate Lines and Reverse Text"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Six sort modes: alpha asc/desc, length asc/desc, numeric asc/desc",
+            "Case-sensitive toggle for alpha sort and duplicate detection",
+            "Preserves blank lines and trailing whitespace",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Natural / version-number sort (item-2 before item-10)",
+            "Locale-neutral Unicode collation",
+            "Drops blank or whitespace-only lines automatically",
+            "Applies case sensitivity to length or numeric modes"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "remove-duplicate-lines",
+      "slug": "remove-duplicate-lines",
+      "category": "word-tools",
+      "url": "/word-tools/remove-duplicate-lines/",
+      "title": "Remove Duplicate Lines — Kefiw",
+      "h1": "Remove Duplicate Lines",
+      "current_word_count": 63,
+      "current": {
+        "description": "Remove duplicate lines from a list or block of text. Optionally preserve order.",
+        "keywords": [
+          "remove duplicates",
+          "dedupe lines",
+          "unique lines"
+        ],
+        "intro": "Paste any list and remove duplicate entries. Choose whether to preserve original order or sort the result.",
+        "outcomeLine": "Dedupe a list with case and whitespace controls.",
+        "howTo": [
+          "Paste lines.",
+          "Toggle order-preserving or sorted output."
+        ],
+        "examples": [
+          {
+            "title": "5 lines in, 3 unique out",
+            "body": "Typical for cleaning scraped lists or logs."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is whitespace trimmed?",
+            "a": "Yes — trailing whitespace per line is ignored when matching."
+          }
+        ],
+        "relatedIds": [
+          "sort-lines",
+          "reverse-text",
+          "case-converter"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text split on `\\n` into lines",
+        "output_type": "deduped lines in original order (preserve) or sorted order, joined back with `\\n`",
+        "processing_steps": [
+          "Split on `\\n`.",
+          "For each line: strip trailing whitespace with `/\\s+$/` (leading whitespace is kept).",
+          "Walk lines in order, using a `Set<string>` to track seen values. Keep the first occurrence only.",
+          "If Preserve order is on: join the kept list with `\\n`.",
+          "If Preserve order is off: `.sort()` the kept list with the default JS comparator (lexicographic, case-sensitive, code-point-based — NOT the `localeCompare` collator used by Sort Lines) before joining.",
+          "Client reports in/out/removed/unique-rate stats on the result."
+        ],
+        "data_sources": [
+          "No dictionary. `removeDuplicateLines()` in `src/lib/text.ts`."
+        ],
+        "fallback_behavior": "Empty input returns empty output. No error state.",
+        "known_limitations": [
+          "Comparison is case-SENSITIVE. \"Apple\" and \"apple\" are treated as distinct lines. Use Case Converter first if you need a case-insensitive dedupe.",
+          "Only trailing whitespace is trimmed. Leading whitespace is preserved, so \"  apple\" and \"apple\" are treated as distinct.",
+          "Whitespace-only lines are treated the same way as ordinary lines — two blank lines dedupe to one.",
+          "Sort mode uses the default JS string comparator, not the locale-aware collator used in Sort Lines. Result order may differ from Sort Lines' A→Z for diacritic and case edge cases.",
+          "Does not normalize Unicode (NFC / NFD), so \"café\" (precomposed é) and \"café\" (e + combining acute) are treated as distinct lines even though they render identically.",
+          "No fuzzy / near-duplicate detection — exact match on the trimmed line only."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line font-mono textarea, h-48)"
+          ],
+          "filters": [
+            "Preserve original order checkbox (default: on — keeps first occurrence; off = sort uniques)"
+          ],
+          "outputs": [
+            "\"N in → M out\" summary label above the inputs",
+            "Read-only output textarea (font-mono, h-48) with Copy button",
+            "Summary card: \"Removed N duplicates from M lines\" (or \"No duplicates found\")",
+            "Stats card: Input, Output, Removed, Unique rate (%)",
+            "Takeaway: preserve-order note or sort-mode note",
+            "Next-step card linking to Sort Lines and Word Counter"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Removes duplicate lines from a block of text",
+            "Preserve-order toggle keeps the first occurrence; otherwise returns sorted uniques",
+            "Trims trailing whitespace before comparing",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Case-insensitive dedupe",
+            "Whitespace-normalized comparison (leading whitespace still matters)",
+            "Unicode normalization before comparison",
+            "Fuzzy / near-match dedupe (Levenshtein, Jaccard)",
+            "Locale-aware sorting when the preserve-order toggle is off"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "reading-time-calculator",
+      "slug": "reading-time-calculator",
+      "category": "calculators",
+      "url": "/calculators/reading-time-calculator/",
+      "title": "Reading Time Calculator — Kefiw",
+      "h1": "Reading Time Calculator",
+      "current_word_count": 123,
+      "current": {
+        "description": "Estimate reading time and speaking time for any text. Adjustable WPM.",
+        "keywords": [
+          "reading time calculator",
+          "words per minute",
+          "speech time calculator"
+        ],
+        "intro": "Paste any text and get an estimate of how long it takes to read silently or read aloud. Adjust the words-per-minute slider for your audience.",
+        "outcomeLine": "How long a piece of text takes to read aloud or silently.",
+        "howTo": [
+          "Paste your article, email, or script.",
+          "Slide the WPM control — 238 is a typical adult reading speed.",
+          "Speaking time is shown at a standard 150 WPM pace."
+        ],
+        "examples": [
+          {
+            "title": "500 words at 238 WPM",
+            "body": "About 2 min to read, about 3 min 20 sec to read aloud."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What reading speed should I use?",
+            "a": "Adults average 238 WPM for silent reading. Audiobooks are narrated at 150–160 WPM; conference talks average 120–150 WPM."
+          },
+          {
+            "q": "How is the word count measured?",
+            "a": "A word is any run of letters, digits, apostrophes, or hyphens."
+          }
+        ],
+        "relatedIds": [
+          "word-counter",
+          "syllable-counter"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "free text — any length",
+        "output_type": "estimated silent reading time and speaking-aloud time at adjustable words-per-minute rates, plus word / character / paragraph counts",
+        "processing_steps": [
+          "Count words via `countWords()`: trim the whole string, then split on `/\\s+/` and take the resulting array length. (Different from Word Counter, which uses a `/\\b[\\w'-]+\\b/g` match.)",
+          "Count characters: raw `text.length` (includes all whitespace).",
+          "Count paragraphs: split on `/\\n\\s*\\n/`, trim each, filter empty.",
+          "Compute read minutes = words / readWpm; speak minutes = words / speakWpm.",
+          "Format results with `fmtMin()`: under 1 minute → rounded seconds (min 1 sec when > 0); between 1 and 60 minutes → `Xm Ys` or `X min` when even; 60+ minutes → `Xh Ym`.",
+          "Render comparison at fixed 125 / 200 / 300 WPM reference rates regardless of the chosen readWpm."
+        ],
+        "data_sources": [
+          "No dictionary. `countWords()` in `src/lib/text.ts`."
+        ],
+        "fallback_behavior": "Empty input returns no time output (only the input textarea). No zero-word card.",
+        "known_limitations": [
+          "Word-count formula differs from the Word Counter page: this tool uses whitespace split, Word Counter uses a word-character regex. For text with em-dashes, curly quotes, or joined punctuation the two counts can diverge by 1–2%.",
+          "Reading-speed slider range is 100–500 WPM (default 200). Real adult silent reading is usually 200–300 WPM; the tool page's intro line claiming \"238 WPM is a typical adult reading speed\" contradicts the slider default of 200 — both are plausible but inconsistent.",
+          "Speaking-speed slider range is 90–200 WPM (default 130). Real speaking pace varies by genre: audiobook narration 150–160 WPM, TED-talk pace 163 WPM, auctioneers 250+.",
+          "No accounting for images, code blocks, tables, headings, or reader pauses at paragraph breaks.",
+          "No language detection — whitespace split gives spurious counts for Chinese, Japanese, or Thai (no word boundaries).",
+          "Does not persist slider settings (unlike Word Counter's WPM panel with `useToolSetting`).",
+          "Comparison table always shows 125 / 200 / 300 WPM reference points, even if the user has the slider at an unrelated value — the takeaway message \"every 200 words is about 1 minute at the default pace\" is hardcoded and does not recompute."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "text (multi-line textarea, h-48)"
+          ],
+          "filters": [
+            "reading pace slider (range 100–500 WPM, step 10, default 200) with tick labels \"125 (slow) / 200 (avg) / 300 (fast)\"",
+            "speaking pace slider (range 90–200 WPM, step 5, default 130) with tick labels \"90 (slow) / 130 (avg) / 180 (fast)\""
+          ],
+          "outputs": [
+            "Large emerald reading-time card + matching slate speaking-time card (two-column on wide screens)",
+            "Summary card: word count + formatted read/speak estimates",
+            "Stats card: Words, Characters, Paragraphs, Read, Speak",
+            "Takeaway: hardcoded \"every 200 words ≈ 1 minute\" note",
+            "Comparison card: reading time at fixed 125 / 200 / 300 WPM reference rates",
+            "Next-step card linking to Word Counter and Syllable Counter"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Estimates silent reading time and speaking-aloud time for English text",
+            "Adjustable WPM sliders for both reading and speaking",
+            "Runs entirely in the browser",
+            "Provides a fixed comparison across slow / average / fast reference rates"
+          ],
+          "claim_forbidden": [
+            "Personalised reading-speed measurement",
+            "Genre-specific estimates (fiction vs. technical vs. poetry)",
+            "Image / table / code-block time adjustments",
+            "Works on languages without whitespace word boundaries (Chinese, Japanese, Thai)",
+            "Uses the same word-count formula as Word Counter (whitespace split vs. regex differ for edge cases)",
+            "Persists slider settings between visits"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cS-remove-duplicate-lines-when",
+      "slug": "when-to-remove-duplicate-lines",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/when-to-remove-duplicate-lines/",
+      "title": "When to Remove Duplicate Lines — And When Not To",
+      "h1": "When to Remove Duplicate Lines",
+      "subhead": "The common cases — deduping a word list, cleaning a CSV, collapsing logs — and the traps.",
+      "current_word_count": 278,
+      "target_word_count": 1200,
+      "current": {
+        "description": "When and how to remove duplicate lines from text, including case-sensitivity, whitespace, and preserving order.",
+        "keywords": [
+          "remove duplicate lines",
+          "dedupe text",
+          "unique lines tool"
+        ],
+        "outcomeLine": "Dedupe is trivial until you hit case-sensitivity or trailing-whitespace differences.",
+        "intro": "Removing duplicate lines is a one-click operation — until you realise \"apple\" and \"Apple \" count as different lines unless you handle case and whitespace first.",
+        "keyPoints": [
+          "Common use cases: email list dedupe, combined word lists, log-file cleanup, import file preparation.",
+          "Case sensitivity matters: \"apple\" and \"APPLE\" are only duplicates if you lowercase first.",
+          "Trailing whitespace matters: \"apple\" and \"apple \" look identical but are different strings. Trim first.",
+          "Order-preserving dedupe keeps the first occurrence; sort-then-dedupe produces alphabetical output.",
+          "Do NOT dedupe if the duplicates carry meaning — e.g. log lines where repetition indicates frequency."
+        ],
+        "examples": [
+          {
+            "title": "Simple dedupe",
+            "body": "apple / banana / apple / cherry → apple / banana / cherry. First-occurrence kept."
+          },
+          {
+            "title": "Case-insensitive",
+            "body": "Apple / apple / APPLE all collapse to one entry when case is ignored."
+          },
+          {
+            "title": "Do not dedupe",
+            "body": "A log with 500 \"connection timeout\" lines — the count matters. Use sort | count instead."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "remove-duplicate-lines",
+            "note": "Main tool. Paste lines, choose case sensitivity, get deduped output in original order."
+          },
+          {
+            "toolId": "sort-lines",
+            "note": "Sort first if you want alphabetical grouping alongside dedupe."
+          },
+          {
+            "toolId": "word-counter",
+            "note": "After dedupe, confirm the new count to verify the operation did what you expected."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does removing duplicates change the order?",
+            "a": "Depends on the tool setting. \"Preserve order\" keeps the first occurrence in place. \"Sort then dedupe\" produces alphabetical output."
+          },
+          {
+            "q": "What counts as a duplicate?",
+            "a": "By default, an exact byte-for-byte match. Toggle case-insensitive to treat Apple and APPLE as the same; trim whitespace to ignore trailing spaces."
+          }
+        ],
+        "relatedIds": [
+          "remove-duplicate-lines",
+          "sort-lines",
+          "word-counter",
+          "cS-sort-lines-when",
+          "cS-text-cleanup-workflows"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-sort-lines-when",
+      "slug": "when-to-sort-lines",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/when-to-sort-lines/",
+      "title": "When to Sort Lines — Alphabetical, Length, or Custom",
+      "h1": "When to Sort Lines",
+      "subhead": "Sort modes and the use cases they actually fit.",
+      "current_word_count": 244,
+      "target_word_count": 1200,
+      "current": {
+        "description": "When to sort lines of text, how to pick between alphabetical/length/custom sort, and common pitfalls.",
+        "keywords": [
+          "sort lines",
+          "sort text alphabetical",
+          "sort lines by length"
+        ],
+        "outcomeLine": "Sort is free; the hard part is picking the right sort mode for the job.",
+        "intro": "Sorting is usually a preparation step, not a goal. You sort because the next operation — dedupe, diff, or visual scan — works better on ordered input.",
+        "keyPoints": [
+          "Alphabetical (A → Z): default mode. Matches what most people expect from \"sort\".",
+          "Length-ascending / descending: useful for word lists, where you want short-first or long-first.",
+          "Reverse: flip any sort order. Z → A or long → short.",
+          "Preserve case vs. case-insensitive: affects where capitalised words land. Usually you want case-insensitive.",
+          "Natural sort: treats numbers as numbers (\"file2\" before \"file10\"), not as strings."
+        ],
+        "examples": [
+          {
+            "title": "Before dedupe",
+            "body": "Sort alphabetically so duplicates are adjacent and easier to eyeball-check."
+          },
+          {
+            "title": "Word list review",
+            "body": "Sort by length-descending to see the longest candidates first."
+          },
+          {
+            "title": "File names with numbers",
+            "body": "Alphabetical sorts file10 before file2. Natural sort fixes this — file1, file2, file10."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "sort-lines",
+            "note": "Main tool. Alphabetical, length, reverse, case-insensitive all supported."
+          },
+          {
+            "toolId": "remove-duplicate-lines",
+            "note": "Sort first if you want sorted-unique output."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does sorting change any line contents?",
+            "a": "No — only line order changes. The lines themselves are untouched unless you also apply trim or case-change operations."
+          },
+          {
+            "q": "How does case-insensitive sort handle ties?",
+            "a": "Two lines that differ only by case end up adjacent. Which comes first depends on the tool — most preserve original order within a tie group."
+          }
+        ],
+        "relatedIds": [
+          "sort-lines",
+          "remove-duplicate-lines",
+          "cS-remove-duplicate-lines-when",
+          "cS-text-cleanup-workflows"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-word-counter-vs-letter-counter",
+      "slug": "word-counter-vs-letter-counter",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/word-counter-vs-letter-counter/",
+      "title": "Word Counter vs. Letter Counter — Which Count Do You Actually Need?",
+      "h1": "Word Counter vs. Letter Counter",
+      "subhead": "Words, characters with spaces, characters without spaces, and why they all differ.",
+      "current_word_count": 273,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The difference between word count and character count, and when to use each — essays, tweets, SEO, form fields.",
+        "keywords": [
+          "word counter vs letter counter",
+          "word count vs character count",
+          "text counter"
+        ],
+        "outcomeLine": "Every count answers a different question — pick the one that matches what someone is actually measuring.",
+        "intro": "Word count and character count answer different questions. Essays and articles use word count; tweets and SMS use character count; SEO meta tags use character count including spaces.",
+        "keyPoints": [
+          "Word count: number of whitespace-separated tokens. 500 words = a typical short blog post.",
+          "Character count with spaces: total visible length. Used by Twitter, SMS, meta descriptions.",
+          "Character count without spaces: raw letter count. Used in some academic constraints and password strength.",
+          "Line count: for code, logs, or structured text where each line is a unit.",
+          "Sentence count: for readability scoring — avoid relying on it for exact measurements, since abbreviations (Mr., Dr.) trip most detectors."
+        ],
+        "examples": [
+          {
+            "title": "Tweet",
+            "body": "Twitter counts characters including spaces. \"Hello world\" = 11 characters, 2 words."
+          },
+          {
+            "title": "Essay requirement",
+            "body": "\"500 words\" = 500 whitespace-separated tokens. Typical tools count hyphens as part of a word (state-of-the-art = 1 word)."
+          },
+          {
+            "title": "Meta description",
+            "body": "Google truncates around 155 characters including spaces. Count characters, not words."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-counter",
+            "note": "Gives word count, character-with-space, character-without-space, lines, sentences — the lot."
+          },
+          {
+            "toolId": "letter-counter",
+            "note": "Focused on letter/character frequency — useful for cryptograms or game racks."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Do contractions count as one word or two?",
+            "a": "Standard word counters treat \"don't\" as one word. If you are writing for a strict academic count, check the specific style guide."
+          },
+          {
+            "q": "What about hyphenated words?",
+            "a": "Most counters treat \"state-of-the-art\" as one word. Pandoc, MS Word, and Google Docs all use this default."
+          }
+        ],
+        "relatedIds": [
+          "word-counter",
+          "letter-counter",
+          "cS-text-cleanup-workflows"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-text-cleanup-workflows",
+      "slug": "common-text-cleanup-workflows",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/common-text-cleanup-workflows/",
+      "title": "Common Text Cleanup Workflows — Paste, Clean, Done",
+      "h1": "Common Text Cleanup Workflows",
+      "subhead": "Three or four recipes that cover most real-world copy-paste pain.",
+      "current_word_count": 299,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Common text cleanup recipes — deduping email lists, converting case, preparing CSVs, cleaning pasted tables.",
+        "keywords": [
+          "text cleanup workflow",
+          "clean pasted text",
+          "text processing recipes"
+        ],
+        "outcomeLine": "Chain a couple of tools in the right order and messy text becomes clean output in 30 seconds.",
+        "intro": "Most text-cleanup jobs are one of four recipes. Learn them and you will stop reaching for regex or a code editor for simple tasks.",
+        "keyPoints": [
+          "Email list dedupe: sort → lowercase → dedupe → count. Reveals actual unique addresses.",
+          "CSV column cleanup: paste → case-convert → trim → dedupe. Produces consistent imports.",
+          "Reformat pasted list: paste → sort by length → review. Surfaces outliers and typos.",
+          "Turn prose into list: word-counter first → sentence-split → sort → dedupe. Gives a clean item list.",
+          "Order matters — always dedupe LAST, after case and whitespace normalisation, or you will miss near-duplicates."
+        ],
+        "examples": [
+          {
+            "title": "Email dedupe",
+            "body": "Paste 800 emails → lowercase all → remove duplicate lines → count. Usually shrinks 800 to ~500."
+          },
+          {
+            "title": "Tag cleanup",
+            "body": "Comma-separated tags: split to lines → trim → case-convert to lowercase → dedupe → sort. Reveals \"javascript\" vs \"JavaScript\" duplicates."
+          },
+          {
+            "title": "Long list review",
+            "body": "Product names: sort by length-descending → eyeball the top 20 to catch unusually-long anomalies."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "case-converter",
+            "note": "Step 1 of most workflows — normalise case before any comparison."
+          },
+          {
+            "toolId": "remove-duplicate-lines",
+            "note": "Usually the last step, after normalisation."
+          },
+          {
+            "toolId": "sort-lines",
+            "note": "Before or after dedupe, depending on whether you want sorted output."
+          },
+          {
+            "toolId": "word-counter",
+            "note": "Use at start and end to verify the cleanup did what you expected."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why dedupe last?",
+            "a": "Because \"Apple\" and \"apple\" are only duplicates after case normalisation. Dedupe first, then case-convert, and you keep both."
+          },
+          {
+            "q": "Is there a single tool that chains these?",
+            "a": "Not here — each tool does one thing well. Chain them by copy-pasting between tabs. For scripted repetition, a short shell or Python script is better."
+          }
+        ],
+        "relatedIds": [
+          "case-converter",
+          "remove-duplicate-lines",
+          "sort-lines",
+          "word-counter",
+          "cS-remove-duplicate-lines-when",
+          "cS-sort-lines-when"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cS-remove-duplicate-lines-when": [
+      "remove-duplicate-lines",
+      "sort-lines",
+      "word-counter",
+      "cS-sort-lines-when",
+      "cS-text-cleanup-workflows"
+    ],
+    "cS-sort-lines-when": [
+      "sort-lines",
+      "remove-duplicate-lines",
+      "cS-remove-duplicate-lines-when",
+      "cS-text-cleanup-workflows"
+    ],
+    "cS-word-counter-vs-letter-counter": [
+      "word-counter",
+      "letter-counter",
+      "cS-text-cleanup-workflows"
+    ],
+    "cS-text-cleanup-workflows": [
+      "case-converter",
+      "remove-duplicate-lines",
+      "sort-lines",
+      "word-counter",
+      "cS-remove-duplicate-lines-when",
+      "cS-sort-lines-when"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "word-counter",
+          "url": "/word-tools/word-counter/"
+        },
+        {
+          "id": "letter-counter",
+          "url": "/word-tools/letter-counter/"
+        },
+        {
+          "id": "case-converter",
+          "url": "/word-tools/case-converter/"
+        },
+        {
+          "id": "reverse-text",
+          "url": "/word-tools/reverse-text/"
+        },
+        {
+          "id": "sort-lines",
+          "url": "/word-tools/sort-lines/"
+        },
+        {
+          "id": "remove-duplicate-lines",
+          "url": "/word-tools/remove-duplicate-lines/"
+        },
+        {
+          "id": "reading-time-calculator",
+          "url": "/calculators/reading-time-calculator/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cS-remove-duplicate-lines-when",
+          "url": "/guides/when-to-remove-duplicate-lines/"
+        },
+        {
+          "id": "cS-sort-lines-when",
+          "url": "/guides/when-to-sort-lines/"
+        },
+        {
+          "id": "cS-word-counter-vs-letter-counter",
+          "url": "/guides/word-counter-vs-letter-counter/"
+        },
+        {
+          "id": "cS-text-cleanup-workflows",
+          "url": "/guides/common-text-cleanup-workflows/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

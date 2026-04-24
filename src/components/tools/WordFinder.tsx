@@ -179,6 +179,7 @@ export default function WordFinder({ lockedLength }: WordFinderProps = {}) {
         loading={phase !== 'idle'}
         group={showScores ? undefined : 'length'}
         scores={showScores}
+        rack={searchBy === 'letters' ? letters : undefined}
         tool="word-finder"
         loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
         emptyLabel="Type some letters to see words you can make."

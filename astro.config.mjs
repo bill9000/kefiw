@@ -10,6 +10,10 @@ export default defineConfig({
     tailwind({ applyBaseStyles: true }),
     react(),
   ],
+  // Hide the floating Astro dev toolbar (the bottom-left "a" widget shown in `astro dev`).
+  devToolbar: {
+    enabled: false,
+  },
   build: {
     inlineStylesheets: 'auto',
     format: 'directory',

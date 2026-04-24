@@ -18,7 +18,9 @@ const SLOT_ID = (import.meta.env.PUBLIC_ADSENSE_STICKY_SLOT as string | undefine
 const DISMISS_KEY = 'kfw_sticky_closed_at';
 const DISMISS_MS = 60_000;
 const BANNER_HEIGHT = 60;
-const ANCHOR_OFFSET = 36;
+// Sticky now sits at the true bottom — the KFW anchor is a corner FAB, not
+// a full-width bar, so there's no horizontal row to clear.
+const ANCHOR_OFFSET = 0;
 
 declare global {
   interface Window {
@@ -147,59 +149,65 @@ export default function StickyAdBanner(): JSX.Element | null {
     bottom: ANCHOR_OFFSET,
     zIndex: 9998,
     height: BANNER_HEIGHT,
-    background: '#09090b',
-    borderTop: '1px solid #27272a',
-    borderBottom: '1px solid #27272a',
+    background: '#ffffff',
+    borderTop: '1px solid #e2e8f0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    boxShadow: '0 -2px 8px rgba(15, 23, 42, 0.06)',
   };
 
   const labelStyle: React.CSSProperties = {
     position: 'absolute',
-    top: 2,
-    left: 6,
+    top: 4,
+    left: 8,
     fontSize: 9,
-    color: '#64748b',
-    letterSpacing: '0.08em',
+    color: '#94a3b8',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
     pointerEvents: 'none',
-    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
     zIndex: 1,
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   };
 
   const closeBtn: React.CSSProperties = {
+    // Floats above the banner's top-right corner so it isn't cramped against
+    // the ad content. Use a circle with a soft shadow so it reads as a chip.
     position: 'absolute',
-    top: -10,
-    right: -6,
-    width: 22,
-    height: 22,
+    top: -12,
+    right: -12,
+    width: 28,
+    height: 28,
     padding: 0,
     lineHeight: 1,
-    background: 'transparent',
-    color: '#94a3b8',
-    border: '1px solid #27272a',
+    background: '#ffffff',
+    color: '#334155',
+    border: '1px solid #cbd5e1',
     cursor: 'pointer',
-    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
-    fontSize: 13,
-    zIndex: 2,
-    borderRadius: 2,
+    fontSize: 16,
+    zIndex: 3,
+    borderRadius: 999,
+    boxShadow: '0 2px 6px rgba(15, 23, 42, 0.12)',
   };
 
-  const devText: React.CSSProperties = {
-    color: '#475569',
-    fontSize: 11,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
-    fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+  const devPlaceholder: React.CSSProperties = {
+    color: '#94a3b8',
+    fontSize: 12,
+    letterSpacing: '0.02em',
+    fontFamily:
+      'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   };
 
   return (
     <div ref={shellRef} style={shell} data-kfw-zone="STICKY" role="complementary" aria-label="Sticky advertisement">
-      <div style={labelStyle}>[COMMERCIAL_DATA_FEED // KFW-ZONE-STICKY]</div>
+      <div style={labelStyle}>Advertisement</div>
       <button type="button" style={closeBtn} onClick={close} aria-label="Close advertisement">×</button>
 
       {devMode ? (
-        <div style={devText}>[ DEV // {ltd ? 'LTD_MODE' : 'FULL_MODE'} // STICKY {BANNER_HEIGHT}px ]</div>
+        <div style={devPlaceholder}>
+          Ad placeholder · sticky · {BANNER_HEIGHT}px · {ltd ? 'contextual' : 'personalized'}
+        </div>
       ) : (
         <ins
           ref={insRef}

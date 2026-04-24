@@ -1,0 +1,1823 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-22T03:11:34.933Z",
+  "cluster": {
+    "slug": "unscramble",
+    "section": "word-tools",
+    "hubSlug": "unscramble-and-anagram-help",
+    "url": "/word-tools/unscramble-and-anagram-help/",
+    "title": "Unscramble & Anagram Help — Kefiw",
+    "h1": "Unscramble & Anagram Help",
+    "subhead": "Turn a bag of letters into every real word it can make.",
+    "intro": "Word unscramblers and anagram solvers both reshuffle letters into real words — the differences matter when you have blanks, need phrase anagrams, or want to filter by length. This cluster pulls together the right tool plus the practical tricks that make solving faster.",
+    "description": "Word unscrambler, anagram solver, and the strategy tips that make both faster — when to use which, how blanks work, how to find the longest word.",
+    "keywords": [
+      "word unscrambler help",
+      "anagram solver help",
+      "unscramble letters strategy"
+    ],
+    "faq": [
+      {
+        "q": "Do unscrambler and anagram solver do the same thing?",
+        "a": "Close — the unscrambler returns any valid word that can be built from subsets of your letters, anagram solvers focus on using all letters. Use both when you're stuck."
+      },
+      {
+        "q": "Can I use blanks?",
+        "a": "Yes. Use ? as a wildcard in either tool. Each ? can be any letter."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "scrabble",
+      "pattern",
+      "word-families"
+    ]
+  },
+  "tools": [
+    {
+      "id": "word-unscrambler",
+      "slug": "word-unscrambler",
+      "category": "word-tools",
+      "url": "/word-tools/word-unscrambler/",
+      "title": "Word Unscrambler — Kefiw",
+      "h1": "Word Unscrambler",
+      "current_word_count": 161,
+      "current": {
+        "description": "Unscramble letters into valid English words. Fast, free, runs entirely in your browser.",
+        "keywords": [
+          "unscrambler",
+          "unscramble letters",
+          "word unscrambler",
+          "letter unscrambler"
+        ],
+        "intro": "Paste a set of scrambled letters and get every valid English word you can build from them. Works offline, runs in your browser, and returns results in milliseconds.",
+        "outcomeLine": "Paste your letters, see every real word they make — ranked by length or score.",
+        "howTo": [
+          "Type or paste your scrambled letters into the input box.",
+          "Click Unscramble (or just wait — the tool runs as you type).",
+          "Results are grouped by length, longest first.",
+          "Tap any word to copy it to your clipboard."
+        ],
+        "examples": [
+          {
+            "title": "Input: TEINGL",
+            "body": "Returns: tingle, ingle, tile, tine, gent, gilt, lien, line, nite, tien, tile, gel, lie, ten…"
+          },
+          {
+            "title": "Input: AEILNRT",
+            "body": "Returns: retinal, latrine, ratline, reliant, trenail, entail, linter, rental…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does this support wildcards?",
+            "a": "Yes — use ? for a single blank tile. You can combine known letters with wildcards, e.g. \"ca?t\"."
+          },
+          {
+            "q": "What dictionary is used?",
+            "a": "An open-source English word list covering common Scrabble- and Words With Friends-valid words."
+          },
+          {
+            "q": "Does it work offline?",
+            "a": "Yes. All processing runs locally in your browser. No server calls."
+          }
+        ],
+        "relatedIds": [
+          "anagram-solver",
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "string of letters (a-z, plus `?` for blank/wildcard tiles)",
+        "output_type": "array of every dictionary word that can be spelled from the input letters, sorted by length descending then alphabetical",
+        "processing_steps": [
+          "Load the chosen word list on first use via web worker: Game list = ENABLE1 (~172,823 words) or Full list = dict.txt (~370,105 words).",
+          "Normalize input: lowercase, strip non-letter/non-`?` characters.",
+          "For each dictionary word within the min/max length range: use `canMakeFromRack` to check whether it can be built from the input letters (blanks satisfy any missing letter).",
+          "Sort matches by length descending, then alphabetically.",
+          "Fallback: if minLen > 2 produces zero matches, re-run with minLen = 2 and surface an amber \"No words found at N+ letters\" notice.",
+          "Client optionally computes per-word Scrabble and WWF scores when the \"Show scores\" checkbox is enabled."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries) — the \"Game list\" mode used for casual Scrabble/WWF play.",
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries) — the \"Full list\" mode that includes archaic, technical, and inflected forms.",
+          "SCRABBLE_VALUES and WWF_VALUES for optional score display."
+        ],
+        "fallback_behavior": "Empty input returns no results. If minLen > 2 yields nothing, automatically retries at minLen = 2 and displays a fallback banner. No phonetic or transliteration fallback.",
+        "known_limitations": [
+          "Requires every letter of the candidate word to be spellable from the input (blanks cover gaps). Does not return anagrams that need extra letters.",
+          "No result cap — very open letter sets (\"aeinorst\") can produce thousands of matches and slow the render.",
+          "Full list includes archaic, technical, and inflected forms; some are not valid Scrabble/WWF plays.",
+          "Neither list includes proper nouns, abbreviations, or acronyms.",
+          "Wildcard handling is length-only — `?` represents one blank tile, not a multi-character wildcard.",
+          "No pattern or positional matching — use Word Finder or Pattern Solver for those.",
+          "Scores, when shown, follow the same blank-scoring overcount as the rack helpers (blanks scored at full tile value)."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "letters (single-line text input, font-mono, autofocused)"
+          ],
+          "filters": [
+            "mode: Game list (ENABLE1) | Full list (dict.txt)",
+            "min length: dropdown 2–7",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Amber fallback banner when min-length fallback fires",
+            "Summary card: total word count",
+            "Stats card: longest word, shortest word, best Scrabble play with score, best WWF play with score",
+            "Comparison card: count by word length (top 4 lengths)",
+            "Takeaway: best short play (≤4 letters) with Scrabble score",
+            "Result list grouped by length (or flat when scores are shown)",
+            "Copy button per result group",
+            "Next-step card linking to Scrabble Helper and WWF Helper"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds every valid English word that can be spelled from the input letters",
+            "Supports blank tiles (`?`)",
+            "Offers a compact game list (ENABLE1) and a broader dictionary (dict.txt)",
+            "Optionally shows Scrabble and WWF scores inline",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Finds only full-letter anagrams (use Anagram Solver for that)",
+            "Supports multi-letter wildcards or positional patterns (use Word Finder / Pattern Solver)",
+            "Includes proper nouns, slang, or acronyms",
+            "Returns tournament-certified TWL/SOWPODS validity"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "anagram-solver",
+      "slug": "anagram-solver",
+      "category": "word-tools",
+      "url": "/word-tools/anagram-solver/",
+      "title": "Anagram Solver — Kefiw",
+      "h1": "Anagram Solver",
+      "current_word_count": 110,
+      "current": {
+        "description": "Find every anagram of your word or phrase. All-letter and partial anagrams, instantly.",
+        "keywords": [
+          "anagram solver",
+          "anagram finder",
+          "anagrams of a word"
+        ],
+        "intro": "Enter any word or phrase and get every valid anagram — both perfect rearrangements and partial matches using a subset of the letters.",
+        "outcomeLine": "Find every exact-letter rearrangement of your rack.",
+        "howTo": [
+          "Type any word or letters into the input.",
+          "Toggle between \"all letters\" and \"any letters\" mode.",
+          "Tap a result to copy it."
+        ],
+        "examples": [
+          {
+            "title": "All-letter anagrams of LISTEN",
+            "body": "silent, enlist, inlets, tinsel"
+          },
+          {
+            "title": "Partial anagrams of STREAM",
+            "body": "master, maters, tamers, tears, rates, stare…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is an anagram?",
+            "a": "A rearrangement of the letters of a word or phrase to form another valid word or phrase."
+          },
+          {
+            "q": "Does spacing matter?",
+            "a": "Spaces are stripped before matching. Only the letters are used."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "scrabble-helper",
+          "word-finder"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "word or letter string (a-z; whitespace is stripped, non-letter characters ignored)",
+        "output_type": "array of every valid English anagram of the input — either using ALL letters (exact mode) or ANY subset of the letters (partial mode); filtered to 3+ letters when possible, else 2-letter fallback",
+        "processing_steps": [
+          "Load the chosen word list on first use: Game list = ENABLE1 (~172,823 words) or Full list = dict.txt (~370,105 words).",
+          "Normalize input: strip whitespace; the worker also lowercases and strips non-letters via `sortedLetters`.",
+          "Exact (All letters) mode: compute a sorted-letter key (e.g. \"listen\" → \"eilnst\"), look it up in the pre-built `bySorted` index, and return every word sharing that key — excluding the input itself (case-insensitive).",
+          "Partial (Any letters) mode: run `unscrambleLetters` with minLen=2 and maxLen=input length — returns every dictionary word whose letters can all be covered by the input (rack-fit).",
+          "Client filters results to length ≥ 3. If the filtered list is empty, fall back to the unfiltered (2+) results and display a \"No 3+ letter matches\" banner.",
+          "Optional inline Scrabble + WWF scoring when toggled."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`, ~172,823 entries) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`, ~370,105 entries) — \"Full list\" mode.",
+          "Pre-built `bySorted` index: Map<sortedLetterKey, string[]> built once per dictionary at first use.",
+          "SCRABBLE_VALUES and WWF_VALUES for optional score display."
+        ],
+        "fallback_behavior": "Empty input returns no results. If no 3+ letter matches exist, shows 2-letter results with an amber banner. No phonetic or fuzzy-match fallback.",
+        "known_limitations": [
+          "Exact mode requires a same-length rearrangement only. \"LISTEN → SILENT\" works; \"LISTEN → LINE\" does not.",
+          "Partial mode excludes the input word itself only in Exact mode — Partial may include the input if it is in the dictionary.",
+          "Exact mode uses sorted-letter hashing, so it treats input as a multiset. Duplicates are preserved (\"LLAMA\" anagrams must also use two Ls).",
+          "Blanks / wildcards (`?`) are NOT supported in this tool. Use Word Unscrambler or Word Finder for blank handling.",
+          "Spaces are stripped before matching — \"SILENT LISTEN\" is treated as one 12-letter string, not two separate inputs.",
+          "Punctuation and digits are silently dropped.",
+          "No multi-word anagrams — the tool only finds single-word anagrams, never phrases like \"ASTRONOMER → MOON STARER\".",
+          "Neither dictionary includes proper nouns, abbreviations, or acronyms.",
+          "Score display overcounts when non-letter characters are in the input (they are dropped silently, not flagged)."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "letters (single-line text input, font-mono, autofocused)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "mode toggle: All letters (exact anagram) | Any letters (partial anagram)",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Amber fallback banner when no 3+ letter matches",
+            "Summary card: total anagram count with \"anagram\" (exact) or \"match\" (partial) wording",
+            "Stats card: longest, shortest, best Scrabble play with score, best WWF play with score",
+            "Comparison card: count by word length (top 4 lengths)",
+            "Takeaway: best scoring anagram",
+            "Result list grouped by length (or flat when scores are shown)",
+            "Next-step card linking to Word Unscrambler and Scrabble Helper"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Finds exact (all-letter) anagrams of an English word",
+            "Finds partial anagrams (sub-letter rearrangements) in Any-letters mode",
+            "Offers a compact game list (ENABLE1) and a broader dictionary (dict.txt)",
+            "Optionally displays Scrabble and WWF scores",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Finds multi-word anagrams or phrase anagrams",
+            "Supports blanks or wildcards",
+            "Handles proper nouns, names, or brand names",
+            "Returns near-anagrams (off by one letter)",
+            "Handles diacritics or non-Latin scripts"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "word-finder",
+      "slug": "word-finder",
+      "category": "word-tools",
+      "url": "/word-tools/word-finder/",
+      "title": "Word Finder by Letters — Kefiw",
+      "h1": "Word Finder by Letters",
+      "current_word_count": 109,
+      "current": {
+        "description": "Find words that can be made from a specific set of letters, with optional minimum and maximum length filters.",
+        "keywords": [
+          "word finder",
+          "find words with letters",
+          "word maker"
+        ],
+        "intro": "Enter the letters you have (including blanks as ?) and filter by word length. Useful for Scrabble, Words With Friends, and general word puzzles. For prefix, suffix, or substring searches, use the dedicated Words Starting With, Words Ending With, or Words Containing tools.",
+        "outcomeLine": "Pattern-match with ? and * across the whole dictionary.",
+        "howTo": [
+          "Enter your available letters (2–15 characters).",
+          "Use ? for each blank tile.",
+          "Optionally set a minimum and maximum word length.",
+          "Tap any result to copy it."
+        ],
+        "examples": [
+          {
+            "title": "Input: RSTLNE?",
+            "body": "Returns ELDEST, LETTERS, RELENTS, STERN…"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many blanks can I use?",
+            "a": "Up to 2 — same as real Scrabble."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "letters (a-z plus `?` for blanks) OR a fixed-length pattern (a-z plus `?`/`_`/`.` as wildcards)",
+        "output_type": "array of dictionary words matching either the letter rack (with min/max length filters) or the positional pattern",
+        "processing_steps": [
+          "Load the chosen word list on first use: Game list = ENABLE1 or Full list = dict.txt.",
+          "If search mode is \"Letters\": strip whitespace, call the `unscramble` worker with minLen/maxLen — same rack-fit logic as Word Unscrambler but with separate length bounds.",
+          "If search mode is \"Pattern\": pattern length fixes the candidate word length. For each dictionary word of that length, call `matchesPattern` — any position whose pattern char is `?`, `_`, or `.` accepts any letter; other positions must match exactly (case-insensitive).",
+          "Letters mode sorts by length descending then alphabetically; Pattern mode returns in the source word-list order (effectively alphabetical from the dictionary file).",
+          "Optional Scrabble + WWF score display when toggled.",
+          "Lightweight variants (`5-letter-word-finder`, `6-letter-word-finder`, `7-letter-word-finder`) lock the pattern length to 5/6/7 and hide the min/max controls."
+        ],
+        "data_sources": [
+          "ENABLE1 word list (`public/data/enable.txt`) — \"Game list\" mode.",
+          "Broader English dictionary (`public/data/dict.txt`) — \"Full list\" mode."
+        ],
+        "fallback_behavior": "Empty input returns no results. No automatic min-length fallback (unlike Word Unscrambler). No phonetic fallback.",
+        "known_limitations": [
+          "Pattern mode matches exact-length candidates only — a 4-character pattern cannot match a 5-letter word.",
+          "Pattern wildcards (`?`, `_`, `.`) are single-character only — no regex quantifiers, no character classes.",
+          "Letters mode does not support a \"must include these letters\" constraint — use Words Containing for substring matching instead.",
+          "No position-aware scoring, no premium-square modelling.",
+          "Neither word list includes proper nouns, abbreviations, or acronyms.",
+          "Does not deduplicate between the two word lists — switching mode refetches and rebuilds the index."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "letters or pattern (single-line text input, font-mono, autofocused; maxLength is locked on the 5/6/7-letter variants)",
+            "min length: dropdown 2–8 (letters mode only; hidden on locked-length variants)",
+            "max length: dropdown 5–15 (letters mode only; hidden on locked-length variants)"
+          ],
+          "filters": [
+            "word list: Game list (ENABLE1) | Full list (dict.txt)",
+            "search by: Letters | Pattern",
+            "show scores: toggle for inline Scrabble + WWF scores"
+          ],
+          "outputs": [
+            "Summary card: match count, with the pattern echoed when in Pattern mode",
+            "Stats card: mode, longest, shortest, best Scrabble, best WWF; plus wildcard and fixed-char counts in Pattern mode",
+            "Comparison card: count by word length (top 4 lengths)",
+            "Takeaway (conditional): most common result length",
+            "Result list — grouped by length when scores are off, flat when scores are on",
+            "Next-step card linking to Words Starting With / Ending With / Containing"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Two search modes: Letters (anagram-style with min/max length) and Pattern (positional, fixed length)",
+            "Accepts single-letter wildcards (`?`, `_`, `.`) in Pattern mode",
+            "Supports blanks (`?`) in Letters mode",
+            "Offers a compact game list (ENABLE1) and a broader dictionary (dict.txt)",
+            "Runs entirely in the browser",
+            "Powers the 5-, 6-, and 7-letter variants with the pattern length locked"
+          ],
+          "claim_forbidden": [
+            "Regex-style patterns (quantifiers, character classes)",
+            "Prefix/suffix/substring search — those are separate tools",
+            "Scrabble/WWF board modelling, premium squares, or hook plays",
+            "Proper nouns, slang, or acronyms"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "scrabble-helper",
+      "slug": "scrabble-helper",
+      "category": "word-tools",
+      "url": "/word-tools/scrabble-helper/",
+      "title": "Scrabble Word Finder — Kefiw",
+      "h1": "Scrabble Word Finder",
+      "current_word_count": 94,
+      "current": {
+        "description": "Find the highest-scoring Scrabble words you can play with your tiles.",
+        "keywords": [
+          "scrabble word finder",
+          "scrabble helper",
+          "scrabble cheat"
+        ],
+        "intro": "Enter your rack (up to 7 letters, use ? for blanks) and get every playable Scrabble word, sorted by point value.",
+        "outcomeLine": "Your rack plus the board — every playable word ranked by score.",
+        "howTo": [
+          "Enter your tiles. Use ? for blanks.",
+          "Results are sorted by Scrabble score, highest first.",
+          "Tap any word to copy it to your clipboard."
+        ],
+        "examples": [
+          {
+            "title": "Rack: QUIZZES",
+            "body": "Top play: QUIZZES (34 points, uses all tiles for a 50-point bingo)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are tile values exact?",
+            "a": "Yes — standard tournament Scrabble tile values."
+          },
+          {
+            "q": "Does this include bingo bonus?",
+            "a": "Yes, +50 if you use all 7 tiles."
+          }
+        ],
+        "relatedIds": [
+          "words-with-friends-helper",
+          "word-unscrambler",
+          "anagram-solver"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "rack of up to 9 letters (a-z plus `?` for blank tiles); optional single board letter the word must play through",
+        "output_type": "ranked array of playable words with Scrabble scores, capped at 300 results, sorted by score descending then length descending then alphabetical",
+        "processing_steps": [
+          "Normalize rack: lowercase, strip non-letter/non-`?` characters, truncate to 9 characters.",
+          "Normalize board letter (if provided): lowercase, first letter only.",
+          "Load the ENABLE1 word list (~172,823 words) on first use via web worker.",
+          "Filter dictionary to words between 2 and 15 letters.",
+          "For each candidate word: if a board letter is specified, require the word to contain it; remove one instance before rack-fit check.",
+          "Check rack fit with `canMakeFromRack` — blanks (`?`) satisfy any missing letter.",
+          "Score each playable word with `wordScore` using SCRABBLE_VALUES (standard tournament tile values).",
+          "Add a +50 bingo bonus when the word uses exactly 7 tiles from the rack (i.e. `remainder.length === 7` after optional board-letter removal).",
+          "Sort by score descending, then length descending, then alphabetically.",
+          "Truncate to 300 results before returning.",
+          "Client re-sorts to alphabetical in Basic mode; keeps score order in Scored mode."
+        ],
+        "data_sources": [
+          "ENABLE1 public-domain English word list (~172,823 entries, `public/data/enable.txt`), loaded on first use via web worker.",
+          "SCRABBLE_VALUES tile map in `src/lib/dict.ts` (Q/Z=10, J/X=8, K=5, F/H/V/W/Y=4, B/C/M/P=3, D/G=2, A/E/I/L/N/O/R/S/T/U=1)."
+        ],
+        "fallback_behavior": "Empty rack returns no results. No phonetic, morphological, or proper-noun fallback. Reset button clears rack and board letter together.",
+        "known_limitations": [
+          "Scores blanks as full tile value. Standard Scrabble rules score a blank as 0 — this tool overstates the score by the value of each letter represented by a blank.",
+          "Bingo bonus is awarded only when the word consumes 7 rack tiles. A 7-letter word that uses a board letter plus 6 rack tiles is not treated as a bingo, matching real play.",
+          "Dictionary is ENABLE1, not TWL or SOWPODS. A handful of tournament-valid words (e.g. recent additions, SOWPODS-only entries) may not appear; a few ENABLE1 words are not TWL-legal.",
+          "No board context beyond a single \"plays through\" letter. Does not model double-letter, triple-letter, double-word, triple-word premium squares, adjacent letters, hooks, or open-parallel plays.",
+          "No proper nouns, abbreviations, or acronyms — ENABLE1 excludes them.",
+          "Board-letter check accepts the first occurrence only; when the same letter repeats in the word, only one instance is treated as the board tile.",
+          "Results capped at 300. Very open racks (e.g. lots of common letters) may hit the cap."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "rack (single-line text input, uppercase display, font-mono, maxLength 9, autofocused)",
+            "board letter (single-character optional input, uppercase display, maxLength 1)"
+          ],
+          "filters": [
+            "mode: Basic | Scored — Basic sorts results alphabetically; Scored keeps the score-ranked order"
+          ],
+          "outputs": [
+            "Summary card: best play and its score",
+            "Stats card: total plays, second-best play, score gap, bingo candidate count, best short play (≤4 letters), best long play (≥5)",
+            "Takeaway card (conditional): bingo candidate count and +50 bonus reminder",
+            "Takeaway card (conditional): board-letter constraint notice when set",
+            "Results table: Word | Length | Score (Score column hidden in Basic mode)",
+            "Copy-all button that dumps the result list (with or without scores depending on mode)",
+            "Next-step card linking to WWF Helper and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Ranks playable Scrabble words by point value using standard tournament tile values",
+            "Supports blanks (`?`) in the rack",
+            "Supports a single optional \"plays through\" board letter",
+            "Flags 7-letter bingo candidates and adds the +50 bonus",
+            "Runs entirely in the browser (no server round-trip)"
+          ],
+          "claim_forbidden": [
+            "Models the full board, premium squares, adjacent words, hooks, or parallel plays",
+            "Scores blanks as 0 (as tournament rules require)",
+            "Uses the TWL or SOWPODS tournament word list — it uses ENABLE1",
+            "Includes proper nouns, abbreviations, or acronyms",
+            "Respects recent dictionary updates beyond ENABLE1"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "words-with-friends-helper",
+      "slug": "words-with-friends-helper",
+      "category": "word-tools",
+      "url": "/word-tools/words-with-friends-helper/",
+      "title": "Words With Friends Word Finder — Kefiw",
+      "h1": "Words With Friends Word Finder",
+      "current_word_count": 68,
+      "current": {
+        "description": "Find the highest-scoring Words With Friends plays from your tiles.",
+        "keywords": [
+          "words with friends",
+          "wwf word finder",
+          "wwf helper"
+        ],
+        "intro": "Enter your rack and get every valid Words With Friends play, scored using WWF tile values.",
+        "outcomeLine": "WWF tile values and dictionary — different game, different answers.",
+        "howTo": [
+          "Enter your tiles. Use ? for blanks.",
+          "Results are sorted by WWF score."
+        ],
+        "examples": [
+          {
+            "title": "Rack: SQUEEZE",
+            "body": "Top play: SQUEEZE (high-value Z and Q combo)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are the tile values different from Scrabble?",
+            "a": "Yes — Words With Friends uses its own tile distribution and values."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": {
+        "input_type": "rack of up to 9 letters (a-z plus `?` for blank tiles); optional single board letter the word must play through",
+        "output_type": "ranked array of playable words with WWF scores, capped at 300 results, sorted by score descending then length descending then alphabetical",
+        "processing_steps": [
+          "Normalize rack: lowercase, strip non-letter/non-`?` characters, truncate to 9 characters.",
+          "Normalize board letter (if provided): lowercase, first letter only.",
+          "Load the ENABLE1 word list (~172,823 words) on first use via web worker.",
+          "Filter dictionary to words between 2 and 15 letters.",
+          "For each candidate word: if a board letter is specified, require it in the word; remove one instance before rack-fit check.",
+          "Check rack fit with `canMakeFromRack` — blanks (`?`) satisfy any missing letter.",
+          "Score each playable word with `wordScore` using WWF_VALUES (Words With Friends tile distribution).",
+          "Add a +35 bingo bonus (WWF standard) when the word uses exactly 7 tiles from the rack.",
+          "Sort by score descending, then length descending, then alphabetically.",
+          "Truncate to 300 results before returning."
+        ],
+        "data_sources": [
+          "ENABLE1 public-domain English word list (~172,823 entries, `public/data/enable.txt`), shared with Scrabble Helper.",
+          "WWF_VALUES tile map in `src/lib/dict.ts`. Differs from Scrabble: J=10 (vs 8), B/F/H/M/P=4 (vs 3/4/4/3/3), L=2 (vs 1), N=2 (vs 1), U=2 (vs 1), Y=3 (vs 4), C=4 (vs 3), G=3 (vs 2)."
+        ],
+        "fallback_behavior": "Empty rack returns no results. No phonetic, morphological, or proper-noun fallback. Reset clears rack and board letter together.",
+        "known_limitations": [
+          "Same blank-scoring caveat as Scrabble Helper: blanks score full tile value here, but real WWF scores them as 0.",
+          "Bingo bonus fires only when 7 rack tiles are consumed — a 7-letter word that uses a board letter plus 6 rack tiles is not flagged as bingo.",
+          "No board context beyond a single \"plays through\" letter. Does not model WWF premium squares (triple-letter, triple-word, or the different square layout), hooks, or parallel plays.",
+          "Uses the ENABLE1 dictionary as a reasonable proxy for the WWF dictionary — the two overlap heavily but are not identical. A handful of WWF-legal slang and informal words may be missing; a few ENABLE1 words may not be WWF-legal.",
+          "No proper nouns, abbreviations, or acronyms.",
+          "Board-letter check accepts the first occurrence only.",
+          "Results capped at 300."
+        ],
+        "ui_fields": {
+          "inputs": [
+            "rack (single-line text input, uppercase display, font-mono, maxLength 9, autofocused)",
+            "board letter (single-character optional input, maxLength 1)"
+          ],
+          "filters": [
+            "mode: Basic | Scored — Basic sorts results alphabetically; Scored keeps the score-ranked order"
+          ],
+          "outputs": [
+            "Summary card: best play and its WWF score",
+            "Stats card: total plays, second-best, score gap, bingo count, best short play (≤4), best long play (≥5)",
+            "Takeaway card (conditional): bingo candidate count with +35 WWF bonus reminder",
+            "Takeaway card (conditional): board-letter constraint notice when set",
+            "Results table: Word | Length | Score (Score column hidden in Basic mode)",
+            "Copy-all button",
+            "Next-step card linking to Scrabble Helper and Word Unscrambler"
+          ]
+        },
+        "content_guidance": {
+          "claim_allowed": [
+            "Ranks playable Words With Friends plays by point value using WWF tile values",
+            "Supports blanks (`?`) in the rack",
+            "Supports a single optional \"plays through\" board letter",
+            "Flags 7-letter bingo candidates and adds the +35 WWF bonus",
+            "Runs entirely in the browser"
+          ],
+          "claim_forbidden": [
+            "Uses the official Zynga Words With Friends dictionary — it uses ENABLE1 as a close proxy",
+            "Models the WWF board, premium squares, or parallel plays",
+            "Scores blanks as 0 (as real WWF scoring does)",
+            "Handles the WWF2 ruleset variants (Solo Challenge, Lightning Round) specifically",
+            "Includes proper nouns, player names, or brand names"
+          ]
+        }
+      },
+      "_writer_note": "tool_logic is verified from source code. Claim only what appears in content_guidance.claim_allowed; avoid anything in claim_forbidden.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cS-how-to-use-a-word-unscrambler",
+      "slug": "how-to-use-a-word-unscrambler",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-use-a-word-unscrambler/",
+      "title": "How to Use a Word Unscrambler — A 3-Step Approach",
+      "h1": "How to Use a Word Unscrambler",
+      "subhead": "A quick method that gets the answer in seconds, not minutes.",
+      "current_word_count": 288,
+      "target_word_count": 1200,
+      "current": {
+        "description": "A short, practical guide to getting the right word out of a word unscrambler fast. Covers input, length filters, wildcards, and when to switch to the anagram solver.",
+        "keywords": [
+          "how to use word unscrambler",
+          "word unscrambler tips",
+          "unscramble letters"
+        ],
+        "outcomeLine": "Paste, filter, scan — that's the whole workflow.",
+        "intro": "A word unscrambler returns every real English word that can be built from your letters. Used well, it hands you the answer in under five seconds. Used badly, it overwhelms you with 600 matches you can't skim.",
+        "keyPoints": [
+          "Paste all your letters, including duplicates. Every letter counts.",
+          "Use ? as a wildcard for blanks. Each ? can match any single letter.",
+          "Filter by minimum length. Longer is usually higher-scoring — set minLen to 5 or 6 when you need a bingo.",
+          "Results are grouped longest-first. Scan the top bucket first.",
+          "If the unscrambler returns nothing long enough, try the anagram solver for exact-letter plays, or drop a letter you don't need."
+        ],
+        "examples": [
+          {
+            "title": "Input: TEINGL",
+            "body": "Returns TINGLE, TILING, NITTLE, LEGIT, TILE, NITE… scan longest first."
+          },
+          {
+            "title": "Input: AEI?NRT",
+            "body": "Wildcard expands to any letter — returns RETINA, RATINE, and many 7-letter candidates."
+          },
+          {
+            "title": "Input: CAAARR (bad rack)",
+            "body": "No long plays — consider a swap. The unscrambler tells you this fast."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-unscrambler",
+            "note": "Default choice — returns every valid subset-word from your letters, longest first."
+          },
+          {
+            "toolId": "anagram-solver",
+            "note": "Switch here when you need exact-letter anagrams (all letters used, no subsets)."
+          },
+          {
+            "toolId": "scrabble-helper",
+            "note": "For Scrabble-specific scoring — ranks results by point value rather than length."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How long should I make the minimum length filter?",
+            "a": "Default is 2 or 3. For Scrabble bingos set it to 7. For Wordle set it to the puzzle length exactly."
+          },
+          {
+            "q": "Are proper nouns included?",
+            "a": "No — the underlying dictionary excludes proper nouns. You'll only see common English words."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "anagram-solver",
+          "scrabble-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-how-to-solve-anagrams-faster",
+      "slug": "how-to-solve-anagrams-faster",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-solve-anagrams-faster/",
+      "title": "How to Solve Anagrams Faster — Pattern-Based Shortcuts",
+      "h1": "How to Solve Anagrams Faster",
+      "subhead": "A handful of pattern tricks that beat brute-force rearrangement.",
+      "current_word_count": 301,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Shortcuts and mental patterns that make solving anagrams faster than brute-force letter rearrangement.",
+        "keywords": [
+          "solve anagrams fast",
+          "anagram tips",
+          "anagram strategy"
+        ],
+        "outcomeLine": "Spot the prefix, spot the suffix, lock in the vowels — the word falls out.",
+        "intro": "Brute-force rearrangement treats every letter as unknown. Pattern-based solving locks in the predictable parts first — vowels, common suffixes, and prefixes — and lets the remaining letters fall into place.",
+        "keyPoints": [
+          "Find the vowels first. A 7-letter rack with only 1 vowel rarely forms a word — swap it.",
+          "Scan for common endings: -ING, -ED, -ER, -TION, -LY, -NESS. If present, lock them and permute the rest.",
+          "Scan for common starts: UN-, RE-, PRE-, DIS-, MIS-. Same logic.",
+          "Double letters (LL, EE, TT, SS) are almost always adjacent in the answer — treat them as a unit.",
+          "Y acts like a vowel in about 40% of cases. If you're short on vowels, try Y as one.",
+          "Consonant clusters (CH, SH, TH, PH, CK) stay together — don't split them during brute force."
+        ],
+        "examples": [
+          {
+            "title": "Rack: GNIDAER",
+            "body": "Spot -ING → RIGHT suffix. Remaining: EADR → READ. Answer: READING."
+          },
+          {
+            "title": "Rack: NOITATS",
+            "body": "Spot -TION → suffix. Remaining: SAT → STAT? Answer: STATION."
+          },
+          {
+            "title": "Rack: ENEUQ",
+            "body": "Two Es, one U — vowel-heavy. Try Q next to U (QU-) → QUEEN."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "anagram-solver",
+            "note": "Returns every exact-letter anagram of your input."
+          },
+          {
+            "toolId": "word-unscrambler",
+            "note": "Use when the answer might not use all letters (e.g. Scrabble plays)."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "Use when you know some positions — pattern search beats pure anagram for partially-known answers."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Which vowels are most common?",
+            "a": "E, then A, then I, then O, then U. If you have 3 vowels and none of them are E, consider whether the answer is unusual."
+          },
+          {
+            "q": "Do these patterns work for phrase anagrams?",
+            "a": "Partially — word boundaries make phrase anagrams much harder. The suffix/prefix trick still helps within individual words."
+          }
+        ],
+        "relatedIds": [
+          "anagram-solver",
+          "word-unscrambler",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-unscrambler-vs-anagram-solver",
+      "slug": "unscrambler-vs-anagram-solver",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/unscrambler-vs-anagram-solver/",
+      "title": "Unscrambler vs Anagram Solver — Which to Use When",
+      "h1": "Unscrambler vs Anagram Solver",
+      "subhead": "Two similar tools, one practical difference that changes your choice.",
+      "current_word_count": 290,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Word Unscrambler and Anagram Solver look similar but solve different problems. A quick guide to which one handles each situation.",
+        "keywords": [
+          "word unscrambler vs anagram solver",
+          "anagram tool difference"
+        ],
+        "outcomeLine": "Use Unscrambler for \"any word from these letters\". Use Anagram Solver for \"a word using all these letters\".",
+        "intro": "A word unscrambler returns every valid word that can be built from any subset of your letters. An anagram solver returns only words that use ALL your letters. Pick based on what the problem asks for.",
+        "keyPoints": [
+          "Unscrambler = subset search. Good for Scrabble (play any length), Words With Friends, general word finding.",
+          "Anagram solver = exact-letter search. Good for crossword clues that say \"anagram of ___\", phrase anagrams, Jumble puzzles.",
+          "Both tools support ? as a wildcard — a blank tile that can become any letter.",
+          "When stuck, try both. The unscrambler result often includes the anagram and more.",
+          "For phrase anagrams (multiple words), only the anagram solver's phrase mode helps."
+        ],
+        "examples": [
+          {
+            "title": "Scrabble rack AEIRNST",
+            "body": "Unscrambler: returns RETAINS, STAINER, RESIN, RENT, plus hundreds of shorter plays. Anagram solver: returns only the 7-letter answers (RETAINS, STAINER)."
+          },
+          {
+            "title": "Jumble puzzle",
+            "body": "Anagram solver — every letter must be used, no subsets."
+          },
+          {
+            "title": "Scrabble blitz (any word is fine)",
+            "body": "Unscrambler — you want the highest-scoring play at any length."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-unscrambler",
+            "note": "Default for Scrabble, WWF, and any \"find a word\" task."
+          },
+          {
+            "toolId": "anagram-solver",
+            "note": "When every letter must be used — Jumble, crossword \"anagram of\" clues."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can an anagram solver find phrase anagrams?",
+            "a": "Some can — look for a phrase-anagram mode that allows output with spaces. Pure single-word anagram solvers will not split."
+          },
+          {
+            "q": "Do both tools handle duplicate letters?",
+            "a": "Yes. Both honour duplicates — if your input is BOOKKEEPER, the output only uses as many Os, Ks, and Es as you provided."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "anagram-solver"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-blank-tiles-word-tools",
+      "slug": "blank-tiles-in-word-tools",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/blank-tiles-in-word-tools/",
+      "title": "Blank Tiles & Wildcards in Word Tools",
+      "h1": "Blank Tiles & Wildcards in Word Tools",
+      "subhead": "How the ? symbol works, and where it changes the answer.",
+      "current_word_count": 285,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to use blank tiles (the ? wildcard) in word unscramblers, pattern finders, and solvers.",
+        "keywords": [
+          "blank tiles word tools",
+          "wildcard word search",
+          "scrabble blanks"
+        ],
+        "outcomeLine": "Use ? as a placeholder for any letter — each ? expands every search path.",
+        "intro": "A blank tile is a placeholder that can become any letter. Every major Kefiw word tool accepts ? as a wildcard. Used right, it unlocks plays you'd otherwise miss.",
+        "keyPoints": [
+          "Type ? anywhere a letter might go. Each ? is one wildcard = one letter.",
+          "Multiple ?s multiply the search space: \"??t\" returns every 3-letter word ending in T.",
+          "In unscramblers, ? behaves like a Scrabble blank — it can be any letter.",
+          "In pattern search (Word Finder, Wordle solver), ? represents an unknown position.",
+          "For Scrabble, remember that blanks score 0 — so a big play using a blank is only big from bonuses, not tile value."
+        ],
+        "examples": [
+          {
+            "title": "Pattern \"c?t\"",
+            "body": "CAT, COT, CUT in the Word Finder."
+          },
+          {
+            "title": "Unscrambler \"AEI?NRT\"",
+            "body": "Every word that uses any subset of A, E, I, N, R, T plus one wildcard letter."
+          },
+          {
+            "title": "Wordle hint \"??R??\"",
+            "body": "Every 5-letter word with R in the middle — narrows the remaining answers quickly."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-unscrambler",
+            "note": "Add a ? for each blank tile in your rack."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "Use ? for unknown positions when you have partial knowledge of the answer."
+          },
+          {
+            "toolId": "scrabble-helper",
+            "note": "Blanks automatically score 0 here — output reflects real board scoring."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many wildcards should I use?",
+            "a": "Match your actual blanks — usually 1, occasionally 2. More than 2 ?s produces so many results it stops being useful."
+          },
+          {
+            "q": "Do blanks double-count in Scrabble scoring?",
+            "a": "Blanks score 0, always. Even on a triple-letter square, a blank contributes nothing on its own. The bonuses apply to non-blank tiles."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "word-finder",
+          "scrabble-helper",
+          "cE-scrabble-blanks"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-longest-word-from-letters",
+      "slug": "find-the-longest-word-from-letters",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/find-the-longest-word-from-letters/",
+      "title": "How to Find the Longest Word from a Set of Letters",
+      "h1": "Find the Longest Word from Your Letters",
+      "subhead": "When every letter scores, length is where the points come from.",
+      "current_word_count": 322,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to find the longest word your letters can form — the key for Scrabble bingos, WWF plays, and long-word puzzles.",
+        "keywords": [
+          "longest word from letters",
+          "bingo scrabble",
+          "long word unscrambler"
+        ],
+        "outcomeLine": "Set a minimum length, sort by length, skim the top bucket.",
+        "intro": "In Scrabble and Words With Friends, using all 7 tiles scores a 50-point bingo. Other puzzles reward length directly. The mechanical approach: set a minimum length, sort longest-first, and scan the top bucket.",
+        "keyPoints": [
+          "Set minLen to the highest plausible length (often 7 for a full rack) and work down only if needed.",
+          "If no 7-letter match exists, try 6 — and look for a letter you could swap to unlock the 7.",
+          "Longest words often contain common suffixes (-ING, -ED, -TION) or prefixes (UN-, RE-, PRE-).",
+          "Y and blanks both count toward length — don't forget them when scanning.",
+          "If you have 6 consonants and 1 vowel, swap a consonant — 7-letter words almost always need 2+ vowels."
+        ],
+        "examples": [
+          {
+            "title": "Rack AEINRST",
+            "body": "Longest: RETAINS, RETSINA, STAINER, NASTIER — all 7-letter bingos. This rack is famously fertile."
+          },
+          {
+            "title": "Rack AABINOR",
+            "body": "Longest: IBERIAN? No — proper noun. Next best: ORBITAL? No, no L. Actual: AIRCON — 6 letters. Consider a swap."
+          },
+          {
+            "title": "Rack with a blank: AEIR?ST",
+            "body": "The ? expands every search. Typical result: dozens of 7-letter hits."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-unscrambler",
+            "note": "Set minLen to 7 for Scrabble bingos. Results show all 7-letter plays first."
+          },
+          {
+            "toolId": "anagram-solver",
+            "note": "If you want to use ALL letters, this is tighter than the unscrambler."
+          },
+          {
+            "toolId": "scrabble-helper",
+            "note": "Ranks by score rather than length — but a bingo still scores high, so it floats to the top."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How often does a random 7-letter rack form a bingo?",
+            "a": "About 15% of randomly-drawn racks contain at least one 7-letter bingo. Good racks have 2–3 vowels and no duplicates of rare letters."
+          },
+          {
+            "q": "What's the hardest letter to bingo with?",
+            "a": "Q, easily. Only a few 7-letter Q-without-U words exist. Swap the Q if you can't combine it with a U."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "anagram-solver",
+          "cE-scrabble-bingo-strategy"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-highest-scoring-from-letters",
+      "slug": "highest-scoring-words-from-letters",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/highest-scoring-words-from-letters/",
+      "title": "Highest-Scoring Words From Your Letters — How to Spot Them Fast",
+      "h1": "Highest-Scoring Words From Your Letters",
+      "subhead": "Score-sorted output beats length-sorted when tiles are valued unequally.",
+      "current_word_count": 323,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to find the highest-scoring word from a rack of letters — why score-sort matters and how to read the results.",
+        "keywords": [
+          "highest scoring words from letters",
+          "unscramble by score",
+          "best score rack"
+        ],
+        "outcomeLine": "Sort by score, not length — a short J/Q/X/Z play often beats a long common-letter one.",
+        "intro": "Length and score are not the same. A 5-letter word with all 1-point tiles scores 5; a 3-letter word with X or Z scores 15+. A good unscrambler sorts by score and tells you which tiles carry the points.",
+        "keyPoints": [
+          "Sort by score descending, not length. The first result is the correct choice.",
+          "Rack with Q, Z, J, or X — the highest-scoring word is usually short.",
+          "Rack with no high-value tiles — length matters more, longer wins.",
+          "Watch for multi-tile bonuses on the board — a lower-score word on a triple-word square can beat a higher-score word on a plain square.",
+          "Bingo bonus (+50) applies only on 7-letter plays — if the unscrambler shows one, weigh it heavily."
+        ],
+        "examples": [
+          {
+            "title": "Rack: EROTNAI",
+            "body": "Length-sort top = 7-letter common words. Score-sort top = same words, but gives you the explicit score for bingo-bonus comparison."
+          },
+          {
+            "title": "Rack with Z",
+            "body": "ZEBRA (5 letters, 16 base) often beats longer but letter-common options like BEARER (11 base)."
+          },
+          {
+            "title": "Rack: AEIOUQN",
+            "body": "QI or QUA (Q+vowel short plays) score surprisingly high. Long plays with Q usually need U support."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-unscrambler",
+            "note": "Main tool — paste rack, sort by score. Every output shows the base score."
+          },
+          {
+            "toolId": "scrabble-helper",
+            "note": "For board-aware scoring including bonus squares."
+          },
+          {
+            "toolId": "anagram-solver",
+            "note": "For racks where you want every possible word, not just the top scores."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why does the unscrambler show base scores, not bonus-square scores?",
+            "a": "Because it does not know your board. For board-aware scoring including triple-word squares, use the Scrabble helper with a board snapshot."
+          },
+          {
+            "q": "Does it matter which dictionary the tool uses?",
+            "a": "Yes — TWL and SOWPODS differ on a few thousand words. For official Scrabble, TWL in North America / SOWPODS elsewhere. Casual play, either works."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "scrabble-helper",
+          "anagram-solver",
+          "cS-longest-word-from-letters",
+          "cS-best-short-words-from-letters"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-best-short-words-from-letters",
+      "slug": "best-short-words-from-scrambled-letters",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/best-short-words-from-scrambled-letters/",
+      "title": "Best Short Words From Scrambled Letters — When Short Beats Long",
+      "h1": "Best Short Words From Scrambled Letters",
+      "subhead": "Fast plays, hook plays, and when a 3-letter word outscores a 5-letter one.",
+      "current_word_count": 283,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to find the best short words from a set of scrambled letters, including when to play short over long.",
+        "keywords": [
+          "best short words scrambled letters",
+          "short unscramble",
+          "short word finder rack"
+        ],
+        "outcomeLine": "Short plays win when tiles are high-value or board position is tight.",
+        "intro": "In Scrabble and similar games, short words are often the right play — for tile dumping, hook plays, and tight board positions. Unscrambling with a short-word filter is a different search than \"longest word from my letters\".",
+        "keyPoints": [
+          "Filter to lengths 2-4 in the unscrambler to surface only short plays.",
+          "Short plays are best when your rack has high-value tiles that need a short exit (Q, J, X, Z).",
+          "2-letter plays are hooks — they form parallel words with existing tiles on the board.",
+          "3-letter plays on bonus squares often outscore 5-letter plays on plain ones.",
+          "When defending a tight board, short plays buy turns without opening triple-word lanes."
+        ],
+        "examples": [
+          {
+            "title": "Rack QIUIEUT",
+            "body": "Longest: nothing useful. Short: QI, QUIT, QUITE. Three short plays, easy."
+          },
+          {
+            "title": "Board tight, rack TEARS",
+            "body": "Can play STARE (5 letters), or AT / ET / AS (2-letter hooks). Hooks might score more on bonus squares."
+          },
+          {
+            "title": "Dumping J",
+            "body": "Rack LMNOPJX — JO, JUT, JOB are your playable outs. Skip to short."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-unscrambler",
+            "note": "Filter to length 2-4 for short-only output."
+          },
+          {
+            "toolId": "scrabble-helper",
+            "note": "Board-aware — also shows hook opportunities for short plays."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is a short play always worse than a long one?",
+            "a": "No. Short plays on bonus squares or with high-value tiles often outscore long ones. Score comparison matters, not length alone."
+          },
+          {
+            "q": "What length is best to search for?",
+            "a": "Depends on the situation. Length 2-3 for tight boards and tile dumping; 4-5 for general play; 7 only when a bingo is possible."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "scrabble-helper",
+          "cS-highest-scoring-from-letters",
+          "cS-best-2-letter-scrabble-words",
+          "cS-best-3-letter-scrabble-words"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-search-by-word-length",
+      "slug": "how-to-search-by-word-length",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-search-by-word-length/",
+      "title": "How to Search by Word Length — Exact, Minimum, and Maximum",
+      "h1": "How to Search by Word Length",
+      "subhead": "The three length filters and when each one is the right choice.",
+      "current_word_count": 310,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to use length filters in a word-unscrambler — exact length, minimum, maximum, and the ranges that fit common use cases.",
+        "keywords": [
+          "search by word length",
+          "word length filter",
+          "unscrambler length"
+        ],
+        "outcomeLine": "Exact for fixed-length puzzles, min/max for flexible rack searches.",
+        "intro": "Most unscramblers let you filter output by length. Choosing exact vs. minimum vs. maximum is the difference between a useful shortlist and a flood of unusable options.",
+        "keyPoints": [
+          "Exact length: for Wordle, Quordle, and other fixed-length puzzles. Length 5 only, nothing else.",
+          "Minimum length: when you want only \"real\" words. Set min = 3 to exclude 2-letter tiny plays.",
+          "Maximum length: for short-play searches. Set max = 4 to see only hooks and dumps.",
+          "Range (min + max): for Scrabble rack browsing — min = 3, max = 7 hides spam and shows playable options.",
+          "No filter (all lengths): useful only for vocabulary study, not gameplay."
+        ],
+        "examples": [
+          {
+            "title": "Wordle prep",
+            "body": "Known letters ARE, unknown positions. Search with exact length = 5, contains ARE. Hundreds of 5-letter options — still narrowable."
+          },
+          {
+            "title": "Scrabble rack browse",
+            "body": "Rack AEINRST. Min = 4, max = 7. Strips the tiny 2-3 letter plays you already know and shows mid-length and bingo options."
+          },
+          {
+            "title": "Dumping awkward tiles",
+            "body": "Rack QIXZJOO. Max = 3. Shows QI, JO, OX, ZO — every short play to unload high-value tiles."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "word-unscrambler",
+            "note": "Supports all three length filters — use min/max for range searches."
+          },
+          {
+            "toolId": "5-letter-word-finder",
+            "note": "Hardcoded length = 5. Best for Wordle and related games."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For pattern + length combinations (pattern \"C?T\" with length = 3)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is a sensible default length for Scrabble?",
+            "a": "Minimum 3, maximum 7. Removes 2-letter spam you already know; caps at the rack size so you never see impossible plays."
+          },
+          {
+            "q": "Can I search for a length range?",
+            "a": "Yes — set min and max to different values. Min = 4 and max = 6 gives only 4, 5, and 6-letter words."
+          }
+        ],
+        "relatedIds": [
+          "word-unscrambler",
+          "5-letter-word-finder",
+          "word-finder",
+          "cS-highest-scoring-from-letters",
+          "cS-best-short-words-from-letters"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-board-letters-with-rack",
+      "slug": "how-to-use-board-letters-with-rack-tools",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-use-board-letters-with-rack-tools/",
+      "title": "How to Use Board Letters With Rack Tools — Combining Both for Better Plays",
+      "h1": "How to Use Board Letters With Rack Tools",
+      "subhead": "Your rack plus one board letter is a different search — and often more productive.",
+      "current_word_count": 339,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to include already-placed board letters in unscrambler searches to find hook plays and better board-contact words.",
+        "keywords": [
+          "board letters rack tool",
+          "scrabble hook finder",
+          "rack plus board letters"
+        ],
+        "outcomeLine": "Add board letters as extras and the tool finds plays that hook into what is already placed.",
+        "intro": "An unscrambler that only sees your rack gives incomplete answers. In real Scrabble, the board already has letters you can build from — adding those as extras to your search opens up plays you otherwise miss.",
+        "keyPoints": [
+          "Pick a board letter your next play could use as the anchor.",
+          "Add it to your rack in the unscrambler — rack of 7 plus board letter = 8-letter search.",
+          "Results include words that use the board letter as any position (first, middle, last).",
+          "Filter results by length and whether the board letter is at an edge — those are the placeable ones.",
+          "For multi-letter anchors (two already-placed letters adjacent), add both."
+        ],
+        "examples": [
+          {
+            "title": "Rack AEIRST, board has S",
+            "body": "Add S → search AEIRSTS. Shows STARES, STAIRS, ASTER plus all rack-only words. The first two use the board S as an anchor."
+          },
+          {
+            "title": "Rack EIUNG, board has TRAIN ending",
+            "body": "Add TRAIN as a prefix-anchor → look for TRAINING style extensions. Often finds bingo-scale plays."
+          },
+          {
+            "title": "Two-letter anchor",
+            "body": "Board has IN adjacent and open. Add IN to rack and filter for words starting or ending with IN."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "scrabble-helper",
+            "note": "Designed for this — takes full board state plus rack and finds every hook play automatically."
+          },
+          {
+            "toolId": "word-unscrambler",
+            "note": "Fallback: add board letters to rack manually and filter results."
+          },
+          {
+            "toolId": "anagram-solver",
+            "note": "For studying \"what can I build with rack + anchor\" offline."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is it cheating to search with board letters included?",
+            "a": "In a casual game, it depends on your house rules. In tournament play, all tools are off-limits during games. For practice, it is the correct way to train board-aware searching."
+          },
+          {
+            "q": "How do I handle blanks on the board?",
+            "a": "Treat them as the letter they represent. If the board has a blank playing as an E, add E to your rack in the search."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "word-unscrambler",
+          "anagram-solver",
+          "cS-search-by-word-length"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-common-anagram-patterns",
+      "slug": "common-anagram-patterns",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/common-anagram-patterns/",
+      "title": "Common Anagram Patterns — Letter Groups That Unlock Fast",
+      "h1": "Common Anagram Patterns",
+      "subhead": "The five or six letter combinations that carry most anagram puzzles.",
+      "current_word_count": 280,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most common anagram building blocks — suffix groups, consonant clusters, vowel runs — for faster solving.",
+        "keywords": [
+          "common anagram patterns",
+          "anagram solving technique",
+          "how to solve anagrams fast"
+        ],
+        "outcomeLine": "Recognise -ING, -ED, TH-, ST-, vowel clusters — and most anagrams fall open in seconds.",
+        "intro": "Anagrams are puzzles in pattern recognition. Once you can spot a likely -ING ending or a TH- opening inside a jumble, the rest of the word usually sorts itself.",
+        "keyPoints": [
+          "-ING, -ED, -ER, -EST endings: if you see I+N+G or E+R, try peeling them off first.",
+          "TH-, SH-, CH-, WH- openings: 2-letter consonant clusters to check at the start.",
+          "Double letters: LL, TT, SS, EE — pair them up, then anagram what remains.",
+          "Vowel clusters: EA, OU, IE, AI — rarely split, usually adjacent in the answer.",
+          "Unusual letter pairs (Q+U, J+O, X+vowel): almost always appear together in the answer."
+        ],
+        "examples": [
+          {
+            "title": "Jumble: TESING",
+            "body": "Spot ING. Peel off → TES. TES → SET? Word = SETTING? No, missing a T. Word = TESTING. Pattern recognition > brute force."
+          },
+          {
+            "title": "Jumble: THEATIR",
+            "body": "Spot TH-. TH + EATIR → THEATRE. Start-consonant cluster reveals the word."
+          },
+          {
+            "title": "Jumble: QIKCU",
+            "body": "Q always with U → QU + IKC → QUICK. Forced letter pairing unlocks it."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "anagram-solver",
+            "note": "Computer brute-force. Use when your pattern-spotting fails."
+          },
+          {
+            "toolId": "word-unscrambler",
+            "note": "Same engine, better for \"what can these letters make\" browsing."
+          },
+          {
+            "toolId": "word-finder",
+            "note": "For pattern-plus-contains searches when you have partial structure."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is pattern recognition faster than using a solver?",
+            "a": "For 5-7 letter jumbles, yes — trained solvers beat tools. For 8+ letters or obscure vocabulary, tools win."
+          },
+          {
+            "q": "How do I train pattern recognition?",
+            "a": "Do 10-15 jumbles a day for a month. Your eye learns to spot -ING, TH-, and common vowel pairs without thinking."
+          }
+        ],
+        "relatedIds": [
+          "anagram-solver",
+          "word-unscrambler",
+          "word-finder",
+          "cS-how-to-solve-anagrams-faster"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-2-letter-words",
+      "slug": "2-letter-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/2-letter-words/",
+      "title": "2-Letter Words — Every Valid 2-Letter Scrabble Word — Kefiw",
+      "h1": "2-Letter Words",
+      "subhead": "Every valid 2-letter word in the Kefiw word list",
+      "current_word_count": 190,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete list of valid 2-letter words from the ENABLE word list, useful for Scrabble, Words With Friends, and tight board plays.",
+        "keywords": [
+          "2 letter words",
+          "two letter words",
+          "2 letter scrabble words",
+          "valid 2 letter words"
+        ],
+        "outcomeLine": null,
+        "intro": "Two-letter words are the single most important rack-clearing plays in Scrabble and Words With Friends. This is the complete alphabetical list from the Kefiw word list.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "Scrabble \"bonus\" short plays",
+            "body": "QI (12), ZA (11), and XU (9) are the highest-scoring plain 2-letter words before bonus squares."
+          },
+          {
+            "title": "Vowel dumps",
+            "body": "If your rack is vowel-heavy, AA, AE, AI, OE, OI help you trade clogged tiles for fresh ones."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many 2-letter words are there in Scrabble?",
+            "a": "The official TWL list has roughly 100 valid 2-letter words; SOWPODS adds a handful more. Kefiw uses the public ENABLE list, which sits close to TWL."
+          },
+          {
+            "q": "Is \"QI\" really a word?",
+            "a": "Yes. QI (the Chinese concept of life force) was added to the official Scrabble dictionaries in the 2000s. It is one of the highest-value 2-letter plays."
+          },
+          {
+            "q": "Are 2-letter words also valid in Words With Friends?",
+            "a": "Most are, but Words With Friends uses its own internal dictionary. Use the Words With Friends Helper for exact validation."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-3-letter-words",
+      "slug": "3-letter-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/3-letter-words/",
+      "title": "3-Letter Words — Every Valid 3-Letter Scrabble Word — Kefiw",
+      "h1": "3-Letter Words",
+      "subhead": "Every valid 3-letter word in the Kefiw word list",
+      "current_word_count": 176,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Complete list of valid 3-letter words, grouped by starting letter — essential for Scrabble, Words With Friends, and crossword tight spots.",
+        "keywords": [
+          "3 letter words",
+          "three letter words",
+          "3 letter scrabble words",
+          "valid 3 letter words"
+        ],
+        "outcomeLine": null,
+        "intro": "Three-letter words are the bread and butter of tight board play. This is the complete list from the Kefiw word list, grouped for easy skimming.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "High-value 3-letter plays",
+            "body": "ZAX, ZEP, FIZ, JEU, JUS, QIS, XIS — small words, big scores, especially across bonus squares."
+          },
+          {
+            "title": "Common unusual words",
+            "body": "AAL, AAS, AGA, AHI, AIT, ANE — uncommon in speech, fully valid on a Scrabble board."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "How many 3-letter words exist?",
+            "a": "Around 1,000 in a standard English Scrabble list. Exact count varies slightly between TWL, SOWPODS, and ENABLE."
+          },
+          {
+            "q": "Why are so many 3-letter words unfamiliar?",
+            "a": "Scrabble dictionaries include archaic, regional, and loan-word entries. Knowing the odd 3-letter words is one of the biggest single rating boosts for intermediate players."
+          },
+          {
+            "q": "Can I filter these by starting letter?",
+            "a": "Yes — see the linked letter-specific pages (3-letter words starting with A, B, C…) or use the Word Finder with a prefix pattern."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper",
+          "word-finder"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cA-highest-scoring-words",
+      "slug": "highest-scoring-words",
+      "kind": "word-list",
+      "pageType": null,
+      "section": "word-tools",
+      "url": "/word-tools/highest-scoring-words/",
+      "title": "Highest-Scoring Scrabble Words — Kefiw",
+      "h1": "Highest-Scoring Scrabble Words",
+      "subhead": "The top 500 highest-value 5–8 letter plays",
+      "current_word_count": 173,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The top 500 highest-scoring Scrabble words between 5 and 8 letters, ranked by raw tile value (before bonus squares).",
+        "keywords": [
+          "highest scoring scrabble words",
+          "best scrabble words",
+          "high value scrabble words",
+          "top scoring words"
+        ],
+        "outcomeLine": null,
+        "intro": "Raw tile value is the foundation of every big Scrabble play. These are the 500 highest-scoring 5-8 letter words in the ENABLE list, ignoring bonus squares.",
+        "keyPoints": [],
+        "examples": [
+          {
+            "title": "All three 10-point tiles",
+            "body": "PIZZAZZ, JAZZILY, ZUGZWANG, and JEJUNELY all pack multiple high-value tiles into one word."
+          },
+          {
+            "title": "Clean 8-letter bingos",
+            "body": "QUETZALS, JAZZMEN, BOXWOODS — high base score plus a 50-point bingo bonus."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Are these scores before or after bonus squares?",
+            "a": "Before. The scores are the sum of raw tile values only — a J + Z + vowels alone is already 20+ points."
+          },
+          {
+            "q": "Can I actually play these?",
+            "a": "Yes, as long as the letters fit your rack and the existing board. Use the Scrabble Helper to match a word to a specific rack plus board position."
+          },
+          {
+            "q": "What is the single highest-scoring legal play ever recorded?",
+            "a": "OXYPHENBUTAZONE (1,778 points) is the theoretical maximum single-play score in standard Scrabble with optimal board setup."
+          }
+        ],
+        "relatedIds": [
+          "scrabble-helper",
+          "words-with-friends-helper"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cS-how-to-use-a-word-unscrambler": [
+      "word-unscrambler",
+      "anagram-solver",
+      "scrabble-helper"
+    ],
+    "cS-how-to-solve-anagrams-faster": [
+      "anagram-solver",
+      "word-unscrambler",
+      "word-finder"
+    ],
+    "cS-unscrambler-vs-anagram-solver": [
+      "word-unscrambler",
+      "anagram-solver"
+    ],
+    "cS-blank-tiles-word-tools": [
+      "word-unscrambler",
+      "word-finder",
+      "scrabble-helper"
+    ],
+    "cS-longest-word-from-letters": [
+      "word-unscrambler",
+      "anagram-solver"
+    ],
+    "cS-highest-scoring-from-letters": [
+      "word-unscrambler",
+      "scrabble-helper",
+      "anagram-solver",
+      "cS-longest-word-from-letters",
+      "cS-best-short-words-from-letters"
+    ],
+    "cS-best-short-words-from-letters": [
+      "word-unscrambler",
+      "scrabble-helper",
+      "cS-highest-scoring-from-letters"
+    ],
+    "cS-search-by-word-length": [
+      "word-unscrambler",
+      "word-finder",
+      "cS-highest-scoring-from-letters",
+      "cS-best-short-words-from-letters"
+    ],
+    "cS-board-letters-with-rack": [
+      "scrabble-helper",
+      "word-unscrambler",
+      "anagram-solver",
+      "cS-search-by-word-length"
+    ],
+    "cS-common-anagram-patterns": [
+      "anagram-solver",
+      "word-unscrambler",
+      "word-finder",
+      "cS-how-to-solve-anagrams-faster"
+    ],
+    "cA-2-letter-words": [
+      "scrabble-helper",
+      "words-with-friends-helper",
+      "word-finder"
+    ],
+    "cA-3-letter-words": [
+      "scrabble-helper",
+      "words-with-friends-helper",
+      "word-finder"
+    ],
+    "cA-highest-scoring-words": [
+      "scrabble-helper",
+      "words-with-friends-helper"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "word-unscrambler",
+          "url": "/word-tools/word-unscrambler/"
+        },
+        {
+          "id": "anagram-solver",
+          "url": "/word-tools/anagram-solver/"
+        },
+        {
+          "id": "word-finder",
+          "url": "/word-tools/word-finder/"
+        },
+        {
+          "id": "scrabble-helper",
+          "url": "/word-tools/scrabble-helper/"
+        },
+        {
+          "id": "words-with-friends-helper",
+          "url": "/word-tools/words-with-friends-helper/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cS-how-to-use-a-word-unscrambler",
+          "url": "/guides/how-to-use-a-word-unscrambler/"
+        },
+        {
+          "id": "cS-how-to-solve-anagrams-faster",
+          "url": "/guides/how-to-solve-anagrams-faster/"
+        },
+        {
+          "id": "cS-unscrambler-vs-anagram-solver",
+          "url": "/guides/unscrambler-vs-anagram-solver/"
+        },
+        {
+          "id": "cS-blank-tiles-word-tools",
+          "url": "/guides/blank-tiles-in-word-tools/"
+        },
+        {
+          "id": "cS-longest-word-from-letters",
+          "url": "/guides/find-the-longest-word-from-letters/"
+        },
+        {
+          "id": "cS-highest-scoring-from-letters",
+          "url": "/guides/highest-scoring-words-from-letters/"
+        },
+        {
+          "id": "cS-best-short-words-from-letters",
+          "url": "/guides/best-short-words-from-scrambled-letters/"
+        },
+        {
+          "id": "cS-search-by-word-length",
+          "url": "/guides/how-to-search-by-word-length/"
+        },
+        {
+          "id": "cS-board-letters-with-rack",
+          "url": "/guides/how-to-use-board-letters-with-rack-tools/"
+        },
+        {
+          "id": "cS-common-anagram-patterns",
+          "url": "/guides/common-anagram-patterns/"
+        },
+        {
+          "id": "cA-2-letter-words",
+          "url": "/word-tools/2-letter-words/"
+        },
+        {
+          "id": "cA-3-letter-words",
+          "url": "/word-tools/3-letter-words/"
+        },
+        {
+          "id": "cA-highest-scoring-words",
+          "url": "/word-tools/highest-scoring-words/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

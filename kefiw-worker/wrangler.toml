@@ -11,4 +11,4 @@ database_id = "72b319c3-7f4a-47b7-848a-027573804c0e"
 
 # CORS origins that may hit the Worker (expand when custom domain goes live)
 [vars]
-ALLOWED_ORIGINS = "https://kefiw.pages.dev,http://localhost:4321"
+ALLOWED_ORIGINS = "https://kefiw.com,https://www.kefiw.com,https://kefiw.pages.dev,http://localhost:4321,http://127.0.0.1:4321"

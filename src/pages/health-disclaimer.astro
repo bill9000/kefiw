@@ -1,0 +1,53 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Health Disclaimer — Kefiw"
+  description="Kefiw health pages are educational tools and guides. They do not diagnose, prescribe, treat, or create a clinician-patient relationship."
+  canonical="/health-disclaimer/"
+  keywords={['health disclaimer', 'medical disclaimer', 'kefiw health']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Health Disclaimer</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw health pages are educational tools and guides. They are not medical advice, do not diagnose or prescribe, and do not create a clinician-patient relationship.
+    </p>
+
+    <TrustNav current="/health-disclaimer/" />
+
+    <h2>What the health pages are for</h2>
+    <p>
+      Health pages on Kefiw are meant to help users understand formulas, thresholds, timing models, routing logic, and practical limitations. They can support planning, education, and clearer questions for a real clinician. They are not a substitute for individualized care.
+    </p>
+
+    <h2>What the health pages are not for</h2>
+    <ul>
+      <li>diagnosis</li>
+      <li>prescribing or dosing advice</li>
+      <li>emergency decision-making based only on the website</li>
+      <li>replacing a clinician&rsquo;s judgment, physical exam, testing, or follow-up care</li>
+    </ul>
+
+    <h2>What users are usually trying to do</h2>
+    <p>
+      Users often arrive on health pages trying to estimate a number, interpret a threshold, compare scenarios, or decide whether the next step should be routine follow-up or faster care. Those are understandable needs, but a website cannot see the full clinical picture. Use the page to understand the model, not to treat the result as a diagnosis.
+    </p>
+
+    <h2>When not to wait on the website</h2>
+    <p>
+      If a situation feels urgent, rapidly worsening, severe, or unusual, do not rely on a website result to decide whether to seek care. Follow local emergency guidance and use professional care channels appropriate to your situation.
+    </p>
+
+    <h2>How review works on health pages</h2>
+    <p>
+      Health pages may carry engineering review, scientific review, and registered nurse review. That review improves the formula logic, wording, and clarity around limitations. It does not convert the page into personalized medical care.
+    </p>
+
+    <h2>Related pages</h2>
+    <p>
+      Read <a href="/registered-nurse-review/">Registered Nurse Review</a>, <a href="/scientific-review/">Scientific Review</a>, and <a href="/editorial-policy/">Editorial Policy</a> to see how Kefiw draws the line between useful education and overclaiming.
+    </p>
+  </article>
+</BaseLayout>

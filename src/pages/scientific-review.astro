@@ -1,0 +1,53 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Scientific Review — Kefiw"
+  description="What scientific review means on Kefiw: source selection, evidence framing, assumptions, uncertainty, claim limits, and when a model should not be overstated."
+  canonical="/scientific-review/"
+  keywords={['scientific review', 'research review', 'evidence review', 'kefiw scientific review']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Scientific Review</h1>
+    <p class="lead text-lg text-slate-700">
+      Scientific review on Kefiw means claims are checked against the level of evidence available, then rewritten so the page says no more than the evidence can support.
+    </p>
+
+    <TrustNav current="/scientific-review/" />
+
+    <h2>What scientific review covers</h2>
+    <ul>
+      <li>which source families are appropriate for a page</li>
+      <li>whether a result is measured, estimated, modeled, or heuristic</li>
+      <li>how uncertainty, edge cases, and limitations are described</li>
+      <li>whether an answer is being overstated beyond what the underlying model allows</li>
+    </ul>
+
+    <h2>What users are usually trying to do</h2>
+    <p>
+      Users often want the shortest path to a decision, but that does not erase uncertainty. They may be trying to compare options, sanity-check a formula, understand a rule, or see whether a tool result is trustworthy enough for the next step. Scientific review helps the page separate what is known, what is estimated, and what still depends on context.
+    </p>
+
+    <h2>What the review looks for</h2>
+    <ul>
+      <li>Does the page clearly identify the model or standard behind the result?</li>
+      <li>Does it state when the output is a rough estimate rather than a hard threshold?</li>
+      <li>Does it avoid unsupported claims about accuracy, prediction, or certainty?</li>
+      <li>Does it point the user toward the right next tool, guide, or source when more context is needed?</li>
+    </ul>
+
+    <h2>What scientific review does not mean</h2>
+    <ul>
+      <li>It does not turn a simple tool into a peer-reviewed paper.</li>
+      <li>It does not mean every topic has complete or unanimous evidence.</li>
+      <li>It does mean the page should represent uncertainty honestly and link users toward better context when the model is thin.</li>
+    </ul>
+
+    <h2>Why this matters</h2>
+    <p>
+      A page can be technically correct and still misleading if it hides its evidence quality. Scientific review exists to prevent that. When Kefiw says a result is deterministic, modeled, estimated, or advisory only, the wording should match the evidence beneath it.
+    </p>
+  </article>
+</BaseLayout>

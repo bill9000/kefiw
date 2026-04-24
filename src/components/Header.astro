@@ -1,7 +1,8 @@
 ---
 import ToolSearch from './ToolSearch.tsx';
+import SystemTray from './SystemTray.tsx';
 ---
-<header class="border-b border-slate-200 bg-white/90 backdrop-blur">
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
   <div class="container-wide flex h-14 items-center gap-3">
     <a href="/" class="flex items-center gap-2 font-bold text-slate-900 no-underline" aria-label="Kefiw home">
       <span class="inline-flex h-7 w-7 items-center justify-center rounded bg-brand-600 text-sm font-bold text-white">K</span>
@@ -17,8 +18,11 @@ import ToolSearch from './ToolSearch.tsx';
       <a href="/games/" class="hover:text-brand-700">Games</a>
       <a href="/guides/" class="hover:text-brand-700">Guides</a>
     </nav>
-    <div class="ml-auto w-full max-w-[12rem] sm:max-w-xs">
-      <ToolSearch client:idle />
+    <div class="ml-auto flex items-center gap-2">
+      <div class="w-full max-w-[12rem] sm:max-w-xs">
+        <ToolSearch client:idle />
+      </div>
+      <SystemTray client:idle />
     </div>
   </div>
   <nav class="container-wide flex gap-2 overflow-x-auto pb-2 text-xs sm:hidden" aria-label="Mobile categories">

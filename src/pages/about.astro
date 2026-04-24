@@ -3,32 +3,68 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 ---
 <BaseLayout
   title="About — Kefiw"
-  description="Kefiw is a small collection of fast, free web tools: word unscramblers, anagram solvers, converters, calculators, and lightweight games. Mobile-first, runs in your browser, no signup."
+  description="Kefiw is a fast, practical tools site for solving, calculating, and making better everyday decisions. Knowledge · Efficiency · Focus · Insight · Wins."
   canonical="/about/"
-  keywords={['about kefiw', 'free web tools', 'privacy-first tools']}
+  keywords={['about kefiw', 'free web tools', 'privacy-first tools', 'everyday decision tools']}
 >
   <article class="container-narrow py-10 prose-tool">
     <h1 class="text-3xl font-bold tracking-tight">About Kefiw</h1>
-    <p>Kefiw is a small, fast collection of everyday web utilities — word unscramblers, anagram solvers, unit converters, calculators, and a few lightweight games. Everything runs right in your browser.</p>
+
+    <p class="lead text-lg text-slate-700">
+      Kefiw is a fast, practical tools site for solving, calculating, and making better everyday decisions.
+    </p>
+
+    <h2>Brand story</h2>
+    <p>
+      Kefiw is built for <strong>quick wins</strong> — tools, calculators, and decision helpers that save time and make everyday problems easier to solve. Short name, memorable, and organised around one idea: the fastest path from question to answer.
+    </p>
+
+    <p>
+      Under the name, an expanded meaning:
+    </p>
+    <ul>
+      <li><strong>K</strong>nowledge — a broad library of deterministic tools, from word unscramblers to survival-runway calculators.</li>
+      <li><strong>E</strong>fficiency — every tool runs in the browser, loads fast, and ships minimal JavaScript.</li>
+      <li><strong>F</strong>ocus — one tool, one answer. No AI sprawl, no "just chat with our assistant."</li>
+      <li><strong>I</strong>nsight — chains, pipelines, and scenarios connect small tools into real decisions.</li>
+      <li><strong>W</strong>ins — what users walk away with: a number, a list, a next step.</li>
+    </ul>
+
+    <h2>What&rsquo;s inside</h2>
+    <p>Short version: word tools, calculators, decision tools, and daily challenges. Longer version:</p>
+    <ul>
+      <li><a href="/word-tools/">Word tools</a> — anagrams, unscramblers, pattern finders, rhymes, letter and syllable counters.</li>
+      <li><a href="/converters/">Converters</a> — length, weight, temperature, volume, area, speed, and time.</li>
+      <li><a href="/calculators/">Calculators</a> — percentages, age, date differences, discount stacking, gold value, and more.</li>
+      <li><a href="/finance/">Finance</a> — runway, break-even, crossover, shock-survival math.</li>
+      <li><a href="/health/">Health</a> — BMR, BAC, hydration, heart-rate zones, and reagent pipelines.</li>
+      <li><a href="/logic/">Logic</a> — geo arbitrage, upskill ROI, subscription purge.</li>
+      <li><a href="/games/">Games</a> — daily word, Sudoku, the Vibe cluster, and relationship games for fun.</li>
+      <li><a href="/guides/">Guides</a> — short explainers for when the tool needs context.</li>
+    </ul>
 
     <h2>What makes it different</h2>
     <ul>
       <li><strong>No signup.</strong> Open any page and use it. No accounts, no paywalls, no trial timers.</li>
       <li><strong>Mobile-first.</strong> Every tool is designed to work with one thumb on a phone before it works on a desktop.</li>
-      <li><strong>Privacy-friendly.</strong> Calculations happen on your device. We do not track individual visitors and we do not sell data.</li>
+      <li><strong>Privacy-friendly.</strong> Calculations happen on your device. We don&rsquo;t track individual visitors and we don&rsquo;t sell data.</li>
+      <li><strong>Deterministic.</strong> Same inputs always return the same answer. No "AI" guesses, no surprise changes between visits.</li>
       <li><strong>Fast.</strong> Pages are static and ship minimal JavaScript. Dictionary searches use a background Web Worker so the UI never freezes.</li>
-    </ul>
-
-    <h2>What&rsquo;s inside</h2>
-    <p>Kefiw is organised into four sections:</p>
-    <ul>
-      <li><a href="/word-tools/">Word tools</a> — anagrams, unscramblers, pattern finders, rhymes, letter and syllable counters.</li>
-      <li><a href="/converters/">Converters</a> — length, weight, temperature, volume, area, speed, and time.</li>
-      <li><a href="/calculators/">Calculators</a> — percentages, age, date differences, and more.</li>
-      <li><a href="/games/">Games</a> — Sudoku today, more on the way.</li>
     </ul>
 
     <h2>Feedback</h2>
     <p>Spotted a bug, a missing tool, or a suggestion? See the <a href="/contact/">contact page</a>.</p>
+
+    <h2>How pages are reviewed</h2>
+    <p>
+      Kefiw now publishes separate trust pages for review scope, methodology, sources, and health disclaimers so users can see what a label such as <em>engineering review</em> or <em>registered nurse review</em> actually means.
+    </p>
+    <ul>
+      <li><a href="/about-the-reviewers/">About the Reviewers</a> — overview of the review lanes and what each one covers.</li>
+      <li><a href="/editorial-policy/">Editorial Policy</a> — how tools and guides are written, updated, and constrained.</li>
+      <li><a href="/methodology/">Methodology</a> — how formulas, assumptions, examples, and limits are handled.</li>
+      <li><a href="/sources/">Sources</a> — what source families Kefiw uses by page type.</li>
+      <li><a href="/health-disclaimer/">Health Disclaimer</a> — the boundary on health pages and when not to rely on them.</li>
+    </ul>
   </article>
 </BaseLayout>

@@ -353,7 +353,7 @@ export default function VibeDrop() {
           >
             {score.toString().padStart(4, '0')}
           </h2>
-          <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-slate-400">
+          <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-slate-300">
             Best: <span className="font-mono text-cyan-300">{highScore}</span>
           </p>
         </div>
@@ -375,7 +375,7 @@ export default function VibeDrop() {
               ? 'border-cyan-400 bg-cyan-400/10 text-cyan-100 shadow-[0_0_22px_rgba(34,211,238,0.45)]'
               : currentWord
                 ? 'border-fuchsia-500/40 bg-fuchsia-500/5 text-fuchsia-200'
-                : 'border-slate-700 bg-slate-900/40 text-slate-500'
+                : 'border-slate-700 bg-slate-900/40 text-slate-300'
           }`}
         >
           {currentWord || '—'}
@@ -510,7 +510,7 @@ export default function VibeDrop() {
       </AnimatePresence>
 
       <div className="mt-4 grid grid-cols-2 gap-2 text-center text-[11px]">
-        <div className="rounded-lg border border-slate-800 bg-slate-900/60 px-2 py-1 text-slate-400">
+        <div className="rounded-lg border border-slate-800 bg-slate-900/60 px-2 py-1 text-slate-300">
           Drag 3+ adjacent letters to spell a word
         </div>
         <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/5 px-2 py-1 text-cyan-300">
