@@ -232,7 +232,10 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 
 for (const slug of targets) {
   const brief = buildBrief(slug);
-  const out = path.join(OUT_DIR, `${slug}.json`);
+  // Convention: baseline export lives at {slug}-V2.json so the V3 enhanced
+  // return from the writer (which arrives as {slug}-V3-enhanced.json) can
+  // sit alongside it without name collision.
+  const out = path.join(OUT_DIR, `${slug}-V2.json`);
   fs.writeFileSync(out, JSON.stringify(brief, null, 2) + '\n', 'utf8');
   const toolCount = brief.tools.length;
   const articleCount = brief.articles.length;

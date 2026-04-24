@@ -1,0 +1,367 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:20.058Z",
+  "cluster": {
+    "slug": "cognitive-throughput",
+    "section": "logic",
+    "hubSlug": "cognitive-throughput",
+    "url": "/logic/cognitive-throughput/",
+    "title": "Cognitive Throughput — Kefiw",
+    "h1": "Cognitive Throughput",
+    "subhead": "System monitor for the brain — the four meters that govern what you can actually process in a day.",
+    "intro": "Four deterministic instruments for the CPU behind your life: signal-to-noise on intake efficiency, task-switching tax on concurrent projects, decision-fatigue battery on willpower drain, and the focus-decay curve for deep work.",
+    "description": "Signal-to-noise ratio, task-switching tax, decision fatigue, and deep-work focus decay — four closed-form calculators for the brain's operating layer.",
+    "keywords": [
+      "cognitive throughput",
+      "decision fatigue calculator",
+      "task switching tax",
+      "focus horizon",
+      "attention management"
+    ],
+    "faq": [
+      {
+        "q": "Are these scientifically validated?",
+        "a": "They are deterministic models of well-documented heuristics. The shapes (geometric decay for switching, exponential for focus, linear drain for willpower) match research patterns; the exact coefficients are rules of thumb. Use as signal, not measurement."
+      },
+      {
+        "q": "Why an industrial aesthetic?",
+        "a": "These tools model the machine layer of cognition — compute, overhead, bandwidth, throughput. A CPU-monitor visual is the right metaphor. Pastel wellness UIs hide the tradeoffs."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "logistical-mobility"
+    ]
+  },
+  "tools": [
+    {
+      "id": "signal-to-noise",
+      "slug": "signal-to-noise",
+      "category": "logic",
+      "url": "/logic/signal-to-noise/",
+      "title": "Signal-to-Noise Ratio — Content Throughput Calculator | Kefiw",
+      "h1": "Signal-to-Noise · Content Throughput",
+      "current_word_count": 195,
+      "current": {
+        "description": "Measure how much of your daily information intake converts into actionable decisions. Throughput-pipe visual with clogged / flowing state.",
+        "keywords": [
+          "signal to noise",
+          "information efficiency",
+          "content throughput",
+          "digital waste",
+          "distraction calculator"
+        ],
+        "intro": "You consume hours of content. Most of it produces zero decisions. This meter divides minutes of input by actionable insights — below 10% the pipe is clogged, you are in a distraction loop, not research.",
+        "outcomeLine": "Minutes-consumed vs actionable-insights — flags distraction loops below 10%.",
+        "howTo": [
+          "Enter minutes of content consumed today (news, social, video, reading).",
+          "Enter the number of decisions or actions that actually changed because of it.",
+          "Efficiency = (insights / (minutes × 0.1)) × 100 — baseline 6 min per insight.",
+          "Below 10% = distraction loop · 10–40% = research · 40%+ = action-ready throughput."
+        ],
+        "examples": [
+          {
+            "title": "120 min consumed · 2 insights",
+            "body": "Efficiency 16.7% · Information_Gathering · 100 min categorised as digital waste."
+          },
+          {
+            "title": "60 min consumed · 6 insights",
+            "body": "Efficiency 100% · Action_Ready · converting input to decisions cleanly."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What counts as an \"insight\"?",
+            "a": "Something that changed a decision, opinion, or action. Feeling informed is not an insight — feeling informed is the noise that masks a clogged pipe."
+          },
+          {
+            "q": "Why the 6 min baseline?",
+            "a": "Rough median across studies of information-to-action latency in knowledge work. Adjust downward if you operate in a high-signal environment (research, finance)."
+          }
+        ],
+        "relatedIds": [
+          "task-switching",
+          "decision-fatigue",
+          "focus-horizon"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "task-switching",
+      "slug": "task-switching",
+      "category": "logic",
+      "url": "/logic/task-switching/",
+      "title": "Task Switching Tax — Context Overhead Calculator | Kefiw",
+      "h1": "Task Switching Tax · Context Overhead",
+      "current_word_count": 177,
+      "current": {
+        "description": "Calculate the hours per day you lose to juggling concurrent projects. Each additional context costs 20% of remaining capacity — CPU-usage view.",
+        "keywords": [
+          "task switching cost",
+          "context switching",
+          "multitasking calculator",
+          "focus loss",
+          "cognitive overhead"
+        ],
+        "intro": "Switching between contexts compounds. One task = 100%. Two = 80%. Three = 64%. By the fifth concurrent project, only 41% of your hours survive the overhead. This meter shows the CPU split between user process and system overhead.",
+        "outcomeLine": "CPU overhead of concurrent projects · 0.80^(n−1) retention curve.",
+        "howTo": [
+          "Enter number of distinct concurrent contexts (projects, clients, channels).",
+          "Enter workday hours.",
+          "Retention = 0.80^(n−1). Loss = 1 − retention. Multiply by workday hours.",
+          "When OVERHEAD ≥ 45% you are running the OS, not the application."
+        ],
+        "examples": [
+          {
+            "title": "n = 4 · 8h day",
+            "body": "Retention 51.2% · Effective 4.1h · Switching tax 3.9h."
+          },
+          {
+            "title": "n = 2 · 8h day",
+            "body": "Retention 80% · Effective 6.4h · Switching tax 1.6h."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why 20% per task?",
+            "a": "Rough heuristic from Weinberg (1992) and reproduced in several attention-research reviews. Exact percentage is domain-dependent but the geometric-decay shape is consistent."
+          },
+          {
+            "q": "Does batching help?",
+            "a": "Massively. Consolidating 5 contexts into 2 time-boxed windows recovers ~40% of your day — which is why time-blocking works and Slack doesn't."
+          }
+        ],
+        "relatedIds": [
+          "signal-to-noise",
+          "decision-fatigue",
+          "focus-horizon"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "decision-fatigue",
+      "slug": "decision-fatigue",
+      "category": "logic",
+      "url": "/logic/decision-fatigue/",
+      "title": "Decision Fatigue — Willpower Battery Calculator | Kefiw",
+      "h1": "Decision Fatigue · Willpower Battery",
+      "current_word_count": 218,
+      "current": {
+        "description": "Model remaining willpower across the day. Every decision draws from the same finite reserve — trivial × 1, moderate × 5, heavy × 10.",
+        "keywords": [
+          "decision fatigue calculator",
+          "willpower calculator",
+          "cognitive load",
+          "ego depletion",
+          "decision overload"
+        ],
+        "intro": "Willpower is finite and shared across every decision you make. Trivial choices (what to eat, what to wear) drain the same reservoir as heavy ones (strategy, conflict). This battery gauge tracks the drain — when it dips below 20% you stop deciding and start defaulting.",
+        "outcomeLine": "Willpower battery drained by weighted choices — trivial ×1, moderate ×5, heavy ×10.",
+        "howTo": [
+          "Count the trivial, moderate, and heavy decisions made so far today.",
+          "Willpower = 100 − Σ(count × weight). Trivial ×1, Moderate ×5, Heavy ×10.",
+          "Above 75% = Full_Charge · 15–45% = Low_Reserve · below 15% = Depleted.",
+          "Batch trivial choices (meal prep, uniform wardrobe) to protect heavy-decision capacity."
+        ],
+        "examples": [
+          {
+            "title": "10 trivial · 4 moderate · 1 heavy",
+            "body": "Drain 40 · Willpower 60 · Drawing_Down — avoid stacking more heavy calls."
+          },
+          {
+            "title": "20 trivial · 8 moderate · 2 heavy",
+            "body": "Drain 80 · Willpower 20 · Low_Reserve — you are in decision debt."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is decision fatigue real?",
+            "a": "The underlying ego-depletion model has been challenged by replication failures. The practical pattern — late-day choices get worse — is well-supported. Treat this as a useful heuristic, not settled neuroscience."
+          },
+          {
+            "q": "How do I restore willpower?",
+            "a": "Glucose, sleep, and time off-task. A nap, a meal, or a walk will recover more than \"pushing through\" ever will."
+          }
+        ],
+        "relatedIds": [
+          "trap-detector",
+          "task-switching",
+          "focus-horizon"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "focus-horizon",
+      "slug": "focus-horizon",
+      "category": "logic",
+      "url": "/logic/focus-horizon/",
+      "title": "Deep Work Capacity — Focus Decay Calculator | Kefiw",
+      "h1": "Deep Work Capacity · Focus Horizon",
+      "current_word_count": 215,
+      "current": {
+        "description": "Exponential decay model of focus quality. e^(−0.01×min) half-life ≈ 69 minutes — the horizon shows how long until quality drops below usable.",
+        "keywords": [
+          "deep work calculator",
+          "focus decay",
+          "attention span",
+          "flow state",
+          "pomodoro length"
+        ],
+        "intro": "Focus is not steady — it decays exponentially from the moment you start. Quality = 100 × e^(−0.01 × min), floor at 0. Half-life ≈ 69 min. After that every additional unit of time delivers half the output. The tail is where you make typos and bugs.",
+        "outcomeLine": "Exponential focus decay, e^(−0.01×min) · half-life ≈ 69 min · floor at 0.",
+        "howTo": [
+          "Enter minutes of continuous focused work so far.",
+          "Quality = 100 × e^(−0.01 × min), capped at 0.",
+          "Above 70% = Peak_Focus · 15–40% = Decaying · below 3% = Focus_Collapse.",
+          "Horizon shows time left before quality drops below 15% — take the break at that marker, not after."
+        ],
+        "examples": [
+          {
+            "title": "45 min into a session",
+            "body": "Quality 63.8% · Sustained_Focus · ~145 min left before collapse."
+          },
+          {
+            "title": "180 min unbroken",
+            "body": "Quality 16.5% · Decaying_Focus · grinding on fumes — a 20-min break recovers more than pushing."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does everyone decay at the same rate?",
+            "a": "No. λ varies by person, sleep, and task difficulty. 0.01/min is a rough baseline — adjust mentally if you know yours is flatter or steeper."
+          },
+          {
+            "q": "Why cap at 0?",
+            "a": "Exponential decay never reaches 0 mathematically, but focus quality below ~3% is operationally dead. The cap prevents misleading \"2% focus\" readouts that suggest you are still working."
+          }
+        ],
+        "relatedIds": [
+          "task-switching",
+          "decision-fatigue",
+          "signal-to-noise"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "signal-to-noise",
+          "url": "/logic/signal-to-noise/"
+        },
+        {
+          "id": "task-switching",
+          "url": "/logic/task-switching/"
+        },
+        {
+          "id": "decision-fatigue",
+          "url": "/logic/decision-fatigue/"
+        },
+        {
+          "id": "focus-horizon",
+          "url": "/logic/focus-horizon/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

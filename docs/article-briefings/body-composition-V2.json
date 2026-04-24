@@ -1,0 +1,343 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:11.865Z",
+  "cluster": {
+    "slug": "body-composition",
+    "section": "health",
+    "hubSlug": "body-composition",
+    "url": "/health/body-composition/",
+    "title": "Body Composition & Health Monitoring — Kefiw",
+    "h1": "Body Composition & Health",
+    "subhead": "Impairment math, chassis density, coolant load, cessation ladder.",
+    "intro": "Four instruments for tracking the current physical state: estimated BAC after a drink count, body-fat % from tape measurements, daily hydration requirement, and the nicotine decay timeline after quitting.",
+    "description": "Widmark BAC calculator, US Navy body-fat circumference method, hydration requirement by mass and activity, and cotinine cessation timeline.",
+    "keywords": [
+      "BAC calculator",
+      "body fat calculator",
+      "hydration calculator",
+      "quit smoking timeline"
+    ],
+    "faq": [
+      {
+        "q": "Is BAC estimate legally defensible?",
+        "a": "No. Widmark has documented ±30% error and is not admissible anywhere. Only breathalyzer or blood draw is evidence."
+      },
+      {
+        "q": "Why US Navy body-fat, not BMI?",
+        "a": "BMI cannot tell muscle from fat. Circumference methods validate ±3-4% against DEXA — better for athletic or lean populations."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "bio-maintenance",
+      "bio-logistics"
+    ]
+  },
+  "tools": [
+    {
+      "id": "impairment-bac",
+      "slug": "impairment-bac",
+      "category": "health",
+      "url": "/health/impairment-bac/",
+      "title": "Impairment Coefficient — BAC Calculator (Widmark) | Kefiw",
+      "h1": "Impairment Coefficient · Widmark BAC",
+      "current_word_count": 170,
+      "current": {
+        "description": "Blood alcohol estimate via Widmark equation. Gauge shows legal-limit marker and clear-to-operate time. Hard-coded estimate only — not legal evidence.",
+        "keywords": [
+          "BAC calculator",
+          "Widmark formula",
+          "blood alcohol calculator",
+          "when will I be sober"
+        ],
+        "intro": "Widmark (1932) remains the forensic standard: BAC = (alcohol_g / (weight_g × r)) × 100 − β × t. r ≈ 0.68 male / 0.55 female, β ≈ 0.015 %/h. Real BAC varies with food, drug interactions, and individual enzyme efficiency.",
+        "outcomeLine": "Widmark BAC gauge with clear-to-operate countdown — estimate only, never legal evidence.",
+        "howTo": [
+          "Enter gender, weight, drinks, and grams alcohol per drink (~14 g = US standard).",
+          "Enter hours since first drink.",
+          "Gauge shows current BAC against the 0.08 legal limit; sidebar shows clear-to-operate time."
+        ],
+        "examples": [
+          {
+            "title": "180 lb male · 3 drinks · 1.5 h",
+            "body": "BAC ≈ 0.044 · clear in ~3 h. Below 0.08 — not below impairment threshold."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is this admissible in court?",
+            "a": "No. Widmark-based estimates have well-documented ±30% error and are not legal evidence anywhere. Breathalyzer or blood draw is the only admissible measurement."
+          },
+          {
+            "q": "Why does my BAC feel higher than the estimate?",
+            "a": "Empty stomach, medication interactions, sleep deprivation, and female physiology (lower ADH) all push real BAC above Widmark."
+          }
+        ],
+        "relatedIds": [
+          "substance-decay",
+          "medical-triage",
+          "hydraulic-integrity"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "structural-density",
+      "slug": "structural-density",
+      "category": "health",
+      "url": "/health/structural-density/",
+      "title": "Structural Density — Body Fat Calculator (US Navy) | Kefiw",
+      "h1": "Structural Density · Body Fat %",
+      "current_word_count": 157,
+      "current": {
+        "description": "Estimate body fat percentage via the US Navy circumference method. Tape-measure formula accurate to ±3-4% vs DEXA.",
+        "keywords": [
+          "body fat calculator",
+          "US Navy body fat",
+          "circumference method",
+          "tape measure body fat"
+        ],
+        "intro": "The Navy developed this formula in the 1980s as a field substitute for underwater weighing. Logarithmic regression of neck, waist, and (for women) hip circumferences against height. Validated ±3-4% vs DEXA — better than BMI, worse than a scan.",
+        "outcomeLine": "US Navy body fat from tape-measure circumferences — ±3–4% vs DEXA.",
+        "howTo": [
+          "Measure neck (below larynx), waist (narrowest point), and hip (widest, women only).",
+          "Pick units and gender.",
+          "Read body-fat % and classification band."
+        ],
+        "examples": [
+          {
+            "title": "70 in · neck 15 · waist 34 · male",
+            "body": "BF ≈ 17.4% · Fit band. Strip fat by tightening waist − neck delta."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why waist − neck?",
+            "a": "The Navy formula models total body volume as head + neck (lean) + trunk + limbs. Waist − neck (men) and waist + hip − neck (women) proxy trunk fat."
+          },
+          {
+            "q": "Is it accurate for athletes?",
+            "a": "Less so. Muscular necks under-count fat; deep-trained cores inflate waist slightly. Accept ±5% for trained populations."
+          }
+        ],
+        "relatedIds": [
+          "metabolic-incline",
+          "metabolic-floor",
+          "fuel-partition"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "hydraulic-integrity",
+      "slug": "hydraulic-integrity",
+      "category": "health",
+      "url": "/health/hydraulic-integrity/",
+      "title": "Hydraulic Integrity — Hydration Calculator | Kefiw",
+      "h1": "Hydraulic Integrity · Coolant Load",
+      "current_word_count": 142,
+      "current": {
+        "description": "Daily water requirement anchored to body mass and activity. Coolant-tank visualisation with pressure status.",
+        "keywords": [
+          "hydration calculator",
+          "daily water needs",
+          "how much water should I drink",
+          "dehydration calculator"
+        ],
+        "intro": "Required fluid ≈ weight × 0.5 oz + activity × 0.4 oz — the simple rule-of-thumb that survives the ACSM literature. Not medical. Kidney-impaired and endurance athletes need individualized targets.",
+        "outcomeLine": "Daily fluid requirement anchored to mass and activity — coolant-tank read.",
+        "howTo": [
+          "Enter weight (lbs), today's active minutes, and current intake (oz).",
+          "Tank fills to current intake; colour encodes pressure (green Stable / gold Guarded / magenta Low).",
+          "Read the deficit and close it before the next training window."
+        ],
+        "examples": [
+          {
+            "title": "180 lb · 30 min activity · 32 oz",
+            "body": "Required ≈ 102 oz · current 32 · Low pressure. Deficit 70 oz."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does coffee count?",
+            "a": "Yes — caffeinated drinks hydrate on net despite being diuretic. Alcohol does not."
+          },
+          {
+            "q": "Is 8 × 8 a real rule?",
+            "a": "No. The \"8 glasses\" number has no scientific origin. Anchor to body mass and activity instead."
+          }
+        ],
+        "relatedIds": [
+          "ion-balance",
+          "thermal-failure",
+          "kinetic-expenditure"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "cessation-ladder",
+      "slug": "cessation-ladder",
+      "category": "health",
+      "url": "/health/cessation-ladder/",
+      "title": "Cessation Decay Ladder — Nicotine Clearance | Kefiw",
+      "h1": "Cessation Decay Ladder",
+      "current_word_count": 125,
+      "current": {
+        "description": "Plot cotinine decay and system-recovery milestones after the last cigarette. 16-hour half-life; baseline at ~72 hours.",
+        "keywords": [
+          "nicotine half life",
+          "cotinine clearance",
+          "quit smoking timeline",
+          "how long to quit smoking"
+        ],
+        "intro": "Nicotine itself has a 2h half-life; its metabolite cotinine clears at 16h. Detox progress plus CDC-derived system milestones (heart rate, CO, cilia, withdrawal) shows exactly what recovers on what schedule.",
+        "outcomeLine": "Cotinine decay and system-recovery milestones since last cigarette.",
+        "howTo": [
+          "Enter hours since last cigarette.",
+          "Progress bar shows % baseline; milestones light up as you pass them.",
+          "Baseline recovery reads the hours to 95% cleared."
+        ],
+        "examples": [
+          {
+            "title": "24 hours clean",
+            "body": "~64% metabolites cleared · heart rate normalised · CO halved. 48 h away from cilia recovery start."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does vaping have the same timeline?",
+            "a": "Nicotine pharmacokinetics are identical. Combustion-specific markers (CO, tar) don't apply."
+          },
+          {
+            "q": "When do cravings stop?",
+            "a": "Acute withdrawal peaks days 1–3, resolves by day 14. Situational triggers persist for months."
+          }
+        ],
+        "relatedIds": [
+          "substance-decay",
+          "medical-triage",
+          "impairment-bac"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "impairment-bac",
+          "url": "/health/impairment-bac/"
+        },
+        {
+          "id": "structural-density",
+          "url": "/health/structural-density/"
+        },
+        {
+          "id": "hydraulic-integrity",
+          "url": "/health/hydraulic-integrity/"
+        },
+        {
+          "id": "cessation-ladder",
+          "url": "/health/cessation-ladder/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

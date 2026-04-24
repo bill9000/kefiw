@@ -74,6 +74,33 @@ export default function LetterCounter() {
           </div>
         </div>
       )}
+      {/* Top-10 letter bar chart — hand-rolled SVG so we don't pull a chart lib. */}
+      {data.entries.filter(([k]) => /[a-z]/.test(k)).length > 0 && (() => {
+        const letters = data.entries.filter(([k]) => /[a-z]/.test(k)).slice(0, 10);
+        const max = letters[0]?.[1] ?? 1;
+        const W = 320;
+        const H = 140;
+        const barW = (W - 20) / letters.length - 2;
+        return (
+          <div>
+            <div className="label">Top letters</div>
+            <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Top 10 letters by frequency" className="block w-full max-w-md">
+              {letters.map(([k, n], i) => {
+                const h = (n / max) * (H - 30);
+                const x = 10 + i * (barW + 2);
+                const y = H - 20 - h;
+                return (
+                  <g key={k}>
+                    <rect x={x} y={y} width={barW} height={h} className="fill-brand-500" rx="2" />
+                    <text x={x + barW / 2} y={y - 2} textAnchor="middle" className="fill-slate-600" fontSize="8">{n}</text>
+                    <text x={x + barW / 2} y={H - 6} textAnchor="middle" className="fill-slate-700" fontSize="10" fontWeight="600">{k.toUpperCase()}</text>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+        );
+      })()}
       {data.entries.length > 0 && (
         <div>
           <div className="flex items-center justify-between">

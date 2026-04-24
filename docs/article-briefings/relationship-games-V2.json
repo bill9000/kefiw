@@ -1,0 +1,352 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:23.867Z",
+  "cluster": {
+    "slug": "relationship-games",
+    "section": "games",
+    "hubSlug": "relationship-games",
+    "url": "/games/relationship-games/",
+    "title": "Fun Relationship Games — Kefiw",
+    "h1": "Fun Relationship Games",
+    "subhead": "Novelty compatibility tools — for laughs, not predictions.",
+    "intro": "Three playful, transparent name-and-signal games: a letter-based love calculator, the classic FLAMES schoolyard game, and an 8-question relationship longevity quiz. Every result is deterministic — same inputs always return the same answer — and every result is explicitly for fun.",
+    "description": "Love calculator, FLAMES name game, and a \"how long will we last?\" quiz. Deterministic, transparent, and explicitly novelty tools.",
+    "keywords": [
+      "love calculator",
+      "flames game",
+      "relationship quiz",
+      "name compatibility",
+      "fun relationship games"
+    ],
+    "faq": [
+      {
+        "q": "Are these relationship calculators real?",
+        "a": "No. They are novelty tools that use letter math or quiz answers to produce deterministic results. They are built for fun and conversation, not prediction.",
+        "faq_intent": "trust"
+      },
+      {
+        "q": "Is a love calculator accurate?",
+        "a": "No love calculator can predict real relationships. What letter-based tools measure is letter overlap; what signal-based quizzes measure is how you answered the quiz. Real compatibility depends on time, care, and daily choices.",
+        "faq_intent": "trust"
+      },
+      {
+        "q": "What is the FLAMES game?",
+        "a": "FLAMES is a 1970s schoolyard game. Write two names, cross out shared letters, count what remains, and cycle through F-L-A-M-E-S (Friends, Lovers, Affectionate, Marriage, Enemies, Siblings) to land on one letter.",
+        "faq_intent": "definition"
+      },
+      {
+        "q": "Can you get 100% on a love calculator?",
+        "a": "Some calculators always return numbers near 100 for fun. Kefiw’s smooths its results to the 10–90 range to stay honest — a 100% score would undermine the \"for fun\" framing.",
+        "faq_intent": "edge-case"
+      }
+    ],
+    "relatedClusterSlugs": [
+      "daily"
+    ]
+  },
+  "tools": [
+    {
+      "id": "love-calculator",
+      "slug": "love-calculator",
+      "category": "games",
+      "url": "/games/love-calculator/",
+      "title": "Love Calculator — Name Compatibility for Fun",
+      "h1": "Love Calculator",
+      "current_word_count": 292,
+      "current": {
+        "description": "Enter two names and get a compatibility percentage based on shared letters, vowel balance, and the classic LOVES tally. For fun only.",
+        "keywords": [
+          "love calculator",
+          "name compatibility",
+          "love meter",
+          "relationship compatibility test",
+          "love percentage"
+        ],
+        "intro": "A deterministic novelty calculator. Enter two names and the tool scores them from three transparent signals: shared letters, vowel harmony, and a LOVES-letter tally. Same names always give the same score — swap nicknames or full names to see how it changes.",
+        "outcomeLine": "Three transparent signals combined into a reproducible compatibility percentage.",
+        "howTo": [
+          "Enter your name.",
+          "Enter their name.",
+          "Read the percentage and the verdict blurb.",
+          "Try nicknames and full legal names to see how the score shifts."
+        ],
+        "examples": [
+          {
+            "title": "Alex + Sam",
+            "body": "Limited letter overlap, similar vowel balance. Score usually lands in the mid-range."
+          },
+          {
+            "title": "Jordan + Morgan",
+            "body": "More shared letters and common vowels push the score higher."
+          },
+          {
+            "title": "Kit + Aurora",
+            "body": "Very different letter sets usually score lower — which can be read as complementary energies."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is the love calculator real?",
+            "a": "No. It is a novelty tool. It combines letter overlap, vowel balance, and a LOVES tally into a reproducible percent. The formula is deterministic — it does not know the humans attached to the names.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "How does the love calculator work?",
+            "a": "It averages three signals: how many unique letters the names share, how close their vowel ratios are, and how many LOVES letters appear in the combined name. The result is smoothed to cluster between 10 and 90 percent.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Can I get 100% on the love calculator?",
+            "a": "Not with this one — the formula caps the score around 90 to keep results honest and playful. Any calculator that always returns 100% is using the score for entertainment, not math.",
+            "faq_intent": "edge-case"
+          },
+          {
+            "q": "Does the love calculator predict marriage?",
+            "a": "No. A letter-based compatibility score cannot predict relationships. Treat it as a conversation starter — and use [How Long Will We Last?](/games/how-long-will-we-last/) for a signal-based quiz instead.",
+            "faq_intent": "trust"
+          }
+        ],
+        "relatedIds": [
+          "flames-calculator",
+          "how-long-will-we-last"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "flames-calculator",
+      "slug": "flames-calculator",
+      "category": "games",
+      "url": "/games/flames-calculator/",
+      "title": "FLAMES Calculator — The Classic Name Game",
+      "h1": "FLAMES Calculator",
+      "current_word_count": 252,
+      "current": {
+        "description": "The classic 1970s schoolyard game — cross out shared letters from two names, count what remains, and cycle through FLAMES to find your result.",
+        "keywords": [
+          "flames calculator",
+          "flames name game",
+          "flames love game",
+          "name compatibility flames"
+        ],
+        "intro": "FLAMES is a playground game from the 1970s: cross out shared letters in two names, count the remaining letters, and use that count to cycle through the letters F-L-A-M-E-S (Friends, Lovers, Affectionate, Marriage, Enemies, Siblings). The last letter standing is your result.",
+        "outcomeLine": "Cross out shared letters, count the remainder, and cycle through FLAMES.",
+        "howTo": [
+          "Enter your name.",
+          "Enter their name.",
+          "The tool crosses out matching letter pairs and shows which letter of FLAMES wins."
+        ],
+        "examples": [
+          {
+            "title": "Alex + Sam",
+            "body": "Shared: A. Remaining letters in ALEX: L, E, X; in SAM: S, M. Total remaining: 5 — cycles through FLAMES to Enemies."
+          },
+          {
+            "title": "Pat + Mia",
+            "body": "Shared: A. Remaining: P, T; I, M — 4 letters. Cycles to Marriage."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What does FLAMES stand for?",
+            "a": "F = Friends, L = Lovers, A = Affectionate, M = Marriage, E = Enemies, S = Siblings. The letter that survives the elimination is your verdict.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "How does the FLAMES game work?",
+            "a": "Write both names. Cross out letters that appear in both (one for one). Count the letters remaining in both names combined. Use that number to cycle through F-L-A-M-E-S, removing a letter each time until only one remains.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Is FLAMES accurate?",
+            "a": "No. FLAMES is a novelty game. It measures letter overlap, not compatibility. Treat the result as entertainment.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "Why do I keep getting Enemies?",
+            "a": "E sits in a spot that the elimination math hits often for short name pairs. Try full names or nicknames to see different results.",
+            "faq_intent": "troubleshooting"
+          }
+        ],
+        "relatedIds": [
+          "love-calculator",
+          "how-long-will-we-last"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "how-long-will-we-last",
+      "slug": "how-long-will-we-last",
+      "category": "games",
+      "url": "/games/how-long-will-we-last/",
+      "title": "How Long Will We Last? — Relationship Longevity Quiz",
+      "h1": "How Long Will We Last?",
+      "current_word_count": 293,
+      "current": {
+        "description": "An 8-question novelty quiz that estimates years together from answers about values, conflict, trust, family, and shared life.",
+        "keywords": [
+          "how long will we last",
+          "relationship longevity quiz",
+          "will we last quiz",
+          "relationship predictor",
+          "how many years together quiz"
+        ],
+        "intro": "An 8-question quiz that combines how you answer to produce an estimated years-together figure. Each answer contributes a transparent score; the tool shows which signals pushed the result up and which pulled it down. For fun — a conversation starter, not a prediction.",
+        "outcomeLine": "Weighted scores across 8 signals → an estimated years-together figure and which signals matter most.",
+        "howTo": [
+          "Enter both names.",
+          "Answer the 8 questions about values, conflict, laughter, distance, future, family, and trust.",
+          "Read the estimated years and the strongest vs weakest signals.",
+          "Change an answer to see how the number shifts."
+        ],
+        "examples": [
+          {
+            "title": "Mostly positive answers",
+            "body": "Strong values alignment, low conflict, solid trust → often lands in the 20–40 years range."
+          },
+          {
+            "title": "Mixed signals",
+            "body": "Good laughter and future talk, but long-distance and family tension → often lands in 3–8 years."
+          },
+          {
+            "title": "Early days",
+            "body": "Known under 3 months, unknown values alignment, no cohabitation → often a short arc with weak signals."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can a quiz predict how long a relationship will last?",
+            "a": "No quiz can predict relationship longevity. Real outcomes depend on daily choices, timing, and life events a quiz cannot capture. Treat this as a reflection tool, not a forecast.",
+            "faq_intent": "trust"
+          },
+          {
+            "q": "What does the years-together number mean?",
+            "a": "It is a deterministic mapping from your 8 answers to an estimated range. Strong positive answers push toward decades; weak or negative answers push toward months. Changing one answer shifts the number predictably.",
+            "faq_intent": "definition"
+          },
+          {
+            "q": "Which questions matter most?",
+            "a": "Values alignment, conflict style, and trust tend to dominate real research on relationship longevity. This quiz weights every question equally, so results are sensitive to any single weak signal.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "Is this a real compatibility test?",
+            "a": "No. Real compatibility assessments used in therapy and research are far more detailed. Use the quiz for fun, then talk about the weakest signal together.",
+            "faq_intent": "trust"
+          }
+        ],
+        "relatedIds": [
+          "love-calculator",
+          "flames-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "love-calculator",
+          "url": "/games/love-calculator/"
+        },
+        {
+          "id": "flames-calculator",
+          "url": "/games/flames-calculator/"
+        },
+        {
+          "id": "how-long-will-we-last",
+          "url": "/games/how-long-will-we-last/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

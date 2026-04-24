@@ -1,0 +1,1061 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:01.111Z",
+  "cluster": {
+    "slug": "everyday-calculators",
+    "section": "calculators",
+    "hubSlug": "everyday-calculators",
+    "url": "/calculators/everyday-calculators/",
+    "title": "Everyday Calculators — Kefiw",
+    "h1": "Everyday Calculators",
+    "subhead": "Percentages, dates, hours, averages — the quick ones.",
+    "intro": "The calculators you reach for most: percentages, age and date difference, hours worked, simple averages. This cluster bundles them with short explainers for the common gotchas (e.g. why percent change isn't symmetric).",
+    "description": "Percentage calculator, age calculator, date difference, average, and hours — plus short guides to the common mistakes and mental-math shortcuts.",
+    "keywords": [
+      "percentage calculator",
+      "age calculator",
+      "date difference",
+      "hours calculator"
+    ],
+    "faq": [
+      {
+        "q": "Why isn't percent change symmetric?",
+        "a": "100 → 125 is +25%, but 125 → 100 is −20%. Percent change divides by the starting value, so the base changes when you reverse direction."
+      },
+      {
+        "q": "Is 10% off, then 10% off, the same as 20% off?",
+        "a": "No. Two 10% discounts compound to 19% off. Stacked discounts are always worth less than the simple sum."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "shopping",
+      "text-cleanup"
+    ]
+  },
+  "tools": [
+    {
+      "id": "percentage-calculator",
+      "slug": "percentage-calculator",
+      "category": "calculators",
+      "url": "/calculators/percentage-calculator/",
+      "title": "Percentage Calculator — Kefiw",
+      "h1": "Percentage Calculator",
+      "current_word_count": 59,
+      "current": {
+        "description": "Calculate percentages: what is X% of Y, X is what % of Y, and % change.",
+        "keywords": [
+          "percentage calculator",
+          "percent of",
+          "percent change"
+        ],
+        "intro": "Every common percentage calculation in one place.",
+        "outcomeLine": "Percent of, percent change, and mental-math checks in one place.",
+        "howTo": [
+          "Pick a calculation mode.",
+          "Enter the values."
+        ],
+        "examples": [
+          {
+            "title": "What is 15% of 80?",
+            "body": "12"
+          },
+          {
+            "title": "20 is what % of 50?",
+            "body": "40%"
+          },
+          {
+            "title": "Change from 100 to 125",
+            "body": "+25%"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does it handle negative change?",
+            "a": "Yes, returns a negative percent."
+          }
+        ],
+        "relatedIds": [
+          "age-calculator",
+          "date-difference-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "percent-of-calculator",
+      "slug": "percent-of-calculator",
+      "category": "calculators",
+      "url": "/calculators/percent-of-calculator/",
+      "title": "Percent Of Calculator — What Is X% of Y",
+      "h1": "Percent Of Calculator",
+      "current_word_count": 151,
+      "current": {
+        "description": "Calculate exactly what X% of Y equals, with quick-math anchors for 1%, 10%, 25%, and 50%.",
+        "keywords": [
+          "percent of calculator",
+          "what is x percent of y",
+          "percent of a number"
+        ],
+        "intro": "Find what any percent of any number equals. Shows quick-math anchors (1%, 10%, 25%, 50%) so you can sanity-check the answer in your head.",
+        "outcomeLine": "X% of Y, instantly — with the formula shown.",
+        "howTo": [
+          "Enter the percent.",
+          "Enter the whole number.",
+          "The result and anchors update instantly."
+        ],
+        "examples": [
+          {
+            "title": "What is 15% of 80?",
+            "body": "12 — tip of the head: 10% of 80 = 8, half of that = 4, 8 + 4 = 12."
+          },
+          {
+            "title": "What is 7.5% of 240?",
+            "body": "18 — 10% of 240 = 24, minus a quarter of 10% (6) = 18."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How do I do this in my head?",
+            "a": "Find 10% first (move the decimal left one place), then scale. 15% = 10% + half of 10%."
+          },
+          {
+            "q": "Why show the other percent anchors?",
+            "a": "They reveal whether your answer makes sense at a glance — a wrong answer usually looks wrong next to them."
+          }
+        ],
+        "relatedIds": [
+          "percentage-calculator",
+          "percent-change-calculator",
+          "discount-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "percent-change-calculator",
+      "slug": "percent-change-calculator",
+      "category": "calculators",
+      "url": "/calculators/percent-change-calculator/",
+      "title": "Percent Increase / Decrease Calculator",
+      "h1": "Percent Increase / Decrease Calculator",
+      "current_word_count": 126,
+      "current": {
+        "description": "Calculate the percent change from one value to another — increase or decrease — with exact delta and ratio.",
+        "keywords": [
+          "percent change calculator",
+          "percent increase calculator",
+          "percent decrease calculator"
+        ],
+        "intro": "See the exact percent change between any two numbers. Works for both increases and decreases — the sign tells you which.",
+        "outcomeLine": "Percent increase and decrease with the correct denominator.",
+        "howTo": [
+          "Enter the starting value.",
+          "Enter the ending value.",
+          "The percent change, absolute delta, and ratio update instantly."
+        ],
+        "examples": [
+          {
+            "title": "100 → 125",
+            "body": "+25% increase — delta +25, ratio 1.25"
+          },
+          {
+            "title": "80 → 60",
+            "body": "−25% decrease — delta −20, ratio 0.75"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why is percent change not symmetric?",
+            "a": "Going from 100 to 125 is +25%, but going from 125 back to 100 is −20%. The denominator is always the starting value."
+          },
+          {
+            "q": "What if the starting value is 0?",
+            "a": "Percent change is undefined when the base is 0. Use absolute difference instead."
+          }
+        ],
+        "relatedIds": [
+          "percentage-calculator",
+          "percent-of-calculator",
+          "discount-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "age-calculator",
+      "slug": "age-calculator",
+      "category": "calculators",
+      "url": "/calculators/age-calculator/",
+      "title": "Age Calculator — Kefiw",
+      "h1": "Age Calculator",
+      "current_word_count": 49,
+      "current": {
+        "description": "Calculate exact age in years, months, days, hours, and minutes.",
+        "keywords": [
+          "age calculator",
+          "how old am I",
+          "age in days"
+        ],
+        "intro": "Enter a birthdate and get your exact age down to the minute.",
+        "outcomeLine": "Age as of today from a birth date, down to the day.",
+        "howTo": [
+          "Enter birthdate.",
+          "Optionally enter a target date (default is today)."
+        ],
+        "examples": [
+          {
+            "title": "Born 1990-01-15 on 2026-04-17",
+            "body": "36 years, 3 months, 2 days"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does it account for leap years?",
+            "a": "Yes."
+          }
+        ],
+        "relatedIds": [
+          "date-difference-calculator",
+          "percentage-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "age-on-date-calculator",
+      "slug": "age-on-date-calculator",
+      "category": "calculators",
+      "url": "/calculators/age-on-date-calculator/",
+      "title": "Age On Date Calculator — How Old On Any Date",
+      "h1": "Age On A Specific Date",
+      "current_word_count": 111,
+      "current": {
+        "description": "Calculate how old you will be — or were — on any target date. Works for past and future dates.",
+        "keywords": [
+          "age on date calculator",
+          "age on specific date",
+          "how old will I be"
+        ],
+        "intro": "Pick a birthdate and a target date and see the exact age at that moment — years, months, days, hours, and minutes.",
+        "outcomeLine": "Age on a future or past date — leap-year aware.",
+        "howTo": [
+          "Enter a birthdate.",
+          "Change the \"As of\" date to your target date.",
+          "All figures recalculate instantly."
+        ],
+        "examples": [
+          {
+            "title": "Born 1990-01-15, target 2030-01-15",
+            "body": "Exactly 40 years — 14,610 days."
+          },
+          {
+            "title": "Born 1988-06-01, target 2026-12-25",
+            "body": "38 years, 6 months, 24 days."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does it work for future dates?",
+            "a": "Yes — set the \"As of\" field to any date in the future."
+          },
+          {
+            "q": "What about leap years?",
+            "a": "Leap years are handled; the totals use real calendar days."
+          }
+        ],
+        "relatedIds": [
+          "age-calculator",
+          "date-difference-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "date-difference-calculator",
+      "slug": "date-difference-calculator",
+      "category": "calculators",
+      "url": "/calculators/date-difference-calculator/",
+      "title": "Date Difference Calculator — Kefiw",
+      "h1": "Date Difference Calculator",
+      "current_word_count": 237,
+      "current": {
+        "description": "Calculate the difference between two dates in years, months, weeks, days, hours, minutes, and seconds.",
+        "keywords": [
+          "date difference",
+          "days between dates",
+          "date calculator"
+        ],
+        "intro": "Pick two dates and get the difference in every useful unit.",
+        "outcomeLine": "Days, weeks, months, and years between any two dates.",
+        "howTo": [
+          "Enter start date.",
+          "Enter end date."
+        ],
+        "examples": [
+          {
+            "title": "2026-01-01 to 2026-04-17",
+            "body": "106 days, ≈ 15 weeks, ≈ 3 months 16 days"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does it count the end date?",
+            "a": "The total-days figure counts full days between the two dates; it does not include the end date itself."
+          },
+          {
+            "q": "Does 3 days mean 72 hours?",
+            "a": "Yes — 3 full days is 72 hours. But \"3 days from Monday\" in everyday speech usually means \"on Thursday\" which is actually 3 days later by calendar, not 72 hours from the start of Monday. The difference matters for deadlines.",
+            "faq_intent": "edge-case"
+          },
+          {
+            "q": "How many days are left in the year?",
+            "a": "Use the dedicated [Days Left in the Year](/calculators/days-left-in-year/) tool — it reports remaining days and percent of the year elapsed, with leap-year handling.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "How do you calculate 31 days?",
+            "a": "Enter your start date and add 31 days to it — the calculator returns the exact end date. Note that \"31 days\" crosses a month boundary in most months, which is why 31-day and \"one month\" counts can differ.",
+            "faq_intent": "how-to"
+          },
+          {
+            "q": "What is a Julian day?",
+            "a": "A Julian day is a continuous day count from January 1, 4713 BCE used in astronomy and calendar systems. It is different from \"Julian calendar\" dates. Most date calculators (including this one) use the Gregorian calendar, not Julian day numbers.",
+            "faq_intent": "definition"
+          }
+        ],
+        "relatedIds": [
+          "age-calculator",
+          "time-converter",
+          "days-left-in-year",
+          "hours-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "hours-calculator",
+      "slug": "hours-calculator",
+      "category": "calculators",
+      "url": "/calculators/hours-calculator/",
+      "title": "Hours Calculator — Kefiw",
+      "h1": "Hours Calculator",
+      "current_word_count": 166,
+      "current": {
+        "description": "Calculate hours worked between two times, minus a break. Optional hourly-rate pay.",
+        "keywords": [
+          "hours calculator",
+          "time card calculator",
+          "work hours calculator"
+        ],
+        "intro": "Enter a start time, end time, and break minutes. Get hours worked in HH:MM and decimal form — plus pay if you add an hourly rate.",
+        "outcomeLine": "Hours and minutes between two times, across days.",
+        "howTo": [
+          "Enter start and end times.",
+          "Enter break length in minutes (default 30).",
+          "Optionally add an hourly rate to see pay."
+        ],
+        "examples": [
+          {
+            "title": "9:00 to 17:30 with 30-min break",
+            "body": "8:00 worked = 8.00 hours"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does it handle overnight shifts?",
+            "a": "Yes. If the end time is earlier than the start, it assumes you crossed midnight."
+          },
+          {
+            "q": "Is overtime calculated?",
+            "a": "No. Multiply hours over 40 by your overtime rate separately."
+          },
+          {
+            "q": "How do I calculate a 7.6-hour day?",
+            "a": "A 7.6-hour workday is 7 hours and 36 minutes (0.6 × 60 = 36). Decimal hours after the point convert to minutes by multiplying by 60: 7.25 h = 7h 15m, 7.5 h = 7h 30m, 7.75 h = 7h 45m. This calculator shows both decimal hours and HH:MM form so you can read whichever you need.",
+            "faq_intent": "how-to"
+          }
+        ],
+        "relatedIds": [
+          "date-difference-calculator",
+          "time-converter"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "average-calculator",
+      "slug": "average-calculator",
+      "category": "calculators",
+      "url": "/calculators/average-calculator/",
+      "title": "Average Calculator — Kefiw",
+      "h1": "Average Calculator",
+      "current_word_count": 122,
+      "current": {
+        "description": "Calculate mean, median, sum, min, max, range, and standard deviation for any list of numbers.",
+        "keywords": [
+          "average calculator",
+          "mean calculator",
+          "median calculator",
+          "standard deviation"
+        ],
+        "intro": "Paste any list of numbers — separated by commas, spaces, or line breaks — and get every common summary statistic instantly.",
+        "outcomeLine": "Mean, median, and mode from any list of numbers.",
+        "howTo": [
+          "Paste or type your numbers into the input.",
+          "Separators can be commas, spaces, tabs, semicolons, or new lines.",
+          "Stats update as you type."
+        ],
+        "examples": [
+          {
+            "title": "10, 20, 30, 40, 50",
+            "body": "Mean 30, median 30, sum 150, std dev ≈ 14.14"
+          },
+          {
+            "title": "Mixed separators",
+            "body": "\"1 2\\n3,4;5\" → same as \"1,2,3,4,5\" — mean 3, range 4."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Which standard deviation does this use?",
+            "a": "Population standard deviation (divide by N). For sample std dev, multiply by √(N/(N−1))."
+          },
+          {
+            "q": "Are non-numeric values ignored?",
+            "a": "Yes. Anything that does not parse as a number is skipped silently."
+          }
+        ],
+        "relatedIds": [
+          "percentage-calculator",
+          "ratio-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cS-percentage-increase-how",
+      "slug": "how-to-calculate-percentage-increase",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-calculate-percentage-increase/",
+      "title": "How to Calculate Percentage Increase — The One Formula",
+      "h1": "How to Calculate Percentage Increase",
+      "subhead": "The formula, the common mistakes, and when to use decrease instead.",
+      "current_word_count": 277,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Simple percentage-increase formula with worked examples, common pitfalls, and when to use percentage decrease or percent of.",
+        "keywords": [
+          "percentage increase",
+          "how to calculate percentage increase",
+          "percent change formula"
+        ],
+        "outcomeLine": "(new − old) ÷ old × 100. That is the whole thing.",
+        "intro": "Percentage increase describes how much a value grew, relative to the original. One formula, works every time: (new − old) ÷ old × 100.",
+        "keyPoints": [
+          "Formula: (new − old) ÷ old × 100 = percent increase.",
+          "Use old value as the denominator, not new — this is the single most common mistake.",
+          "If new is less than old, the result is negative → that is a percentage decrease.",
+          "A 100% increase means the value doubled. A 200% increase means it tripled.",
+          "\"Percent of\" and \"percent change\" are different operations — do not confuse them."
+        ],
+        "examples": [
+          {
+            "title": "Price up from £50 to £60",
+            "body": "(60 − 50) ÷ 50 × 100 = 20% increase."
+          },
+          {
+            "title": "Headcount 120 → 150",
+            "body": "(150 − 120) ÷ 120 × 100 = 25% increase."
+          },
+          {
+            "title": "Common mistake",
+            "body": "Dividing by the NEW value: (60 − 50) ÷ 60 = 16.7%. Wrong denominator — always use the OLD value."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "percent-change-calculator",
+            "note": "The dedicated tool — handles both increase and decrease, shows the working."
+          },
+          {
+            "toolId": "percentage-calculator",
+            "note": "General-purpose percentage tool. Pick this if you also need \"what is X% of Y\" style questions."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is a 50% increase the same as a 50% decrease back to original?",
+            "a": "No. 100 → 150 is +50%. 150 → 100 is −33.3% (back to old value). The asymmetry trips people up constantly."
+          },
+          {
+            "q": "What if the old value is zero?",
+            "a": "Percentage increase is undefined when the starting value is zero — you cannot divide by zero. Report the absolute change instead."
+          }
+        ],
+        "relatedIds": [
+          "percent-change-calculator",
+          "percentage-calculator",
+          "cS-percent-of-number-how",
+          "cS-percent-mental-math"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-percent-of-number-how",
+      "slug": "how-to-calculate-percent-of-a-number",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-calculate-percent-of-a-number/",
+      "title": "How to Calculate a Percent of a Number — The Shortcut",
+      "h1": "How to Calculate a Percent of a Number",
+      "subhead": "Multiply by the decimal — that is the whole trick.",
+      "current_word_count": 304,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to compute \"percent of a number\" — formula, mental-math shortcuts, and examples for discounts, tips, and tax.",
+        "keywords": [
+          "percent of a number",
+          "how to calculate percent of",
+          "percentage of"
+        ],
+        "outcomeLine": "X% of Y = X/100 × Y. For mental math, shift the decimal and add or halve.",
+        "intro": "Finding a percent of a number is different from calculating percentage change. You already know the percentage — you just want to apply it to a value.",
+        "keyPoints": [
+          "Formula: X% of Y = (X ÷ 100) × Y. 20% of 150 = 0.20 × 150 = 30.",
+          "Mental-math trick for 10%: move the decimal one place left. 10% of 150 = 15.",
+          "20% = 10% × 2. 5% = 10% ÷ 2. 15% = 10% + 5%.",
+          "1% = 10% ÷ 10, or move the decimal two places left.",
+          "For percentages over 100%, you get a number larger than the original — 150% of 40 = 60."
+        ],
+        "examples": [
+          {
+            "title": "20% tip on a £65 bill",
+            "body": "10% = £6.50, double it = £13. Tip is £13."
+          },
+          {
+            "title": "15% off £80",
+            "body": "10% = £8, 5% = £4, total discount = £12. Pay £68."
+          },
+          {
+            "title": "8.5% tax on $200",
+            "body": "10% = $20, 1% = $2, so 8.5% ≈ 20 − 2 − 1 = $17. Close enough for mental math."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "percent-of-calculator",
+            "note": "The dedicated \"X% of Y\" tool. Just type both values, get the answer."
+          },
+          {
+            "toolId": "percentage-calculator",
+            "note": "Covers percent-of, percent-change, and percent-from-fraction in one interface."
+          },
+          {
+            "toolId": "tip-calculator",
+            "note": "For restaurant bills specifically — handles split-between-people in one step."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is the difference between \"percent of\" and \"percentage\"?",
+            "a": "\"Percent of\" applies a known percentage to a value (20% of 150 = 30). \"Percentage\" or \"percent change\" computes the percentage relationship between two values."
+          },
+          {
+            "q": "Can I multiply percentages directly?",
+            "a": "Yes — convert to decimals first. 20% × 50% = 0.20 × 0.50 = 0.10 = 10%. Used for successive discounts and compound calculations."
+          }
+        ],
+        "relatedIds": [
+          "percent-of-calculator",
+          "percentage-calculator",
+          "tip-calculator",
+          "cS-percent-mental-math",
+          "cS-percentage-increase-how"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-percent-mental-math",
+      "slug": "percentage-mental-math-tricks",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/percentage-mental-math-tricks/",
+      "title": "Percentage Mental Math Tricks — Fast Answers Without a Calculator",
+      "h1": "Percentage Mental Math Tricks",
+      "subhead": "Five shortcuts that cover tips, discounts, tax, and sale prices.",
+      "current_word_count": 300,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Mental-math techniques for quick percentage calculations — tips, discounts, and tax without reaching for a calculator.",
+        "keywords": [
+          "percentage mental math",
+          "percent tricks",
+          "fast percentage"
+        ],
+        "outcomeLine": "Once 10% is a reflex, everything else is addition.",
+        "intro": "Most everyday percentages reduce to \"find 10%, then build up or down\". Learn five small shortcuts and you can answer almost any percent question faster than you can type it into a calculator.",
+        "keyPoints": [
+          "10%: move the decimal one place left. 10% of 240 = 24.",
+          "1%: move the decimal two places left. 1% of 240 = 2.4.",
+          "20% = 10% × 2. 5% = 10% ÷ 2. 15% = 10% + 5%. 25% = quarter = divide by 4.",
+          "Swap X% of Y and Y% of X — same answer. 4% of 75 is hard; 75% of 4 is 3.",
+          "\"10% off then another 10% off\" is NOT 20% off — it is 19% off (compounding)."
+        ],
+        "examples": [
+          {
+            "title": "Tip calculation",
+            "body": "18% on £45. 10% = £4.50, 20% = £9, halfway = £8.10. Round to £8."
+          },
+          {
+            "title": "Discount stack",
+            "body": "30% off, then extra 20% off. 0.70 × 0.80 = 0.56, so 44% off total — NOT 50%."
+          },
+          {
+            "title": "Swap trick",
+            "body": "16% of 25 is hard. Swap: 25% of 16 = 4. Done."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "percentage-calculator",
+            "note": "When the answer matters exactly and mental math risk is too high — taxes, legal, or final totals."
+          },
+          {
+            "toolId": "tip-calculator",
+            "note": "For restaurant bills with split-between and service-style calculations."
+          },
+          {
+            "toolId": "discount-calculator",
+            "note": "For stacked discounts or percent-off-and-then-tax problems."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why do stacked discounts not just add?",
+            "a": "Each discount applies to the already-discounted price, not the original. 30% off + 20% off = (100 − 30) × (100 − 20) / 100 = 56% of original = 44% off, not 50%."
+          },
+          {
+            "q": "When should I double-check mental math?",
+            "a": "Anything involving tax, legal agreements, final invoices, or split-between-people totals — the rounding errors compound quickly."
+          }
+        ],
+        "relatedIds": [
+          "percentage-calculator",
+          "tip-calculator",
+          "discount-calculator",
+          "cS-percent-of-number-how",
+          "cS-percentage-increase-how"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-age-on-date-how",
+      "slug": "how-to-calculate-age-on-a-date",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-calculate-age-on-a-date/",
+      "title": "How to Calculate Age on a Date — Future, Past, or Hypothetical",
+      "h1": "How to Calculate Age on a Date",
+      "subhead": "Birthday, target date, answer — with the leap-year and timezone traps.",
+      "current_word_count": 305,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Calculate a person's age on a specific date — future, past, or hypothetical — with leap-year and edge-case handling.",
+        "keywords": [
+          "age on date",
+          "how to calculate age on specific date",
+          "age calculator"
+        ],
+        "outcomeLine": "Subtract the birth date from the target date. Round down if the birthday has not happened yet that year.",
+        "intro": "Age on a date is not just \"today − birthday\". It is \"has the birthday already happened in the target year?\" If yes, age = year diff; if no, age = year diff − 1.",
+        "keyPoints": [
+          "Formula: start with target_year − birth_year.",
+          "If target_date is before (birth_month, birth_day) in target year, subtract 1.",
+          "Leap-year birthday (Feb 29): most jurisdictions treat Mar 1 as the legal birthday in non-leap years.",
+          "For retirement, pensions, and legal milestones — the day of the birthday itself usually counts as \"that age\".",
+          "Future-date questions (\"how old will I be on 2050-01-01?\") use the same formula."
+        ],
+        "examples": [
+          {
+            "title": "Born 1990-06-15, target 2025-03-10",
+            "body": "2025 − 1990 = 35. Has June 15 happened by March 10? No. Age = 34."
+          },
+          {
+            "title": "Born 1990-06-15, target 2025-09-10",
+            "body": "2025 − 1990 = 35. Has June 15 happened by September 10? Yes. Age = 35."
+          },
+          {
+            "title": "Leap day",
+            "body": "Born 2000-02-29, target 2025-02-28. Most jurisdictions: not yet 25. Target 2025-03-01: age 25."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "age-on-date-calculator",
+            "note": "Dedicated tool for this exact question — pick birth date, pick target date, get age."
+          },
+          {
+            "toolId": "age-calculator",
+            "note": "If the target is \"today\", this is the one-click version."
+          },
+          {
+            "toolId": "date-difference-calculator",
+            "note": "For the raw day/month/year difference between any two dates."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How are leap-year birthdays handled?",
+            "a": "Legally varies by country. UK/US common law: March 1 in non-leap years. Some jurisdictions use Feb 28. Our calculator uses March 1 as the default."
+          },
+          {
+            "q": "Does timezone matter?",
+            "a": "For birthdays yes — if you were born at 23:00 in London, you are technically one day older in Sydney. Most calculators ignore time of day and just use the calendar date."
+          }
+        ],
+        "relatedIds": [
+          "age-on-date-calculator",
+          "age-calculator",
+          "date-difference-calculator",
+          "cS-days-between-dates-how"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-days-between-dates-how",
+      "slug": "how-to-calculate-days-between-dates",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-to-calculate-days-between-dates/",
+      "title": "How to Calculate Days Between Two Dates — Inclusive, Exclusive, and Working Days",
+      "h1": "How to Calculate Days Between Two Dates",
+      "subhead": "The subtraction, the off-by-one, and how weekdays-only differ.",
+      "current_word_count": 284,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to compute the number of days between two dates, including inclusive/exclusive endpoints and working-day calculations.",
+        "keywords": [
+          "days between dates",
+          "how to calculate days between",
+          "date difference calculator"
+        ],
+        "outcomeLine": "Subtract the earlier date from the later date — then decide if the endpoints count.",
+        "intro": "Days between dates sounds like simple subtraction, but \"how many days from Monday to Friday\" has at least three valid answers depending on whether you count the endpoints.",
+        "keyPoints": [
+          "Exclusive count: later_date − earlier_date. Monday to Friday = 4 days.",
+          "Inclusive count: later_date − earlier_date + 1. Monday to Friday = 5 days.",
+          "Working days: exclude Saturday/Sunday (and optionally public holidays).",
+          "For contracts, \"X days from Y\" usually means exclusive — the signing day is day 0.",
+          "Leap years are handled automatically if you use date arithmetic, not day counting."
+        ],
+        "examples": [
+          {
+            "title": "Project timeline",
+            "body": "Start 2026-01-10, end 2026-01-20. Exclusive: 10 days. Inclusive: 11 days. Use exclusive for elapsed days."
+          },
+          {
+            "title": "Working days",
+            "body": "2026-01-10 (Sat) to 2026-01-20 (Tue). 10 total days, 7 working days (Mon-Fri × 1.4 weeks)."
+          },
+          {
+            "title": "Contract deadline",
+            "body": "\"30 days from signing\" means 30 days after signing day — exclusive. Sign Jan 1, deadline is Jan 31."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "date-difference-calculator",
+            "note": "Main tool — pick two dates, get days / weeks / months / years."
+          },
+          {
+            "toolId": "age-on-date-calculator",
+            "note": "When the two dates are a birth date and a target date."
+          },
+          {
+            "toolId": "hours-calculator",
+            "note": "For sub-day precision — hours and minutes between timestamps."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Inclusive or exclusive — which should I use?",
+            "a": "Most everyday questions want exclusive (\"how many nights at a hotel\"). Billing, rental, and contract terms usually want inclusive — read the specific agreement."
+          },
+          {
+            "q": "How do I count working days?",
+            "a": "Count total days, then subtract (days ÷ 7) × 2 for weekends, and subtract any public holidays that fall in the range. Tools automate this."
+          }
+        ],
+        "relatedIds": [
+          "date-difference-calculator",
+          "age-on-date-calculator",
+          "hours-calculator",
+          "cS-age-on-date-how"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cS-percentage-increase-how": [
+      "percent-change-calculator",
+      "percentage-calculator",
+      "cS-percent-of-number-how",
+      "cS-percent-mental-math"
+    ],
+    "cS-percent-of-number-how": [
+      "percent-of-calculator",
+      "percentage-calculator",
+      "cS-percent-mental-math",
+      "cS-percentage-increase-how"
+    ],
+    "cS-percent-mental-math": [
+      "percentage-calculator",
+      "cS-percent-of-number-how",
+      "cS-percentage-increase-how"
+    ],
+    "cS-age-on-date-how": [
+      "age-on-date-calculator",
+      "age-calculator",
+      "date-difference-calculator",
+      "cS-days-between-dates-how"
+    ],
+    "cS-days-between-dates-how": [
+      "date-difference-calculator",
+      "age-on-date-calculator",
+      "hours-calculator",
+      "cS-age-on-date-how"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "percentage-calculator",
+          "url": "/calculators/percentage-calculator/"
+        },
+        {
+          "id": "percent-of-calculator",
+          "url": "/calculators/percent-of-calculator/"
+        },
+        {
+          "id": "percent-change-calculator",
+          "url": "/calculators/percent-change-calculator/"
+        },
+        {
+          "id": "age-calculator",
+          "url": "/calculators/age-calculator/"
+        },
+        {
+          "id": "age-on-date-calculator",
+          "url": "/calculators/age-on-date-calculator/"
+        },
+        {
+          "id": "date-difference-calculator",
+          "url": "/calculators/date-difference-calculator/"
+        },
+        {
+          "id": "hours-calculator",
+          "url": "/calculators/hours-calculator/"
+        },
+        {
+          "id": "average-calculator",
+          "url": "/calculators/average-calculator/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cS-percentage-increase-how",
+          "url": "/guides/how-to-calculate-percentage-increase/"
+        },
+        {
+          "id": "cS-percent-of-number-how",
+          "url": "/guides/how-to-calculate-percent-of-a-number/"
+        },
+        {
+          "id": "cS-percent-mental-math",
+          "url": "/guides/percentage-mental-math-tricks/"
+        },
+        {
+          "id": "cS-age-on-date-how",
+          "url": "/guides/how-to-calculate-age-on-a-date/"
+        },
+        {
+          "id": "cS-days-between-dates-how",
+          "url": "/guides/how-to-calculate-days-between-dates/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

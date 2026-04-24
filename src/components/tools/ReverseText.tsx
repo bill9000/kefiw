@@ -3,7 +3,29 @@ import CopyButton from '../CopyButton';
 import { reverseChars, reverseWords, reverseLines } from '~/lib/text';
 import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 
-type Mode = 'chars' | 'words' | 'each-word' | 'lines';
+type Mode = 'chars' | 'words' | 'each-word' | 'lines' | 'mirror';
+
+// Upside-down / mirror glyph table. Intentionally English-only — mirroring
+// is novelty/display text, not a linguistic operation.
+const MIRROR: Record<string, string> = {
+  a: 'ɐ', b: 'q', c: 'ɔ', d: 'p', e: 'ǝ', f: 'ɟ', g: 'ƃ', h: 'ɥ', i: 'ᴉ',
+  j: 'ɾ', k: 'ʞ', l: 'l', m: 'ɯ', n: 'u', o: 'o', p: 'd', q: 'b', r: 'ɹ',
+  s: 's', t: 'ʇ', u: 'n', v: 'ʌ', w: 'ʍ', x: 'x', y: 'ʎ', z: 'z',
+  A: '∀', B: 'ᗺ', C: 'Ɔ', D: 'p', E: 'Ǝ', F: 'Ⅎ', G: '⅁', H: 'H', I: 'I',
+  J: 'ſ', K: 'ʞ', L: '˥', M: 'W', N: 'N', O: 'O', P: 'Ԁ', Q: 'Ό', R: 'ᴚ',
+  S: 'S', T: '⊥', U: '∩', V: 'Λ', W: 'M', X: 'X', Y: '⅄', Z: 'Z',
+  '.': '˙', ',': "'", "'": ',', '"': ',,', '?': '¿', '!': '¡',
+  '(': ')', ')': '(', '[': ']', ']': '[', '{': '}', '}': '{',
+  '<': '>', '>': '<', '&': '⅋', '_': '‾', '3': 'Ɛ', '4': 'ᔭ',
+  '6': '9', '7': 'ㄥ', '9': '6',
+};
+
+// Mirror + reverse so the result reads bottom-up, flipped. Classic flip-text.
+function mirrorFlip(s: string): string {
+  const mapped: string[] = [];
+  for (const ch of s) mapped.push(MIRROR[ch] ?? ch);
+  return mapped.reverse().join('');
+}
 
 // Grapheme-safe character reversal using Intl.Segmenter so emoji ZWJ and
 // combining marks don't get shredded. Falls back to the lib helper.
@@ -38,16 +60,17 @@ export default function ReverseText() {
       case 'words': return reverseWords(source);
       case 'each-word': return reverseEachWord(source);
       case 'lines': return reverseLines(source);
+      case 'mirror': return mirrorFlip(source);
     }
   }, [source, mode]);
 
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
-        {(['chars','words','each-word','lines'] as Mode[]).map((m) => (
+        {(['chars','words','each-word','lines','mirror'] as Mode[]).map((m) => (
           <button key={m} onClick={() => setMode(m)}
             className={`btn ${mode===m ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900 hover:bg-slate-200'}`}>
-            {m === 'chars' ? 'Characters' : m === 'words' ? 'Word order' : m === 'each-word' ? 'Reverse each word' : 'Lines'}
+            {m === 'chars' ? 'Characters' : m === 'words' ? 'Word order' : m === 'each-word' ? 'Reverse each word' : m === 'lines' ? 'Lines' : 'Mirror (upside-down)'}
           </button>
         ))}
       </div>

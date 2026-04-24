@@ -1,0 +1,2458 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:07.726Z",
+  "cluster": {
+    "slug": "daily",
+    "section": "games",
+    "hubSlug": "daily-challenges",
+    "url": "/games/daily-challenges/",
+    "title": "Daily Challenges — Kefiw",
+    "h1": "Daily Challenges",
+    "subhead": "A new puzzle every day. Come back, keep your streak.",
+    "intro": "Kefiw now has three live daily pipelines. Kefiw Daily is the core word-and-logic route with Hunt, Hive, and Sudoku. Kefiw Math adds five short mental-arithmetic dashes. Kefiw Verbal adds five seeded letter-and-word puzzles. They all refresh at 4am Eastern (ET) and are built for repeatable daily play instead of one-off sessions.",
+    "description": "Three daily pipelines on Kefiw — Word, Math, and Verbal — plus strategy guides for turning short repeatable play into a routine you actually keep.",
+    "keywords": [
+      "daily word game",
+      "daily brain games",
+      "mental math practice",
+      "verbal puzzles",
+      "daily puzzle"
+    ],
+    "faq": [
+      {
+        "q": "When does the daily puzzle reset?",
+        "a": "4am Eastern Time (ET). Everyone worldwide gets the same puzzle on the same date — it just flips at different local clock times depending on where you are."
+      },
+      {
+        "q": "Do streaks survive across browsers?",
+        "a": "Progress saves in the current browser only. Switching browsers or clearing site data starts over."
+      },
+      {
+        "q": "What is a better daily routine than playing one random puzzle?",
+        "a": "A pipeline is better than a random single game because it mixes task types. Kefiw Daily gives word deduction and logic, Kefiw Math gives numeracy, and Kefiw Verbal gives letter-pattern work.",
+        "faq_intent": "comparison"
+      },
+      {
+        "q": "Are these daily pipelines free?",
+        "a": "Yes. Every daily puzzle and daily pipeline on Kefiw runs in the browser with no sign-up, no download, and no paywall. Play offline once the page loads.",
+        "faq_intent": "trust"
+      },
+      {
+        "q": "Are these daily games good for the brain?",
+        "a": "They can support daily cognitive engagement, especially because the three pipelines rotate different mental tasks. They are still not a cure, a diagnosis tool, or a replacement for exercise, sleep, hearing care, and blood-pressure control.",
+        "faq_intent": "definition"
+      },
+      {
+        "q": "Which pipeline should adults over 40 start with?",
+        "a": "Start with Kefiw Daily because it is the easiest habit to keep: Hunt, Hive, and Sudoku in one short session. Add Math and Verbal once the routine feels stable.",
+        "faq_intent": "how-to"
+      },
+      {
+        "q": "What daily games are good for seniors?",
+        "a": "Start with the shortest, clearest routes: Kefiw Daily, easy Sudoku, and Hive-style word search play. The best routine for older adults is short, readable, and repeatable rather than punishing.",
+        "faq_intent": "how-to"
+      }
+    ],
+    "relatedClusterSlugs": [
+      "pattern",
+      "scrabble"
+    ]
+  },
+  "tools": [
+    {
+      "id": "vibematch",
+      "slug": "vibematch",
+      "category": "games",
+      "url": "/games/vibematch/",
+      "title": "VibeMatch — Neural Synchrony Memory Grid",
+      "h1": "VibeMatch",
+      "current_word_count": 314,
+      "current": {
+        "description": "A cyberpunk memory game with a twist: every 8 misses the system re-indexes and swaps two hidden nodes. Sync every pair in the lowest time.",
+        "keywords": [
+          "vibematch",
+          "memory match game",
+          "concentration card game",
+          "neural memory puzzle",
+          "cyberpunk matching game"
+        ],
+        "intro": "A grid of face-down Data Nodes hides pairs of tech icons. Flip two at a time — matches stay online, mismatches flip back. But this is no ordinary memory game: every 8 misses the system re-indexes, swapping two hidden nodes with a glitchy shake. Chase 100% synchronization at the lowest Neural Latency.",
+        "outcomeLine": "Neural synchrony — flip pairs of tech-icon nodes; every 8 misses the system re-indexes and swaps two hidden tiles. Fastest sync wins.",
+        "howTo": [
+          "Tap a tile to flip it. Tap a second tile to pair-check. Matches stay online and pulse green; mismatches flip back after ~0.5s.",
+          "The clock starts on your first flip. Latency is shown live in the HUD.",
+          "Every 8 misses, watch for the Neural Re-Index: two hidden tiles swap positions with a magenta shake.",
+          "Clear every pair to reach 100% sync. Your fastest run per grid size is saved."
+        ],
+        "examples": [
+          {
+            "title": "4×4 — Entry",
+            "body": "8 pairs of tech icons. Solvable in under 30 seconds with a clean run."
+          },
+          {
+            "title": "6×6 — Pro",
+            "body": "18 pairs fill the grid. More misses mean more glitches — memory of positions becomes unreliable."
+          },
+          {
+            "title": "Re-Index",
+            "body": "On miss #8, #16, #24 … two random face-down tiles swap. Any assumption about their positions is invalidated."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How does the Neural Glitch pick which tiles to swap?",
+            "a": "Two hidden tiles are chosen at random from the currently face-down unmatched pool. Matched tiles are never touched."
+          },
+          {
+            "q": "Can I click three tiles in quick succession?",
+            "a": "No — the board locks between the second flip and the pair resolution, so only two cards are ever face-up at once."
+          },
+          {
+            "q": "What's saved?",
+            "a": "The fastest completion time per grid size (4×4 and 6×6) and lifetime wins — all in localStorage on this device."
+          },
+          {
+            "q": "Which icons appear?",
+            "a": "A pool of 18 tech icons — Cpu, Zap, Shield, Atom, Binary, Database, Eye, Fingerprint, Terminal, Wifi, Cloud, Lock, Bolt, Radar, Rocket, Satellite, Server, Globe — shuffled fresh each game."
+          }
+        ],
+        "relatedIds": [
+          "vibecircuit",
+          "vibecrypt",
+          "vibehex",
+          "vibepath"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibecircuit",
+      "slug": "vibecircuit",
+      "category": "games",
+      "url": "/games/vibecircuit/",
+      "title": "VibeCircuit — Neural Patch-Panel Wire Puzzle",
+      "h1": "VibeCircuit",
+      "current_word_count": 291,
+      "current": {
+        "description": "Wire each pair of glowing LEDs on a neon motherboard. Lines cannot cross; fill every cell for a Perfect Vibe win.",
+        "keywords": [
+          "vibecircuit",
+          "flow free alternative",
+          "pipe connect puzzle",
+          "neural patch panel game",
+          "wire routing puzzle"
+        ],
+        "intro": "A dark circuitry grid scatters pairs of colored LED nodes. Drag from one LED to its twin to lay a thick neon wire — but lines cannot cross. Drag through an existing wire and it short-circuits, retracting that color. Connect every pair to optimize the board; fill every cell for a Perfect Vibe.",
+        "outcomeLine": "Neural patch-panel — drag neon wires from each LED to its twin without crossing another net; fill every cell for a Perfect Vibe.",
+        "howTo": [
+          "Tap a glowing LED node and drag toward its matching pair. The wire renders in real time as you move.",
+          "To edit an existing wire, tap anywhere along it and drag — the path is truncated at that point.",
+          "Drag across another color's wire and it short-circuits: that color retracts back to the cut.",
+          "Connect every pair to complete the circuit. Fill every single cell for a Perfect Vibe."
+        ],
+        "examples": [
+          {
+            "title": "Short circuit",
+            "body": "Drag cyan through a magenta wire. Magenta resets back to where the cut happened; cyan continues."
+          },
+          {
+            "title": "Edit mid-path",
+            "body": "Tap the middle of a connected wire and drag a new route. The tail is discarded and replaced."
+          },
+          {
+            "title": "Perfect Vibe",
+            "body": "Every pair connected AND every cell occupied. The Grid Fill meter hits 100% and the System Initialized banner pulses."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are lines allowed to overlap?",
+            "a": "No. Wires cannot cross or share a cell. Dragging into another color's wire resets that color back to the cut point."
+          },
+          {
+            "q": "Do I have to fill every cell?",
+            "a": "No — connecting all pairs counts as a circuit optimized. Filling every cell earns a separate Perfect Vibe count."
+          },
+          {
+            "q": "Can I move through another color's LED?",
+            "a": "No. Foreign nodes are solid obstacles; only the matching node can accept a wire."
+          },
+          {
+            "q": "Is progress saved?",
+            "a": "Lifetime Circuits Optimized and Perfect Vibe counts persist to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibecrypt",
+          "vibehex",
+          "vibepath",
+          "vibecalc"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibecrypt",
+      "slug": "vibecrypt",
+      "category": "games",
+      "url": "/games/vibecrypt/",
+      "title": "VibeCrypt — Terminal Cryptogram Decryption Trainer",
+      "h1": "VibeCrypt",
+      "current_word_count": 342,
+      "current": {
+        "description": "A famous quote hides behind a random substitution cipher. Click a letter, type a guess, and use frequency analysis to crack the code.",
+        "keywords": [
+          "vibecrypt",
+          "cryptogram",
+          "substitution cipher",
+          "decryption trainer",
+          "frequency analysis game"
+        ],
+        "intro": "Each round encrypts a tech, AI, or philosophy quote with a random substitution alphabet. Letters, punctuation, and spacing are preserved so shape patterns and letter frequency give you a way in. Assign guesses to every cipher letter — and if you stall, Brute Force reveals a locked-in letter in gold.",
+        "outcomeLine": "Terminal cryptogram — a famous quote hides behind a random substitution cipher; use frequency analysis and Brute Force to decrypt it.",
+        "howTo": [
+          "Click any encrypted letter to select it. Type A–Z to set your guess for that letter; Backspace clears it.",
+          "Your guess replaces the cipher letter everywhere it appears in the quote. Assigning a new plain letter that was already in use clears the older mapping.",
+          "Use the Frequency Analyzer: in English, E, T, A, O, I, and N dominate. Match the tallest bars first.",
+          "Hit Brute Force to lock in a random unsolved letter with its correct mapping (shown in gold).",
+          "Solve when every cipher letter in the quote maps to its plaintext."
+        ],
+        "examples": [
+          {
+            "title": "Frequency attack",
+            "body": "The tallest bar in English text is almost always E. Assigning E to the highest-count cipher letter often breaks a quote open."
+          },
+          {
+            "title": "Short words",
+            "body": "Three-letter cipher words are usually THE or AND. A two-letter word ending in the same letter as \"the\" is a strong clue."
+          },
+          {
+            "title": "Brute Force",
+            "body": "One tap of Brute Force reveals a random unsolved letter and locks it in gold — use sparingly if you want a clean solve."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How is the cipher generated?",
+            "a": "A fresh Fisher-Yates shuffle of A–Z is drawn each round, rejected if any letter maps to itself (a derangement), so the ciphertext is always distinct from the plaintext."
+          },
+          {
+            "q": "Where do the quotes come from?",
+            "a": "A curated bank of 20 short technology, AI, and philosophy quotes — all under ~120 characters for readable frequency analysis."
+          },
+          {
+            "q": "Does Brute Force lose my progress?",
+            "a": "No — it only fills in a single locked cell. Your other guesses stay, and the revealed letter cannot be overwritten."
+          },
+          {
+            "q": "Is progress saved?",
+            "a": "Lifetime System Decryptions and Brute Force usage persist to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibehex",
+          "vibecontext",
+          "vibepath",
+          "vibecalc"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibehex",
+      "slug": "vibehex",
+      "category": "games",
+      "url": "/games/vibehex/",
+      "title": "VibeHex — Cyberpunk Hive Word Puzzle",
+      "h1": "VibeHex",
+      "current_word_count": 262,
+      "current": {
+        "description": "Seven glowing hexagons hide hundreds of words. Every word must use the core letter; find the pangram that touches all seven.",
+        "keywords": [
+          "vibehex",
+          "spelling bee alternative",
+          "honeycomb word game",
+          "pangram puzzle",
+          "cyberpunk word hive"
+        ],
+        "intro": "A neon-gold core hexagon surrounded by six neon-blue hexes. Build words of four or more letters using only the seven hive letters — and every word must include the core. Spot the pangram and the whole hive lights up gold.",
+        "outcomeLine": "Cyberpunk hive — 6 neon-blue letters + gold core, build 4+ letter words with the core, hunt the pangram; rank from Novice to Vibe Master.",
+        "howTo": [
+          "Tap hexes (or type on your keyboard) to build a word. The core letter is required in every word.",
+          "Minimum four letters. Letters outside the hive are rejected.",
+          "Enter submits, Delete erases the last letter, Shuffle rotates the outer ring.",
+          "Scoring: 4-letter words = 1pt, longer words = 1pt per letter, Pangrams = +7 bonus."
+        ],
+        "examples": [
+          {
+            "title": "Minimum word",
+            "body": "A 4-letter word using the core — 1 point."
+          },
+          {
+            "title": "Long word",
+            "body": "A 7-letter word using only hive letters including the core — 7 points."
+          },
+          {
+            "title": "Pangram",
+            "body": "A word using all seven hive letters at least once — base points + 7 bonus."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can I repeat letters?",
+            "a": "Yes — letters can be reused within a word. Only the seven letters on the hive are allowed, and the core letter must appear at least once."
+          },
+          {
+            "q": "Where do the valid words come from?",
+            "a": "The ENABLE word list is filtered per hive to produce the lexicon, including all pangrams."
+          },
+          {
+            "q": "Can I get new hives?",
+            "a": "Yes — New Hive picks a fresh 7-letter isogram seed and regenerates the board with its own lexicon and pangrams."
+          },
+          {
+            "q": "Is my progress saved?",
+            "a": "Found words persist per-hive to localStorage, along with lifetime score and the number of hives you have mastered (Vibe Master rank)."
+          }
+        ],
+        "relatedIds": [
+          "vibecontext",
+          "vibepath",
+          "vibecalc",
+          "vibetwist",
+          "vibelink"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibecontext",
+      "slug": "vibecontext",
+      "category": "games",
+      "url": "/games/vibecontext/",
+      "title": "VibeContext — Neural Terminal Semantic Guess",
+      "h1": "VibeContext",
+      "current_word_count": 246,
+      "current": {
+        "description": "Guess the target word by sending semantically related words. A proximity map rates each guess 1-1000 — climb the signal strength bar to the lock.",
+        "keywords": [
+          "vibecontext",
+          "semantle alternative",
+          "semantic guess game",
+          "warmth word game",
+          "context guessing game"
+        ],
+        "intro": "A hidden target word waits behind the prompt. Each guess is scored 1–1000 based on how closely it relates to the target; the signal bar tracks your warmest guess. Related words you might never have thought to try pull you in; unrelated words stay frozen.",
+        "outcomeLine": "Semantic guessing — a curated warmth map rates each guess 1-1000; climb the signal bar from Frozen to Scorching to lock the target.",
+        "howTo": [
+          "Type any English word and hit Send. The console scores it against the curated proximity map.",
+          "Watch the Signal Strength bar track your warmest guess. Cool → Warm → Hot → Scorching.",
+          "Unrecognized words are rejected; recognized English words outside the map still register a faint \"frozen\" score.",
+          "Lock the signal at 1000 by guessing the target word."
+        ],
+        "examples": [
+          {
+            "title": "Core concept",
+            "body": "A guess tightly tied to the target returns a Scorching score (900+)."
+          },
+          {
+            "title": "Adjacent concept",
+            "body": "A related but indirect word returns a Warm-Cool score (400–700)."
+          },
+          {
+            "title": "Unrelated word",
+            "body": "A valid English word with no semantic tie stays Frozen (1–12)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How are scores calculated?",
+            "a": "Each level hardcodes a proximity map — curated warmth scores between 1 and 999 for hundreds of semantically related words. The target itself is 1000."
+          },
+          {
+            "q": "Are valid English words without a score still accepted?",
+            "a": "Yes — the ENABLE word list is used to accept recognized English words and assign them a low Frozen score so you can see they registered."
+          },
+          {
+            "q": "Is my progress saved?",
+            "a": "Total signals locked (lifetime wins) persist to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibehex",
+          "vibepath",
+          "vibecalc",
+          "vibetwist"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibepath",
+      "slug": "vibepath",
+      "category": "games",
+      "url": "/games/vibepath/",
+      "title": "VibePath — Thematic Word Path Puzzle",
+      "h1": "VibePath",
+      "current_word_count": 250,
+      "current": {
+        "description": "Drag a neon thread through the grid to uncover every theme word. Find the Vibe-Span that connects two opposite sides to trigger the System Override.",
+        "keywords": [
+          "vibepath",
+          "strands alternative",
+          "thematic word search",
+          "spangram game",
+          "word path puzzle"
+        ],
+        "intro": "A 6×7 letter grid hides every word in a single theme — and one Vibe-Span that crosses the grid from side to side. Drag adjacent letters in any direction to trace a word; valid traces solidify into a cyan thread, the Spangram lights hot pink and fires a System Override pulse. Every letter must land in some word to clear the board.",
+        "outcomeLine": "Thematic word path — drag neon threads through a 6×7 grid, claim every letter, find the Vibe-Span that crosses opposite sides.",
+        "howTo": [
+          "Read the theme hint above the grid — every valid word relates to it.",
+          "Press and drag through adjacent letters (horizontal, vertical, or diagonal) to build a word.",
+          "Release to commit. Valid words solidify; the Vibe-Span pulses the whole grid and glows hot pink.",
+          "The puzzle is cleared only when every letter has been claimed by a found word."
+        ],
+        "examples": [
+          {
+            "title": "Theme: Cybernetics",
+            "body": "Words include NEURAL, SYSTEM, CODE, LINK, CHIP, BYTE, PORT — plus the Vibe-Span that spans the grid."
+          },
+          {
+            "title": "Vibe-Span behavior",
+            "body": "The spangram must touch two opposite sides (top↔bottom or left↔right). Finding it locks the theme in place."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Can I trace words in any direction?",
+            "a": "Yes — horizontal, vertical, and both diagonals. Paths can bend. You cannot reuse a cell in the same word."
+          },
+          {
+            "q": "Does the Vibe-Span spell the theme?",
+            "a": "It is the one word that describes the theme and stretches between two opposite sides of the grid."
+          },
+          {
+            "q": "Is my progress saved?",
+            "a": "Total Neural Maps Synced (completed puzzles) persists to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibecalc",
+          "vibepair",
+          "vibetwist",
+          "vibelink",
+          "vibecrosser"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibecalc",
+      "slug": "vibecalc",
+      "category": "games",
+      "url": "/games/vibecalc/",
+      "title": "VibeCalc — Terminal Math Deduction",
+      "h1": "VibeCalc",
+      "current_word_count": 240,
+      "current": {
+        "description": "Crack the hidden 8-character equation in six tries. Nerdle-style deduction with a strict math parser and a matrix-terminal palette.",
+        "keywords": [
+          "vibecalc",
+          "nerdle alternative",
+          "math deduction game",
+          "equation guess game",
+          "terminal math puzzle"
+        ],
+        "intro": "A hidden 8-character equation waits behind the prompt. You get six guesses. The parser enforces real arithmetic — order of operations included — so every submission must actually balance. Deep Emerald means right character, right spot. Electric Gold means right character, wrong spot. Faded Grey means not in the equation.",
+        "outcomeLine": "Terminal math deduction — crack the hidden 8-char equation in six tries; strict parser, order of operations, Calculation Streak.",
+        "howTo": [
+          "Enter eight characters — digits 0–9 and the operators + − * / plus a single = sign.",
+          "Press Enter. The parser rejects anything that is not mathematically valid (order of operations applies).",
+          "Read the colors: Deep Emerald = locked, Electric Gold = misplaced, Faded Grey = not in the equation.",
+          "Solve it within six tries to extend your Calculation Streak."
+        ],
+        "examples": [
+          {
+            "title": "Straight sum",
+            "body": "45+12=57 — classic 8-char addition."
+          },
+          {
+            "title": "Order of operations",
+            "body": "2*3+4=10 — multiplication resolves before the addition, so the parser allows it."
+          },
+          {
+            "title": "Integer division only",
+            "body": "108/9=12 — results must be whole numbers; 10/3 is rejected as invalid math."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What counts as a valid equation?",
+            "a": "Exactly 8 characters, exactly one = sign, no leading zeros on any number, integer-only arithmetic, and both sides must evaluate to the same value."
+          },
+          {
+            "q": "Does it respect order of operations?",
+            "a": "Yes — * and / bind tighter than + and −, evaluated left-to-right within each precedence level."
+          },
+          {
+            "q": "Is my streak saved?",
+            "a": "Yes — Calculation Streak, best streak, wins and losses persist to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibepair",
+          "vibetwist",
+          "vibelink",
+          "vibeglobe"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibepair",
+      "slug": "vibepair",
+      "category": "games",
+      "url": "/games/vibepair/",
+      "title": "VibePair — Dual-Icon Rebus Puzzle",
+      "h1": "VibePair",
+      "current_word_count": 293,
+      "current": {
+        "description": "Two glowing icons combine into one compound word. Tap letters from a glass-morphism bank into the answer slots to solve the visual rebus.",
+        "keywords": [
+          "vibepair",
+          "pictoword alternative",
+          "visual rebus game",
+          "compound word puzzle",
+          "icon word game"
+        ],
+        "intro": "Two cyberpunk icons glow side by side — a blue cell on the left, a pink cell on the right. Decode the compound word they form (Lightbulb + Home → Lighthouse), then fly letters from the glass bank into the answer slots. Out of ideas? A Neural Hint drops a correct letter for some Vibe Points.",
+        "outcomeLine": "Dual-icon rebus — combine two glowing icons into one compound word; glass-morphism letter bank, Neural Hint costs Vibe Points.",
+        "howTo": [
+          "Study the two icons and the separator: the left icon is the first half of the word, the right icon is the second.",
+          "Tap letters in the bank to fly them into the slots in order — tap a placed letter to send it back.",
+          "When every slot is filled correctly the Visual Synapse fires, banking the win and auto-advancing.",
+          "Stuck? Fire a Neural Hint (Zap icon, 25 Vibe Points) to lock in a correct letter."
+        ],
+        "examples": [
+          {
+            "title": "Lightbulb + Home",
+            "body": "Answer: LIGHTHOUSE — the compound word spans both icons."
+          },
+          {
+            "title": "Snowflake + User",
+            "body": "Answer: SNOWMAN — short compound, shorter bank, faster sync."
+          },
+          {
+            "title": "Rocket + Ship",
+            "body": "Answer: ROCKETSHIP — longer rebus, larger bank, more noise letters."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How are Vibe Points earned and spent?",
+            "a": "Solve a rebus for +30 Vibe Points. Firing a Neural Hint costs 25. You start each run with 50 in the tank."
+          },
+          {
+            "q": "Can I unplace a letter?",
+            "a": "Yes — tap any letter already in a slot to fly it back into the bank."
+          },
+          {
+            "q": "What does the Neural Hint do exactly?",
+            "a": "It fills the first empty slot with its correct letter, swaps in a correct letter over a wrong one, or clears a misplaced tile so you can retry."
+          },
+          {
+            "q": "Is my progress saved?",
+            "a": "Visual Synapses Synced and Vibe Points persist to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibetwist",
+          "vibelink",
+          "vibecrosser",
+          "vibedrop"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibetwist",
+      "slug": "vibetwist",
+      "category": "games",
+      "url": "/games/vibetwist/",
+      "title": "VibeTwist — Neon Anagram Speed-Run",
+      "h1": "VibeTwist",
+      "current_word_count": 226,
+      "current": {
+        "description": "Scramble-letter speed run. Find as many words as possible in 2 minutes. Hit the Bingo that uses all 7 letters to clear the level.",
+        "keywords": [
+          "vibetwist",
+          "text twist alternative",
+          "anagram speedrun",
+          "word scramble game",
+          "bingo word game"
+        ],
+        "intro": "Seven neon keycaps, two minutes, a wall of empty slots. Type or tap letters to build words — each valid word lights its slot. Find the Bingo (the word using all seven letters) to stop the clock and roll straight into the next level.",
+        "outcomeLine": "Neon 2-minute anagram speed-run — find sub-words, nail the 7-letter Bingo to advance the level.",
+        "howTo": [
+          "Tap a tile or press a keyboard letter to load it into the input strip.",
+          "Press Enter (or Submit) to score. Valid words light the matching slot and rack up length² × 10 points.",
+          "Twist rearranges the tiles; Clear / Back strip your input without penalty.",
+          "Spell the 7-letter Bingo to freeze the clock, trigger the celebration, and advance to a new scramble."
+        ],
+        "examples": [
+          {
+            "title": "Level 1 Bingo",
+            "body": "RETAINS — one valid Bingo. NASTIER, RATINES, RETINAS and other 7-letter anagrams also count."
+          },
+          {
+            "title": "Scoring",
+            "body": "length² × 10 — a 5-letter word is 250, a 7-letter Bingo is 490."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Where do the valid words come from?",
+            "a": "The ENABLE word list (~172k entries) loaded on mount, filtered per letter set."
+          },
+          {
+            "q": "What happens on Bingo?",
+            "a": "Timer freezes, the BINGO burst plays, your score is banked, and a new 7-letter scramble starts with a fresh 2-minute clock."
+          },
+          {
+            "q": "Is the highest level saved?",
+            "a": "Yes — Best Level and Best Score persist to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibelink",
+          "vibedrop",
+          "vibeshift",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibelink",
+      "slug": "vibelink",
+      "category": "games",
+      "url": "/games/vibelink/",
+      "title": "VibeLink — Cyberpunk Group-Sort Puzzle",
+      "h1": "VibeLink",
+      "current_word_count": 215,
+      "current": {
+        "description": "Sort 16 tiles into 4 hidden groups of 4. Cyberpunk Connections-style with Protocol, Logic, Encryption, and Source Code tiers.",
+        "keywords": [
+          "vibelink",
+          "connections alternative",
+          "group puzzle",
+          "word grouping game",
+          "cyberpunk connections"
+        ],
+        "intro": "Each round deals 16 tiles hiding four secret groups. Pick any four tiles and Submit — a full sync collapses them into a colored band, a near-miss flashes \"One away…\" and drains a power cell. Four power cells, four groups — stay alive and sync them all.",
+        "outcomeLine": "Sort 16 tiles into 4 hidden groups — Protocol, Logic, Encryption, Source Code tiers; 4 power cells allowed.",
+        "howTo": [
+          "Tap four tiles that share a hidden theme, then hit Submit.",
+          "Correct sets merge into a glowing band labelled by level: Protocol (L1), Logic (L2), Encryption (L3), Source Code (L4).",
+          "3-out-of-4 triggers a \"One away…\" hint but still costs a power cell.",
+          "Shuffle rearranges the remaining tiles. Four mistakes ends the round."
+        ],
+        "examples": [
+          {
+            "title": "Protocol (easy)",
+            "body": "LLM Chatbots: GPT, CLAUDE, LLAMA, GEMINI."
+          },
+          {
+            "title": "Source Code (tricky)",
+            "body": "Snakes: PYTHON, COBRA, VIPER, MAMBA — misdirection with PYTHON the language."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What are the four levels?",
+            "a": "Level 1 Protocol (blue) is easiest, then Logic (green), Encryption (purple), and Source Code (gold) which often plays on wordplay or misdirection."
+          },
+          {
+            "q": "Do mistakes end the round immediately?",
+            "a": "No — four mistakes are allowed total. Each wrong submit drains one power cell. When all four are spent, remaining groups are revealed."
+          },
+          {
+            "q": "Is my streak saved?",
+            "a": "Yes — wins, losses, current streak and best streak persist to localStorage on this device."
+          }
+        ],
+        "relatedIds": [
+          "vibeglobe",
+          "vibecrosser",
+          "vibedrop",
+          "vibeshift"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibeglobe",
+      "slug": "vibeglobe",
+      "category": "games",
+      "url": "/games/vibeglobe/",
+      "title": "VibeGlobe — Geographic Deduction Game",
+      "h1": "VibeGlobe",
+      "current_word_count": 222,
+      "current": {
+        "description": "Guess the country from its glowing silhouette. Each wrong guess gives you a distance in km and a directional arrow. Cyberpunk Worldle-style with local score.",
+        "keywords": [
+          "vibeglobe",
+          "worldle alternative",
+          "geography game",
+          "country silhouette game",
+          "country guess game"
+        ],
+        "intro": "A random country appears as a neon silhouette. You have six attempts to name it. Every wrong guess shows the distance in kilometres from your guess to the target and an arrow pointing the way. A proximity bar and a stylised world map track your mission.",
+        "outcomeLine": "Neon country-silhouette deduction — 6 guesses, Haversine distance, compass arrows, Global Mastery stat.",
+        "howTo": [
+          "Look at the silhouette and type a country name — pick from the autocomplete.",
+          "Wrong guesses show distance (Haversine km) and a compass arrow toward the target.",
+          "Your guesses turn red on the world map; the target turns neon green when found or revealed.",
+          "Solve within 6 attempts. Total countries found persist as Global Mastery."
+        ],
+        "examples": [
+          {
+            "title": "Near miss",
+            "body": "Guess Spain when the target is France: distance ~1,000 km, arrow ↑, proximity ~95%."
+          },
+          {
+            "title": "Persistent score",
+            "body": "Global Mastery count saves to localStorage on this device."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How is distance calculated?",
+            "a": "Haversine formula on the two capital/centroid lat-lon pairs. It is great-circle distance, not road distance."
+          },
+          {
+            "q": "Why does a guess need autocomplete?",
+            "a": "Spelling counts — the autocomplete accepts aliases (UK, USA, Türkiye, Holland, etc.) so you do not have to match the exact display name."
+          },
+          {
+            "q": "What countries are in play?",
+            "a": "A curated set of ~50 major countries across every continent. Each game picks one at random."
+          }
+        ],
+        "relatedIds": [
+          "vibecrosser",
+          "vibedrop",
+          "vibeshift",
+          "vibecipher"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibecrosser",
+      "slug": "vibecrosser",
+      "category": "games",
+      "url": "/games/vibecrosser/",
+      "title": "VibeCrosser — Cyberpunk Word Wheel Crossword",
+      "h1": "VibeCrosser",
+      "current_word_count": 246,
+      "current": {
+        "description": "Swipe letters on a neon wheel to fill a minimalist crossword grid. Cyberpunk Wordscapes-style puzzler with fly-in reveals and local vibe score.",
+        "keywords": [
+          "vibecrosser",
+          "wordscapes alternative",
+          "word wheel game",
+          "crossword word puzzle",
+          "cyberpunk word game"
+        ],
+        "intro": "Drag across letters on the electric-cyan wheel to form words. Every word you spell flies letter-by-letter into its slot on the crossword grid above. Clear all target words to finish the puzzle, then Vibes Collected persists on this device.",
+        "outcomeLine": "Neon word wheel crossword — swipe letters, watch words fly into the grid, bank vibes.",
+        "howTo": [
+          "Press and drag across letters on the wheel to chain them — release to submit.",
+          "Valid target words fly into the grid cells; locked cells unlock with a cyan glow.",
+          "Tap Shuffle to rearrange the wheel, or Hint to reveal a random letter for 20 vibes.",
+          "Clear every word to advance to the next puzzle — vibes carry across puzzles."
+        ],
+        "examples": [
+          {
+            "title": "Puzzle 1 — SHIRT",
+            "body": "Find SHIRT, HITS, and STIR to fill the crossword. Scores 50 + 40 + 40 = 130 vibes."
+          },
+          {
+            "title": "Persistent score",
+            "body": "Total Vibes Collected is saved in localStorage on this device across sessions."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Do I have to find words in order?",
+            "a": "No — any target word at any time. Words already found show as \"already found\" if you re-swipe them."
+          },
+          {
+            "q": "What counts as a valid word?",
+            "a": "Each puzzle has a fixed list of target words. Other real words from the wheel letters do not score — only the listed ones."
+          },
+          {
+            "q": "How is this different from VibeDrop or VibeShift?",
+            "a": "VibeCrosser is a wheel-and-crossword puzzler. VibeShift is a column slider. VibeDrop is a tile-chain tower. All three share the cyberpunk theme and local scoring."
+          }
+        ],
+        "relatedIds": [
+          "vibedrop",
+          "vibeshift",
+          "vibecipher",
+          "word-finder"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibedrop",
+      "slug": "vibedrop",
+      "category": "games",
+      "url": "/games/vibedrop/",
+      "title": "VibeDrop — Neon Word-Chain Tower Puzzle",
+      "h1": "VibeDrop",
+      "current_word_count": 238,
+      "current": {
+        "description": "Drag across adjacent letters to spell words and clear the tower. 5-letter words trigger a Vibe Blast that wipes surrounding tiles.",
+        "keywords": [
+          "vibedrop",
+          "spelltower alternative",
+          "word chain puzzle",
+          "word tower game",
+          "neon word game"
+        ],
+        "intro": "A synthwave-styled word tower. Drag across adjacent tiles to form a word, release to clear it. Any word of 5+ letters detonates a Vibe Blast that clears every neighbouring tile too. Tiles above fall down with bouncy physics and new letters drop from the top.",
+        "outcomeLine": "Drag-to-spell neon word tower — 5-letter words trigger a Vibe Blast clearing adjacent tiles.",
+        "howTo": [
+          "Press and drag across adjacent tiles (including diagonals) to chain letters.",
+          "Release to submit. Valid words (3+ letters) clear and score length² × 10.",
+          "Form a 5+ letter word to trigger a Vibe Blast — every tile next to your chain is wiped out.",
+          "Tiles fall to fill the gap and new letters drop in from the top."
+        ],
+        "examples": [
+          {
+            "title": "Quick score",
+            "body": "Chaining a 4-letter word scores 16 × 10 = 160 points."
+          },
+          {
+            "title": "Vibe Blast",
+            "body": "A 6-letter word scores 360 points AND blasts every adjacent tile — easy way to chain combos."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What counts as a valid word?",
+            "a": "The game ships with a core dictionary and augments it on load from the full ENABLE word list (~170k words)."
+          },
+          {
+            "q": "How is the score calculated?",
+            "a": "length × length × 10. A 3-letter word is 90, a 5-letter is 250, a 7-letter is 490 — plus the bonus clears from the blast radius."
+          },
+          {
+            "q": "How is this different from VibeShift?",
+            "a": "VibeShift slides columns to reveal words. VibeDrop is a free-form tile-chain puzzle with tower-style clearing and blast combos."
+          }
+        ],
+        "relatedIds": [
+          "vibeshift",
+          "vibecipher",
+          "word-finder",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibeshift",
+      "slug": "vibeshift",
+      "category": "games",
+      "url": "/games/vibeshift/",
+      "title": "VibeShift — Column Letter Slider Puzzle",
+      "h1": "VibeShift",
+      "current_word_count": 248,
+      "current": {
+        "description": "Slide five columns of letters so the center row spells valid words. Cyberpunk TypeShift-style puzzle with multiple levels.",
+        "keywords": [
+          "vibeshift",
+          "typeshift alternative",
+          "word slider puzzle",
+          "column word game",
+          "cyberpunk word game"
+        ],
+        "intro": "Each level gives you five columns of letters. Slide columns up or down (or tap letters) so the center goal row spells a real word — every letter you use stays lit. Clear every letter to finish the level.",
+        "outcomeLine": "Slide five columns to spell words — clear every letter to finish the level.",
+        "howTo": [
+          "Drag a column up or down, or tap a letter to bring it to the center goal row.",
+          "When the goal row spells a valid target word, the tiles glow cyan and those letters stay lit.",
+          "Keep forming different words until every letter on the board is cyan.",
+          "Tap the reset icon to restart the level, or Settings to jump to any level."
+        ],
+        "examples": [
+          {
+            "title": "Level 1 solve",
+            "body": "Form SHINE, STONE, and SMILE in any order — each word lights new letters until the board is fully cleared."
+          },
+          {
+            "title": "Progress saved",
+            "body": "Your current level and lifetime completions persist in localStorage on this device."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How do I know which words to aim for?",
+            "a": "Each level is designed around a hand-picked set of target words. The column letters are chosen so those words are solvable — and so that solving them all clears every tile."
+          },
+          {
+            "q": "Does typing a random real word count?",
+            "a": "No — only the level's target words will glow. Other letter combinations won't mark tiles as used."
+          },
+          {
+            "q": "How is this different from VibeCipher?",
+            "a": "VibeCipher is a Wordle-style guess game with unlimited rounds. VibeShift is a TypeShift-style puzzle where you slide columns to reveal words."
+          }
+        ],
+        "relatedIds": [
+          "vibecipher",
+          "daily-word",
+          "word-unscrambler",
+          "word-finder"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "vibecipher",
+      "slug": "vibecipher",
+      "category": "games",
+      "url": "/games/vibecipher/",
+      "title": "VibeCipher — Unlimited Word Guess Game",
+      "h1": "VibeCipher",
+      "current_word_count": 184,
+      "current": {
+        "description": "A cyberpunk-styled 5-letter word guess game. Unlimited plays, local stats, no signup.",
+        "keywords": [
+          "vibecipher",
+          "wordle alternative",
+          "word guess game",
+          "unlimited wordle",
+          "5 letter word game"
+        ],
+        "intro": "Crack a new 5-letter cipher every round. Six guesses, greens and ambers guide you in, and your win streak stays on your device. Play as many rounds as you want.",
+        "outcomeLine": "Cyberpunk 5-letter word guess — unlimited rounds, local stats, no signup.",
+        "howTo": [
+          "Type a 5-letter word and press Enter.",
+          "Green tiles mean the letter is in the exact spot; amber means the letter is in the word but wrong spot.",
+          "Use the on-screen or physical keyboard — Del removes, Enter submits.",
+          "Press New Game anytime for a fresh cipher."
+        ],
+        "examples": [
+          {
+            "title": "Valid guess",
+            "body": "\"CRANE\" on row 1 often reveals 2–3 useful letter states."
+          },
+          {
+            "title": "Stats saved locally",
+            "body": "Wins, games played, current streak, and best streak persist in this browser."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is the answer the same as Wordle?",
+            "a": "No — VibeCipher picks independently from a curated 5-letter pool and is unlimited."
+          },
+          {
+            "q": "Does it track my stats across devices?",
+            "a": "Stats are stored in localStorage on the device you played on. Clearing site data resets them."
+          },
+          {
+            "q": "Can I share a result?",
+            "a": "Yes — the win/loss modal has a Share button that copies a result summary or uses your device share sheet."
+          }
+        ],
+        "relatedIds": [
+          "daily-word",
+          "wordle-solver",
+          "word-unscrambler",
+          "5-letter-word-finder"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "daily-word",
+      "slug": "daily-word",
+      "category": "games",
+      "url": "/games/daily-word/",
+      "title": "Daily Word — Puzzle of the Day",
+      "h1": "Daily Word",
+      "current_word_count": 141,
+      "current": {
+        "description": "A fresh 5-letter anagram every day. New puzzle at 4am Eastern (ET) — same one for everyone worldwide.",
+        "keywords": [
+          "daily word game",
+          "word puzzle",
+          "word of the day"
+        ],
+        "intro": "Unscramble today's 5-letter word. Everyone worldwide gets the same puzzle — a new one appears at 4am Eastern (ET) each day.",
+        "outcomeLine": "Today's word challenge — same puzzle for everyone.",
+        "howTo": [
+          "Look at the scrambled letters.",
+          "Type your guess into the input.",
+          "Use the hint button if stuck — it reveals one letter at a time.",
+          "Come back tomorrow for the next puzzle."
+        ],
+        "examples": [
+          {
+            "title": "New puzzle at 4am ET daily",
+            "body": "Same 5 letters for every player on the same day — rank yourself by attempts used."
+          }
+        ],
+        "faq": [
+          {
+            "q": "When does the puzzle change?",
+            "a": "At 4am Eastern Time (ET) each day. That’s 1am Pacific, 9am UK, 10am Central Europe, 5pm in Tokyo — same puzzle worldwide, just a different local clock."
+          },
+          {
+            "q": "Is my progress saved?",
+            "a": "Yes — saved locally in your browser. Clearing site data resets it."
+          }
+        ],
+        "relatedIds": [
+          "daily-anagram",
+          "daily-unscramble",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "daily-anagram",
+      "slug": "daily-anagram",
+      "category": "games",
+      "url": "/games/daily-anagram/",
+      "title": "Daily Anagram — 6-Letter Word Puzzle",
+      "h1": "Daily Anagram",
+      "current_word_count": 104,
+      "current": {
+        "description": "A 6-letter anagram puzzle refreshed every day. Play once, come back tomorrow.",
+        "keywords": [
+          "daily anagram",
+          "anagram of the day",
+          "daily word puzzle"
+        ],
+        "intro": "Today's anagram: unscramble six letters into a real English word. Same puzzle for everyone — rolls over at 4am Eastern each day.",
+        "outcomeLine": "Fresh anagram every day with shareable results.",
+        "howTo": [
+          "Study the scrambled letters.",
+          "Type your guess and press Enter.",
+          "Reveal a letter for a hint when stuck."
+        ],
+        "examples": [
+          {
+            "title": "Daily scramble",
+            "body": "e.g. \"VARLET\" → could be TRAVEL — test your guess."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Will the same word repeat?",
+            "a": "Over years it can recur, but the pool is large enough that you'll see fresh words daily for a long time."
+          },
+          {
+            "q": "Can I share my result?",
+            "a": "Tell friends your attempts count — same puzzle worldwide."
+          }
+        ],
+        "relatedIds": [
+          "daily-word",
+          "daily-unscramble",
+          "anagram-solver"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "daily-unscramble",
+      "slug": "daily-unscramble",
+      "category": "games",
+      "url": "/games/daily-unscramble/",
+      "title": "Daily Unscramble — 7-Letter Word of the Day",
+      "h1": "Daily Unscramble",
+      "current_word_count": 111,
+      "current": {
+        "description": "A 7-letter unscramble puzzle each day. Harder than daily-anagram — one word per day, refreshed at 4am ET.",
+        "keywords": [
+          "daily unscramble",
+          "word unscramble daily",
+          "daily word puzzle"
+        ],
+        "intro": "A tougher daily puzzle: seven scrambled letters, one valid English word. New each day at 4am Eastern (ET).",
+        "outcomeLine": "A new scrambled-word puzzle each day.",
+        "howTo": [
+          "Look at the 7 scrambled letters.",
+          "Type your guess. Enter to submit.",
+          "Reveal letters one at a time if you're stuck."
+        ],
+        "examples": [
+          {
+            "title": "Daily 7-letter anagram",
+            "body": "Tougher than the 5- and 6-letter variants — expect to need hints sometimes."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why is this harder?",
+            "a": "Seven letters have 5,040 possible orderings vs 720 for six. The solver space is 7x bigger."
+          },
+          {
+            "q": "When do puzzles reset?",
+            "a": "4am Eastern Time (ET) each day. Your progress saves for the current day only."
+          }
+        ],
+        "relatedIds": [
+          "daily-word",
+          "daily-anagram",
+          "word-unscrambler"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "sudoku",
+      "slug": "sudoku",
+      "category": "games",
+      "url": "/games/sudoku/",
+      "title": "Sudoku — Kefiw",
+      "h1": "Sudoku",
+      "current_word_count": 425,
+      "current": {
+        "description": "Play Sudoku in your browser. Easy, medium, hard, and expert boards. Auto-save progress.",
+        "keywords": [
+          "sudoku",
+          "play sudoku online",
+          "sudoku game"
+        ],
+        "intro": "Classic Sudoku — a 9×9 grid split into nine 3×3 boxes. Fill every blank cell with a digit 1–9 so each row, each column, and each 3×3 box contains every digit exactly once. No arithmetic, no diagonals — just those three constraints. Every puzzle has a unique solution, so you never need to guess. Progress saves locally.",
+        "outcomeLine": "Play Sudoku — easy through expert, no mid-game popups.",
+        "howTo": [
+          "The rules: fill every blank cell with 1–9 so that each of the 9 rows, 9 columns, and nine 3×3 boxes contains every digit exactly once.",
+          "A digit is legal in a cell only if it doesn't already appear in that cell's row, column, or 3×3 box.",
+          "Tap a blank cell to select it; press 1–9 (or tap the number buttons) to place a digit. Backspace/Delete/0 clears.",
+          "Red highlighting means you broke a rule — undo and rescan. A proper Sudoku is always solvable by logic alone; if you feel like guessing, you missed a deduction.",
+          "Starter technique: pick a digit like 1, scan all nine 3×3 boxes, and place it in any box where only one cell can legally hold it. Repeat for 2 through 9, then loop back — each placement opens new forced moves.",
+          "Pick a difficulty at the top; your progress auto-saves per difficulty."
+        ],
+        "examples": [
+          {
+            "title": "The three rules",
+            "body": "Each row: every digit 1–9 once. Each column: every digit 1–9 once. Each 3×3 box: every digit 1–9 once. That is the entire ruleset."
+          },
+          {
+            "title": "Legal-placement check",
+            "body": "Want to put a 7 in a blank cell? Check its row for a 7 (none → OK), its column (none → OK), its 3×3 box (already a 7 → illegal). Try another digit."
+          },
+          {
+            "title": "Difficulties",
+            "body": "Easy (~40 clues, 3–7 min), Medium (~32), Hard (~28), Expert (~24 — near the human-solvable minimum)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is there math in Sudoku?",
+            "a": "No. The digits 1–9 are symbols — you could replace them with letters or shapes and the game would be identical. No addition, no multiplication."
+          },
+          {
+            "q": "Do diagonals count?",
+            "a": "Not in standard Sudoku. Only rows, columns, and 3×3 boxes have the once-each-digit rule. \"Diagonal Sudoku\" is a variant, not the default."
+          },
+          {
+            "q": "Can I take notes?",
+            "a": "Pencil marks are planned for a future version. For now, use mental candidates or scratch paper on hard puzzles."
+          },
+          {
+            "q": "Why does a cell highlight red?",
+            "a": "Your digit violates one of the three rules — same digit already in the row, column, or 3×3 box."
+          },
+          {
+            "q": "How is the board generated?",
+            "a": "Backtracking solver fills a full 9×9, then removes cells while verifying uniqueness — every puzzle has exactly one solution."
+          }
+        ],
+        "relatedIds": [
+          "sudoku-easy",
+          "daily-word"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "sudoku-easy",
+      "slug": "sudoku-easy",
+      "category": "games",
+      "url": "/games/sudoku-easy/",
+      "title": "Easy Sudoku — Play Free Online",
+      "h1": "Easy Sudoku",
+      "current_word_count": 180,
+      "current": {
+        "description": "Play easy Sudoku in your browser. About 36 given clues — ideal for beginners or a quick puzzle.",
+        "keywords": [
+          "easy sudoku",
+          "sudoku easy",
+          "easy sudoku online"
+        ],
+        "intro": "Easy Sudoku with ~40 starting clues — the right starting point if you're learning. The rules: fill every blank cell with 1–9 so each row, each column, and each 3×3 box contains every digit exactly once. No math, no diagonals. Progress saves locally.",
+        "outcomeLine": "Beginner-friendly Sudoku with 35+ given digits.",
+        "howTo": [
+          "Rules recap: each of the 9 rows, 9 columns, and nine 3×3 boxes must contain every digit 1–9 exactly once.",
+          "Tap a blank cell. Press 1–9 to place a digit; Backspace/Delete/0 to clear.",
+          "Easy puzzles are solvable by naked singles alone — find a cell where only one digit is legal (no conflicts in row, column, or box) and place it.",
+          "Red highlighting means the digit breaks a rule. Undo and look again — never guess."
+        ],
+        "examples": [
+          {
+            "title": "Easy difficulty",
+            "body": "≈ 36 clues, typical solve 3–7 minutes for beginners."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What makes a puzzle easy?",
+            "a": "More starting clues means fewer branching decisions — easy puzzles can be solved using only single-candidate scans."
+          },
+          {
+            "q": "Progress saved?",
+            "a": "Yes. Each difficulty has its own saved board."
+          }
+        ],
+        "relatedIds": [
+          "sudoku",
+          "sudoku-medium",
+          "sudoku-hard"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "sudoku-medium",
+      "slug": "sudoku-medium",
+      "category": "games",
+      "url": "/games/sudoku-medium/",
+      "title": "Medium Sudoku — Play Free Online",
+      "h1": "Medium Sudoku",
+      "current_word_count": 186,
+      "current": {
+        "description": "Play medium Sudoku in your browser. About 30 clues — needs light scanning and candidate elimination.",
+        "keywords": [
+          "medium sudoku",
+          "sudoku medium",
+          "medium sudoku online"
+        ],
+        "intro": "Medium Sudoku with ~32 starting clues. The standard Sudoku rules apply: fill every blank cell with 1–9 so each row, column, and 3×3 box contains every digit exactly once. Expect to scan and do light candidate elimination.",
+        "outcomeLine": "Mid-difficulty Sudoku requiring candidate notation.",
+        "howTo": [
+          "The three rules: each row, each column, and each 3×3 box must contain every digit 1–9 exactly once.",
+          "Tap a blank cell and press 1–9 to enter a digit (Backspace/Delete/0 clears).",
+          "Start with naked singles (only one legal digit fits the cell), then scan digit-by-digit for hidden singles — a digit that can go in only one cell of a given row, column, or box.",
+          "Red highlight means a rule was broken. Uniqueness is guaranteed, so there is always a logical next step — no guessing needed."
+        ],
+        "examples": [
+          {
+            "title": "Medium difficulty",
+            "body": "≈ 30 clues, typical solve 7–15 minutes."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What techniques work at this level?",
+            "a": "Single candidates, hidden singles, and basic box/line interactions usually suffice."
+          },
+          {
+            "q": "Is mental note-taking enough?",
+            "a": "Usually yes. For the trickier cells, pencil-marks on paper can help until pencil-marks ship in the app."
+          }
+        ],
+        "relatedIds": [
+          "sudoku",
+          "sudoku-easy",
+          "sudoku-hard"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "sudoku-hard",
+      "slug": "sudoku-hard",
+      "category": "games",
+      "url": "/games/sudoku-hard/",
+      "title": "Hard Sudoku — Play Free Online",
+      "h1": "Hard Sudoku",
+      "current_word_count": 195,
+      "current": {
+        "description": "Play hard Sudoku in your browser. Around 26 clues — requires chains, pairs, and patient elimination.",
+        "keywords": [
+          "hard sudoku",
+          "sudoku hard",
+          "hard sudoku online"
+        ],
+        "intro": "Hard Sudoku with ~28 starting clues. The same three rules apply — 1–9 in every row, column, and 3×3 box exactly once — but expect to need techniques beyond simple scanning: pointing pairs, naked pairs, and occasional X-wings.",
+        "outcomeLine": "Advanced Sudoku with X-wing and chain techniques needed.",
+        "howTo": [
+          "Rules: each of the 9 rows, 9 columns, and nine 3×3 boxes must contain every digit 1–9 exactly once.",
+          "Tap a cell and press 1–9 (Backspace/Delete/0 to clear). Red means you violated a rule.",
+          "Start with singles. When singles run out, look for pointing pairs: if a digit in a 3×3 box is only possible in cells sharing one row or column, it is eliminated from that row/column elsewhere.",
+          "Every puzzle has one solution — no guessing required. If stuck, rescan each digit 1–9 across every row, column, and box.",
+          "Your state saves automatically — take breaks and come back."
+        ],
+        "examples": [
+          {
+            "title": "Hard difficulty",
+            "body": "≈ 26 clues, typical solve 15–30 minutes."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Do I need pen and paper?",
+            "a": "Pencil-marks help at this level. They're on the roadmap for the app itself."
+          },
+          {
+            "q": "Is every puzzle uniquely solvable?",
+            "a": "Yes — the generator enforces a unique solution."
+          }
+        ],
+        "relatedIds": [
+          "sudoku",
+          "sudoku-medium",
+          "sudoku-expert"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "sudoku-expert",
+      "slug": "sudoku-expert",
+      "category": "games",
+      "url": "/games/sudoku-expert/",
+      "title": "Expert Sudoku — Hardest Puzzles Online",
+      "h1": "Expert Sudoku",
+      "current_word_count": 210,
+      "current": {
+        "description": "The toughest Sudoku. ~22 clues — requires advanced techniques and patience.",
+        "keywords": [
+          "expert sudoku",
+          "sudoku expert",
+          "hardest sudoku"
+        ],
+        "intro": "Expert Sudoku with ~24 starting clues — near the human-solvable minimum. Standard rules: 1–9 in every row, column, and 3×3 box exactly once. At this difficulty you will need XY-wings, swordfish, or uniqueness rectangles to finish without guessing.",
+        "outcomeLine": "Top difficulty — advanced logic or careful trial-and-error.",
+        "howTo": [
+          "Rules (unchanged from Easy): fill every blank cell with 1–9 so each row, each column, and each 3×3 box contains every digit exactly once.",
+          "Tap a cell, press 1–9 to place (Backspace/Delete/0 to clear). Red highlight flags a rule break.",
+          "Expect singles and pairs to run out quickly. When they do, move to chains: if A=3 forces B=7 forces C=3 forces a contradiction, then A≠3.",
+          "Every puzzle is uniquely solvable by logic. If you catch yourself guessing, you've missed a technique — rescan from box 1.",
+          "Take breaks: expert solves often need 30+ minutes; state saves per difficulty."
+        ],
+        "examples": [
+          {
+            "title": "Expert difficulty",
+            "body": "≈ 22 clues, typical solve 30+ minutes."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is the theoretical minimum clues?",
+            "a": "17 clues — proven by exhaustive search in 2012. Most \"expert\" puzzles hover at 22–24 to stay solvable by humans."
+          },
+          {
+            "q": "Can I solve these without guessing?",
+            "a": "Yes — uniquely-solvable puzzles can always be solved by logic alone, but you may need techniques like XY-Wing, Swordfish, or uniqueness rectangles."
+          }
+        ],
+        "relatedIds": [
+          "sudoku",
+          "sudoku-hard",
+          "sudoku-medium"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "art-bg-daily-routine-brain-health",
+      "slug": "word-games-and-puzzles-brain-health-routine",
+      "kind": "guide",
+      "pageType": null,
+      "section": "guides",
+      "url": "/guides/word-games-and-puzzles-brain-health-routine/",
+      "title": "A Daily Brain-Health Routine After 40: Word, Math, and Verbal Pipelines | Kefiw",
+      "h1": "A Daily Brain-Health Routine After 40",
+      "subhead": "Three short Kefiw pipelines make daily cognitive engagement easier to keep than vague promises or once-a-week effort.",
+      "current_word_count": 725,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to use Kefiw Daily, Kefiw Math, and Kefiw Verbal as a repeatable brain-health routine after 40. Evidence-backed framing, direct source links, and realistic guardrails on what games can and cannot do.",
+        "keywords": [
+          "word games brain health",
+          "puzzles for brain health",
+          "daily brain health routine",
+          "brain health after 40",
+          "brain games after 40",
+          "word games for memory",
+          "sudoku brain health",
+          "mental math for adults",
+          "verbal puzzles brain health",
+          "brain games routine",
+          "daily kefiw routine"
+        ],
+        "outcomeLine": "Short, repeatable play can support cognitive engagement after 40, but it still works best beside exercise, sleep, hearing care, and blood-pressure control.",
+        "intro": "If you are over 40, the best reason to use Kefiw daily is not that it promises miracles. It is that it gives you three short pipelines you can actually keep: **Kefiw Daily** for word and logic play, **Kefiw Math** for mental arithmetic and proportional reasoning, and **Kefiw Verbal** for letter-pattern and verbal-flexibility work. That is a better habit shape than playing one random puzzle when you remember and calling it brain care. Used honestly, these pipelines support daily cognitive engagement. They do not replace exercise, sleep, blood-pressure control, hearing care, or medical evaluation when something feels off.",
+        "keyPoints": [
+          "Three short daily pipelines — word, math, verbal — cover different kinds of mental work in under 15 minutes each.",
+          "Kefiw Daily is the shortest repeatable route: Hunt, Hive, and Sudoku in roughly 10 minutes.",
+          "Kefiw Math gives five daily mental-arithmetic dashes: percent, discount, convert, tip, and date math in about 12 minutes.",
+          "Kefiw Verbal gives five daily letter-and-word puzzles: cryptogram, link grid, letter shift, mini crosser, and word twist in about 15 minutes.",
+          "NIA says cognitive training can help maintain cognitive health in older adults, but it also warns that evidence for commercial brain-game claims is not definitive.",
+          "CDC and WHO put the biggest dementia-risk levers elsewhere: physical activity, blood-pressure control, diabetes management, hearing care, smoking, and alcohol reduction.",
+          "The best case for cognitive benefit is habit strength. Short, enjoyable sessions are easier to repeat than abstract brain-training plans people drop almost immediately.",
+          "Rotation matters. Word deduction, mental arithmetic, and letter-pattern puzzles load different mental systems and keep boredom down.",
+          "For adults 40+, that broader mix makes more sense than grinding one puzzle type and pretending it covers everything."
+        ],
+        "examples": [
+          {
+            "title": "Busy 40+ weekday routine",
+            "body": "Monday, Wednesday, Friday: open Kefiw Daily and clear Hunt, Hive, and Sudoku in one short session. Tuesday and Thursday: do Kefiw Math instead. The point is repeatability, not volume."
+          },
+          {
+            "title": "Mixed-cognition routine",
+            "body": "Open `/daily/` for deduction and logic in the morning, then use `/daily/verbal/` later in the week for cryptogram, link grid, and word-pattern work. This gives you broader practice than one repeating game."
+          },
+          {
+            "title": "Mental-math add-on",
+            "body": "Open `/daily/math/` for Percent Dash, Discount Duel, Convert Sprint, Tip Drill, and Time Delta. Or use the regular calculators the same way: guess first, reveal second, score the gap."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Can word games and puzzles reduce dementia risk?",
+            "a": "They can support cognitive engagement, but they are only one part of risk reduction. The stronger evidence still favors exercise, blood-pressure control, hearing care, and smoking avoidance. Games help most when they keep you mentally active enough to stick with a broader routine."
+          },
+          {
+            "q": "Why use a pipeline instead of one favorite puzzle?",
+            "a": "A mixed routine trains more than one skill. Kefiw Daily leans word-plus-logic, Kefiw Math leans numeracy, and Kefiw Verbal leans working memory plus pattern recognition. Rotation also makes the habit easier to keep because the session feels fresh."
+          },
+          {
+            "q": "Which Kefiw pipeline should someone over 40 start with?",
+            "a": "Start with Kefiw Daily because it is the easiest daily habit: Hunt, Hive, and Sudoku in one short session. Add Math or Verbal once the routine feels stable."
+          },
+          {
+            "q": "How long should I play each day to stay sharp after 40?",
+            "a": "Ten to twenty minutes is enough for most people. Short daily sessions are easier to repeat, and repeatability matters more than occasional marathon puzzle sessions."
+          },
+          {
+            "q": "Is mental-math practice worth adding to word puzzles after 40?",
+            "a": "Yes, because it trains a different lane. Word puzzles lean on retrieval and pattern search, while math drills lean on numeracy, working memory, and error checking."
+          },
+          {
+            "q": "Can brain games replace exercise or blood-pressure control?",
+            "a": "No. They should sit beside those habits, not replace them. CDC, NIA, and WHO all put major emphasis on movement, cardiovascular health, hearing, smoking, alcohol, and sleep."
+          },
+          {
+            "q": "What makes Kefiw useful if the evidence on brain games is mixed?",
+            "a": "The value is habit design, not magic software. Kefiw gives you short, low-friction, repeatable pipelines that make cognitive engagement easier to do consistently."
+          }
+        ],
+        "relatedIds": [
+          "daily-word",
+          "daily-anagram",
+          "daily-unscramble",
+          "sudoku",
+          "cS-daily-kefiw-score-strategy",
+          "cS-daily-kefiw-streak-rules",
+          "art-bg-seniors-brain-routine",
+          "art-bg-after-40-memory-changes",
+          "art-bg-mental-math-calculators"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "art-bg-after-40-memory-changes",
+      "slug": "memory-changes-after-40-what-to-do",
+      "kind": "guide",
+      "pageType": null,
+      "section": "guides",
+      "url": "/guides/memory-changes-after-40-what-to-do/",
+      "title": "Memory Changes After 40: What to Do and Where Puzzles Fit | Kefiw",
+      "h1": "Memory Changes After 40: What to Do Next",
+      "subhead": "Use games as part of a healthy routine, not as a way to avoid getting checked.",
+      "current_word_count": 602,
+      "target_word_count": 1200,
+      "current": {
+        "description": "What to do if memory changes show up in your 40s or 50s, what puzzles can help with, and why evaluation still matters. Includes a realistic Kefiw routine and red flags to take seriously.",
+        "keywords": [
+          "memory changes after 40",
+          "forgetful in 40s",
+          "early memory changes",
+          "puzzles for memory changes",
+          "word games memory issues",
+          "middle age memory problems"
+        ],
+        "outcomeLine": "Word games can keep you mentally engaged, but midlife memory concerns still deserve sleep, stress, medication, vascular, and medical review.",
+        "intro": "A lot of people in their 40s and 50s notice moments that feel different: names taking longer, rereading the same paragraph, losing the thread in meetings, missing a turn you usually make automatically. Some of that is normal. Some of it is stress, sleep debt, depression, hearing loss, medication effects, or attention overload. Some of it deserves a real workup. The right move is not panic and it is not denial. It is to use mentally engaging routines like Kefiw games for support while taking possible medical causes seriously.",
+        "keyPoints": [
+          "Midlife memory changes are common, but dementia is not a normal part of aging and should not be self-diagnosed through games.",
+          "NIA and CDC both emphasize that cardiovascular health, sleep, hearing, mood, diabetes, and blood pressure matter for later cognitive outcomes.",
+          "If changes affect work steps, finances, appointments, directions, medication, or daily decision-making, move from self-observation to evaluation.",
+          "Kefiw games fit best as structure: they keep you engaged, let you notice patterns in attention and fatigue, and give you a low-friction routine while you sort out causes.",
+          "The live Daily Kefiw pipeline is a good mix for this stage because it rotates deduction, fluency, and logic instead of hammering one narrow skill.",
+          "Do not use puzzle success to talk yourself out of seeing a clinician. High-functioning people can still be missing a real issue."
+        ],
+        "examples": [
+          {
+            "title": "Likely overload, still worth fixing",
+            "body": "A user is sleeping 5 hours, drinking more caffeine, and juggling nonstop context switching. Hunt feels harder than usual. The routine helps, but the obvious intervention is still sleep and workload cleanup."
+          },
+          {
+            "title": "Medical review is the next step",
+            "body": "Someone in their late 40s starts missing medication doses, repeating questions, and getting lost on familiar routes. Games are not the answer to that pattern. Evaluation is."
+          },
+          {
+            "title": "Supportive routine while waiting",
+            "body": "A user with a pending appointment plays Daily Kefiw in the morning and does estimate-first calculator drills at lunch. The routine keeps activity up without pretending to solve the cause."
+          }
+        ],
+        "whenToUse": [],
+        "faq": [
+          {
+            "q": "Are memory changes in your 40s normal?",
+            "a": "Some are, and many come from stress, sleep, mood, hearing, or medication effects. But changes that disrupt daily tasks deserve real evaluation instead of guesswork."
+          },
+          {
+            "q": "Can puzzles tell you whether you have early dementia?",
+            "a": "No. A good or bad game session is not a diagnosis. Games can show fatigue or attention patterns, but they cannot replace clinical assessment."
+          },
+          {
+            "q": "Should I keep playing word games if I am worried about memory?",
+            "a": "Yes, as long as they stay enjoyable and you are not using them to avoid getting checked. Games can support routine and engagement while you sort out causes."
+          },
+          {
+            "q": "What else matters more than puzzles if memory feels worse?",
+            "a": "Sleep, blood pressure, hearing, mood, alcohol, medications, diabetes, and physical activity all matter a great deal. Midlife brain health is not only about mental exercises."
+          },
+          {
+            "q": "When should I talk to a doctor about memory changes?",
+            "a": "Talk to a doctor when changes affect work, money, appointments, conversations, directions, or daily tasks - or when other people are noticing the same pattern."
+          },
+          {
+            "q": "Can depression or sleep problems look like memory trouble?",
+            "a": "Yes. Depression, anxiety, poor sleep, sleep apnea, overload, and some medicines can all create memory and attention complaints that feel alarming."
+          }
+        ],
+        "relatedIds": [
+          "daily-word",
+          "daily-anagram",
+          "daily-unscramble",
+          "sudoku",
+          "art-bg-daily-routine-brain-health",
+          "art-bg-seniors-brain-routine",
+          "art-bg-mental-math-calculators"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "art-bg-mental-math-calculators",
+      "slug": "mental-math-practice-with-calculators",
+      "kind": "guide",
+      "pageType": null,
+      "section": "guides",
+      "url": "/guides/mental-math-practice-with-calculators/",
+      "title": "Mental Math Practice With Calculators: Estimate First, Reveal Second | Kefiw",
+      "h1": "Mental Math Practice With Calculators",
+      "subhead": "The fastest way to turn a utility into a game is to guess before you reveal the answer.",
+      "current_word_count": 584,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How to turn everyday calculators into mental-math games by guessing first and scoring the gap. Includes where this fits in a broader brain-health routine and why Kefiw plans scored calculator game modes.",
+        "keywords": [
+          "mental math practice",
+          "calculator guessing game",
+          "estimate first calculator",
+          "mental math games",
+          "brain training math",
+          "numeracy practice adults"
+        ],
+        "outcomeLine": "Estimate first, reveal second, and ordinary calculators become quick drills for numeracy, working memory, and attention.",
+        "intro": "A calculator does not have to replace thinking. It can grade it. That is the idea behind estimate-first calculator use: before you reveal the exact answer, you guess it. Then you compare the gap. This is the cleanest way to turn an everyday tool into a small numeracy and attention drill. It also scales. Today you can do it manually with Kefiw calculators. The planned next step is dedicated game mode, where the guess comes first, the result comes second, and the score reflects how close you were.",
+        "keyPoints": [
+          "Estimate-first use turns utility math into practice for working memory, numeracy, and error checking.",
+          "This is a strong complement to word games because it trains a different lane from retrieval and language.",
+          "The best calculator drills are everyday tasks: percentages, averages, ratios, dates, tips, and time math.",
+          "The evidence around cognitive training is mixed overall, but structured arithmetic and cognitive exercises can improve targeted skills and everyday function in older adults.",
+          "Mental math should stay grounded in real tasks people actually do. That is what makes a result-guessing mode more useful than abstract flashcards.",
+          "Guessing games are coming to more calculator surfaces, but the estimate-first habit already works with the current tools."
+        ],
+        "examples": [
+          {
+            "title": "Percentage drill",
+            "body": "Guess 18% of 240 before opening the exact output. If you land near 43, the calculator confirms 43.2 and grades the gap."
+          },
+          {
+            "title": "Average drill",
+            "body": "Estimate the average of 14, 17, 23, and 26 before revealing it. You are training rough grouping, not just exact arithmetic."
+          },
+          {
+            "title": "Real-life transfer",
+            "body": "Tip, discount, and time calculators are useful because they resemble real decisions. Practice sticks better when the math still matters outside the game."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "percentage-calculator",
+            "note": "Best everyday estimate drill. Percent of, percent change, and what percent all work well in guess-first mode."
+          },
+          {
+            "toolId": "average-calculator",
+            "note": "Good for rough grouping and sanity-checking without getting lost in long arithmetic."
+          },
+          {
+            "toolId": "ratio-calculator",
+            "note": "Useful when you want a harder working-memory and simplification task."
+          },
+          {
+            "toolId": "tip-calculator",
+            "note": "Real-world and fast. Great for building estimation habits that transfer outside the site."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is using a calculator still mental-math practice if the tool gives the exact answer?",
+            "a": "Yes, if you guess first. The calculator becomes feedback, not a shortcut, and feedback is what makes the habit improve over time."
+          },
+          {
+            "q": "What kinds of calculators make the best guessing games?",
+            "a": "Percentages, tips, averages, ratios, and date math work well because the numbers stay familiar and the results are easy to sanity-check."
+          },
+          {
+            "q": "Can estimate-first calculator use help keep your mind sharp?",
+            "a": "It can support numeracy and attention as one part of a broader routine. It should sit beside movement, sleep, social contact, and other mentally engaging activities."
+          },
+          {
+            "q": "How many rounds should I do in one session?",
+            "a": "Three to five good estimates are plenty for most people. Stop while accuracy is still honest instead of turning the drill into fatigue practice."
+          },
+          {
+            "q": "Is calculator game mode live on every Kefiw calculator yet?",
+            "a": "No. The full scored mode is planned, but the estimate-first method already works on the current calculators today."
+          },
+          {
+            "q": "Why pair calculator drills with word games or Sudoku?",
+            "a": "Because numeracy, language, and logic are different lanes. A mixed routine keeps practice broader and usually feels less repetitive."
+          }
+        ],
+        "relatedIds": [
+          "percentage-calculator",
+          "average-calculator",
+          "ratio-calculator",
+          "tip-calculator",
+          "art-bg-daily-routine-brain-health",
+          "art-bg-after-40-memory-changes",
+          "cS-percent-mental-math"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-daily-word-how",
+      "slug": "how-daily-word-challenges-work",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/how-daily-word-challenges-work/",
+      "title": "How Daily Word Challenges Work — Seeds, Fairness, and Streaks",
+      "h1": "How Daily Word Challenges Work",
+      "subhead": "Why everyone gets the same puzzle on the same day, and how streaks stay honest.",
+      "current_word_count": 294,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How daily word puzzles are generated, why everyone sees the same one, and how streak tracking works.",
+        "keywords": [
+          "daily word challenge",
+          "how daily puzzles work",
+          "daily word puzzle"
+        ],
+        "outcomeLine": "Same puzzle for everyone, same day — that is what makes a daily challenge worth playing.",
+        "intro": "A daily word challenge is a puzzle that is the same for everyone on a given date. The shared experience is the point — you can discuss today's puzzle with friends knowing they had the same one.",
+        "keyPoints": [
+          "Each puzzle is seeded by the date — same date, same puzzle, for every player.",
+          "A new puzzle unlocks at local midnight (or a fixed global time, depending on the game).",
+          "Streaks count consecutive days completed; missing a day resets (usually).",
+          "Difficulty is fixed per day — you cannot re-roll for an easier puzzle.",
+          "Results are shareable because everyone faced the same challenge."
+        ],
+        "examples": [
+          {
+            "title": "Wordle-style",
+            "body": "Everyone sees the same five-letter answer on 2026-04-18. Your guesses differ, but the target does not."
+          },
+          {
+            "title": "Daily unscramble",
+            "body": "Same scrambled letters for all players. First-solve time or guess count can be compared."
+          },
+          {
+            "title": "Streak tracking",
+            "body": "Play Monday, Tuesday, Wednesday. Miss Thursday. Friday your streak is 1 again — a 3-day streak did not survive the gap."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "daily-word",
+            "note": "The main daily word challenge — new puzzle each day, shareable results."
+          },
+          {
+            "toolId": "daily-anagram",
+            "note": "Daily anagram variant — same letters for everyone, fastest solve wins."
+          },
+          {
+            "toolId": "daily-unscramble",
+            "note": "Daily scrambled-word challenge with shareable grade."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why can't I replay a day I missed?",
+            "a": "The challenge is explicitly time-boxed — its value comes from everyone facing it simultaneously. Replay would undermine the \"same day, same puzzle\" idea."
+          },
+          {
+            "q": "When does the next puzzle unlock?",
+            "a": "Usually at midnight in your local timezone. Some games use a fixed UTC time so everyone unlocks simultaneously regardless of timezone."
+          }
+        ],
+        "relatedIds": [
+          "daily-word",
+          "daily-anagram",
+          "daily-unscramble",
+          "cS-daily-streak-tips"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-daily-streak-tips",
+      "slug": "daily-streak-tips",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/daily-streak-tips/",
+      "title": "Daily Streak Tips — How to Keep a Streak Alive",
+      "h1": "Daily Streak Tips",
+      "subhead": "The small habits that turn \"I play sometimes\" into a 200-day streak.",
+      "current_word_count": 323,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Practical tips for building and maintaining streaks in daily word puzzles without burning out.",
+        "keywords": [
+          "daily puzzle streak tips",
+          "word puzzle streak",
+          "maintain daily streak"
+        ],
+        "outcomeLine": "Play at the same time daily, keep a buffer day, and do not chase lost streaks.",
+        "intro": "Long streaks are not about puzzle skill — they are about routine. Most lost streaks are lost to life (travel, illness, forgetting), not to hard puzzles.",
+        "keyPoints": [
+          "Pick a consistent daily trigger — coffee, lunch, before-bed — so play becomes reflexive.",
+          "Do the puzzle early in the day when possible. Gives you a buffer if the day gets busy.",
+          "Use timezone awareness when travelling — crossing the date line can cost a day.",
+          "Accept that streaks end. A 400-day streak is as legitimate as a current-200-day streak.",
+          "If the puzzle is frustrating, quit and revisit in 20 minutes rather than grinding and making it worse."
+        ],
+        "examples": [
+          {
+            "title": "Morning coffee play",
+            "body": "Puzzle becomes part of your caffeine routine. Streak survives as long as the coffee does."
+          },
+          {
+            "title": "Travel day",
+            "body": "Flying to a +8 timezone on Monday? Play Monday's puzzle before you leave OR just after you land — do not wait until bedtime local time."
+          },
+          {
+            "title": "Hard puzzle stall",
+            "body": "You are on guess 4 of 6 and nothing fits. Close it, come back in 20 minutes — fresh eyes beat grinding."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "daily-word",
+            "note": "The flagship daily challenge for streak-building."
+          },
+          {
+            "toolId": "daily-anagram",
+            "note": "Pair with the word challenge for a two-puzzle daily routine."
+          },
+          {
+            "toolId": "daily-unscramble",
+            "note": "Lower-effort daily — good for busy days when you want to keep the habit alive."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does the puzzle save my progress if I close the tab?",
+            "a": "Most daily-puzzle apps save progress — you can resume the same day's puzzle later. Check the specific game's settings."
+          },
+          {
+            "q": "Can I legitimately use solver tools?",
+            "a": "Depends on your own ethics. Using a solver on guess 1 is playing a different game; using it on your last guess when you are stuck is just a hint. Streaks are between you and you."
+          }
+        ],
+        "relatedIds": [
+          "daily-word",
+          "daily-anagram",
+          "daily-unscramble",
+          "cS-daily-word-how"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-sudoku-difficulty-explained",
+      "slug": "sudoku-difficulty-explained",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/sudoku-difficulty-explained/",
+      "title": "Sudoku Difficulty Explained — From Easy to Expert",
+      "h1": "Sudoku Difficulty Explained",
+      "subhead": "What actually changes between easy, medium, hard, and expert puzzles.",
+      "current_word_count": 291,
+      "target_word_count": 1200,
+      "current": {
+        "description": "How sudoku difficulty levels differ — techniques required, given-clue counts, and what easy/medium/hard/expert actually mean.",
+        "keywords": [
+          "sudoku difficulty levels",
+          "sudoku easy medium hard",
+          "sudoku expert"
+        ],
+        "outcomeLine": "Difficulty is not about grid size — it is about which solving techniques you need.",
+        "intro": "All sudoku puzzles use the same 9×9 grid and the same rules. What changes between easy and expert is the set of solving techniques you need to reach the unique solution.",
+        "keyPoints": [
+          "Easy: 35+ given digits. Solvable with naked singles and hidden singles only.",
+          "Medium: 28–32 givens. Requires naked pairs, pointing pairs, box-line reduction.",
+          "Hard: 25–28 givens. Adds X-wing, swordfish, chains.",
+          "Expert: 22–25 givens. Requires advanced techniques like XY-wing, uniqueness rectangles, possibly guessing.",
+          "Minimum givens for a unique puzzle = 17. These are expert-only."
+        ],
+        "examples": [
+          {
+            "title": "Easy puzzle",
+            "body": "You can fill in digits just by scanning rows, columns, and boxes for \"only one place this can go\"."
+          },
+          {
+            "title": "Medium",
+            "body": "Scanning alone gets you stuck. You need to note candidates and spot pairs like \"these two cells can only be 3 or 7\"."
+          },
+          {
+            "title": "Expert",
+            "body": "Pencil marks everywhere. Progress requires spotting complex patterns — X-wings, chains, or in some cases trial-and-error."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "sudoku-easy",
+            "note": "Start here if you are new. 35+ givens, solvable with scanning only."
+          },
+          {
+            "toolId": "sudoku-medium",
+            "note": "Next step up — requires candidate notation."
+          },
+          {
+            "toolId": "sudoku-hard",
+            "note": "Introduces X-wing and related intermediate techniques."
+          },
+          {
+            "toolId": "sudoku-expert",
+            "note": "Top difficulty — advanced techniques required."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Do fewer givens always mean harder?",
+            "a": "Usually, but not always. A puzzle with 30 givens requiring an X-wing is harder than one with 26 givens solvable by hidden singles. Technique matters more than count."
+          },
+          {
+            "q": "Can an expert-level puzzle always be solved without guessing?",
+            "a": "In principle yes, but the technique required may be obscure enough that guess-and-check is faster in practice. The \"true\" difficulty of a puzzle is the minimum-technique set needed."
+          }
+        ],
+        "relatedIds": [
+          "sudoku",
+          "sudoku-easy",
+          "sudoku-medium",
+          "sudoku-hard",
+          "sudoku-expert",
+          "cS-beginner-sudoku-strategy"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-beginner-sudoku-strategy",
+      "slug": "beginner-sudoku-strategy",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/beginner-sudoku-strategy/",
+      "title": "Beginner Sudoku Strategy — The Two Techniques That Solve Easy Puzzles",
+      "h1": "Beginner Sudoku Strategy",
+      "subhead": "Naked singles and hidden singles — most easy puzzles need nothing else.",
+      "current_word_count": 360,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The two core sudoku techniques every beginner needs — naked singles and hidden singles — with worked examples.",
+        "keywords": [
+          "beginner sudoku strategy",
+          "naked singles",
+          "hidden singles",
+          "easy sudoku technique"
+        ],
+        "outcomeLine": "Scan the grid. Fill every cell that has only one possible digit. Repeat.",
+        "intro": "Easy sudoku puzzles are solvable with two techniques: naked singles and hidden singles. Together they usually carry you through any puzzle graded \"easy\" without notation.",
+        "keyPoints": [
+          "Naked single: a cell where only one digit is possible given the row, column, and box constraints.",
+          "Hidden single: a digit that can only go in one cell within a row, column, or box, even if that cell has multiple candidates.",
+          "Scan by digit: \"where can the 1 go in this box?\" Often there is only one spot.",
+          "Scan by cell: \"what can go in this empty cell?\" If only one number fits, fill it.",
+          "Fill every naked/hidden single you find before moving to harder techniques."
+        ],
+        "examples": [
+          {
+            "title": "Naked single",
+            "body": "A cell where the row has 2,4,7,9, the column has 3,5,8, the box has 1,3,6. Only 0 missing from 1–9 is... recheck: row+col+box covers 1,2,3,4,5,6,7,8,9 minus {unique missing} — the remaining single digit is the answer."
+          },
+          {
+            "title": "Hidden single",
+            "body": "In a box with two empty cells, only one of them is in a row that does not already contain 4. That cell must be the 4, even if the cell itself could hold other digits by box-alone."
+          },
+          {
+            "title": "Scanning drill",
+            "body": "Go 1 through 9. For each digit, check each box: \"can this digit go in only one cell of this box?\" Fill every one-cell case."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "sudoku-easy",
+            "note": "Start here — almost every puzzle is solvable with just naked and hidden singles."
+          },
+          {
+            "toolId": "sudoku-medium",
+            "note": "Step up once easy puzzles feel automatic. Add pair-based techniques."
+          },
+          {
+            "toolId": "sudoku",
+            "note": "Main sudoku hub — pick your difficulty and play."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Should I write down candidates for easy puzzles?",
+            "a": "Usually no — easy puzzles are solvable by scanning alone. Candidates help once you hit medium difficulty where pairs and triples come in."
+          },
+          {
+            "q": "What if I get stuck on an easy puzzle?",
+            "a": "Almost always you missed a hidden single. Go digit-by-digit through every box and ask \"where can this go?\" — you will find the missed cell."
+          }
+        ],
+        "relatedIds": [
+          "sudoku",
+          "sudoku-easy",
+          "sudoku-medium",
+          "cS-sudoku-difficulty-explained"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "art-bg-daily-routine-brain-health": [
+      "daily-word",
+      "daily-anagram",
+      "daily-unscramble",
+      "sudoku",
+      "art-bg-after-40-memory-changes",
+      "art-bg-mental-math-calculators"
+    ],
+    "art-bg-after-40-memory-changes": [
+      "daily-word",
+      "daily-anagram",
+      "daily-unscramble",
+      "sudoku",
+      "art-bg-daily-routine-brain-health",
+      "art-bg-mental-math-calculators"
+    ],
+    "art-bg-mental-math-calculators": [
+      "art-bg-daily-routine-brain-health",
+      "art-bg-after-40-memory-changes"
+    ],
+    "cS-daily-word-how": [
+      "daily-word",
+      "daily-anagram",
+      "daily-unscramble",
+      "cS-daily-streak-tips"
+    ],
+    "cS-daily-streak-tips": [
+      "daily-word",
+      "daily-anagram",
+      "daily-unscramble",
+      "cS-daily-word-how"
+    ],
+    "cS-sudoku-difficulty-explained": [
+      "sudoku",
+      "sudoku-easy",
+      "sudoku-medium",
+      "sudoku-hard",
+      "sudoku-expert",
+      "cS-beginner-sudoku-strategy"
+    ],
+    "cS-beginner-sudoku-strategy": [
+      "sudoku",
+      "sudoku-easy",
+      "sudoku-medium",
+      "cS-sudoku-difficulty-explained"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "vibematch",
+          "url": "/games/vibematch/"
+        },
+        {
+          "id": "vibecircuit",
+          "url": "/games/vibecircuit/"
+        },
+        {
+          "id": "vibecrypt",
+          "url": "/games/vibecrypt/"
+        },
+        {
+          "id": "vibehex",
+          "url": "/games/vibehex/"
+        },
+        {
+          "id": "vibecontext",
+          "url": "/games/vibecontext/"
+        },
+        {
+          "id": "vibepath",
+          "url": "/games/vibepath/"
+        },
+        {
+          "id": "vibecalc",
+          "url": "/games/vibecalc/"
+        },
+        {
+          "id": "vibepair",
+          "url": "/games/vibepair/"
+        },
+        {
+          "id": "vibetwist",
+          "url": "/games/vibetwist/"
+        },
+        {
+          "id": "vibelink",
+          "url": "/games/vibelink/"
+        },
+        {
+          "id": "vibeglobe",
+          "url": "/games/vibeglobe/"
+        },
+        {
+          "id": "vibecrosser",
+          "url": "/games/vibecrosser/"
+        },
+        {
+          "id": "vibedrop",
+          "url": "/games/vibedrop/"
+        },
+        {
+          "id": "vibeshift",
+          "url": "/games/vibeshift/"
+        },
+        {
+          "id": "vibecipher",
+          "url": "/games/vibecipher/"
+        },
+        {
+          "id": "daily-word",
+          "url": "/games/daily-word/"
+        },
+        {
+          "id": "daily-anagram",
+          "url": "/games/daily-anagram/"
+        },
+        {
+          "id": "daily-unscramble",
+          "url": "/games/daily-unscramble/"
+        },
+        {
+          "id": "sudoku",
+          "url": "/games/sudoku/"
+        },
+        {
+          "id": "sudoku-easy",
+          "url": "/games/sudoku-easy/"
+        },
+        {
+          "id": "sudoku-medium",
+          "url": "/games/sudoku-medium/"
+        },
+        {
+          "id": "sudoku-hard",
+          "url": "/games/sudoku-hard/"
+        },
+        {
+          "id": "sudoku-expert",
+          "url": "/games/sudoku-expert/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "art-bg-daily-routine-brain-health",
+          "url": "/guides/word-games-and-puzzles-brain-health-routine/"
+        },
+        {
+          "id": "art-bg-after-40-memory-changes",
+          "url": "/guides/memory-changes-after-40-what-to-do/"
+        },
+        {
+          "id": "art-bg-mental-math-calculators",
+          "url": "/guides/mental-math-practice-with-calculators/"
+        },
+        {
+          "id": "cS-daily-word-how",
+          "url": "/guides/how-daily-word-challenges-work/"
+        },
+        {
+          "id": "cS-daily-streak-tips",
+          "url": "/guides/daily-streak-tips/"
+        },
+        {
+          "id": "cS-sudoku-difficulty-explained",
+          "url": "/guides/sudoku-difficulty-explained/"
+        },
+        {
+          "id": "cS-beginner-sudoku-strategy",
+          "url": "/guides/beginner-sudoku-strategy/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

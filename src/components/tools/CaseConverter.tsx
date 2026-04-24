@@ -6,7 +6,8 @@ import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
 type Mode =
   | 'upper' | 'lower' | 'title' | 'sentence'
   | 'camel' | 'snake' | 'kebab' | 'constant'
-  | 'title-ap' | 'title-chicago' | 'title-apa' | 'title-mla';
+  | 'title-ap' | 'title-chicago' | 'title-apa' | 'title-mla'
+  | 'preset-tag' | 'preset-filename' | 'preset-heading';
 const MODES: { id: Mode; label: string }[] = [
   { id: 'upper', label: 'UPPERCASE' },
   { id: 'lower', label: 'lowercase' },
@@ -34,6 +35,54 @@ function isAcronym(word: string): boolean {
   return word.length >= 2 && word === word.toUpperCase() && /[A-Z]/.test(word);
 }
 
+// Unicode-aware tokenizer: split on anything that isn't a letter, mark, or
+// number. Handles café, naïve, Zoë, etc. without shredding accented letters.
+function splitUnicodeTokens(text: string): string[] {
+  return text.split(/([^\p{L}\p{M}\p{N}']+)/u);
+}
+
+// Output presets — compose the existing modes into common developer workflows.
+function presetTag(text: string): string {
+  // tags are lowercase, hyphen-separated, stripped of non-word chars
+  return text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]+/gu, '')
+    .trim()
+    .replace(/[\s-]+/g, '-');
+}
+
+function presetFilename(text: string): string {
+  // filenames: lowercase, underscores, no chars that break on Windows/Linux
+  return text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s._-]+/gu, '')
+    .trim()
+    .replace(/[\s]+/g, '_')
+    .replace(/_+/g, '_');
+}
+
+function presetHeading(text: string): string {
+  // headings: Chicago-style title case, trimmed, single spaces
+  return styleGuideTitle(text.trim().replace(/\s+/g, ' '), 'chicago');
+}
+
+// Visual diff: char-by-char. Returns tuples of (kind, char).
+type DiffSegment = { same: boolean; char: string };
+function charDiff(input: string, output: string): DiffSegment[] {
+  // Character-level diff — align by index. Good enough for case changes
+  // where length often matches; when lengths diverge (snake/kebab add
+  // joiners), we just mark the tail as changed.
+  const segs: DiffSegment[] = [];
+  const max = Math.max(input.length, output.length);
+  for (let i = 0; i < max; i++) {
+    const a = input[i] ?? '';
+    const b = output[i] ?? '';
+    if (a === b) segs.push({ same: true, char: b });
+    else if (b) segs.push({ same: false, char: b });
+  }
+  return segs;
+}
+
 function capFirst(word: string): string {
   if (!word) return word;
   if (isAcronym(word)) return word;
@@ -41,12 +90,17 @@ function capFirst(word: string): string {
 }
 
 function styleGuideTitle(text: string, style: 'ap' | 'chicago' | 'apa' | 'mla'): string {
-  return text.split(/(\s+)/).map((tok) => {
-    if (/^\s+$/.test(tok)) return tok;
-    const isFirst = text.indexOf(tok) === 0;
-    // Detect last by checking end-of-string (cheap but works for single-line input).
-    const isLast = text.trimEnd().endsWith(tok) && text.indexOf(tok) + tok.length === text.trimEnd().length;
-    const lower = tok.toLowerCase().replace(/[^a-z']/g, '');
+  const tokens = splitUnicodeTokens(text);
+  return tokens.map((tok, idx) => {
+    if (/^[^\p{L}\p{M}\p{N}']+$/u.test(tok)) return tok;
+    // First word = first non-delimiter token; last word = last non-delimiter token.
+    const isFirst = tokens.findIndex((t) => !/^[^\p{L}\p{M}\p{N}']+$/u.test(t)) === idx;
+    const lastContentIdx = (() => {
+      for (let i = tokens.length - 1; i >= 0; i--) if (!/^[^\p{L}\p{M}\p{N}']+$/u.test(tokens[i])) return i;
+      return -1;
+    })();
+    const isLast = idx === lastContentIdx;
+    const lower = tok.toLowerCase().replace(/[^\p{L}']/gu, '');
     if (isAcronym(tok)) return tok;
     if (isFirst || isLast) return capFirst(tok);
     if (style === 'ap') {
@@ -66,6 +120,7 @@ function styleGuideTitle(text: string, style: 'ap' | 'chicago' | 'apa' | 'mla'):
 export default function CaseConverter() {
   const [text, setText] = useState('');
   const [mode, setMode] = useState<Mode>('title');
+  const [showDiff, setShowDiff] = useState(false);
   const out = useMemo(() => {
     switch (mode) {
       case 'upper': return text.toUpperCase();
@@ -75,6 +130,9 @@ export default function CaseConverter() {
       case 'title-chicago': return styleGuideTitle(text, 'chicago');
       case 'title-apa': return styleGuideTitle(text, 'apa');
       case 'title-mla': return styleGuideTitle(text, 'mla');
+      case 'preset-tag': return presetTag(text);
+      case 'preset-filename': return presetFilename(text);
+      case 'preset-heading': return presetHeading(text);
       case 'sentence': return toSentenceCase(text);
       case 'camel': return toCamelCase(text);
       case 'snake': return toSnakeCase(text);
@@ -82,6 +140,8 @@ export default function CaseConverter() {
       case 'constant': return toConstantCase(text);
     }
   }, [text, mode]);
+
+  const diffSegs = useMemo(() => charDiff(text, out), [text, out]);
 
   return (
     <div className="space-y-3">
@@ -92,6 +152,26 @@ export default function CaseConverter() {
             {m.label}
           </button>
         ))}
+      </div>
+      {/* Quick presets — common developer workflows */}
+      <div className="flex flex-wrap items-center gap-2 rounded-md border border-slate-200 bg-slate-50 p-2">
+        <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">Presets</span>
+        <button onClick={() => setMode('preset-tag')}
+          className={`btn ${mode==='preset-tag' ? 'bg-brand-600 text-white' : 'bg-white text-slate-900 hover:bg-slate-100'}`}>
+          Tag · lowercase-kebab
+        </button>
+        <button onClick={() => setMode('preset-filename')}
+          className={`btn ${mode==='preset-filename' ? 'bg-brand-600 text-white' : 'bg-white text-slate-900 hover:bg-slate-100'}`}>
+          Filename · lower_snake
+        </button>
+        <button onClick={() => setMode('preset-heading')}
+          className={`btn ${mode==='preset-heading' ? 'bg-brand-600 text-white' : 'bg-white text-slate-900 hover:bg-slate-100'}`}>
+          Heading · Title Case
+        </button>
+        <label className="ml-auto flex cursor-pointer items-center gap-1.5 text-xs text-slate-600">
+          <input type="checkbox" checked={showDiff} onChange={(e) => setShowDiff(e.target.checked)} />
+          Show diff
+        </label>
       </div>
       <div>
         <label className="label" htmlFor="in">Input</label>
@@ -104,6 +184,20 @@ export default function CaseConverter() {
         </div>
         <textarea id="out" readOnly className="input h-36 bg-slate-50" value={out} />
       </div>
+      {showDiff && text.length > 0 && (
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm">
+          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Visual diff — yellow = changed, plain = same
+          </div>
+          <div className="font-mono whitespace-pre-wrap break-words text-slate-900">
+            {diffSegs.map((seg, i) =>
+              seg.same
+                ? <span key={i}>{seg.char}</span>
+                : <span key={i} className="rounded bg-amber-100 px-[1px] text-amber-900">{seg.char}</span>
+            )}
+          </div>
+        </div>
+      )}
       {text.length > 0 && (() => {
         const label = MODES.find((m) => m.id === mode)?.label ?? mode;
         const delta = out.length - text.length;

@@ -1,0 +1,341 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:13.785Z",
+  "cluster": {
+    "slug": "structural-output",
+    "section": "health",
+    "hubSlug": "structural-output",
+    "url": "/health/structural-output/",
+    "title": "Structural Output & Training Load — Kefiw",
+    "h1": "Structural Output",
+    "subhead": "1RM, relative power, heart-rate zones, kinetic expenditure.",
+    "intro": "Four instruments for training load and output: estimated one-rep maximum, Wilks relative-strength coefficient, Karvonen heart-rate zones, and MET-based calorie burn.",
+    "description": "Brzycki 1RM, Wilks powerlifting coefficient, Karvonen training zones, and MET calorie expenditure from the Compendium of Physical Activities.",
+    "keywords": [
+      "1RM calculator",
+      "Wilks calculator",
+      "heart rate zones",
+      "MET calculator"
+    ],
+    "faq": [
+      {
+        "q": "Why Brzycki and not Epley?",
+        "a": "Brzycki is most accurate in the 1–10 rep range; Epley holds up better at 10+. For 3–5 rep sets — the ergonomic sweet spot — Brzycki wins."
+      },
+      {
+        "q": "Why Karvonen over %HRmax?",
+        "a": "Karvonen incorporates resting HR — a fit person's reserve is higher, so zones shift up. Better personalisation than flat %HRmax."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "bio-logistics",
+      "bio-maintenance"
+    ]
+  },
+  "tools": [
+    {
+      "id": "max-load-capacity",
+      "slug": "max-load-capacity",
+      "category": "health",
+      "url": "/health/max-load-capacity/",
+      "title": "Max Load Capacity — Brzycki 1RM Calculator | Kefiw",
+      "h1": "Max Load Capacity · Brzycki 1RM",
+      "current_word_count": 158,
+      "current": {
+        "description": "Estimate one-rep maximum from a sub-max set using the Brzycki formula. Recovery / Hypertrophy / Strength zones.",
+        "keywords": [
+          "1RM calculator",
+          "Brzycki formula",
+          "one rep max calculator",
+          "strength training zones"
+        ],
+        "intro": "Brzycki (1993) is the most accurate sub-max 1RM estimator in the 1–10 rep range: 1RM = weight × 36 / (37 − reps). Training percentages flow from the estimate — 60% recovery, 75% hypertrophy, 85% strength.",
+        "outcomeLine": "Brzycki 1RM estimate plus recovery / hypertrophy / strength loads.",
+        "howTo": [
+          "Enter the weight you lifted and the reps you completed (≤ 10 for accuracy).",
+          "Read estimated 1RM and the three training-zone loads.",
+          "Re-test every 4–6 weeks at the same rep count."
+        ],
+        "examples": [
+          {
+            "title": "225 lb × 5 reps",
+            "body": "1RM ≈ 253 lb · recovery 152 · hypertrophy 190 · strength 215."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why cap at 10 reps?",
+            "a": "Above 10, endurance starts to dominate strength and Brzycki systematically under-estimates 1RM. Use a different formula (Epley, Lombardi) or a true 3-rep-max test."
+          },
+          {
+            "q": "Is testing actual 1RM worth the risk?",
+            "a": "Rarely. Structural injury risk rises sharply above 85% for untrained lifters. Estimates from a well-executed 3–5 rep set are within 3%."
+          }
+        ],
+        "relatedIds": [
+          "strength-efficiency",
+          "heart-rate-zones",
+          "anabolic-trigger"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "strength-efficiency",
+      "slug": "strength-efficiency",
+      "category": "health",
+      "url": "/health/strength-efficiency/",
+      "title": "Strength-to-Weight Efficiency — Wilks Calculator | Kefiw",
+      "h1": "Strength-to-Weight Efficiency · Wilks",
+      "current_word_count": 134,
+      "current": {
+        "description": "Wilks coefficient — the powerlifting gold-standard for comparing lifters across bodyweight classes.",
+        "keywords": [
+          "Wilks calculator",
+          "relative strength calculator",
+          "powerlifting score",
+          "strength to weight ratio"
+        ],
+        "intro": "Wilks (2020 update) normalises absolute load against bodyweight via a 5th-order polynomial. A 150 lb Wilks 400 scores identically to a 250 lb Wilks 400 — the relative power is the same.",
+        "outcomeLine": "Wilks coefficient — compare relative power across bodyweight classes.",
+        "howTo": [
+          "Enter gender, bodyweight, and total lifted (powerlifting total or single-lift).",
+          "Read Wilks coefficient and rank band."
+        ],
+        "examples": [
+          {
+            "title": "180 lb male · 315 lb squat",
+            "body": "Wilks ≈ 104 · Intermediate band. Upgrade by raising the lift — ratios above 2× bodyweight enter Advanced territory."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Wilks or DOTS?",
+            "a": "Wilks 2020 is the current IPF-adjacent standard. DOTS is competing for adoption. Both normalise the same way; numerical outputs differ."
+          },
+          {
+            "q": "Why a 5th-order polynomial?",
+            "a": "Strength scales sub-linearly with bodyweight (the \"square-cube law\" applied to muscle cross-section). Polynomial captures the non-linearity across all competitive weight classes."
+          }
+        ],
+        "relatedIds": [
+          "max-load-capacity",
+          "anabolic-trigger",
+          "fuel-partition"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "heart-rate-zones",
+      "slug": "heart-rate-zones",
+      "category": "health",
+      "url": "/health/heart-rate-zones/",
+      "title": "Operational Heart Rate Zones — Karvonen Calculator | Kefiw",
+      "h1": "Operational Heart Rate Zones · Karvonen",
+      "current_word_count": 140,
+      "current": {
+        "description": "Calculate the five training zones using Karvonen (heart-rate reserve) method. More accurate than %HRmax alone.",
+        "keywords": [
+          "Karvonen calculator",
+          "heart rate zones",
+          "target heart rate",
+          "training zones"
+        ],
+        "intro": "Karvonen factors resting heart rate into zone calculation: zone_bpm = (HRmax − HRrest) × intensity + HRrest. More personalised than flat %HRmax — a fit person's resting HR is lower, so their zones shift up.",
+        "outcomeLine": "Karvonen zones using HR reserve — more accurate than flat %HRmax.",
+        "howTo": [
+          "Measure resting HR first thing in the morning (average over 3 days).",
+          "Enter age and resting HR.",
+          "Read the five zones with BPM ranges and physiological purpose."
+        ],
+        "examples": [
+          {
+            "title": "35y · resting 62",
+            "body": "HRmax 185 · HRR 123. Z2 aerobic 136–148 · Z4 threshold 160–173."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is 220 − age accurate?",
+            "a": "Population estimate with ±10 bpm standard deviation. Lab test (VO₂max or field test) is more accurate."
+          },
+          {
+            "q": "Which zone burns the most fat?",
+            "a": "Z2 burns highest % fat; Z3-4 burn more total calories (and still substantial fat grams). Pure \"fat-burning zone\" framing misleads."
+          }
+        ],
+        "relatedIds": [
+          "kinetic-expenditure",
+          "max-load-capacity",
+          "rem-sync"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "kinetic-expenditure",
+      "slug": "kinetic-expenditure",
+      "category": "health",
+      "url": "/health/kinetic-expenditure/",
+      "title": "Kinetic Expenditure — MET Calorie Calculator | Kefiw",
+      "h1": "Kinetic Expenditure · MET",
+      "current_word_count": 115,
+      "current": {
+        "description": "Calories burned per activity using the MET (Metabolic Equivalent of Task) method from the Compendium of Physical Activities.",
+        "keywords": [
+          "MET calculator",
+          "calories burned calculator",
+          "exercise calorie calculator",
+          "running calories"
+        ],
+        "intro": "MET × 3.5 × weight_kg / 200 × minutes. MET values from Ainsworth's Compendium of Physical Activities (2011) — the academic reference underneath every fitness tracker's calorie number.",
+        "outcomeLine": "MET-based calorie burn for 15 common activities, with junk-food equivalents.",
+        "howTo": [
+          "Pick activity and enter duration.",
+          "Read kcal for this session, kcal/h sustained, and junk-food equivalents."
+        ],
+        "examples": [
+          {
+            "title": "180 lb · 30 min running · 9.8 MET",
+            "body": "≈ 400 kcal session · 800 kcal/h · 0.71 Big Macs burned."
+          }
+        ],
+        "faq": [
+          {
+            "q": "How accurate is MET?",
+            "a": "±15% vs indirect calorimetry. Individual mechanical efficiency is the largest source of error."
+          },
+          {
+            "q": "Do fitness trackers use MET?",
+            "a": "Under the hood, yes — plus accelerometer data for intensity modulation."
+          }
+        ],
+        "relatedIds": [
+          "metabolic-floor",
+          "heart-rate-zones",
+          "fuel-partition"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "max-load-capacity",
+          "url": "/health/max-load-capacity/"
+        },
+        {
+          "id": "strength-efficiency",
+          "url": "/health/strength-efficiency/"
+        },
+        {
+          "id": "heart-rate-zones",
+          "url": "/health/heart-rate-zones/"
+        },
+        {
+          "id": "kinetic-expenditure",
+          "url": "/health/kinetic-expenditure/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

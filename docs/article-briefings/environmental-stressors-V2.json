@@ -1,0 +1,341 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:17.979Z",
+  "cluster": {
+    "slug": "environmental-stressors",
+    "section": "health",
+    "hubSlug": "environmental-stressors",
+    "url": "/health/environmental-stressors/",
+    "title": "Environmental Stressors — Kefiw",
+    "h1": "Environmental Stressors",
+    "subhead": "UV, CO₂, heat, cold — four atmospheric loads that degrade performance.",
+    "intro": "Four instruments for the external loads on a human chassis: UV burn time by skin type, indoor CO₂ vs cognitive performance, WBGT heat-stress index, and required clothing insulation in clo units.",
+    "description": "UV burn-time by Fitzpatrick type and SPF, CO₂ cognitive-decline mapping, WBGT heat-stress index, and clothing clo calculator.",
+    "keywords": [
+      "UV index calculator",
+      "CO2 calculator",
+      "WBGT calculator",
+      "clo calculator"
+    ],
+    "faq": [
+      {
+        "q": "Why WBGT instead of heat index?",
+        "a": "WBGT adds radiant load (globe temp), so it handles direct sun. Heat index is dry + humidity only. WBGT is the OSHA and ACGIH standard."
+      },
+      {
+        "q": "What is wet-bulb 35°C?",
+        "a": "The absolute thermoregulatory limit — evaporation can no longer cool a healthy adult. Fatal within hours regardless of hydration or fitness."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "bio-maintenance",
+      "structural-output"
+    ]
+  },
+  "tools": [
+    {
+      "id": "uv-exposure",
+      "slug": "uv-exposure",
+      "category": "health",
+      "url": "/health/uv-exposure/",
+      "title": "UV Exposure Delta — Burn Time Calculator | Kefiw",
+      "h1": "UV Exposure Delta · Fitzpatrick MED",
+      "current_word_count": 146,
+      "current": {
+        "description": "Minutes to a Minimum Erythemal Threshold by Fitzpatrick skin type and UV Index. Protected time via SPF.",
+        "keywords": [
+          "UV index calculator",
+          "burn time calculator",
+          "Fitzpatrick skin type",
+          "SPF calculator"
+        ],
+        "intro": "Minimum Erythemal Threshold (MED) varies by Fitzpatrick type — type I burns at 200 J/m², type VI at 1000 J/m². At UV Index 1 ≈ 25 mW/m² erythemally weighted, burn_min = MED / (UVI × 1.5).",
+        "outcomeLine": "Burn time by Fitzpatrick skin type, UV index, and applied SPF.",
+        "howTo": [
+          "Enter current UV index (from weather), pick skin type, enter SPF applied.",
+          "Read unprotected burn time and the SPF-multiplied protected window."
+        ],
+        "examples": [
+          {
+            "title": "UV 7 · Type II · SPF 30",
+            "body": "Unprotected 24 min to MED · protected 12 h — if you reapply every 2 h."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does SPF really multiply burn time?",
+            "a": "In lab conditions (2 mg/cm² application). Real-world application delivers ¼ to ½ of labeled SPF. Reapply every 2 h."
+          },
+          {
+            "q": "Is tan cumulative?",
+            "a": "MED resets overnight. Melanin buildup (tanning) does push MED slightly over weeks — but at the cost of DNA damage."
+          }
+        ],
+        "relatedIds": [
+          "thermal-failure",
+          "insulation-logic",
+          "medical-triage"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "co2-cognitive-tax",
+      "slug": "co2-cognitive-tax",
+      "category": "health",
+      "url": "/health/co2-cognitive-tax/",
+      "title": "CO₂ Cognitive Tax — Indoor Air Calculator | Kefiw",
+      "h1": "CO₂ Cognitive Tax",
+      "current_word_count": 135,
+      "current": {
+        "description": "Indoor CO₂ ppm to cognitive decline mapping. 1400 ppm halves strategic decision-making performance.",
+        "keywords": [
+          "CO2 calculator",
+          "indoor air quality",
+          "ventilation calculator",
+          "cognitive performance CO2"
+        ],
+        "intro": "Satish 2012 and Allen 2016 established an exposure-response: at 1000 ppm, strategic thinking drops ~15%; at 1400 ppm, 50%; at 2500, 75%. ASHRAE indoor target: ≤ 1000 ppm. Most offices and bedrooms hit 1200–2500 without mechanical ventilation.",
+        "outcomeLine": "Indoor CO₂ ppm mapped to cognitive decline — vent or vacate above 1500.",
+        "howTo": [
+          "Read CO₂ from a monitor (outdoor baseline ~420 ppm).",
+          "Read cognitive decline, status band, and action.",
+          "Open a window or vacate above 1500 ppm for sustained cognitive work."
+        ],
+        "examples": [
+          {
+            "title": "1000 ppm (typical bedroom at dawn)",
+            "body": "Cognitive decline ~15% · Elevated band · ventilate."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why does CO₂ affect cognition?",
+            "a": "Mechanism still debated — likely cerebral vasoconstriction and acid-base shift, not hypoxia. Effect reverses within minutes of ventilation."
+          },
+          {
+            "q": "What about outdoor CO₂?",
+            "a": "420 ppm globally, rising ~2 ppm/year. Indoor ppm = outdoor + occupancy load ÷ ventilation rate."
+          }
+        ],
+        "relatedIds": [
+          "thermal-failure",
+          "rem-sync",
+          "medical-triage"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "thermal-failure",
+      "slug": "thermal-failure",
+      "category": "health",
+      "url": "/health/thermal-failure/",
+      "title": "Thermal Failure — WBGT Heat Stress Calculator | Kefiw",
+      "h1": "Thermal Failure · WBGT",
+      "current_word_count": 158,
+      "current": {
+        "description": "Wet-bulb globe temperature — the heat-stress index used by OSHA, ACGIH, and military for work/rest cycle decisions.",
+        "keywords": [
+          "WBGT calculator",
+          "heat stress index",
+          "heat illness risk",
+          "wet bulb temperature"
+        ],
+        "intro": "Heat kills through evaporative failure, not raw temperature. WBGT = 0.7·Tw + 0.2·Tg + 0.1·Td (outdoor) captures humidity (wet-bulb), radiant load (globe), and air temp (dry). Wet-bulb > 35°C = fundamental limit of human thermoregulation.",
+        "outcomeLine": "WBGT heat-stress index — the ACGIH work/rest cycle standard.",
+        "howTo": [
+          "Enter wet-bulb, globe, and dry-bulb temps in °F or °C.",
+          "Toggle direct-sun if outdoors.",
+          "Read WBGT and the ACGIH status band (nominal / moderate / high / extreme / fatal-risk)."
+        ],
+        "examples": [
+          {
+            "title": "Tw 75 · Tg 85 · Td 88 · sun",
+            "body": "WBGT 26.1 °C · Nominal. Moderate band begins at 27 °C."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why wet-bulb and not heat index?",
+            "a": "WBGT handles radiant and direct-sun load; heat index is dry + humidity only. WBGT is the ISO 7243 and ACGIH TLV standard."
+          },
+          {
+            "q": "What happens at wet-bulb 35°C?",
+            "a": "Evaporative cooling fails — skin can't shed heat faster than metabolism generates it. Fatal within hours regardless of hydration, shade, or fitness."
+          }
+        ],
+        "relatedIds": [
+          "insulation-logic",
+          "ion-balance",
+          "hydraulic-integrity"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "insulation-logic",
+      "slug": "insulation-logic",
+      "category": "health",
+      "url": "/health/insulation-logic/",
+      "title": "Insulation Logic — Clothing Clo Calculator | Kefiw",
+      "h1": "Insulation Logic · Clo Units",
+      "current_word_count": 134,
+      "current": {
+        "description": "Required clothing insulation in clo units for air temperature and activity level. Suggested garment stack.",
+        "keywords": [
+          "clo calculator",
+          "cold weather clothing",
+          "insulation calculator",
+          "what to wear outside"
+        ],
+        "intro": "Clo = (33°C − Ta) / (8 × met). 1 clo ≈ business suit. Higher activity generates more metabolic heat, lowering required insulation. Cold under-dressed bodies divert bio-fuel from muscle to thermogenesis — pairs with Kinetic Expenditure.",
+        "outcomeLine": "Required clo for air temp + activity; greedy garment-stack suggestion.",
+        "howTo": [
+          "Enter air temperature and activity state.",
+          "Read required clo; the suggested garment stack greedy-packs layers to meet the target."
+        ],
+        "examples": [
+          {
+            "title": "40 °F · brisk hike",
+            "body": "Required 0.7 clo · stack: fleece mid-layer + thermal base."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is 1 clo exactly?",
+            "a": "0.155 m²·K/W — the insulation of a 1950s business suit at rest in 21 °C, 50% RH, no wind."
+          },
+          {
+            "q": "Why lower clo at higher activity?",
+            "a": "Metabolic heat production rises with met, so the body needs less external insulation. Runners over-dress and dump heat."
+          }
+        ],
+        "relatedIds": [
+          "thermal-failure",
+          "kinetic-expenditure",
+          "bio-fuel"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "uv-exposure",
+          "url": "/health/uv-exposure/"
+        },
+        {
+          "id": "co2-cognitive-tax",
+          "url": "/health/co2-cognitive-tax/"
+        },
+        {
+          "id": "thermal-failure",
+          "url": "/health/thermal-failure/"
+        },
+        {
+          "id": "insulation-logic",
+          "url": "/health/insulation-logic/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

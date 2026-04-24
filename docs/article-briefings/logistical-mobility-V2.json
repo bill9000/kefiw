@@ -1,0 +1,366 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:21.968Z",
+  "cluster": {
+    "slug": "logistical-mobility",
+    "section": "logic",
+    "hubSlug": "logistical-mobility",
+    "url": "/logic/logistical-mobility/",
+    "title": "Logistical Mobility & Lifecycle Logic — Kefiw",
+    "h1": "Logistical Mobility & Lifecycle Logic",
+    "subhead": "The big life-structure decisions — move, retrain, cut, reconnect — run through closed-form math.",
+    "intro": "When to relocate (break-even on moving cost), when to retrain (payback including opportunity cost), when to purge subscriptions (lifetime cost compounds), and which relationships actually pay out (credit vs debit on a visual balance).",
+    "description": "Geographic arbitrage, upskill ROI, subscription purge, and social utility — closed-form math for the major life-structure decisions.",
+    "keywords": [
+      "geographic arbitrage",
+      "upskill ROI",
+      "subscription purge",
+      "social utility calculator",
+      "life decision calculators"
+    ],
+    "faq": [
+      {
+        "q": "Why pair these four tools?",
+        "a": "Each addresses a different axis of life logistics — geography, skill, spending, people. Together they cover the big \"am I in the right configuration\" decisions without overlapping scopes."
+      },
+      {
+        "q": "How does this connect to the Finance suite?",
+        "a": "Subscription Purge pipes its monthly recovery into Runway Zero directly — cutting $50/mo extends your bankruptcy date by weeks. Upskill ROI complements Minimum Viable Rate. Geo Arbitrage pairs with Runway Zero for the \"where should I live\" calculation."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "cognitive-throughput"
+    ]
+  },
+  "tools": [
+    {
+      "id": "geo-arbitrage",
+      "slug": "geo-arbitrage",
+      "category": "logic",
+      "url": "/logic/geo-arbitrage/",
+      "title": "Geographic Arbitrage — Migration Break-Even Calculator | Kefiw",
+      "h1": "Geographic Arbitrage · Migration Horizon",
+      "current_word_count": 203,
+      "current": {
+        "description": "Calculate the break-even month for a move. Monthly gain = (income − cost) at destination minus origin. Horizon visual with plane marker.",
+        "keywords": [
+          "geographic arbitrage calculator",
+          "should I move calculator",
+          "relocation break even",
+          "cost of living comparison"
+        ],
+        "intro": "Moving is a one-time expense that pays back in monthly surplus gains. Break-even = move cost / monthly gain. If you won't stay past break-even, the move is a bet against yourself. This tool plots the plane along a 36-month horizon.",
+        "outcomeLine": "Break-even month for relocating · monthly surplus delta vs one-time move cost.",
+        "howTo": [
+          "Enter monthly income and cost at both locations, plus one-time move cost.",
+          "Monthly gain = (income − cost)·there − (income − cost)·here.",
+          "Break-even = move cost / monthly gain. Negative gain = no break-even, ever.",
+          "Under 6 months = fast · 6–18 = reasonable · 18+ = only if you commit to staying."
+        ],
+        "examples": [
+          {
+            "title": "$6000/$4500 here · $5500/$2800 there · $6000 move",
+            "body": "Monthly gain $1200 · Break-even 5.0 months · Fast_Payback."
+          },
+          {
+            "title": "Equal surpluses · $6000 move",
+            "body": "Monthly gain $0 · No break-even · the move is pure optionality cost."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What about taxes and visas?",
+            "a": "Roll them into cost-there. Tax differential is often the biggest line item — factor in effective rate, not marginal."
+          },
+          {
+            "q": "Does this handle remote work?",
+            "a": "Yes — keep income flat, drop cost-there to the new location, move cost to one-time relocation. The classic \"remote to cheaper city\" case."
+          }
+        ],
+        "relatedIds": [
+          "upskill-payback",
+          "leak-detection",
+          "runway-zero"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "upskill-payback",
+      "slug": "upskill-payback",
+      "category": "logic",
+      "url": "/logic/upskill-payback/",
+      "title": "Upskill ROI — Bootcamp Payback Calculator | Kefiw",
+      "h1": "Upskill ROI · Investment Recovery",
+      "current_word_count": 213,
+      "current": {
+        "description": "Calculate the true payback window on a course or bootcamp, including opportunity cost of study hours. Recovery progress bar with 24-month reference.",
+        "keywords": [
+          "upskill ROI calculator",
+          "bootcamp payback",
+          "course ROI",
+          "is a bootcamp worth it",
+          "education investment calculator"
+        ],
+        "intro": "Every \"free\" course costs your hourly rate × study hours. Payback = (course + opportunity cost) / monthly salary lift. Under 18 months is a solid investment; over 36 months depends on whether the skill holds value that long.",
+        "outcomeLine": "True course ROI including study-hour opportunity cost · 1- and 3-year net.",
+        "howTo": [
+          "Enter course cost, total study hours, your current hourly wage, and expected monthly salary lift.",
+          "Opportunity cost = study_hours × hourly_wage.",
+          "Payback = (course + opportunity cost) / monthly lift.",
+          "Under 6 months = alpha bet · 6–18 = solid · 36+ = slow · no lift = negative ROI."
+        ],
+        "examples": [
+          {
+            "title": "$1500 course · 120h · $35/h · $400 lift",
+            "body": "Opportunity cost $4200 · Total $5700 · Payback 14.3 mo · Solid_Investment."
+          },
+          {
+            "title": "$0 course · 200h · $50/h · $100 lift",
+            "body": "Opportunity cost $10000 · Payback 100 mo · Negative_ROI — find a cheaper path."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is study time really opportunity cost?",
+            "a": "If you could have billed those hours, yes. If you studied during idle time you would have wasted anyway, no. Be honest with yourself."
+          },
+          {
+            "q": "What about non-salary returns?",
+            "a": "Skills can unlock optionality, network, and work quality — real but hard to price. This tool captures the financial floor; everything above is bonus."
+          }
+        ],
+        "relatedIds": [
+          "geo-arbitrage",
+          "leak-detection",
+          "minimum-viable-rate"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "leak-detection",
+      "slug": "leak-detection",
+      "category": "logic",
+      "url": "/logic/leak-detection/",
+      "title": "Subscription Purge — Leak Detection Calculator | Kefiw",
+      "h1": "Subscription Purge · Leak Detection",
+      "current_word_count": 207,
+      "current": {
+        "description": "List every recurring subscription, see the monthly bleed and the 10-year lifetime cost. Sinking-ship visual with drip animations. Pipes recovery into Runway Zero.",
+        "keywords": [
+          "subscription audit",
+          "cancel subscriptions",
+          "recurring charges calculator",
+          "subscription cost",
+          "lifetime subscription cost"
+        ],
+        "intro": "Subscriptions compound silently — $15/mo looks small until you see $1800 over ten years. This tool stacks your lines, sums the monthly bleed, and projects the 5- and 10-year lifetime cost. Every dollar cut here extends the runway on the Runway Zero calculator.",
+        "outcomeLine": "Subscription bleed · monthly, annual, 5- and 10-year lifetime cost.",
+        "howTo": [
+          "Add every active subscription (streaming, cloud, apps, memberships) with monthly cost.",
+          "Monthly bleed = Σ(line). Lifetime = monthly × 12 × years.",
+          "Under $25/mo = minimal · $75–150 = serious · $300+ = taking on water.",
+          "Pipe monthly recovery into the Runway Zero calculator — every $50 cut extends the bankruptcy date by weeks."
+        ],
+        "examples": [
+          {
+            "title": "5 typical subs @ $12/mo avg",
+            "body": "Monthly $60 · Annual $720 · 5-year $3600 · 10-year $7200 · Moderate_Drain."
+          },
+          {
+            "title": "15 subs @ $20/mo avg",
+            "body": "Monthly $300 · 10-year $36000 · Hull_Breach — kill the bottom half now."
+          }
+        ],
+        "faq": [
+          {
+            "q": "What about annual plans?",
+            "a": "Divide by 12 and enter as monthly. The math is the same; the psychology is different — annual feels cheaper but compounds identically."
+          },
+          {
+            "q": "Why the 10-year projection?",
+            "a": "Without inflation adjustment it's conservative. The real 10-year cost is worse once prices creep, which most subscriptions do annually."
+          }
+        ],
+        "relatedIds": [
+          "runway-zero",
+          "geo-arbitrage",
+          "upskill-payback"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "connection-check",
+      "slug": "connection-check",
+      "category": "logic",
+      "url": "/logic/connection-check/",
+      "title": "Social Utility — Relationship ROI Calculator | Kefiw",
+      "h1": "Social Utility · Balance of Connection",
+      "current_word_count": 234,
+      "current": {
+        "description": "Weigh support and positive energy against conflict and drain. Balance-scale visual with tilt indicator. Signals pattern, not judgement.",
+        "keywords": [
+          "relationship ROI",
+          "social utility calculator",
+          "toxic relationship test",
+          "relationship audit",
+          "friendship calculator"
+        ],
+        "intro": "Not every relationship needs to be net-positive — but the sum of your relationships must be, or you run at a deficit. This tool weighs the credit side (support + positive energy) against the debit side (conflict + drain) on a visual balance.",
+        "outcomeLine": "Support + positive weighed against conflict + drain — utility ratio with balance tilt.",
+        "howTo": [
+          "Rate four dimensions 0–10: support given, positive energy, conflict cost, energy drain.",
+          "Utility ratio = (support + positive) / (conflict + drain).",
+          "Above 3 = high-yield · 1–1.5 = break-even · below 0.5 = parasitic.",
+          "Use it to flag patterns — then decide whether to adjust frequency, have a hard conversation, or create distance."
+        ],
+        "examples": [
+          {
+            "title": "Support 5 · positive 6 · conflict 3 · drain 2",
+            "body": "Credit 11 · Debit 5 · Ratio 2.20 · Healthy_Surplus."
+          },
+          {
+            "title": "Support 2 · positive 3 · conflict 6 · drain 7",
+            "body": "Credit 5 · Debit 13 · Ratio 0.38 · Parasitic."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Isn't this transactional and cold?",
+            "a": "It's a mirror, not a verdict. The point is to surface patterns you've been ignoring — not to grade anyone. The feeling of resisting this exercise often tells you more than the numbers."
+          },
+          {
+            "q": "Does a low score mean I should end the relationship?",
+            "a": "No. It means something is worth addressing. Distance, boundaries, and honest conversation all work before total removal — most relationships can be repaired or rebalanced if you actually try."
+          }
+        ],
+        "relatedIds": [
+          "social-latency",
+          "stability-coefficient",
+          "decision-fatigue"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "geo-arbitrage",
+          "url": "/logic/geo-arbitrage/"
+        },
+        {
+          "id": "upskill-payback",
+          "url": "/logic/upskill-payback/"
+        },
+        {
+          "id": "leak-detection",
+          "url": "/logic/leak-detection/"
+        },
+        {
+          "id": "connection-check",
+          "url": "/logic/connection-check/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

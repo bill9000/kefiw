@@ -1,0 +1,916 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:05.539Z",
+  "cluster": {
+    "slug": "units",
+    "section": "converters",
+    "hubSlug": "unit-conversion-tools",
+    "url": "/converters/unit-conversion-tools/",
+    "title": "Unit Conversion Tools — Kefiw",
+    "h1": "Unit Conversion Tools",
+    "subhead": "Length, weight, temperature, volume, area, speed, time.",
+    "intro": "The standard conversion toolbox with a clean mobile layout. Each tool below supports both directions and a full set of common units.",
+    "description": "Unit converters for length, weight, temperature, volume, area, speed, and time — plus quick-reference guides for the most common conversions.",
+    "keywords": [
+      "unit converters",
+      "length converter",
+      "weight converter",
+      "temperature converter"
+    ],
+    "faq": [
+      {
+        "q": "Do these support fractional inputs?",
+        "a": "Yes. Enter decimals or fractions (as decimals) and convert freely."
+      },
+      {
+        "q": "What's the rounding policy?",
+        "a": "Results are displayed to 6 significant figures by default — enough precision for everyday use without noise."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "everyday-calculators",
+      "shopping"
+    ]
+  },
+  "tools": [
+    {
+      "id": "length-converter",
+      "slug": "length-converter",
+      "category": "converters",
+      "url": "/converters/length-converter/",
+      "title": "Length Converter — Kefiw",
+      "h1": "Length Converter",
+      "current_word_count": 47,
+      "current": {
+        "description": "Convert between meters, feet, inches, miles, kilometers, yards, and more.",
+        "keywords": [
+          "length converter",
+          "meters to feet",
+          "cm to inches"
+        ],
+        "intro": "Instant conversion between every common unit of length. Works offline.",
+        "outcomeLine": "Metric and imperial length units, either direction.",
+        "howTo": [
+          "Enter a value.",
+          "Pick source and target units."
+        ],
+        "examples": [
+          {
+            "title": "1 meter",
+            "body": "= 3.2808 feet = 39.37 inches = 100 cm"
+          }
+        ],
+        "faq": [
+          {
+            "q": "How many decimal places?",
+            "a": "Six by default. Adjustable."
+          }
+        ],
+        "relatedIds": [
+          "weight-converter",
+          "area-converter",
+          "volume-converter"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "weight-converter",
+      "slug": "weight-converter",
+      "category": "converters",
+      "url": "/converters/weight-converter/",
+      "title": "Weight Converter — Kefiw",
+      "h1": "Weight Converter",
+      "current_word_count": 46,
+      "current": {
+        "description": "Convert between kilograms, pounds, ounces, grams, stones, and tons.",
+        "keywords": [
+          "weight converter",
+          "kg to lbs",
+          "pounds to kilograms"
+        ],
+        "intro": "Instant mass and weight conversion between every common unit.",
+        "outcomeLine": "Kilograms, pounds, stones, ounces — any direction.",
+        "howTo": [
+          "Enter a value.",
+          "Pick source and target units."
+        ],
+        "examples": [
+          {
+            "title": "1 kilogram",
+            "body": "= 2.2046 pounds = 35.274 ounces"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is stone supported?",
+            "a": "Yes. 1 stone = 14 pounds = 6.35029 kg."
+          }
+        ],
+        "relatedIds": [
+          "length-converter",
+          "volume-converter"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "temperature-converter",
+      "slug": "temperature-converter",
+      "category": "converters",
+      "url": "/converters/temperature-converter/",
+      "title": "Temperature Converter — Kefiw",
+      "h1": "Temperature Converter",
+      "current_word_count": 34,
+      "current": {
+        "description": "Convert between Celsius, Fahrenheit, Kelvin, and Rankine.",
+        "keywords": [
+          "temperature converter",
+          "celsius to fahrenheit",
+          "f to c"
+        ],
+        "intro": "Convert temperature between every common scale instantly.",
+        "outcomeLine": "Fahrenheit ↔ Celsius with decimal precision.",
+        "howTo": [
+          "Enter a value.",
+          "Pick source and target scales."
+        ],
+        "examples": [
+          {
+            "title": "100 °C",
+            "body": "= 212 °F = 373.15 K"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is Rankine supported?",
+            "a": "Yes."
+          }
+        ],
+        "relatedIds": [
+          "length-converter",
+          "weight-converter"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "volume-converter",
+      "slug": "volume-converter",
+      "category": "converters",
+      "url": "/converters/volume-converter/",
+      "title": "Volume Converter — Kefiw",
+      "h1": "Volume Converter",
+      "current_word_count": 42,
+      "current": {
+        "description": "Convert between liters, gallons, cubic meters, milliliters, cups, pints, and more.",
+        "keywords": [
+          "volume converter",
+          "liters to gallons",
+          "ml to oz"
+        ],
+        "intro": "Convert between every common unit of volume.",
+        "outcomeLine": "Litres, gallons (US + UK), cups, millilitres.",
+        "howTo": [
+          "Enter a value.",
+          "Pick source and target units."
+        ],
+        "examples": [
+          {
+            "title": "1 gallon (US)",
+            "body": "= 3.7854 liters = 128 fl oz"
+          }
+        ],
+        "faq": [
+          {
+            "q": "US or UK gallons?",
+            "a": "Both, selectable."
+          }
+        ],
+        "relatedIds": [
+          "weight-converter",
+          "length-converter"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "area-converter",
+      "slug": "area-converter",
+      "category": "converters",
+      "url": "/converters/area-converter/",
+      "title": "Area Converter — Kefiw",
+      "h1": "Area Converter",
+      "current_word_count": 53,
+      "current": {
+        "description": "Convert between square meters, square feet, acres, hectares, and more.",
+        "keywords": [
+          "area converter",
+          "sq ft to sq m",
+          "acres to hectares"
+        ],
+        "intro": "Convert between every common unit of area.",
+        "outcomeLine": "Square metres, feet, acres, hectares — all covered.",
+        "howTo": [
+          "Enter a value.",
+          "Pick source and target units."
+        ],
+        "examples": [
+          {
+            "title": "1 acre",
+            "body": "= 4046.86 m² = 43,560 sq ft = 0.4047 hectares"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Are US and Imperial acres the same?",
+            "a": "Yes, within 0.0000004 — so yes for practical purposes."
+          }
+        ],
+        "relatedIds": [
+          "length-converter",
+          "volume-converter"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "speed-converter",
+      "slug": "speed-converter",
+      "category": "converters",
+      "url": "/converters/speed-converter/",
+      "title": "Speed Converter — Kefiw",
+      "h1": "Speed Converter",
+      "current_word_count": 50,
+      "current": {
+        "description": "Convert between km/h, mph, m/s, knots, and feet per second.",
+        "keywords": [
+          "speed converter",
+          "kph to mph",
+          "knots to mph"
+        ],
+        "intro": "Convert between every common unit of speed.",
+        "outcomeLine": "mph, km/h, m/s, knots — one tool.",
+        "howTo": [
+          "Enter a value.",
+          "Pick source and target units."
+        ],
+        "examples": [
+          {
+            "title": "100 km/h",
+            "body": "= 62.14 mph = 27.78 m/s = 53.996 knots"
+          }
+        ],
+        "faq": [
+          {
+            "q": "What is a knot?",
+            "a": "One nautical mile per hour. 1 knot = 1.852 km/h."
+          }
+        ],
+        "relatedIds": [
+          "length-converter",
+          "time-converter"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "time-converter",
+      "slug": "time-converter",
+      "category": "converters",
+      "url": "/converters/time-converter/",
+      "title": "Time Converter — Kefiw",
+      "h1": "Time Converter",
+      "current_word_count": 56,
+      "current": {
+        "description": "Convert between seconds, minutes, hours, days, weeks, months, and years.",
+        "keywords": [
+          "time converter",
+          "seconds to minutes",
+          "days to hours"
+        ],
+        "intro": "Convert between every common unit of time duration.",
+        "outcomeLine": "Seconds, minutes, hours, days, weeks, years.",
+        "howTo": [
+          "Enter a value.",
+          "Pick source and target units."
+        ],
+        "examples": [
+          {
+            "title": "1 day",
+            "body": "= 24 hours = 1,440 minutes = 86,400 seconds"
+          }
+        ],
+        "faq": [
+          {
+            "q": "Do months use 30 days?",
+            "a": "Months use the average 30.4375 days. For exact month math use the date-difference calculator."
+          }
+        ],
+        "relatedIds": [
+          "date-difference-calculator",
+          "age-calculator"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "id": "cS-common-length-conversions",
+      "slug": "common-length-conversions",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/common-length-conversions/",
+      "title": "Common Length Conversions — Inches, Feet, Metres, and Miles",
+      "h1": "Common Length Conversions",
+      "subhead": "The conversion factors worth memorising, and mental-math shortcuts for the rest.",
+      "current_word_count": 303,
+      "target_word_count": 1200,
+      "current": {
+        "description": "The most common length conversions — inches, feet, yards, miles, metres, kilometres — with factors and mental-math tricks.",
+        "keywords": [
+          "common length conversions",
+          "inches to cm",
+          "miles to km",
+          "feet to metres"
+        ],
+        "outcomeLine": "1 inch = 2.54 cm. 1 foot = 30.48 cm. 1 mile ≈ 1.61 km. Almost everything else derives from these.",
+        "intro": "Length conversions come up constantly — recipes, furniture, travel, fitness. Four or five factors cover almost every real case.",
+        "keyPoints": [
+          "1 inch = 2.54 cm (exactly, by international agreement in 1959).",
+          "1 foot = 12 inches = 30.48 cm ≈ 0.3 metres.",
+          "1 yard = 3 feet = 0.9144 metres.",
+          "1 mile = 1.609 km. Mental math: miles × 1.6, or miles + (miles × 0.6).",
+          "1 metre ≈ 3.28 feet ≈ 39 inches. 1 km ≈ 0.62 miles."
+        ],
+        "examples": [
+          {
+            "title": "Height: 5'10\" to metres",
+            "body": "5 × 30.48 + 10 × 2.54 = 152.4 + 25.4 = 177.8 cm = 1.778 m."
+          },
+          {
+            "title": "Marathon: 26.2 miles to km",
+            "body": "26.2 × 1.609 = 42.16 km. Mental approx: 26 + 26 × 0.6 = 26 + 16 = 42."
+          },
+          {
+            "title": "Bedroom: 12 ft × 10 ft to metres",
+            "body": "12 × 0.3048 = 3.66 m, 10 × 0.3048 = 3.05 m. So 3.66 m × 3.05 m."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "length-converter",
+            "note": "Main tool — any length unit to any other, with precision controls."
+          },
+          {
+            "toolId": "area-converter",
+            "note": "For room sizes, plots of land — once length matters in two dimensions."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is inch exactly 2.54 cm or is it approximate?",
+            "a": "Exactly. Since 1959, the international inch is defined as exactly 2.54 cm. Before that it was a fraction off, which is why old conversions sometimes disagree at the fifth decimal."
+          },
+          {
+            "q": "Why do UK miles and US miles equal?",
+            "a": "Both use the international mile (1609.344 m exactly). The UK also uses the statute mile for some surveying — same value. US survey miles are slightly different but rarely encountered."
+          }
+        ],
+        "relatedIds": [
+          "length-converter",
+          "area-converter",
+          "cS-metric-vs-imperial"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-fahrenheit-vs-celsius",
+      "slug": "fahrenheit-vs-celsius",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/fahrenheit-vs-celsius/",
+      "title": "Fahrenheit vs. Celsius — The Formula and Mental Shortcuts",
+      "h1": "Fahrenheit vs. Celsius",
+      "subhead": "The exact formula, and the quick approximation that gets you within 2°.",
+      "current_word_count": 306,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Fahrenheit to Celsius and back — exact formula, mental-math approximation, and reference temperatures.",
+        "keywords": [
+          "fahrenheit to celsius",
+          "celsius to fahrenheit",
+          "temperature conversion"
+        ],
+        "outcomeLine": "C = (F − 32) × 5/9. Quick estimate: subtract 30 and halve, or double and add 30.",
+        "intro": "The temperature conversion formula is simple but awkward to do in your head. A close approximation lets you convert weather or body temperatures to within a degree or two without a calculator.",
+        "keyPoints": [
+          "Exact: C = (F − 32) × 5/9. F = C × 9/5 + 32.",
+          "Quick F → C: subtract 30, halve. (68 − 30) ÷ 2 = 19 (actual: 20).",
+          "Quick C → F: double, add 30. 20 × 2 + 30 = 70 (actual: 68).",
+          "Approximation error: usually 1–2°. Fine for weather, not for cooking or medical.",
+          "Reference points worth memorising: 0°C = 32°F (freezing), 100°C = 212°F (boiling), 37°C = 98.6°F (body)."
+        ],
+        "examples": [
+          {
+            "title": "Weather: 25°C",
+            "body": "Exact: 25 × 9/5 + 32 = 77°F. Quick: 25 × 2 + 30 = 80°F. 3° off — fine for \"is it warm\"."
+          },
+          {
+            "title": "Oven: 350°F",
+            "body": "Exact: (350 − 32) × 5/9 = 177°C. Most UK ovens have a 180°C setting — close enough."
+          },
+          {
+            "title": "Fever: 101°F",
+            "body": "Exact: (101 − 32) × 5/9 = 38.3°C. Quick: (101 − 30) ÷ 2 = 35.5°C — big error at high F. Use exact for medical."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "temperature-converter",
+            "note": "Main tool — exact conversion with decimal precision."
+          },
+          {
+            "toolId": "length-converter",
+            "note": "Often paired when converting recipe units (oven temp + dish size)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why is the quick approximation inaccurate at high temperatures?",
+            "a": "The formula C = (F − 32) × 5/9 uses 5/9 ≈ 0.556, but the quick version uses 0.5. The error scales with the temperature difference from 32°F."
+          },
+          {
+            "q": "Is there a cross-over point where F = C?",
+            "a": "Yes: −40°. Minus 40 Fahrenheit equals minus 40 Celsius exactly. Useful trivia, not much else."
+          }
+        ],
+        "relatedIds": [
+          "temperature-converter",
+          "length-converter",
+          "cS-metric-vs-imperial"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-liters-vs-gallons",
+      "slug": "litres-vs-gallons",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/litres-vs-gallons/",
+      "title": "Litres vs. Gallons — And the US/UK Gallon Trap",
+      "h1": "Litres vs. Gallons",
+      "subhead": "One litre, two different gallons — know which one you are dealing with.",
+      "current_word_count": 280,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Volume conversions between litres and gallons, with the critical US vs. UK gallon difference.",
+        "keywords": [
+          "litres to gallons",
+          "gallons to litres",
+          "us vs uk gallon"
+        ],
+        "outcomeLine": "1 US gallon = 3.785 L. 1 UK gallon = 4.546 L. They are NOT the same size.",
+        "intro": "The gallon is two different sizes depending on where you are. A US gallon is about 20% smaller than a UK gallon — so \"fuel economy in mpg\" or \"tank capacity in gallons\" mean different things in the two countries.",
+        "keyPoints": [
+          "1 US gallon = 3.785 litres (128 US fluid ounces).",
+          "1 UK (imperial) gallon = 4.546 litres (160 UK fluid ounces).",
+          "1 UK gallon ≈ 1.2 US gallons. That is a ~20% difference.",
+          "A UK fluid ounce and a US fluid ounce are also different — UK fl oz is slightly smaller.",
+          "Fuel economy: 30 mpg (UK) ≈ 25 mpg (US). Always check which gallon."
+        ],
+        "examples": [
+          {
+            "title": "Fuel tank: 15 US gal",
+            "body": "15 × 3.785 = 56.8 L."
+          },
+          {
+            "title": "Milk jug: 1 UK gallon",
+            "body": "4.546 L ≈ 4.55 L. Supermarket 4-pint jug = 2.27 L."
+          },
+          {
+            "title": "Recipe: \"one gallon\"",
+            "body": "American recipe = 3.785 L. British recipe = 4.546 L. Assume US unless stated otherwise in modern cookbooks."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "volume-converter",
+            "note": "Main tool — supports US gallons, UK gallons, litres, millilitres, and more."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why are US and UK gallons different?",
+            "a": "Historical accident. The UK imperial gallon was defined in 1824 based on 10 lb of water. The US kept the older English wine gallon (231 cubic inches). Neither country has changed since."
+          },
+          {
+            "q": "Which gallon do Canada and Australia use?",
+            "a": "Both use metric officially. Canada historically used UK gallons; Australia too. But for fuel, anything pre-metric in those countries is ambiguous — check."
+          }
+        ],
+        "relatedIds": [
+          "volume-converter",
+          "cS-metric-vs-imperial"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-mph-vs-kmh",
+      "slug": "mph-vs-kmh",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/mph-vs-kmh/",
+      "title": "MPH vs. KM/H — The Quick Mental Conversion",
+      "h1": "MPH vs. KM/H",
+      "subhead": "Multiply by 1.6 or divide by 1.6 — and two shortcuts that are close enough.",
+      "current_word_count": 272,
+      "target_word_count": 1200,
+      "current": {
+        "description": "Converting miles per hour to kilometres per hour and back — exact factor and mental-math shortcuts for driving.",
+        "keywords": [
+          "mph to kmh",
+          "kmh to mph",
+          "speed conversion"
+        ],
+        "outcomeLine": "1 mph = 1.609 km/h. Quick: multiply by 1.6, or add 60% of the number.",
+        "intro": "Speed conversion comes up whenever you cross a border between mph-countries (US, UK) and km/h-countries (most of the rest of the world). One factor and a mental-math trick cover it.",
+        "keyPoints": [
+          "1 mph = 1.609 km/h. 1 km/h = 0.621 mph.",
+          "Quick mph → km/h: mph × 1.6, or mph + 60% of mph.",
+          "Quick km/h → mph: km/h × 0.6, or km/h − 40%.",
+          "Useful reference points: 100 km/h ≈ 62 mph. 60 mph ≈ 96 km/h.",
+          "Speed limits you will see: UK motorway 70 mph = 113 km/h. German autobahn advisory 130 km/h ≈ 81 mph."
+        ],
+        "examples": [
+          {
+            "title": "UK speed limit: 70 mph",
+            "body": "70 × 1.6 = 112 km/h. Exact: 112.65 km/h."
+          },
+          {
+            "title": "Autobahn: 130 km/h",
+            "body": "130 × 0.6 = 78 mph. Exact: 80.8 mph."
+          },
+          {
+            "title": "Marathon pace: 10 km/h",
+            "body": "10 × 0.6 = 6 mph. A 10-km/h pace is about a 10-minute mile."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "speed-converter",
+            "note": "Main tool — supports mph, km/h, m/s, knots."
+          },
+          {
+            "toolId": "length-converter",
+            "note": "When converting distance alongside speed (trip planning)."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why do US and UK both use mph?",
+            "a": "Historical inertia. Both countries went partially metric but kept miles for road signs. The UK uses km for most other measurements; the US mostly does not."
+          },
+          {
+            "q": "Is the conversion for speed limits exact?",
+            "a": "Close but not exact — 70 mph = 112.65 km/h, but signs round to 110 or 112. For legal enforcement, the local unit is authoritative."
+          }
+        ],
+        "relatedIds": [
+          "speed-converter",
+          "length-converter",
+          "cS-common-length-conversions",
+          "cS-metric-vs-imperial"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    },
+    {
+      "id": "cS-metric-vs-imperial",
+      "slug": "metric-vs-imperial",
+      "kind": "guide",
+      "pageType": "support",
+      "section": "guides",
+      "url": "/guides/metric-vs-imperial/",
+      "title": "Metric vs. Imperial — The Short Survival Guide",
+      "h1": "Metric vs. Imperial",
+      "subhead": "Which countries use which, and the minimum set of conversions for travellers and readers.",
+      "current_word_count": 349,
+      "target_word_count": 1200,
+      "current": {
+        "description": "A practical guide to metric and imperial systems — which countries use what, the key conversion factors, and when each one is easier to work with.",
+        "keywords": [
+          "metric vs imperial",
+          "imperial to metric",
+          "conversion guide"
+        ],
+        "outcomeLine": "Almost every country uses metric officially. Three holdouts — US, Liberia, Myanmar — still use imperial as primary.",
+        "intro": "Almost the entire world uses metric. Three countries — the US, Liberia, and Myanmar — still use imperial officially, and the UK uses a mixture (metric for weight and length in most contexts, imperial for roads and beer).",
+        "keyPoints": [
+          "Length: 1 inch = 2.54 cm. 1 ft ≈ 0.3 m. 1 mile ≈ 1.6 km.",
+          "Weight: 1 lb ≈ 0.454 kg. 1 kg ≈ 2.2 lb. 1 stone = 14 lb = 6.35 kg.",
+          "Volume: 1 US gal = 3.785 L. 1 UK gal = 4.546 L. 1 L ≈ 33.8 US fl oz.",
+          "Temperature: °C = (°F − 32) × 5/9. Reference: 0°C = 32°F, 37°C = 98.6°F (body).",
+          "UK quirk: weight in stone-and-pounds for people, kg for food. Height in feet-and-inches or cm."
+        ],
+        "examples": [
+          {
+            "title": "UK body weight",
+            "body": "\"11 stone 3\" = 11 × 14 + 3 = 157 lb = 71.2 kg."
+          },
+          {
+            "title": "Recipe: 1 cup flour",
+            "body": "US cup = 240 ml ≈ 125 g flour. UK recipes use grams directly — cups are an American convention."
+          },
+          {
+            "title": "Temperature forecast",
+            "body": "75°F = 24°C (warm). 40°F = 4°C (cold). Use (F − 30) ÷ 2 for a quick approximation."
+          }
+        ],
+        "whenToUse": [
+          {
+            "toolId": "length-converter",
+            "note": "Length across systems — feet, inches, metres, miles, kilometres."
+          },
+          {
+            "toolId": "weight-converter",
+            "note": "Weight across pounds, kilograms, stones, ounces."
+          },
+          {
+            "toolId": "volume-converter",
+            "note": "Volume including the US vs. UK gallon distinction."
+          },
+          {
+            "toolId": "temperature-converter",
+            "note": "Fahrenheit ↔ Celsius, with decimal precision for medical or scientific use."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why does the UK use a mix?",
+            "a": "The UK officially went metric in the 1960s–70s but never fully switched consumer habits. Road signs, beer, and body weight stayed imperial; food, weather, and science went metric."
+          },
+          {
+            "q": "Is metric always easier?",
+            "a": "For arithmetic yes — everything scales by 10. But imperial units (foot, inch, pound) are often more human-sized for everyday measurements, which is part of why they persist."
+          }
+        ],
+        "relatedIds": [
+          "length-converter",
+          "weight-converter",
+          "volume-converter",
+          "temperature-converter",
+          "cS-common-length-conversions",
+          "cS-fahrenheit-vs-celsius",
+          "cS-liters-vs-gallons"
+        ]
+      },
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Keep the existing structured fields but tighten/expand as needed.",
+        "Main expansion goes into longform_markdown as 4-6 H2 sections.",
+        "Preserve every relatedId and toolId — those are internal links."
+      ]
+    }
+  ],
+  "link_map": {
+    "cS-common-length-conversions": [
+      "length-converter",
+      "area-converter",
+      "cS-metric-vs-imperial"
+    ],
+    "cS-fahrenheit-vs-celsius": [
+      "temperature-converter",
+      "length-converter",
+      "cS-metric-vs-imperial"
+    ],
+    "cS-liters-vs-gallons": [
+      "volume-converter",
+      "cS-metric-vs-imperial"
+    ],
+    "cS-mph-vs-kmh": [
+      "speed-converter",
+      "length-converter",
+      "cS-common-length-conversions",
+      "cS-metric-vs-imperial"
+    ],
+    "cS-metric-vs-imperial": [
+      "length-converter",
+      "weight-converter",
+      "volume-converter",
+      "temperature-converter",
+      "cS-common-length-conversions",
+      "cS-fahrenheit-vs-celsius",
+      "cS-liters-vs-gallons"
+    ]
+  },
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "length-converter",
+          "url": "/converters/length-converter/"
+        },
+        {
+          "id": "weight-converter",
+          "url": "/converters/weight-converter/"
+        },
+        {
+          "id": "temperature-converter",
+          "url": "/converters/temperature-converter/"
+        },
+        {
+          "id": "volume-converter",
+          "url": "/converters/volume-converter/"
+        },
+        {
+          "id": "area-converter",
+          "url": "/converters/area-converter/"
+        },
+        {
+          "id": "speed-converter",
+          "url": "/converters/speed-converter/"
+        },
+        {
+          "id": "time-converter",
+          "url": "/converters/time-converter/"
+        }
+      ],
+      "article_urls": [
+        {
+          "id": "cS-common-length-conversions",
+          "url": "/guides/common-length-conversions/"
+        },
+        {
+          "id": "cS-fahrenheit-vs-celsius",
+          "url": "/guides/fahrenheit-vs-celsius/"
+        },
+        {
+          "id": "cS-liters-vs-gallons",
+          "url": "/guides/litres-vs-gallons/"
+        },
+        {
+          "id": "cS-mph-vs-kmh",
+          "url": "/guides/mph-vs-kmh/"
+        },
+        {
+          "id": "cS-metric-vs-imperial",
+          "url": "/guides/metric-vs-imperial/"
+        }
+      ]
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

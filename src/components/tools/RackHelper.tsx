@@ -1,12 +1,57 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useWordWorker } from './useWordWorker';
 import { useToolSetting } from './useToolSettings';
 import { track } from '~/lib/analytics';
 import CopyButton from '../CopyButton';
 import ModeSwitch from './ModeSwitch';
 import OutcomeLayer, { type MaybeCard } from './outcome/OutcomeLayer';
+import { SCRABBLE_VALUES, WWF_VALUES, wordScore } from '~/lib/dict';
+
+// Apply a word-score in the given value set and subtract letter values that
+// the rack's blank tiles represented (blanks score 0 in real Scrabble / WWF).
+function scoreWithBlanks(word: string, blankPositions: number[] | undefined, values: Record<string, number>): number {
+  const base = wordScore(word, values);
+  if (!blankPositions || blankPositions.length === 0) return base;
+  const lower = word.toLowerCase();
+  let penalty = 0;
+  for (const pos of blankPositions) penalty += values[lower[pos]] ?? 0;
+  return base - penalty;
+}
 
 interface Props { valueSet: 'scrabble' | 'wwf'; }
+
+// Leave evaluation — what's left on the rack after a play. Purely rule-based.
+// Does not replace equity tables but gives an honest, user-visible note.
+function evaluateLeave(rack: string, playedWord: string): { leave: string; tone: 'strong' | 'neutral' | 'weak'; note: string } {
+  const rackUpper = rack.toUpperCase().replace(/[^A-Z?]/g, '');
+  // Deduct one tile per letter in the played word from the rack (preferring
+  // exact matches; fall back to blanks for letters not in the rack).
+  const counts: Record<string, number> = {};
+  for (const c of rackUpper) counts[c] = (counts[c] ?? 0) + 1;
+  for (const c of playedWord.toUpperCase()) {
+    if (counts[c]) counts[c]--;
+    else if (counts['?']) counts['?']--;
+  }
+  const leaveArr: string[] = [];
+  for (const [k, n] of Object.entries(counts)) for (let i = 0; i < n; i++) leaveArr.push(k);
+  const leave = leaveArr.sort().join('');
+  if (!leave) return { leave: '', tone: 'neutral', note: 'Empty rack — play draws a fresh 7.' };
+  const VOWELS = new Set(['A', 'E', 'I', 'O', 'U']);
+  const consonants = leaveArr.filter((c) => !VOWELS.has(c) && c !== '?');
+  const vowels = leaveArr.filter((c) => VOWELS.has(c));
+  const blanks = leaveArr.filter((c) => c === '?').length;
+  const highValue = leaveArr.filter((c) => ['J', 'Q', 'X', 'Z'].includes(c));
+  const hasBingoStem =
+    (leaveArr.includes('E') && leaveArr.includes('R') && leaveArr.includes('S') && leaveArr.includes('T')) ||
+    (leaveArr.includes('A') && leaveArr.includes('E') && leaveArr.includes('I') && leaveArr.includes('N') && leaveArr.includes('R'));
+  if (blanks >= 1 && leaveArr.length >= 3) return { leave, tone: 'strong', note: 'Keeps a blank — bingo setup.' };
+  if (hasBingoStem) return { leave, tone: 'strong', note: 'Contains a bingo stem — next-turn 50-point candidate.' };
+  if (consonants.length === 0 && leaveArr.length > 0) return { leave, tone: 'weak', note: 'All vowels — next draw may clog.' };
+  if (vowels.length === 0 && leaveArr.length > 2) return { leave, tone: 'weak', note: 'No vowels — hard to build next turn.' };
+  if (highValue.length > 0 && vowels.length === 0) return { leave, tone: 'weak', note: `Stuck with ${highValue.join('')} and no vowel to offload it.` };
+  if (leaveArr.length <= 2) return { leave, tone: 'neutral', note: 'Short leave — most draws will work.' };
+  return { leave, tone: 'neutral', note: 'Balanced leave.' };
+}
 
 type Mode = 'basic' | 'scored';
 
@@ -83,6 +128,24 @@ export default function RackHelper({ valueSet }: Props) {
     ? [...results].sort((a, b) => a.word.localeCompare(b.word))
     : results;
 
+  // Always compute the "other" scoring system for side-by-side display so
+  // users switching between Scrabble and WWF see the cross-game cost.
+  const otherValueSet = valueSet === 'scrabble' ? WWF_VALUES : SCRABBLE_VALUES;
+  const otherLabel = valueSet === 'scrabble' ? 'WWF' : 'Scrabble';
+  const resultsWithOther = useMemo(
+    () => displayed.map((r) => ({
+      ...r,
+      otherScore: scoreWithBlanks(r.word, r.blankPositions, otherValueSet),
+    })),
+    [displayed, otherValueSet]
+  );
+
+  const bestPlay = useMemo(() => {
+    if (!displayed.length) return null;
+    return [...displayed].sort((a, b) => b.score - a.score)[0];
+  }, [displayed]);
+  const leave = useMemo(() => (bestPlay && rack ? evaluateLeave(rack, bestPlay.word) : null), [bestPlay, rack]);
+
   return (
     <div className="space-y-4">
       <ModeSwitch
@@ -151,15 +214,34 @@ export default function RackHelper({ valueSet }: Props) {
         ];
         return <OutcomeLayer cards={cards} />;
       })()}
+      {/* Rack-leave note for the top-scored play */}
+      {leave && leave.leave && (
+        <aside
+          aria-label="Rack leave"
+          className={`rounded-md border px-3 py-2 text-sm ${
+            leave.tone === 'strong'
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
+              : leave.tone === 'weak'
+              ? 'border-amber-200 bg-amber-50 text-amber-900'
+              : 'border-slate-200 bg-slate-50 text-slate-700'
+          }`}
+        >
+          <span className="text-xs font-semibold uppercase tracking-wide">
+            Leave after playing {bestPlay!.word.toUpperCase()}:
+          </span>{' '}
+          <span className="font-mono">{leave.leave}</span>
+          <span className="ml-2">— {leave.note}</span>
+        </aside>
+      )}
       {phase === 'idle' && displayed.length > 0 && (
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <div className="text-sm text-slate-600">{displayed.length} plays found</div>
+            <div className="text-sm text-slate-600">{displayed.length} plays found · showing {valueSet === 'scrabble' ? 'Scrabble' : 'WWF'} score with {otherLabel} side-by-side</div>
             <CopyButton
-              value={displayed
+              value={resultsWithOther
                 .map((r) => {
                   const w = formatWordForCopy(r.word, r.blankPositions);
-                  return mode === 'scored' ? `${w} (${r.score})` : w;
+                  return mode === 'scored' ? `${w}\t${valueSet}=${r.score}\t${otherLabel.toLowerCase()}=${r.otherScore}` : w;
                 })
                 .join('\n')}
               label="Copy all"
@@ -172,15 +254,17 @@ export default function RackHelper({ valueSet }: Props) {
                 <tr>
                   <th className="p-2">Word</th>
                   <th className="p-2">Length</th>
-                  {mode === 'scored' && <th className="p-2 text-right">Score</th>}
+                  {mode === 'scored' && <th className="p-2 text-right">{valueSet === 'scrabble' ? 'Scrabble' : 'WWF'}</th>}
+                  {mode === 'scored' && <th className="p-2 text-right text-slate-500">{otherLabel}</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {displayed.map((r) => (
+                {resultsWithOther.map((r) => (
                   <tr key={r.word} className="hover:bg-slate-50">
                     <td className="p-2 font-mono">{renderWordWithBlanks(r.word, r.blankPositions)}</td>
                     <td className="p-2 text-slate-600">{r.word.length}</td>
                     {mode === 'scored' && <td className="p-2 text-right font-semibold">{r.score}</td>}
+                    {mode === 'scored' && <td className="p-2 text-right text-slate-500">{r.otherScore}</td>}
                   </tr>
                 ))}
               </tbody>

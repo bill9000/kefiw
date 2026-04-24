@@ -1,0 +1,343 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:15.845Z",
+  "cluster": {
+    "slug": "bio-logistics",
+    "section": "health",
+    "hubSlug": "bio-chemical-logistics",
+    "url": "/health/bio-chemical-logistics/",
+    "title": "Bio-Chemical Logistics — Kefiw",
+    "h1": "Bio-Chemical Logistics",
+    "subhead": "Fuel split, visceral incline, electrolyte loss, MPS bolus.",
+    "intro": "Four instruments for the logistics of fuel and fluid: macronutrient split by goal, waist-to-height cardiometabolic risk flag, electrolyte loss through sweat, and the per-meal protein bolus that maximises muscle protein synthesis.",
+    "description": "Macro calculator with protein floor, WHtR cardiometabolic risk, sweat-loss electrolyte replacement, and per-meal protein bolus for MPS.",
+    "keywords": [
+      "macro calculator",
+      "waist to height ratio",
+      "electrolyte calculator",
+      "protein bolus"
+    ],
+    "faq": [
+      {
+        "q": "Why waist-to-height and not BMI?",
+        "a": "WHtR predicts visceral fat and cardiovascular risk across all populations (Ashwell 2012) — BMI fails for lean or muscular bodies."
+      },
+      {
+        "q": "Is 2 g/kg protein dangerous?",
+        "a": "No evidence of renal harm in healthy adults below 3.5 g/kg. The daily range 1.6–2.2 g/kg is the current evidence-based target."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "structural-output",
+      "body-composition"
+    ]
+  },
+  "tools": [
+    {
+      "id": "fuel-partition",
+      "slug": "fuel-partition",
+      "category": "health",
+      "url": "/health/fuel-partition/",
+      "title": "Fuel Partitioning — Macro Calculator | Kefiw",
+      "h1": "Fuel Partitioning · Macros",
+      "current_word_count": 145,
+      "current": {
+        "description": "Daily protein, fat, and carb targets anchored to bodyweight and training goal. Protein-first, fat floor second, carbs fill.",
+        "keywords": [
+          "macro calculator",
+          "protein calculator",
+          "IIFYM calculator",
+          "macronutrient calculator"
+        ],
+        "intro": "Protein anchored at 1.8–2.2 g/kg by training state; fat floor at 0.8–1.2 g/kg for hormonal health; carbs fill the remaining kcal budget. Pairs with Metabolic Floor for TDEE anchor.",
+        "outcomeLine": "Protein-first, fat floor, carb fill — daily macro split by training goal.",
+        "howTo": [
+          "Enter weight and pick cut / maintain / bulk.",
+          "Optionally override kcal with a custom target.",
+          "Read grams per macro and the kcal split visual."
+        ],
+        "examples": [
+          {
+            "title": "180 lb · maintain",
+            "body": "kcal 2700 · P 147 g · F 82 g · C 345 g."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why anchor protein first?",
+            "a": "Protein is the only essential macro with demonstrated body-composition effects independent of kcal. Fat is essential for endocrine function. Carbs are discretionary energy."
+          },
+          {
+            "q": "Is 2 g/kg too much protein?",
+            "a": "No. Meta-analyses (Morton 2018) show 1.6 g/kg saturates MPS; higher intakes are neutral. Upper-bound safety supported to 3.5 g/kg for renal-healthy adults."
+          }
+        ],
+        "relatedIds": [
+          "metabolic-floor",
+          "anabolic-trigger",
+          "bio-fuel"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "metabolic-incline",
+      "slug": "metabolic-incline",
+      "category": "health",
+      "url": "/health/metabolic-incline/",
+      "title": "Metabolic Incline — Waist-to-Height Calculator | Kefiw",
+      "h1": "Metabolic Incline · Waist-to-Height",
+      "current_word_count": 144,
+      "current": {
+        "description": "Waist-to-height ratio — better predictor of cardiometabolic risk than BMI. \"Keep your waist under half your height.\"",
+        "keywords": [
+          "waist to height ratio",
+          "WHtR calculator",
+          "metabolic risk calculator",
+          "visceral fat calculator"
+        ],
+        "intro": "WHtR flags central adiposity — the fat depot that drives insulin resistance and cardiovascular risk. Ashwell (2012) meta-analysis: WHtR out-performs BMI across age, sex, and ethnicity for CV risk prediction.",
+        "outcomeLine": "Waist-to-height ratio — better CV risk predictor than BMI.",
+        "howTo": [
+          "Measure waist at narrowest point (typically just above navel for men, narrowest torso point for women).",
+          "Enter waist and height in matching units.",
+          "Read ratio and risk band."
+        ],
+        "examples": [
+          {
+            "title": "34 in waist · 70 in height",
+            "body": "WHtR 0.486 · Low-risk band. Cross 0.5 = threshold for elevated CV risk."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why not BMI?",
+            "a": "BMI can't tell muscle from fat or subcutaneous from visceral. A 180 lb bodybuilder and a 180 lb office worker have identical BMI and very different risk profiles."
+          },
+          {
+            "q": "What waist measurement is correct?",
+            "a": "Narrowest natural waist, at the end of a normal exhale. Don't suck in."
+          }
+        ],
+        "relatedIds": [
+          "structural-density",
+          "metabolic-floor",
+          "fuel-partition"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "ion-balance",
+      "slug": "ion-balance",
+      "category": "health",
+      "url": "/health/ion-balance/",
+      "title": "Ion Balance — Electrolyte Loss Calculator | Kefiw",
+      "h1": "Ion Balance · Electrolyte Loss",
+      "current_word_count": 146,
+      "current": {
+        "description": "Sodium, potassium, chloride, and magnesium lost through sweat over a training session. Replacement targets for endurance events.",
+        "keywords": [
+          "electrolyte calculator",
+          "sweat sodium loss",
+          "hydration calculator",
+          "endurance nutrition"
+        ],
+        "intro": "Sweat ion concentration from ACSM/Maughan: ~800 mg Na⁺, 200 mg K⁺, 1000 mg Cl⁻, 20 mg Mg²⁺ per litre. Individual variation is 2-3×. Heavy salt-sweaters lose 1500+ mg Na⁺/L and need aggressive replacement.",
+        "outcomeLine": "Sodium, potassium, chloride, magnesium lost through sweat over a session.",
+        "howTo": [
+          "Enter duration, intensity, and sweat rate (weigh before/after a training block to calibrate).",
+          "Read total fluid + each ion lost.",
+          "Replace 125–150% of fluid and match ion loss to prevent hyponatremia in 4h+ events."
+        ],
+        "examples": [
+          {
+            "title": "2 h · hard · 1.0 L/h",
+            "body": "Fluid 2.6 L · Na⁺ 2080 mg · K⁺ 520 mg. Replace with electrolyte mix, not plain water."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is plain water fine for a 1-hour workout?",
+            "a": "Yes. Ion replacement matters above 90 minutes or in heavy heat."
+          },
+          {
+            "q": "Is salt tablets the answer?",
+            "a": "For salty sweaters doing 4h+, yes. Below that, balanced food post-workout is sufficient."
+          }
+        ],
+        "relatedIds": [
+          "hydraulic-integrity",
+          "thermal-failure",
+          "kinetic-expenditure"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "anabolic-trigger",
+      "slug": "anabolic-trigger",
+      "category": "health",
+      "url": "/health/anabolic-trigger/",
+      "title": "Anabolic Trigger — Protein Bolus Calculator | Kefiw",
+      "h1": "Anabolic Trigger · MPS Bolus",
+      "current_word_count": 153,
+      "current": {
+        "description": "Per-meal protein bolus that maximises muscle protein synthesis. 0.25-0.40 g/kg per feeding, 1.6-2.2 g/kg daily.",
+        "keywords": [
+          "protein bolus calculator",
+          "muscle protein synthesis calculator",
+          "protein per meal",
+          "MPS calculator"
+        ],
+        "intro": "Muscle protein synthesis saturates at 0.25–0.40 g/kg per meal (Morton 2018). Exceeding that per-bolus adds no MPS; spacing bolus intake across 3–5 meals outperforms front-loading.",
+        "outcomeLine": "Per-meal protein bolus that saturates MPS — 0.25–0.40 g/kg.",
+        "howTo": [
+          "Enter weight, meals per day, and training state.",
+          "Read per-meal bolus, daily floor, and total via your meal count.",
+          "If the total falls below the daily floor, add a meal or raise bolus size."
+        ],
+        "examples": [
+          {
+            "title": "180 lb · serious · 4 meals",
+            "body": "Per-meal 33 g · daily 163 g · via 4 meals 131 g — deficit. Add a fifth meal or up bolus to 40 g."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does kind of protein matter?",
+            "a": "Leucine content does — 2–3 g leucine per bolus saturates mTOR. Whey > egg > soy > wheat by leucine density."
+          },
+          {
+            "q": "Can I front-load all my protein?",
+            "a": "Single 120 g bolus activates MPS no more than 40 g. Spread boluses across meals."
+          }
+        ],
+        "relatedIds": [
+          "fuel-partition",
+          "max-load-capacity",
+          "strength-efficiency"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "fuel-partition",
+          "url": "/health/fuel-partition/"
+        },
+        {
+          "id": "metabolic-incline",
+          "url": "/health/metabolic-incline/"
+        },
+        {
+          "id": "ion-balance",
+          "url": "/health/ion-balance/"
+        },
+        {
+          "id": "anabolic-trigger",
+          "url": "/health/anabolic-trigger/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}

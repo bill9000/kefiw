@@ -1,0 +1,346 @@
+{
+  "$schema_version": 1,
+  "exported_at": "2026-04-24T05:00:09.898Z",
+  "cluster": {
+    "slug": "bio-maintenance",
+    "section": "health",
+    "hubSlug": "biological-maintenance",
+    "url": "/health/biological-maintenance/",
+    "title": "Biological Maintenance — Kefiw",
+    "h1": "Biological Maintenance",
+    "subhead": "Fuel floor, decay curves, sleep windows, red-flag routing.",
+    "intro": "Four instruments for the baseline upkeep of a biological chassis: your resting energy cost, the pharmacokinetics of caffeine and alcohol, the 90-minute sleep cycle, and the red-flag router that decides ER vs urgent care vs home.",
+    "description": "BMR/TDEE calculator, caffeine and alcohol half-life plot, 90-minute sleep-cycle timing, and a symptom-based triage router.",
+    "keywords": [
+      "BMR calculator",
+      "TDEE calculator",
+      "caffeine half life",
+      "sleep cycle calculator",
+      "medical triage"
+    ],
+    "faq": [
+      {
+        "q": "How accurate is BMR vs resting metabolic rate?",
+        "a": "Mifflin-St Jeor is ±10% vs indirect calorimetry for a healthy adult. Lab RMR testing narrows the band if precision matters."
+      },
+      {
+        "q": "Is triage a medical decision?",
+        "a": "No — it is a red-flag heuristic. When unsure, call the nurse line or emergency services. False-negative cost is orders of magnitude higher than false-positive cost."
+      }
+    ],
+    "relatedClusterSlugs": [
+      "body-composition",
+      "structural-output"
+    ]
+  },
+  "tools": [
+    {
+      "id": "metabolic-floor",
+      "slug": "metabolic-floor",
+      "category": "health",
+      "url": "/health/metabolic-floor/",
+      "title": "Metabolic Floor — BMR / TDEE Calculator | Kefiw",
+      "h1": "Metabolic Floor · BMR / TDEE",
+      "current_word_count": 168,
+      "current": {
+        "description": "Calculate your Basal Metabolic Rate and Total Daily Energy Expenditure using Mifflin-St Jeor. Power-consumption view with cut / maintain / bulk zones.",
+        "keywords": [
+          "BMR calculator",
+          "TDEE calculator",
+          "Mifflin-St Jeor",
+          "daily calorie needs",
+          "maintenance calories"
+        ],
+        "intro": "The minimum kcal your chassis burns at standby (BMR), and the total expenditure (TDEE) once you layer activity. Mifflin-St Jeor is the current gold-standard regression for resting metabolism — more accurate than Harris-Benedict by ~5%.",
+        "outcomeLine": "Your chassis idle draw (BMR) and full-load TDEE, plus cut / maintain / bulk zones.",
+        "howTo": [
+          "Enter sex, age, weight, and height.",
+          "Pick an activity multiplier — sedentary is actually sedentary (desk + no formal exercise).",
+          "Read Standby (BMR) and Active Load (TDEE).",
+          "Use Cut / Maintain / Bulk zones for calorie targets against your goal."
+        ],
+        "examples": [
+          {
+            "title": "35y male · 80 kg · 180 cm · moderate",
+            "body": "BMR ≈ 1800 kcal · TDEE ≈ 2790 kcal · Cut 2290 · Bulk 3090."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why Mifflin-St Jeor instead of Harris-Benedict?",
+            "a": "Mifflin-St Jeor (1990) fits modern populations better — Harris-Benedict (1919) systematically over-estimates BMR for sedentary people."
+          },
+          {
+            "q": "How accurate is TDEE?",
+            "a": "±10–15% vs doubly-labelled water. The activity multiplier is the biggest source of error — most people over-estimate their activity level."
+          }
+        ],
+        "relatedIds": [
+          "fuel-partition",
+          "kinetic-expenditure",
+          "substance-decay"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "substance-decay",
+      "slug": "substance-decay",
+      "category": "health",
+      "url": "/health/substance-decay/",
+      "title": "Substance Decay — Caffeine & Alcohol Half-Life | Kefiw",
+      "h1": "Substance Decay · Pharmacokinetic",
+      "current_word_count": 151,
+      "current": {
+        "description": "Plot the half-life decay of caffeine or alcohol. See when the intake drops below the jitter threshold and the sleep-interference threshold.",
+        "keywords": [
+          "caffeine half life",
+          "alcohol half life",
+          "pharmacokinetic calculator",
+          "when caffeine wears off"
+        ],
+        "intro": "Caffeine half-life ≈ 5 h, alcohol ≈ 1.5 h (elimination, not BAC decline). Plots the exponential decay curve so you can see when the intake crosses the jitter line and the sleep-interference line.",
+        "outcomeLine": "Plot caffeine or alcohol half-life decay against jitter and sleep thresholds.",
+        "howTo": [
+          "Pick caffeine or alcohol.",
+          "Enter intake mg and hours since consumption.",
+          "The decay curve shows remaining mass; dashed lines mark jitter + sleep thresholds."
+        ],
+        "examples": [
+          {
+            "title": "200 mg coffee at 2pm",
+            "body": "~100 mg remaining at 7pm · ~50 mg at midnight — still above sleep-interference threshold."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Why does caffeine feel worn off before it decays?",
+            "a": "Subjective alertness tracks the first half-life; residual caffeine still binds adenosine receptors and disrupts REM sleep for 6+ hours."
+          },
+          {
+            "q": "Is alcohol decay linear?",
+            "a": "Ethanol elimination is zero-order (constant rate) once enzymes are saturated — roughly 10 g/h. For BAC over time, use Impairment Coefficient."
+          }
+        ],
+        "relatedIds": [
+          "impairment-bac",
+          "rem-sync",
+          "cessation-ladder"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "rem-sync",
+      "slug": "rem-sync",
+      "category": "health",
+      "url": "/health/rem-sync/",
+      "title": "REM-Sync — Sleep Cycle Calculator | Kefiw",
+      "h1": "REM-Sync · Sleep Cycles",
+      "current_word_count": 163,
+      "current": {
+        "description": "Find the optimal bedtime or wake time based on 90-minute sleep cycles. Wake at the end of a cycle, not the middle.",
+        "keywords": [
+          "sleep cycle calculator",
+          "when should I sleep",
+          "best wake time",
+          "90 minute sleep"
+        ],
+        "intro": "A full sleep cycle runs ~90 minutes. Waking at the end of a cycle (light NREM) feels rested; waking mid-REM or deep NREM feels groggy. Five to six cycles is the performance target.",
+        "outcomeLine": "Sleep or wake at the end of a 90-min cycle, not mid-REM.",
+        "howTo": [
+          "Pick mode — wake at a target time, sleep at a target clock time, or sleep now.",
+          "The tool lists 3–7 cycle windows with recommended bedtimes or wake times.",
+          "Optimal windows (5 or 6 cycles) glow cyan."
+        ],
+        "examples": [
+          {
+            "title": "Wake at 6:30 AM",
+            "body": "Optimal sleep: 9:36 PM (6 cycles) or 11:06 PM (5 cycles). Add ~14 min sleep latency."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Does cycle length vary?",
+            "a": "Yes — 75 to 110 minutes, individual and age-dependent. 90 min is the population mean used by most sleep studies."
+          },
+          {
+            "q": "What if I can't sleep 5+ cycles?",
+            "a": "End on a full cycle. Three complete cycles (4.5 h) feels better than four partial ones (5 h cut mid-REM)."
+          }
+        ],
+        "relatedIds": [
+          "substance-decay",
+          "metabolic-floor",
+          "heart-rate-zones"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    },
+    {
+      "id": "medical-triage",
+      "slug": "medical-triage",
+      "category": "health",
+      "url": "/health/medical-triage/",
+      "title": "Medical Triage — ER vs Urgent Care vs Home | Kefiw",
+      "h1": "Medical Triage · Red-Flag Router",
+      "current_word_count": 143,
+      "current": {
+        "description": "Three-tier triage routing for common symptoms. Flags red symptoms to ER, amber to urgent care, green to self-care. Hard-coded heuristic only — not a diagnosis.",
+        "keywords": [
+          "ER or urgent care",
+          "should I go to the ER",
+          "medical triage",
+          "red flag symptoms"
+        ],
+        "intro": "Picks between ER, urgent care, and self-care based on published red-flag lists. Checks universal killers first (chest pain + arm radiation, FAST stroke signs, unresponsive, cyanosis) then symptom-specific flags.",
+        "outcomeLine": "Three-tier red-flag router: ER, urgent care, or self-care — no diagnosis.",
+        "howTo": [
+          "Pick primary symptom.",
+          "Check any red-flag boxes that apply.",
+          "Verdict: Level 1 (ER now), Level 2 (urgent care today), or Level 3 (self-care acceptable)."
+        ],
+        "examples": [
+          {
+            "title": "Chest pain + arm radiation",
+            "body": "Verdict: Level 1. Call emergency services. Do not drive yourself."
+          }
+        ],
+        "faq": [
+          {
+            "q": "Is this a diagnosis?",
+            "a": "No. It is a routing heuristic based on published red-flag lists. It can miss atypical presentations. If unsure, call the nurse line or emergency services."
+          },
+          {
+            "q": "Why the ultra-conservative defaults?",
+            "a": "False-negative cost (missed MI, stroke, sepsis) is orders of magnitude higher than false-positive cost (unnecessary ER trip)."
+          }
+        ],
+        "relatedIds": [
+          "impairment-bac",
+          "cessation-ladder",
+          "hydraulic-integrity"
+        ]
+      },
+      "tool_logic": null,
+      "_writer_note": "tool_logic not yet mapped for this tool. Describe it only from current.description / intro / examples. Do not claim specific algorithms, data sources, or UI filters that are not listed above.",
+      "enhanced": null,
+      "longform_markdown": null,
+      "notes_for_writer": [
+        "Tool pages get a tight intro (60-100 words) + howTo + examples + FAQ.",
+        "Do NOT write long-form prose on the tool page — that belongs in the linked articles.",
+        "Expand the FAQ if it has fewer than 5 entries. Follow PAA rules.",
+        "Respect tool_logic: do not invent filters, data sources, or behaviors not present in ui_fields / processing_steps."
+      ]
+    }
+  ],
+  "articles": [],
+  "link_map": {},
+  "enhancement_brief": {
+    "goal": "Lift each article from short-form summary to authority-grade long-form. Target 1,200+ words per article while keeping the structured fields crisp.",
+    "per_article_outputs": [
+      "1. Fill `enhanced` with any structured-field overrides (usually: tighter intro, expanded keyPoints, more examples, richer FAQ).",
+      "2. Fill `longform_markdown` with 800-1200 word prose body (markdown, H2 sections only — no H1).",
+      "3. Do not modify `current` — that is the baseline snapshot for diffing.",
+      "4. Leave every id/slug/url untouched."
+    ],
+    "faq_rules": {
+      "format": "People Also Ask (PAA) optimized",
+      "question_starters": [
+        "How",
+        "Why",
+        "What",
+        "Is",
+        "Can",
+        "Does",
+        "Should",
+        "When"
+      ],
+      "rules": [
+        "Each question must read like a real search query — not marketing-speak.",
+        "First sentence of answer is a complete standalone 15-25 word definition/answer (Google quotes it directly).",
+        "Full answer 40-60 words. Tight. Front-load the answer.",
+        "Cover distinct intents: definition, comparison, edge-case, how-to, troubleshooting. Not 3 rewordings of the same angle.",
+        "Include one target keyword in at least half the questions.",
+        "Add a faq_intent tag per entry: \"definition\" | \"comparison\" | \"edge-case\" | \"how-to\" | \"troubleshooting\" | \"cost\" | \"trust\""
+      ],
+      "target_count": "5-7 entries per article, 4-6 per tool page"
+    },
+    "longform_rules": {
+      "target_length": "800-1200 words of markdown prose",
+      "structure": [
+        "## H2 section 1 — deeper \"what is it\" / definition with context",
+        "## H2 section 2 — the mechanic / how it works (with one small example)",
+        "## H2 section 3 — when to use vs when to avoid",
+        "## H2 section 4 — worked example or walkthrough",
+        "## H2 section 5 — pitfalls / common mistakes (optional)",
+        "## H2 section 6 — tool-specific tips (link out to the tool)"
+      ],
+      "tone": "Concrete, useful, first-person-plural light. No filler. No \"in conclusion\". Short paragraphs.",
+      "links": [
+        "Every time you mention a sibling tool in this cluster, link it with the exact URL from this brief (tools[].url).",
+        "Every time you mention a sibling article, link it with the exact URL from this brief (articles[].url).",
+        "Do not invent URLs or link to external competitors."
+      ],
+      "forbidden": [
+        "Medical/legal/financial advice language (\"you should\", \"we recommend\") — use neutral framing.",
+        "Em-dash overuse (max 2 per section).",
+        "Generic SEO boilerplate (\"in today's fast-paced world\")."
+      ]
+    },
+    "internal_linking": {
+      "rule": "Use only URLs that appear in this JSON. Prefer linking to sibling tools/articles in THIS cluster over outbound links.",
+      "tool_urls": [
+        {
+          "id": "metabolic-floor",
+          "url": "/health/metabolic-floor/"
+        },
+        {
+          "id": "substance-decay",
+          "url": "/health/substance-decay/"
+        },
+        {
+          "id": "rem-sync",
+          "url": "/health/rem-sync/"
+        },
+        {
+          "id": "medical-triage",
+          "url": "/health/medical-triage/"
+        }
+      ],
+      "article_urls": []
+    },
+    "quality_gates": [
+      "No fabricated facts — if uncertain, phrase as \"in practice\" or remove.",
+      "Every H2 section earns its space — cut if it restates the intro.",
+      "Zero AI-tells: \"it is important to note\", \"in conclusion\", \"let us delve\", \"furthermore\"."
+    ]
+  }
+}
