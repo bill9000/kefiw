@@ -7,6 +7,14 @@
 // NEVER logs user-typed values, dataLabels, or computed results.
 // See project_kefiw_monetization.md (Neutral Cut spec).
 
+import {
+  buildSeededRowsForGame,
+  buildSeededPipelineRows,
+  hoursElapsedInET,
+  type SeededRow,
+  type SeededPipelineRow,
+} from "./leaderboard-seed";
+
 export interface Env {
   DB: D1Database;
   ALLOWED_ORIGINS: string;
@@ -217,16 +225,40 @@ export default {
         gameId.startsWith("verbal-") ? "points" :
         gameId.startsWith("spatial-") ? "points" :
         "points";
-      const { results } = await env.DB
+      // Pull all real cleared rows (no LIMIT yet — we'll merge with seeds first).
+      const realRes = await env.DB
         .prepare(
           `SELECT handle, cleared, guesses, points, tier, time_sec, submitted_at
            FROM daily_scores
-           WHERE daily_date = ? AND game_id = ? AND cleared = 1
-           ORDER BY ${sortKey} ${order}, submitted_at ASC
-           LIMIT ?`
+           WHERE daily_date = ? AND game_id = ? AND cleared = 1`
         )
-        .bind(dailyDate, gameId, limit)
+        .bind(dailyDate, gameId)
         .all();
+      // Seed in deterministic ghost entries up to the current ET hour for the
+      // requested date. Real users always sort honestly against the seed pool.
+      const startEpochMs = Date.parse(dailyDate + "T08:00:00Z"); // 4am ET ≈ 8 UTC (DST drift OK; submitted_at is for tie-break only)
+      const hourET = hoursElapsedInET(dailyDate, new Date());
+      const seededRows: SeededRow[] = buildSeededRowsForGame(dailyDate, gameId, hourET, startEpochMs);
+      const merged: SeededRow[] = [
+        ...((realRes.results ?? []) as unknown as SeededRow[]),
+        ...seededRows,
+      ];
+      const pickSortVal = (r: SeededRow): number | null => {
+        if (sortKey === "guesses") return r.guesses;
+        if (sortKey === "points") return r.points;
+        if (sortKey === "time_sec") return r.time_sec;
+        return r.points;
+      };
+      const cmp = (a: SeededRow, b: SeededRow): number => {
+        const av = pickSortVal(a);
+        const bv = pickSortVal(b);
+        const an = av ?? Number.MAX_SAFE_INTEGER * (order === "ASC" ? 1 : -1);
+        const bn = bv ?? Number.MAX_SAFE_INTEGER * (order === "ASC" ? 1 : -1);
+        if (an !== bn) return order === "ASC" ? an - bn : bn - an;
+        return (a.submitted_at ?? 0) - (b.submitted_at ?? 0);
+      };
+      merged.sort(cmp);
+      const results = merged.slice(0, limit);
       return json({ daily_date: dailyDate, game_id: gameId, results }, { headers: cors });
     }
 
@@ -244,11 +276,9 @@ export default {
       if (!pipelineGames) {
         return json({ error: "unknown_pipeline" }, { status: 404, headers: cors });
       }
-      // For each device_hash that cleared every game in the pipeline on this day,
-      // sum points (for point-based games) and time_sec (for time-based games).
-      // SQL: aggregate with a JOIN, filter to devices with cleared count == pipeline.length.
+      // Real rows: aggregate per device_hash that cleared every pipeline game.
       const placeholders = pipelineGames.map(() => "?").join(",");
-      const { results } = await env.DB
+      const realResRaw = await env.DB
         .prepare(
           `SELECT
              handle,
@@ -260,18 +290,40 @@ export default {
            WHERE daily_date = ?
              AND game_id IN (${placeholders})
            GROUP BY device_hash
-           HAVING games_cleared = ?
-           ORDER BY total_points DESC, total_time_sec ASC, submitted_at ASC
-           LIMIT ?`
+           HAVING games_cleared = ?`
         )
-        .bind(dailyDate, ...pipelineGames, pipelineGames.length, limit)
+        .bind(dailyDate, ...pipelineGames, pipelineGames.length)
         .all();
-      const rows = (results ?? []).map((r: any) => ({
+      const realRows: SeededPipelineRow[] = (realResRaw.results ?? []).map((r: any) => ({
         handle: r.handle,
-        total_score: Number(r.total_points) || 0,
+        total_points: Number(r.total_points) || 0,
         total_time_sec: Number(r.total_time_sec) || 0,
         games_cleared: Number(r.games_cleared) || 0,
         submitted_at: Number(r.submitted_at) || 0,
+      }));
+      // Seeded ghost pipeline rows for hours 0..nowET. Coherent skill profile
+      // per ghost so the 5 game scores belong together.
+      const startEpochMs = Date.parse(dailyDate + "T08:00:00Z");
+      const hourET = hoursElapsedInET(dailyDate, new Date());
+      const seededPipelineRows = buildSeededPipelineRows(dailyDate, pipelineId, pipelineGames, hourET, startEpochMs);
+      const merged = [...realRows, ...seededPipelineRows.map((s): SeededPipelineRow => ({
+        handle: s.handle,
+        total_points: s.total_points,
+        total_time_sec: s.total_time_sec,
+        games_cleared: s.games_cleared,
+        submitted_at: s.submitted_at,
+      }))];
+      merged.sort((a, b) => {
+        if (a.total_points !== b.total_points) return b.total_points - a.total_points;
+        if (a.total_time_sec !== b.total_time_sec) return a.total_time_sec - b.total_time_sec;
+        return a.submitted_at - b.submitted_at;
+      });
+      const rows = merged.slice(0, limit).map((r) => ({
+        handle: r.handle,
+        total_score: r.total_points,
+        total_time_sec: r.total_time_sec,
+        games_cleared: r.games_cleared,
+        submitted_at: r.submitted_at,
       }));
       return json({ daily_date: dailyDate, pipeline_id: pipelineId, results: rows }, { headers: cors });
     }
