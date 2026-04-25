@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import RackHelper from './RackHelper';
+import BoardScorer from './BoardScorer';
+import { WWF_CONFIG } from '~/data/board-config';
 
-// WWF uses Zynga's proprietary word list which Kefiw cannot license; results
-// come from the ENABLE public-domain list and some edge-case plays may differ
-// from the actual WWF ruling. Disclaimer panel documented per support article.
 export default function WwfHelper() {
+  const [mode, setMode] = useState<'rack' | 'board'>('rack');
   return (
     <div className="space-y-3">
       <aside
@@ -16,7 +17,23 @@ export default function WwfHelper() {
         invalid by the app even when Kefiw accepts them — and vice versa. If WWF rejects a
         play, trust WWF.
       </aside>
-      <RackHelper valueSet="wwf" />
+      <div className="flex gap-2 border-b border-slate-200">
+        <button
+          type="button"
+          onClick={() => setMode('rack')}
+          className={`border-b-2 px-3 py-2 text-sm font-semibold transition ${mode === 'rack' ? 'border-brand-600 text-brand-700' : 'border-transparent text-slate-600 hover:text-slate-900'}`}
+        >
+          Rack helper
+        </button>
+        <button
+          type="button"
+          onClick={() => setMode('board')}
+          className={`border-b-2 px-3 py-2 text-sm font-semibold transition ${mode === 'board' ? 'border-brand-600 text-brand-700' : 'border-transparent text-slate-600 hover:text-slate-900'}`}
+        >
+          Board scorer
+        </button>
+      </div>
+      {mode === 'rack' ? <RackHelper valueSet="wwf" /> : <BoardScorer config={WWF_CONFIG} />}
     </div>
   );
 }
