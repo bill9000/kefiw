@@ -1,0 +1,28 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SpatialGame from '~/components/daily/SpatialGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/spatial/', label: 'Kefiw Spatial' },
+  { href: '/daily/spatial/hex/', label: 'Hex Fit' },
+];
+---
+
+<BaseLayout
+  title="Daily Hex Fit — shape-matching puzzle"
+  description="Ten quick rounds: pick the hex piece that fits the gap. Fresh puzzle daily at 4am ET."
+  canonical="/daily/spatial/hex/"
+  keywords={["hex fit puzzle", "shape matching daily", "spatial fit game"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Hex Fit</h1>
+      <p class="mt-1 text-slate-600">Ten rounds. Pick the piece that fills the gap.</p>
+    </header>
+    <SpatialGame client:only="react" gameId="spatial-hex" title="Hex Fit" />
+  </article>
+</BaseLayout>

@@ -36,6 +36,9 @@ export async function submitDailyScore(
     } else if (result.gameId.startsWith('verbal-')) {
       payload.points = result.score;
       payload.time_sec = result.timeSec;
+    } else if (result.gameId.startsWith('spatial-')) {
+      payload.points = result.score;
+      payload.time_sec = result.timeSec;
     }
     const body: Record<string, unknown> = {
       daily_date: dailyDate,

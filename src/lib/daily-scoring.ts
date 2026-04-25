@@ -14,6 +14,7 @@
 import { isHiveCleared, type HiveTier } from './daily-hive-score';
 import { isMathCleared } from './daily-math-rounds';
 import { isVerbalCleared } from './daily-verbal-puzzles';
+import { isSpatialCleared } from './daily-spatial-rounds';
 import { getActivePipelines, getPipeline, type DailyPipeline } from '~/data/daily-pipelines';
 
 export interface HuntResult {
@@ -51,7 +52,14 @@ export interface VerbalResult {
   finished: boolean;        // user hit "submit" or ran out of retries
 }
 
-export type GameResult = HuntResult | HiveResult | SudokuResult | MathResult | VerbalResult;
+export interface SpatialResult {
+  gameId: 'spatial-circuit' | 'spatial-drop' | 'spatial-pair' | 'spatial-hex' | 'spatial-path';
+  score: number;            // 0..1500 for the session
+  roundsCompleted: number;  // 0..10
+  timeSec: number;          // total session time used
+}
+
+export type GameResult = HuntResult | HiveResult | SudokuResult | MathResult | VerbalResult | SpatialResult;
 
 export function isCleared(result: GameResult): boolean {
   switch (result.gameId) {
@@ -73,6 +81,12 @@ export function isCleared(result: GameResult): boolean {
     case 'verbal-crosser':
     case 'verbal-twist':
       return result.finished && isVerbalCleared(result.score);
+    case 'spatial-circuit':
+    case 'spatial-drop':
+    case 'spatial-pair':
+    case 'spatial-hex':
+    case 'spatial-path':
+      return isSpatialCleared(result.score, result.roundsCompleted);
   }
 }
 

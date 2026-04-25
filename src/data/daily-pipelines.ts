@@ -39,6 +39,13 @@ export const DAILY_PIPELINES: DailyPipeline[] = [
     games: ['verbal-crypt', 'verbal-link', 'verbal-shift', 'verbal-crosser', 'verbal-twist'],
     active: true,
   },
+  {
+    id: 'spatial',
+    label: 'Kefiw Spatial',
+    blurb: 'Five visual-pattern dashes. Ten MCQ rounds per game. Trains spatial reasoning and visual pattern recognition.',
+    games: ['spatial-circuit', 'spatial-drop', 'spatial-pair', 'spatial-hex', 'spatial-path'],
+    active: true,
+  },
 ];
 
 export const PIPELINES_BY_ID: Record<string, DailyPipeline> = Object.fromEntries(

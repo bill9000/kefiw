@@ -20,6 +20,7 @@ const PIPELINE_GAMES: Record<string, string[]> = {
   core: ["hunt", "hive", "sudoku"],
   math: ["math-percent", "math-discount", "math-convert", "math-tip", "math-timedelta"],
   verbal: ["verbal-crypt", "verbal-link", "verbal-shift", "verbal-crosser", "verbal-twist"],
+  spatial: ["spatial-circuit", "spatial-drop", "spatial-pair", "spatial-hex", "spatial-path"],
 };
 
 async function hmacSha256Hex(secret: string, msg: string): Promise<string> {
@@ -214,6 +215,7 @@ export default {
         gameId === "sudoku" ? "time_sec" :
         gameId.startsWith("math-") ? "points" :
         gameId.startsWith("verbal-") ? "points" :
+        gameId.startsWith("spatial-") ? "points" :
         "points";
       const { results } = await env.DB
         .prepare(

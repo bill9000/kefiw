@@ -1,0 +1,28 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SpatialGame from '~/components/daily/SpatialGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/spatial/', label: 'Kefiw Spatial' },
+  { href: '/daily/spatial/circuit/', label: 'Circuit Path' },
+];
+---
+
+<BaseLayout
+  title="Daily Circuit Path — spatial pattern-completion puzzle"
+  description="Ten quick rounds: identify the cell that completes the circuit. Fresh puzzle daily at 4am ET."
+  canonical="/daily/spatial/circuit/"
+  keywords={["circuit puzzle", "pattern completion daily", "spatial grid puzzle"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Circuit Path</h1>
+      <p class="mt-1 text-slate-600">Ten rounds. Pick the cell that completes the path.</p>
+    </header>
+    <SpatialGame client:only="react" gameId="spatial-circuit" title="Circuit Path" />
+  </article>
+</BaseLayout>

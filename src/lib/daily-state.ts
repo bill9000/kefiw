@@ -60,7 +60,23 @@ export interface VerbalProgress {
   state: Record<string, unknown>;
 }
 
-export type GameProgress = HuntProgress | HiveProgress | SudokuProgress | MathProgress | VerbalProgress;
+// Spatial progress mirrors MathProgress (10-round structure).
+export interface SpatialRoundLog {
+  chosenIndex: number;
+  correctIndex: number;
+  timeUsedSec: number;
+  roundScore: number;
+}
+
+export interface SpatialProgress {
+  roundIndex: number;
+  totalScore: number;
+  totalTimeSec: number;
+  log: SpatialRoundLog[];
+  finished: boolean;
+}
+
+export type GameProgress = HuntProgress | HiveProgress | SudokuProgress | MathProgress | VerbalProgress | SpatialProgress;
 
 interface ProgressByGame {
   [gameId: string]: GameProgress;

@@ -8,7 +8,7 @@
 // so do not reuse an id for a different game.
 
 export type ScoreDirection = 'higher-is-better' | 'lower-is-better';
-export type SeedKind = 'word-hunt' | 'letter-hive' | 'sudoku' | 'math-rounds' | 'verbal-puzzle' | 'custom';
+export type SeedKind = 'word-hunt' | 'letter-hive' | 'sudoku' | 'math-rounds' | 'verbal-puzzle' | 'spatial-rounds' | 'custom';
 
 export interface DailyGame {
   id: string;
@@ -146,6 +146,57 @@ export const DAILY_GAMES: DailyGame[] = [
     scoreDirection: 'higher-is-better',
     maxScore: 1500,
     seedKind: 'verbal-puzzle',
+  },
+  // ---- Kefiw Spatial pipeline (10 rounds × 15s cap → 2.5 min per tool) -----
+  {
+    id: 'spatial-circuit',
+    name: 'Circuit Path',
+    slug: 'circuit',
+    blurb: 'Which cell completes the circuit? 10 quick pattern-recognition rounds.',
+    scoreDirection: 'higher-is-better',
+    maxScore: 1500,
+    timeCapSec: 150,
+    seedKind: 'spatial-rounds',
+  },
+  {
+    id: 'spatial-drop',
+    name: 'Drop Stack',
+    slug: 'drop',
+    blurb: 'Which column has the lowest stack? Quick eye-measurement rounds.',
+    scoreDirection: 'higher-is-better',
+    maxScore: 1500,
+    timeCapSec: 150,
+    seedKind: 'spatial-rounds',
+  },
+  {
+    id: 'spatial-pair',
+    name: 'Tile Pair',
+    slug: 'pair',
+    blurb: 'Match the target tile to its rotated twin. Mental-rotation practice.',
+    scoreDirection: 'higher-is-better',
+    maxScore: 1500,
+    timeCapSec: 150,
+    seedKind: 'spatial-rounds',
+  },
+  {
+    id: 'spatial-hex',
+    name: 'Hex Fit',
+    slug: 'hex',
+    blurb: 'Which hex piece fits the gap? Shape-matching under time pressure.',
+    scoreDirection: 'higher-is-better',
+    maxScore: 1500,
+    timeCapSec: 150,
+    seedKind: 'spatial-rounds',
+  },
+  {
+    id: 'spatial-path',
+    name: 'Path Length',
+    slug: 'path',
+    blurb: 'Which of four routes is shortest? Distance-estimation practice.',
+    scoreDirection: 'higher-is-better',
+    maxScore: 1500,
+    timeCapSec: 150,
+    seedKind: 'spatial-rounds',
   },
 ];
 

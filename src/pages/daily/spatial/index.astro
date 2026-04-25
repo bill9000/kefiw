@@ -1,0 +1,65 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import { getPipeline } from '~/data/daily-pipelines';
+import { getGame } from '~/data/daily-games';
+
+const pipeline = getPipeline('spatial');
+if (!pipeline) throw new Error('spatial pipeline not registered');
+const games = pipeline.games.map((id) => {
+  const g = getGame(id);
+  if (!g) throw new Error(`unknown game id ${id}`);
+  return g;
+});
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/spatial/', label: 'Kefiw Spatial' },
+];
+---
+
+<BaseLayout
+  title="Kefiw Spatial — daily visual-pattern pipeline"
+  description="Five visual-pattern dashes: circuit path, drop stack, tile pair (mental rotation), hex fit, path length. Ten MCQ rounds each. Fresh set at 4am ET."
+  canonical="/daily/spatial/"
+  keywords={["spatial reasoning game", "visual pattern daily", "mental rotation practice", "spatial puzzle daily"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Kefiw Spatial</h1>
+      <p class="mt-1 text-lg text-slate-700">Five visual games. Ten rounds each. Same puzzles for every player, every day.</p>
+      <p class="mt-2 max-w-3xl text-slate-600">
+        Each game gives you ten visual pattern questions — pick the correct SVG tile from four choices. The timer adds a speed multiplier: faster tap = higher score. Clear each with 450+ points (out of 1500) to count toward the Kefiw Spatial pipeline streak.
+      </p>
+    </header>
+
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {games.map((g) => (
+        <a
+          href={`/daily/spatial/${g.slug}/`}
+          class="block rounded-lg border border-slate-200 bg-white p-4 transition hover:border-brand-500 hover:shadow-md"
+        >
+          <div class="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">{g.id.replace('spatial-', '')}</div>
+          <div class="mt-1 text-lg font-bold text-slate-900">{g.name}</div>
+          <p class="mt-2 text-sm text-slate-600">{g.blurb}</p>
+          <div class="mt-3 text-xs text-slate-500">10 rounds · 15s each · max 1500</div>
+        </a>
+      ))}
+    </section>
+
+    <section class="mt-8 flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div>
+        <h2 class="text-lg font-semibold">Pipeline leaderboard</h2>
+        <p class="text-sm text-slate-600">Sum of all five game scores across today. Top 50 shown.</p>
+      </div>
+      <a href="/daily/leaderboard/?pipeline=spatial" class="rounded bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">View ranks →</a>
+    </section>
+
+    <section class="mt-8 rounded-md border border-slate-200 bg-slate-50 p-4 text-xs text-slate-600">
+      <strong>A note on cognitive training.</strong> This pipeline trains visual pattern recognition and mental-rotation speed on the specific tasks — that&rsquo;s what the research supports for near-transfer. It is not a general IQ-boost product. 15–25 minutes a day, four to five days a week, is the sweet spot per the cognitive-training literature.
+    </section>
+  </article>
+</BaseLayout>

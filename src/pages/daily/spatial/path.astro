@@ -1,0 +1,28 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SpatialGame from '~/components/daily/SpatialGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/spatial/', label: 'Kefiw Spatial' },
+  { href: '/daily/spatial/path/', label: 'Path Length' },
+];
+---
+
+<BaseLayout
+  title="Daily Path Length — distance-estimation practice"
+  description="Ten quick rounds: pick the shortest of four routes on a grid. Fresh puzzle daily at 4am ET."
+  canonical="/daily/spatial/path/"
+  keywords={["path length game", "distance estimation daily", "shortest route puzzle"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Path Length</h1>
+      <p class="mt-1 text-slate-600">Ten rounds. Pick the shortest of the four routes.</p>
+    </header>
+    <SpatialGame client:only="react" gameId="spatial-path" title="Path Length" />
+  </article>
+</BaseLayout>

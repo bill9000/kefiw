@@ -1,0 +1,28 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import SpatialGame from '~/components/daily/SpatialGame.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/daily/', label: 'Daily Kefiw' },
+  { href: '/daily/spatial/', label: 'Kefiw Spatial' },
+  { href: '/daily/spatial/pair/', label: 'Tile Pair' },
+];
+---
+
+<BaseLayout
+  title="Daily Tile Pair — mental-rotation practice"
+  description="Ten quick rounds: match the shape to its rotated twin. Fresh puzzle daily at 4am ET."
+  canonical="/daily/spatial/pair/"
+  keywords={["mental rotation game", "spatial matching daily", "shape rotation puzzle"]}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-6 text-center">
+      <h1 class="text-3xl font-bold tracking-tight">Tile Pair</h1>
+      <p class="mt-1 text-slate-600">Ten rounds. Find the rotated twin of the target shape.</p>
+    </header>
+    <SpatialGame client:only="react" gameId="spatial-pair" title="Tile Pair" />
+  </article>
+</BaseLayout>

@@ -39,7 +39,10 @@ function gameBadge(result: GameResult | undefined): { label: string; tone: 'clea
   if (result.gameId === 'hive') return { label: `${result.points} pts — keep going`, tone: 'partial' };
   if (result.gameId === 'hunt') return { label: 'Did not solve', tone: 'partial' };
   if ('score' in result) {
-    const threshold = result.gameId.startsWith('math-') ? 300 : 450;
+    const threshold =
+      result.gameId.startsWith('math-') ? 300 :
+      result.gameId.startsWith('spatial-') ? 450 :
+      450;
     return { label: `${result.score} pts — below ${threshold}`, tone: 'partial' };
   }
   return { label: 'Unsolved', tone: 'partial' };
@@ -49,6 +52,7 @@ function gameHref(pipelineId: string, gameSlug: string): string {
   // Pipelines route their games under a subpath; core lives at /daily/${slug}/.
   if (pipelineId === 'math') return `/daily/math/${gameSlug}/`;
   if (pipelineId === 'verbal') return `/daily/verbal/${gameSlug}/`;
+  if (pipelineId === 'spatial') return `/daily/spatial/${gameSlug}/`;
   return `/daily/${gameSlug}/`;
 }
 
