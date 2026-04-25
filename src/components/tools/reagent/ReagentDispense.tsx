@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { readDashboard, subscribeDashboard } from '~/lib/kfw-bridge';
+import { readDashboard, subscribeDashboard, writeMetric } from '~/lib/kfw-bridge';
 import {
   BORDER, TEXT, DIM, CYAN, GOLD, MAGENTA, RED, LIQUID,
   shellStyle, panelStyle, inputStyle, labelStyle, dimHint, parseNum, round2, disclaimerStyle,
@@ -74,6 +74,16 @@ export default function ReagentDispense() {
     const customDivs = Math.max(1, Math.round(parseNum(state.customDivs) || 100));
     return { ...preset, volumeMl: customVol, divisions: customDivs };
   }, [state.syringe, state.customVolMl, state.customDivs]);
+
+  // Step 2 owns syringe selection. Push it through the bridge so Step 3
+  // (Lookup) can auto-fill from the same choice instead of asking again.
+  // We push effective W and Q so custom syringes carry their numbers through.
+  useEffect(() => {
+    if (!hydrated) return;
+    writeMetric('reagent_syringe_id', state.syringe);
+    writeMetric('reagent_syringe_vol_ml', syringe.volumeMl);
+    writeMetric('reagent_syringe_divs', syringe.divisions);
+  }, [state.syringe, syringe.volumeMl, syringe.divisions, hydrated]);
 
   const calc = useMemo(() => {
     const dose = Math.max(0, parseNum(state.doseMg));

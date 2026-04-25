@@ -66,7 +66,7 @@ export default function VendorYield() {
   const { calcs, err, dose, winner, loser, maxLen } = useMemo(() => {
     const dose = Math.max(0, parseNum(state.doseTargetMcg));
     let err = '';
-    if (dose <= 0) err = 'Target amount (mcg) must be greater than 0';
+    if (dose <= 0) err = 'Target amount (μg) must be greater than 0';
 
     const raw: Calc[] = state.rows.map((row, i) => {
       const mass = Math.max(0, parseNum(row.massMg));
@@ -109,12 +109,12 @@ export default function VendorYield() {
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>ROI-1 · Vendor Cost per Effective Unit</div>
-        <div style={{ fontSize: 11, color: DIM }}>normalize vendors by $/mcg and by $/unit-at-target</div>
+        <div style={{ fontSize: 11, color: DIM }}>normalize vendors by $/μg and by $/unit-at-target</div>
       </div>
 
       <div style={{ marginBottom: '0.75rem' }}>
         <label style={labelStyle}>
-          <div style={{ color: DIM, marginBottom: 4 }}>Target amount (mcg)</div>
+          <div style={{ color: DIM, marginBottom: 4 }}>Target amount (μg)</div>
           <input inputMode="decimal" value={state.doseTargetMcg} onChange={(e) => setState({ ...state, doseTargetMcg: e.target.value })} style={{ ...inputStyle, maxWidth: 160 }} />
           <div style={dimHint}>single-injection amount for cost-per-unit comparison</div>
         </label>
@@ -172,7 +172,7 @@ export default function VendorYield() {
               </svg>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.8fr 0.9fr 0.9fr 1.1fr', gap: 6, fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.1em', padding: '0 0 4px' }}>
-                <div>Vendor</div><div>Total mg</div><div>Total $</div><div>$ / mcg</div><div>$ / unit</div>
+                <div>Vendor</div><div>Total mg</div><div>Total $</div><div>$ / μg</div><div>$ / unit</div>
               </div>
               {calcs.map((c, i) => {
                 const col = colorFor(c);
@@ -190,7 +190,7 @@ export default function VendorYield() {
               {winner && loser && (
                 <div style={{ marginTop: '0.75rem', fontSize: 11, color: TEXT }}>
                   Best: <span style={{ color: CYAN, fontWeight: 700 }}>{winner.row.name}</span> · $
-                  {round2(winner.costPerDose).toFixed(2)} per {round2(dose).toFixed(0)} mcg unit · saves $
+                  {round2(winner.costPerDose).toFixed(2)} per {round2(dose).toFixed(0)} μg unit · saves $
                   {round2(loser.costPerDose - winner.costPerDose).toFixed(2)} vs worst per unit
                 </div>
               )}

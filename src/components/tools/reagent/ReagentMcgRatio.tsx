@@ -29,6 +29,7 @@ const SYRINGE_PRESETS: readonly SyringePreset[] = [
 interface State {
   concMgMl: string;
   useBridge: boolean;
+  useBridgeSyringe: boolean;
   syringe: SyringeId;
   customVolMl: string;
   customDivs: string;
@@ -36,10 +37,17 @@ interface State {
 const DEFAULT_STATE: State = {
   concMgMl: '2.5',
   useBridge: true,
+  useBridgeSyringe: true,
   syringe: 'u100',
   customVolMl: '1',
   customDivs: '100',
 };
+
+interface BridgeSyringe {
+  id: SyringeId;
+  volMl: number;
+  divs: number;
+}
 
 // Generate ~6 evenly-spaced row values that always include the syringe's max.
 function buildRows(divisions: number): number[] {
@@ -58,27 +66,45 @@ export default function ReagentMcgRatio() {
   const [hydrated, setHydrated] = useState(false);
   const [verified, setVerified] = useState(false);
   const [bridgeConc, setBridgeConc] = useState<number | undefined>(undefined);
+  const [bridgeSyringe, setBridgeSyringe] = useState<BridgeSyringe | undefined>(undefined);
 
   useEffect(() => {
     try { const r = localStorage.getItem(STORAGE); if (r) setState({ ...DEFAULT_STATE, ...(JSON.parse(r) as State) }); } catch {}
     setHydrated(true);
   }, []);
   useEffect(() => { if (hydrated) localStorage.setItem(STORAGE, JSON.stringify(state)); }, [state, hydrated]);
-  useEffect(() => { setVerified(false); }, [state.concMgMl, state.useBridge, state.syringe, state.customVolMl, state.customDivs]);
+  useEffect(() => { setVerified(false); }, [state.concMgMl, state.useBridge, state.useBridgeSyringe, state.syringe, state.customVolMl, state.customDivs, bridgeSyringe?.id, bridgeSyringe?.volMl, bridgeSyringe?.divs]);
 
   useEffect(() => {
-    const sync = () => setBridgeConc(readDashboard().metrics.reagent_concentration_mg_ml);
+    const sync = () => {
+      const m = readDashboard().metrics;
+      setBridgeConc(m.reagent_concentration_mg_ml);
+      const id = m.reagent_syringe_id as SyringeId | undefined;
+      const volMl = m.reagent_syringe_vol_ml;
+      const divs = m.reagent_syringe_divs;
+      if (id && volMl !== undefined && divs !== undefined) {
+        setBridgeSyringe({ id, volMl, divs });
+      } else {
+        setBridgeSyringe(undefined);
+      }
+    };
     sync();
     return subscribeDashboard(sync);
   }, []);
 
+  const bridgeSyringeLive = state.useBridgeSyringe && bridgeSyringe !== undefined;
+
   const syringe = useMemo<SyringePreset>(() => {
+    if (bridgeSyringeLive && bridgeSyringe) {
+      const preset = SYRINGE_PRESETS.find((p) => p.id === bridgeSyringe.id) ?? SYRINGE_PRESETS[0];
+      return { ...preset, volumeMl: bridgeSyringe.volMl, divisions: bridgeSyringe.divs };
+    }
     const preset = SYRINGE_PRESETS.find((p) => p.id === state.syringe) ?? SYRINGE_PRESETS[0];
     if (preset.id !== 'custom') return preset;
     const customVol = Math.max(0.01, parseNum(state.customVolMl) || 1);
     const customDivs = Math.max(1, Math.round(parseNum(state.customDivs) || 100));
     return { ...preset, volumeMl: customVol, divisions: customDivs };
-  }, [state.syringe, state.customVolMl, state.customDivs]);
+  }, [state.syringe, state.customVolMl, state.customDivs, bridgeSyringeLive, bridgeSyringe]);
 
   const calc = useMemo(() => {
     const conc = state.useBridge && bridgeConc !== undefined && bridgeConc > 0
@@ -108,8 +134,8 @@ export default function ReagentMcgRatio() {
   return (
     <div style={shellStyle}>
       <div style={{ marginBottom: '0.75rem' }}>
-        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>MCU-1 · mcg per Unit Lookup</div>
-        <div style={{ fontSize: 11, color: DIM }}>Sliding-rule lookup table · syringe tick → micrograms, mg, and mL</div>
+        <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: DIM }}>MCU-1 · μg per Unit Lookup</div>
+        <div style={{ fontSize: 11, color: DIM }}>Sliding-rule lookup table · syringe tick → μg, mg, and mL</div>
       </div>
 
       <div style={{ display: 'grid', gap: '0.75rem', gridTemplateColumns: '1fr', marginBottom: '0.75rem' }}>
@@ -126,17 +152,24 @@ export default function ReagentMcgRatio() {
         </label>
       </div>
 
-      <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11, color: DIM, marginBottom: '0.75rem' }}>
+      <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11, color: DIM, marginBottom: '0.5rem' }}>
         <input type="checkbox" checked={state.useBridge} onChange={(e) => setState({ ...state, useBridge: e.target.checked })} />
         <span>Auto-fill concentration from PRC-1 reconstitution (if available)</span>
       </label>
+      <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11, color: DIM, marginBottom: '0.75rem' }}>
+        <input type="checkbox" checked={state.useBridgeSyringe} onChange={(e) => setState({ ...state, useBridgeSyringe: e.target.checked })} />
+        <span>Auto-fill syringe from GDS-1 dispense step (if available)</span>
+      </label>
 
-      <label style={{ ...labelStyle, marginBottom: state.syringe === 'custom' ? '0.5rem' : '1rem' }}>
-        <div style={{ color: DIM, marginBottom: 4 }}>Syringe</div>
+      <label style={{ ...labelStyle, marginBottom: (!bridgeSyringeLive && state.syringe === 'custom') || (bridgeSyringeLive && bridgeSyringe?.id === 'custom') ? '0.5rem' : '1rem' }}>
+        <div style={{ color: DIM, marginBottom: 4 }}>
+          Syringe{bridgeSyringeLive ? <span style={{ color: CYAN, marginLeft: 6 }}>· LIVE from GDS-1</span> : null}
+        </div>
         <select
-          value={state.syringe}
+          value={bridgeSyringeLive && bridgeSyringe ? bridgeSyringe.id : state.syringe}
+          disabled={bridgeSyringeLive}
           onChange={(e) => setState({ ...state, syringe: e.target.value as SyringeId })}
-          style={inputStyle}
+          style={{ ...inputStyle, opacity: bridgeSyringeLive ? 0.6 : 1 }}
         >
           {SYRINGE_PRESETS.map((p) => (
             <option key={p.id} value={p.id}>{p.label}</option>
@@ -144,15 +177,27 @@ export default function ReagentMcgRatio() {
         </select>
         <div style={dimHint}>{calc.unitsPerMl.toFixed(1)} {syringe.unitLabel}/mL · full barrel {syringe.volumeMl} mL</div>
       </label>
-      {state.syringe === 'custom' && (
+      {((bridgeSyringeLive && bridgeSyringe?.id === 'custom') || (!bridgeSyringeLive && state.syringe === 'custom')) && (
         <div style={{ display: 'grid', gap: '0.5rem', gridTemplateColumns: '1fr 1fr', marginBottom: '1rem' }}>
           <label style={labelStyle}>
             <div style={{ color: DIM, marginBottom: 4 }}>Syringe volume W (mL)</div>
-            <input inputMode="decimal" value={state.customVolMl} onChange={(e) => setState({ ...state, customVolMl: e.target.value })} style={inputStyle} />
+            <input
+              inputMode="decimal"
+              value={bridgeSyringeLive && bridgeSyringe ? String(bridgeSyringe.volMl) : state.customVolMl}
+              disabled={bridgeSyringeLive}
+              onChange={(e) => setState({ ...state, customVolMl: e.target.value })}
+              style={{ ...inputStyle, opacity: bridgeSyringeLive ? 0.6 : 1 }}
+            />
           </label>
           <label style={labelStyle}>
             <div style={{ color: DIM, marginBottom: 4 }}>Divisions Q (marks)</div>
-            <input inputMode="numeric" value={state.customDivs} onChange={(e) => setState({ ...state, customDivs: e.target.value })} style={inputStyle} />
+            <input
+              inputMode="numeric"
+              value={bridgeSyringeLive && bridgeSyringe ? String(bridgeSyringe.divs) : state.customDivs}
+              disabled={bridgeSyringeLive}
+              onChange={(e) => setState({ ...state, customDivs: e.target.value })}
+              style={{ ...inputStyle, opacity: bridgeSyringeLive ? 0.6 : 1 }}
+            />
           </label>
         </div>
       )}
@@ -179,24 +224,24 @@ export default function ReagentMcgRatio() {
                 <div>
                   <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Per Tick</div>
                   <div style={{ fontSize: 28, color: CYAN, fontWeight: 700, lineHeight: 1.1 }}>{calc.mcgPerUnit.toFixed(2)}</div>
-                  <div style={{ fontSize: 11, color: DIM }}>mcg · 1 {syringe.unitLabel === 'units' ? 'unit' : 'mark'} on this syringe</div>
+                  <div style={{ fontSize: 11, color: DIM }}>μg · 1 {syringe.unitLabel === 'units' ? 'unit' : 'mark'} on this syringe</div>
                 </div>
                 <div>
                   <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Density</div>
-                  <div style={{ fontSize: 28, color: GOLD, fontWeight: 700, lineHeight: 1.1 }}>{(calc.conc * 1000).toFixed(0)}</div>
-                  <div style={{ fontSize: 11, color: DIM }}>mcg / mL</div>
+                  <div style={{ fontSize: 28, color: GOLD, fontWeight: 700, lineHeight: 1.1 }}>{calc.conc.toFixed(2)}</div>
+                  <div style={{ fontSize: 11, color: DIM }}>mg / mL</div>
                 </div>
               </div>
 
               <div style={{ ...panelStyle }}>
                 <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 8 }}>
-                  Lookup · Draw → mcg · mg · mL · {syringe.label}
+                  Lookup · Draw → μg · mg · mL · {syringe.label}
                 </div>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                   <thead>
                     <tr style={{ color: DIM, borderBottom: `1px solid ${BORDER}` }}>
                       <th style={{ textAlign: 'left', padding: '6px 8px' }}>{syringe.unitLabel === 'units' ? 'Units' : 'Marks'} drawn</th>
-                      <th style={{ textAlign: 'right', padding: '6px 8px' }}>mcg</th>
+                      <th style={{ textAlign: 'right', padding: '6px 8px' }}>μg</th>
                       <th style={{ textAlign: 'right', padding: '6px 8px' }}>mg</th>
                       <th style={{ textAlign: 'right', padding: '6px 8px' }}>mL</th>
                     </tr>
@@ -218,7 +263,7 @@ export default function ReagentMcgRatio() {
             </>
           ) : (
             <div style={{ ...panelStyle, opacity: 0.4 }}>
-              <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em' }}>mcg per Unit</div>
+              <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em' }}>μg per Unit</div>
               <div style={{ fontSize: 28, color: DIM, fontWeight: 700, lineHeight: 1.1 }}>— . —</div>
               <div style={{ fontSize: 11, color: DIM }}>Awaiting verification</div>
             </div>
@@ -227,7 +272,7 @@ export default function ReagentMcgRatio() {
       )}
 
       <div style={disclaimerStyle()}>
-        Arithmetic only. Not medical advice. The mcg-per-tick figure scales with the syringe you select — U-100 is 1 unit = 0.01 mL, but a 0.5 mL 50-unit barrel, a tuberculin 1 mL (100 × 0.01 mL marks), or a custom W/Q syringe all reshape the table. Always verify concentration source and syringe type before drawing. Research/compounding contexts only.
+        Arithmetic only. Not medical advice. The μg-per-tick figure scales with the syringe you select — U-100 is 1 unit = 0.01 mL, but a 0.5 mL 50-unit barrel, a tuberculin 1 mL (100 × 0.01 mL marks), or a custom W/Q syringe all reshape the table. Always verify concentration source and syringe type before drawing. Research/compounding contexts only.
       </div>
     </div>
   );

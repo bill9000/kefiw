@@ -19,7 +19,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     outcomeLine: 'PRC-1 answers one question: after reconstitution, how many mg of reagent sit in every mL — and every U-100 unit?',
     description: 'PRC-1 reconstitutes a lyophilized vial: concentration = vial mass / BAC water volume. Converts to U-100 units per mg for insulin-syringe administration.',
     keywords: ['reagent reconstitution calculator', 'bac water ratio', 'mg per ml reagent', 'u-100 units per mg', 'lyophilized vial math'],
-    intro: 'A vial labeled "5 mg" is not an administration — it is a mass sitting dry. Add water and the concentration depends entirely on how much. Current working concentration: {{lm:concentration}}. Every downstream calculation (units, mcg, administration volume) fails if this number is wrong.',
+    intro: 'A vial labeled "5 mg" is not an administration — it is a mass sitting dry. Add water and the concentration depends entirely on how much. Current working concentration: {{lm:concentration}}. Every downstream calculation (units, μg, administration volume) fails if this number is wrong.',
     keyPoints: [
       'Formula: concentration_mg_ml = vial_mass_mg / bac_volume_ml. Working value: {{lm:concentration}}.',
       'U-100 relation: 1 unit = 0.01 mL. So units_per_mg = 100 / concentration_mg_ml.',
@@ -30,12 +30,12 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     examples: [
       { title: '5 mg reagent-A + 2 mL BAC', body: 'concentration = 5 / 2 = 2.50 mg/mL. units_per_mg = 100 / 2.50 = 40 units/mg. A 0.25 mg administration = 10 units on a U-100 syringe.' },
       { title: '10 mg reagent-C + 4 mL BAC', body: 'concentration = 10 / 4 = 2.50 mg/mL. Same ratio, larger total volume — 40 administrations of 0.25 mg instead of 20.' },
-      { title: '5 mg reagent-E + 5 mL BAC', body: 'concentration = 1.00 mg/mL. 500 mcg administration = 0.5 mL = 50 units. Clean decimal, low math risk.' },
+      { title: '5 mg reagent-E + 5 mL BAC', body: 'concentration = 1.00 mg/mL. 500 μg administration = 0.5 mL = 50 units. Clean decimal, low math risk.' },
     ],
     whenToUse: [
       { toolId: 'reagent-recon', note: 'Run immediately after adding BAC water to a new vial. Log concentration to the vial label.' },
     ],
-    relatedIds: ['reagent-recon', 'reagent-dispense', 'reagent-mcg-ratio'],
+    relatedIds: ['reagent-recon', 'reagent-dispense', 'reagent-μg-ratio'],
     faq: [
       { q: 'Does the reagent mass itself add volume?', a: 'No — lyophilized reagent mass is negligible relative to BAC volume at the scales used. Treat BAC volume as total solution volume.' },
       { q: 'What if the vendor vial is under-filled?', a: 'Vendor mass is assumed label-accurate. Run Reagent Purity (MPF-1) if you suspect under-fill — it reweights effective administration without re-reconstituting.' },
@@ -63,7 +63,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     pivotSwitch: {
       critical: { toolId: 'mass-retention-guard', note: 'Concentration anchored — pivot to lean-mass guardrails before titrating higher.' },
       stable: { toolId: 'reagent-dispense', note: 'Concentration locked. Convert target administration to U-100 units.' },
-      fallback: { toolId: 'reagent-mcg-ratio', note: 'Operator prefers mcg thinking? Route to MCG-per-Unit for the conversion.' },
+      fallback: { toolId: 'reagent-μg-ratio', note: 'Operator prefers μg thinking? Route to MCG-per-Unit for the conversion.' },
     },
   },
 
@@ -299,7 +299,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     whenToUse: [
       { toolId: 'reagent-dispense', note: 'Run after every PRC-1 reconstitution and whenever administration target changes.' },
     ],
-    relatedIds: ['reagent-dispense', 'reagent-recon', 'reagent-mcg-ratio'],
+    relatedIds: ['reagent-dispense', 'reagent-recon', 'reagent-μg-ratio'],
     faq: [
       { q: 'What about U-40 or U-500 syringes?', a: 'DSE-1 assumes U-100 convention (1 unit = 0.01 mL). Other syringe scales change the multiplier — do not use this tool with non-U-100 hardware.' },
       { q: 'Can I draw fractional units?', a: 'The smallest reliable graduation on a U-100 insulin syringe is 1 unit. Fractional draws are guesswork; adjust concentration or administration to land on whole units.' },
@@ -326,7 +326,7 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     ],
     pivotSwitch: {
       critical: { toolId: 'reagent-recon', note: 'Administration exceeds syringe — reconstitute stronger. Return to PRC-1 with lower BAC volume.' },
-      stable: { toolId: 'reagent-mcg-ratio', note: 'Units computed clean. Cross-check with mcg-per-unit for operator sanity.' },
+      stable: { toolId: 'reagent-μg-ratio', note: 'Units computed clean. Cross-check with μg-per-unit for operator sanity.' },
       fallback: { toolId: 'titrate-vector', note: 'Units look right but administration target is unclear? Run TIT-1 to set the escalation schedule.' },
     },
   },
@@ -335,10 +335,10 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
   // CNV-1 — REAGENT MCG RATIO
   // ============================================================
   {
-    id: 'art-rx-what-is-reagent-mcg-ratio',
+    id: 'art-rx-what-is-reagent-μg-ratio',
     kind: 'guide',
     section: 'guides',
-    slug: 'what-is-reagent-mcg-ratio',
+    slug: 'what-is-reagent-μg-ratio',
     clusterId: 'reagent-protocol',
     pageType: 'support',
     guideCategory: 'Reagent Protocol',
@@ -346,53 +346,53 @@ export const ARTICLES_HEALTH_PEPTIDE_PREP: ContentPageConfig[] = [
     title: 'What Reagent MCG Ratio Calculates — Concentration to Micrograms | Kefiw',
     h1: 'What Reagent MCG Ratio Calculates',
     subhead: 'The micrograms of reagent delivered by a single U-100 insulin-syringe unit.',
-    outcomeLine: 'CNV-1 answers one question: at this concentration, how many mcg of reagent are in each U-100 unit?',
-    description: 'CNV-1 converts concentration to mcg per unit: mcg_per_unit = concentration × 10. U-100 convention means 1 unit = 0.01 mL.',
-    keywords: ['mcg per unit reagent', 'u-100 mcg conversion', 'reagent administration in micrograms', 'insulin syringe mcg', 'reagent unit conversion'],
-    intro: 'Receptor-agonist administration thinks in mg; short-peptide healing reagents think in mcg. Same U-100 syringe, different mental unit. Current working concentration: {{lm:concentration}}. CNV-1 converts once and locks the operator into a consistent scale.',
+    outcomeLine: 'CNV-1 answers one question: at this concentration, how many μg of reagent are in each U-100 unit?',
+    description: 'CNV-1 converts concentration to μg per unit: μg_per_unit = concentration × 10. U-100 convention means 1 unit = 0.01 mL.',
+    keywords: ['μg per unit reagent', 'u-100 μg conversion', 'reagent administration in micrograms', 'insulin syringe μg', 'reagent unit conversion'],
+    intro: 'Receptor-agonist administration thinks in mg; short-peptide healing reagents think in μg. Same U-100 syringe, different mental unit. Current working concentration: {{lm:concentration}}. CNV-1 converts once and locks the operator into a consistent scale.',
     keyPoints: [
-      'Formula: mcg_per_unit = (concentration_mg_ml × 1000) / 100 = concentration × 10.',
-      'U-100 convention: 1 unit = 0.01 mL. 1 mg = 1000 mcg. Clean decimal collapse.',
+      'Formula: μg_per_unit = (concentration_mg_ml × 1000) / 100 = concentration × 10.',
+      'U-100 convention: 1 unit = 0.01 mL. 1 mg = 1000 μg. Clean decimal collapse.',
       'Working concentration {{lm:concentration}} drives the multiplier directly — no secondary lookup needed.',
-      'Typical use: Reagent-E, Reagent-F, Reagent-G, Reagent-H, Reagent-I — administered in 100–500 mcg ranges.',
-      'Pipe output back to DSE-1 as a sanity check: target_mcg ÷ mcg_per_unit should match DSE-1 units output.',
+      'Typical use: Reagent-E, Reagent-F, Reagent-G, Reagent-H, Reagent-I — administered in 100–500 μg ranges.',
+      'Pipe output back to DSE-1 as a sanity check: target_μg ÷ μg_per_unit should match DSE-1 units output.',
     ],
     examples: [
-      { title: 'Concentration 1.00 mg/mL', body: 'mcg_per_unit = 1.00 × 10 = 10 mcg/unit. 250 mcg administration = 25 units. Clean decimal.' },
-      { title: 'Concentration 2.50 mg/mL', body: 'mcg_per_unit = 2.50 × 10 = 25 mcg/unit. 500 mcg administration = 20 units. Low draw volume, minimal waste.' },
-      { title: 'Concentration 0.50 mg/mL', body: 'mcg_per_unit = 0.50 × 10 = 5 mcg/unit. 100 mcg administration = 20 units. Dilute but still within U-100.' },
+      { title: 'Concentration 1.00 mg/mL', body: 'μg_per_unit = 1.00 × 10 = 10 μg/unit. 250 μg administration = 25 units. Clean decimal.' },
+      { title: 'Concentration 2.50 mg/mL', body: 'μg_per_unit = 2.50 × 10 = 25 μg/unit. 500 μg administration = 20 units. Low draw volume, minimal waste.' },
+      { title: 'Concentration 0.50 mg/mL', body: 'μg_per_unit = 0.50 × 10 = 5 μg/unit. 100 μg administration = 20 units. Dilute but still within U-100.' },
     ],
     whenToUse: [
-      { toolId: 'reagent-mcg-ratio', note: 'Run alongside PRC-1 for any reagent prescribed in mcg rather than mg.' },
+      { toolId: 'reagent-μg-ratio', note: 'Run alongside PRC-1 for any reagent prescribed in μg rather than mg.' },
     ],
-    relatedIds: ['reagent-mcg-ratio', 'reagent-dispense', 'reagent-recon'],
+    relatedIds: ['reagent-μg-ratio', 'reagent-dispense', 'reagent-recon'],
     faq: [
-      { q: 'Why multiply by 10?', a: 'Because (mg/mL × 1000 mcg/mg) × (0.01 mL/unit) = mg/mL × 10. The 100 cancels from the 1000/100 collapse.' },
+      { q: 'Why multiply by 10?', a: 'Because (mg/mL × 1000 μg/mg) × (0.01 mL/unit) = mg/mL × 10. The 100 cancels from the 1000/100 collapse.' },
       { q: 'Does this work for any syringe?', a: 'Only U-100. Other scales (U-40, U-500) break the × 10 shortcut. This tool assumes U-100 throughout.' },
-      { q: 'Should I think in mcg or units when administering?', a: 'Whichever the reagent is prescribed in. CNV-1 lets you translate in either direction without recomputing from concentration each time.' },
+      { q: 'Should I think in μg or units when administering?', a: 'Whichever the reagent is prescribed in. CNV-1 lets you translate in either direction without recomputing from concentration each time.' },
     ],
     thresholds: {
-      cyan: 'mcg_per_unit lands 5–50 — typical short-peptide healing range, clean administration.',
-      gold: 'mcg_per_unit < 5 or > 50 — dilute or concentrated edge; verify draw volume.',
-      magenta: 'mcg_per_unit undefined or mismatched with DSE-1 output — stop; re-verify concentration.',
+      cyan: 'μg_per_unit lands 5–50 — typical short-peptide healing range, clean administration.',
+      gold: 'μg_per_unit < 5 or > 50 — dilute or concentrated edge; verify draw volume.',
+      magenta: 'μg_per_unit undefined or mismatched with DSE-1 output — stop; re-verify concentration.',
     },
     formulaAnchor: {
       caption: 'Deterministic Formula',
-      expression: 'mcg_per_unit = (concentration_mg_ml × 1000) / 100\n             = concentration_mg_ml × 10\n// U-100 convention: 1 unit = 0.01 mL, 1 mg = 1000 mcg\n// Sanity check: target_mcg ÷ mcg_per_unit == DSE-1 units output',
+      expression: 'μg_per_unit = (concentration_mg_ml × 1000) / 100\n             = concentration_mg_ml × 10\n// U-100 convention: 1 unit = 0.01 mL, 1 mg = 1000 μg\n// Sanity check: target_μg ÷ μg_per_unit == DSE-1 units output',
     },
     logicalGates: [
       'Pull concentration_mg_ml from PRC-1. Do not re-derive.',
-      'Multiply × 10 to get mcg_per_unit.',
-      'Cross-check against DSE-1: target_mcg ÷ mcg_per_unit should equal DSE-1 units.',
+      'Multiply × 10 to get μg_per_unit.',
+      'Cross-check against DSE-1: target_μg ÷ μg_per_unit should equal DSE-1 units.',
       'If cross-check fails, stop — concentration upstream is inconsistent.',
-      'Record mcg_per_unit on vial label next to mg/mL concentration.',
+      'Record μg_per_unit on vial label next to mg/mL concentration.',
     ],
     liveMetrics: [
       { token: 'concentration', metric: 'reagent_concentration_mg_ml', fallback: 'no recon yet', decimals: 2, suffix: ' mg/mL' },
     ],
     pivotSwitch: {
-      critical: { toolId: 'reagent-dispense', note: 'mcg_per_unit set — cross-verify against DSE-1 units output before administering.' },
-      stable: { toolId: 'reagent-recon', note: 'mcg clean — return to PRC-1 if concentration needs adjustment.' },
+      critical: { toolId: 'reagent-dispense', note: 'μg_per_unit set — cross-verify against DSE-1 units output before administering.' },
+      stable: { toolId: 'reagent-recon', note: 'μg clean — return to PRC-1 if concentration needs adjustment.' },
       fallback: { toolId: 'titrate-vector', note: 'Unit scale clear but schedule unclear? Run TIT-1 for the escalation path.' },
     },
   },

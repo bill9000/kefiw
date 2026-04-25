@@ -148,20 +148,20 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
     h1: 'What Vendor Yield Calculates',
     subhead: 'Cost per microgram and cost per administration across vendors — price discipline for reagent purchasing.',
     outcomeLine: 'Vendor Yield answers one question: which vendor gives me the lowest cost-per-administration after shipping?',
-    description: 'Vendor Yield computes cost per microgram ((price + shipping) / mass_mcg) and cost per administration. Ranks vendors ascending. U-100 unit math ready.',
+    description: 'Vendor Yield computes cost per microgram ((price + shipping) / mass_μg) and cost per administration. Ranks vendors ascending. U-100 unit math ready.',
     keywords: ['reagent vendor cost comparison', 'cost per administration reagent', 'reagent-A vendor ranking', 'reagent-B price per mg', 'reagent shipping cost math'],
     intro: 'Sticker price lies. Current waste {{lm:waste}} means every $ per mg is already discounted — the vendor with the cheapest mg may deliver the most expensive effective administration.',
     keyPoints: [
-      'Formula: cost_per_mcg = (price + shipping) / (mass_mg × 1000); cost_per_dose = cost_per_mcg × dose_mcg. Current waste {{lm:waste}} inflates effective cost.',
+      'Formula: cost_per_μg = (price + shipping) / (mass_mg × 1000); cost_per_dose = cost_per_μg × dose_μg. Current waste {{lm:waste}} inflates effective cost.',
       'Rank vendors ascending by cost-per-administration. Shipping is not free — bake it in.',
       'Adjust for purity and reagent-content-factor: effective_mg = label_mg × purity × content_factor.',
-      'U-100 administration conversion: dose_mcg = dose_mg × 1000; injection volume still follows 1 unit = 0.01 mL.',
+      'U-100 administration conversion: dose_μg = dose_mg × 1000; injection volume still follows 1 unit = 0.01 mL.',
       'Minimum-order discounts flatter cost-per-mg but bloat inventory. Run Reagent Inventory against the bulk empty_date before committing.',
     ],
     examples: [
-      { title: '10 mg @ $80 + $12 ship vs 5 mg @ $45 + $8 ship', body: 'Vendor A: $92 / 10000 mcg = $0.0092/mcg. Vendor B: $53 / 5000 mcg = $0.0106/mcg. A wins by 13%.' },
-      { title: 'Purity-corrected comparison', body: 'Vendor C 10 mg @ $70 + $10 ship, 92% purity = 9.2 effective mg. $80 / 9200 = $0.0087/mcg. Beats both A and B.' },
-      { title: '500 mcg administration comparison', body: 'At $0.0087/mcg: cost_per_dose = 500 × $0.0087 = $4.35. At $0.0106/mcg: $5.30. Over a 16-week titration: ~$15 gap.' },
+      { title: '10 mg @ $80 + $12 ship vs 5 mg @ $45 + $8 ship', body: 'Vendor A: $92 / 10000 μg = $0.0092/μg. Vendor B: $53 / 5000 μg = $0.0106/μg. A wins by 13%.' },
+      { title: 'Purity-corrected comparison', body: 'Vendor C 10 mg @ $70 + $10 ship, 92% purity = 9.2 effective mg. $80 / 9200 = $0.0087/μg. Beats both A and B.' },
+      { title: '500 μg administration comparison', body: 'At $0.0087/μg: cost_per_dose = 500 × $0.0087 = $4.35. At $0.0106/μg: $5.30. Over a 16-week titration: ~$15 gap.' },
     ],
     whenToUse: [
       { toolId: 'vendor-yield', note: 'Before every reorder — vendors rotate prices weekly.' },
@@ -178,12 +178,12 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
     },
     formulaAnchor: {
       caption: 'Deterministic Formula',
-      expression: 'cost_per_mcg = (price_usd + shipping_usd) / (mass_mg × 1000)\neffective_mass_mg = label_mg × purity_pct × content_factor_pct\ncost_per_effective_mcg = (price + shipping) / (effective_mass_mg × 1000)\ncost_per_dose_usd = cost_per_effective_mcg × dose_mcg\n// U-100 conversion unchanged: 1 unit = 0.01 mL',
+      expression: 'cost_per_μg = (price_usd + shipping_usd) / (mass_mg × 1000)\neffective_mass_mg = label_mg × purity_pct × content_factor_pct\ncost_per_effective_μg = (price + shipping) / (effective_mass_mg × 1000)\ncost_per_dose_usd = cost_per_effective_μg × dose_μg\n// U-100 conversion unchanged: 1 unit = 0.01 mL',
     },
     logicalGates: [
       'Collect price, shipping, mass_mg, purity_pct for each vendor. No estimation.',
-      'Compute cost_per_mcg — raw, then purity-corrected.',
-      'Multiply by dose_mcg for cost-per-administration.',
+      'Compute cost_per_μg — raw, then purity-corrected.',
+      'Multiply by dose_μg for cost-per-administration.',
       'Rank ascending. Apply tie-breaks: lead time, test history, payment friction.',
       'Verify empty_date from Reagent Inventory before bulk discount trigger.',
     ],
@@ -225,7 +225,7 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
     ],
     examples: [
       { title: '10-day trip, reagent-A 0.5 mg weekly', body: 'administrations = ceil(10/7) = 2. total_mg = 1 mg. At 2 mg/mL: 0.5 mL = 50 units across 2 injections. Single 5 mg vial covers it. Concentration {{lm:conc}}.' },
-      { title: '21-day trip, stack: reagent-A 1 mg/wk + reagent-B 250 mcg/day', body: 'Reagent-A: administrations=3, mass=3 mg. Reagent-B: administrations=21, mass=5.25 mg. Two vials minimum — one per reagent.' },
+      { title: '21-day trip, stack: reagent-A 1 mg/wk + reagent-B 250 μg/day', body: 'Reagent-A: administrations=3, mass=3 mg. Reagent-B: administrations=21, mass=5.25 mg. Two vials minimum — one per reagent.' },
       { title: '45-day trip, reagent-C 10 mg weekly', body: 'administrations = ceil(45/7) = 7. total_mg = 70 mg. Across 10 mg vials: 7 vials. At 5 mg/mL: 14 mL total, 1400 units.' },
     ],
     whenToUse: [
@@ -290,7 +290,7 @@ export const ARTICLES_HEALTH_PEPTIDE_BIO: ContentPageConfig[] = [
     ],
     examples: [
       { title: 'Reagent-A week 4, 1 mg weekly, h = 7 days', body: 'N(t) per administration at t=7d = 0.50 mg. Administration 1 remnant at week 4 = 1 × 0.5^4 = 0.06 mg. Sum across 4 administrations ≈ 1.88 mg circulating — approaching steady state.' },
-      { title: 'Reagent-E daily 250 mcg, h = 4 hr', body: 'N(t) at t=24h = 250 × 0.5^6 ≈ 3.9 mcg residual. Steady state = 4.3 × 4h = 17 hr, well within daily cycle. Effectively single-administration behavior.' },
+      { title: 'Reagent-E daily 250 μg, h = 4 hr', body: 'N(t) at t=24h = 250 × 0.5^6 ≈ 3.9 μg residual. Steady state = 4.3 × 4h = 17 hr, well within daily cycle. Effectively single-administration behavior.' },
       { title: 'Reagent-B missed week 3, h = 120 hr / 5 days', body: 'Scheduled 5 mg. At 14 days post-last-administration: residual = 5 × 0.5^(14/5) = 0.72 mg. Less than 15% of administration — real gap.' },
     ],
     whenToUse: [

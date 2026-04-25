@@ -129,8 +129,8 @@ export default function ReagentStack() {
                 <thead>
                   <tr style={{ color: DIM, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                     <th style={{ textAlign: 'left', padding: '4px 6px', borderBottom: `1px solid ${BORDER}` }}>Units</th>
-                    <th style={{ textAlign: 'right', padding: '4px 6px', borderBottom: `1px solid ${BORDER}`, color: CYAN }}>{state.nameA || 'A'} (mcg)</th>
-                    <th style={{ textAlign: 'right', padding: '4px 6px', borderBottom: `1px solid ${BORDER}`, color: GOLD }}>{state.nameB || 'B'} (mcg)</th>
+                    <th style={{ textAlign: 'right', padding: '4px 6px', borderBottom: `1px solid ${BORDER}`, color: CYAN }}>{state.nameA || 'A'} (μg)</th>
+                    <th style={{ textAlign: 'right', padding: '4px 6px', borderBottom: `1px solid ${BORDER}`, color: GOLD }}>{state.nameB || 'B'} (μg)</th>
                   </tr>
                 </thead>
                 <tbody>

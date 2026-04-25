@@ -3941,11 +3941,11 @@ const RAW_TOOLS: ToolConfig[] = [
       { q: 'How much BAC water should I use?', a: 'More water = lower concentration = easier to draw low administrations. 2 mL is the default for 5 mg reagent vials; 3 mL gives a more forgiving unit-per-administration ratio.' },
       { q: 'Is BAC water the same as sterile water?', a: 'No. Bacteriostatic water contains 0.9% benzyl alcohol which inhibits microbial growth over the 28-day use-life. Sterile water is single-use only.' },
     ],
-    relatedIds: ['reagent-dispense', 'reagent-mcg-ratio', 'transfer-loss'],
+    relatedIds: ['reagent-dispense', 'reagent-μg-ratio', 'transfer-loss'],
     island: 'reagent/ReagentRecon',
     followUps: [
       { toolId: 'reagent-dispense', cta: 'Reconstitution done. Now draw the exact unit.' },
-      { toolId: 'reagent-mcg-ratio', cta: 'Want the full administration table? Use the unit lookup.' },
+      { toolId: 'reagent-μg-ratio', cta: 'Want the full administration table? Use the unit lookup.' },
     ],
   },
   {
@@ -3955,7 +3955,7 @@ const RAW_TOOLS: ToolConfig[] = [
     noindex: true,
     title: 'Reagent Administration & Syringe Units — U-100 Draw | Kefiw',
     h1: 'Reagent Administration · U-100 Syringe Units',
-    description: 'Convert a target reagent administration (mg or mcg) into syringe units or mL for any syringe type. Pipe-reads concentration from the reconstitution tool.',
+    description: 'Convert a target reagent administration (mg or μg) into syringe units or mL for any syringe type. Pipe-reads concentration from the reconstitution tool.',
     keywords: ['reagent syringe units', 'administration to units', 'mg to mL syringe', 'U-100 insulin syringe draw', 'U-40 syringe calculator', 'custom syringe units'],
     intro: 'Volume (mL) = amount (mg) ÷ concentration (mg/mL). Units = volume × (divisions ÷ syringe volume). Supports U-100, U-40, 0.5 mL and 0.3 mL insulin, tuberculin, plus a custom W mL × Q divisions option.',
     howTo: [
@@ -3974,9 +3974,9 @@ const RAW_TOOLS: ToolConfig[] = [
       { q: 'How many mL do I pull for a given mg amount?', a: 'Volume (mL) = amount (mg) ÷ concentration (mg/mL). The tool shows the volume prominently alongside the unit count, so you can use whichever figure matches your syringe markings.', faq_intent: 'how-to' },
       { q: 'What if my syringe is not a U-100?', a: 'Pick the syringe you are using from the dropdown — U-40, 0.5 mL insulin, 0.3 mL insulin, tuberculin 1 mL, or Custom. The units scale automatically to the divisions on that barrel.', faq_intent: 'edge-case' },
       { q: 'What counts as a "custom" syringe?', a: 'Any syringe where you know the total barrel volume (W mL) and the number of divisions printed on it (Q). The tool computes units = volume × (Q / W), so the answer matches the marks on your specific syringe.', faq_intent: 'how-to' },
-      { q: 'What if my concentration isn\'t mg/mL?', a: 'Convert first. 1 mg/mL = 1000 mcg/mL. The unit math is identical; only the label changes.', faq_intent: 'edge-case' },
+      { q: 'What if my concentration isn\'t mg/mL?', a: 'Convert first. 1 mg/mL = 1000 μg/mL. The unit math is identical; only the label changes.', faq_intent: 'edge-case' },
     ],
-    relatedIds: ['reagent-recon', 'reagent-mcg-ratio', 'transfer-loss'],
+    relatedIds: ['reagent-recon', 'reagent-μg-ratio', 'transfer-loss'],
     island: 'reagent/ReagentDispense',
     followUps: [
       { toolId: 'titrate-vector', cta: 'Administration known. Plan the weekly step-up.' },
@@ -3984,30 +3984,30 @@ const RAW_TOOLS: ToolConfig[] = [
     ],
   },
   {
-    id: 'reagent-mcg-ratio',
+    id: 'reagent-μg-ratio',
     category: 'health',
-    slug: 'reagent-mcg-ratio',
+    slug: 'reagent-μg-ratio',
     noindex: true,
-    title: 'mcg per Unit Lookup — Syringe Administration Table | Kefiw',
-    h1: 'mcg per Unit · Syringe Administration Table',
-    description: 'Given a concentration (mg/mL) and your syringe (U-100, U-40, 0.5 mL insulin, tuberculin, or custom), generate a full mcg / mg / mL lookup table.',
-    keywords: ['mcg per unit table', 'reagent administration chart', 'syringe unit conversion', 'mg to mL syringe table', 'custom syringe lookup'],
-    intro: 'Syringe-configurable lookup: mcg/unit = concentration × (volume per unit). Pick the syringe you are using — U-100, U-40, 0.5 mL or 0.3 mL insulin, tuberculin, or Custom (W mL × Q divisions) — and the full table regenerates for that barrel.',
+    title: 'μg per Unit Lookup — Syringe Administration Table | Kefiw',
+    h1: 'μg per Unit · Syringe Administration Table',
+    description: 'Given a concentration (mg/mL) and your syringe (U-100, U-40, 0.5 mL insulin, tuberculin, or custom), generate a full μg / mg / mL lookup table.',
+    keywords: ['μg per unit table', 'reagent administration chart', 'syringe unit conversion', 'mg to mL syringe table', 'custom syringe lookup'],
+    intro: 'Syringe-configurable lookup: μg/unit = concentration × (volume per unit). Pick the syringe you are using — U-100, U-40, 0.5 mL or 0.3 mL insulin, tuberculin, or Custom (W mL × Q divisions) — and the full table regenerates for that barrel.',
     howTo: [
       'Pipe concentration from Reconstitution or enter mg/mL directly.',
       'Pick your syringe. For Custom, enter W (mL) and Q (divisions).',
-      'Read mcg-per-tick and the per-draw table with mcg, mg, and mL columns.',
+      'Read μg-per-tick and the per-draw table with μg, mg, and mL columns.',
       'Print or screenshot as a fridge reference for that specific syringe + vial.',
     ],
     examples: [
-      { title: 'Reagent-E 1 mg/mL · U-100', body: '10 mcg/unit · 25 u = 250 mcg (0.25 mL) · 50 u = 500 mcg (0.50 mL).' },
-      { title: 'Reagent-C 5 mg/mL · 0.5 mL insulin (50 u)', body: '50 mcg/unit · 10 u = 500 mcg (0.10 mL) · 50 u = 2500 mcg (0.50 mL).' },
-      { title: 'Custom 0.5 mL / 25 divisions · 2 mg/mL', body: '40 mcg/mark · 25 marks = 1000 mcg = 1 mg = 0.5 mL.' },
+      { title: 'Reagent-E 1 mg/mL · U-100', body: '10 μg/unit · 25 u = 250 μg (0.25 mL) · 50 u = 500 μg (0.50 mL).' },
+      { title: 'Reagent-C 5 mg/mL · 0.5 mL insulin (50 u)', body: '50 μg/unit · 10 u = 500 μg (0.10 mL) · 50 u = 2500 μg (0.50 mL).' },
+      { title: 'Custom 0.5 mL / 25 divisions · 2 mg/mL', body: '40 μg/mark · 25 marks = 1000 μg = 1 mg = 0.5 mL.' },
     ],
     faq: [
-      { q: 'Why mcg per unit instead of mg?', a: 'Most research reagent administrations sit in the 100–1000 mcg range. mg resolution is too coarse and leads to decimal errors on insulin syringes.', faq_intent: 'definition' },
-      { q: 'Can I use this with a non-U-100 syringe?', a: 'Yes. Pick your syringe from the dropdown. The mcg-per-tick figure and the per-draw table regenerate based on the barrel\u2019s divisions and volume.', faq_intent: 'edge-case' },
-      { q: 'What is the math behind mcg per unit?', a: 'mcg/unit = concentration(mg/mL) × 1000 ÷ (divisions ÷ barrel volume). For U-100 that simplifies to mg/mL × 10. For other syringes the divisor changes with the barrel.', faq_intent: 'definition' },
+      { q: 'Why μg per unit instead of mg?', a: 'Most research reagent administrations sit in the 100–1000 μg range. mg resolution is too coarse and leads to decimal errors on insulin syringes.', faq_intent: 'definition' },
+      { q: 'Can I use this with a non-U-100 syringe?', a: 'Yes. Pick your syringe from the dropdown. The μg-per-tick figure and the per-draw table regenerate based on the barrel\u2019s divisions and volume.', faq_intent: 'edge-case' },
+      { q: 'What is the math behind μg per unit?', a: 'μg/unit = concentration(mg/mL) × 1000 ÷ (divisions ÷ barrel volume). For U-100 that simplifies to mg/mL × 10. For other syringes the divisor changes with the barrel.', faq_intent: 'definition' },
       { q: 'Is the table still valid after weeks in the fridge?', a: 'Concentration doesn\'t change, but the reagent degrades. Check Vector Decay for residual-activity estimates past day 28.', faq_intent: 'edge-case' },
     ],
     relatedIds: ['reagent-recon', 'reagent-dispense', 'vector-decay'],
@@ -4173,12 +4173,12 @@ const RAW_TOOLS: ToolConfig[] = [
     keywords: ['reagent stack calculator', 'multi reagent blend', 'co-reconstitution math', 'reagent combo administration'],
     intro: 'Co-reconstitution: add multiple reagents to shared BAC volume, compute per-reagent mg/mL, and map each to unit draws on a single syringe.',
     howTo: [
-      'Add each reagent: mass (mg) and target administration (mg or mcg).',
+      'Add each reagent: mass (mg) and target administration (mg or μg).',
       'Enter shared BAC water volume.',
       'Read per-reagent concentration and required syringe units for a single combined draw.',
     ],
     examples: [
-      { title: 'Reagent-E 5 mg + Reagent-F 5 mg · 3 mL BAC', body: 'Each at 1.67 mg/mL · 250 mcg of each = 15 units combined.' },
+      { title: 'Reagent-E 5 mg + Reagent-F 5 mg · 3 mL BAC', body: 'Each at 1.67 mg/mL · 250 μg of each = 15 units combined.' },
     ],
     faq: [
       { q: 'Can all reagents be co-reconstituted?', a: 'Most research reagents co-dissolve in BAC water. Check vendor stability data; a few require acidic or basic diluents that conflict.' },
@@ -4737,15 +4737,22 @@ import { TEXT_CLEANUP_TOOL_ENHANCEMENTS } from './tools-text-cleanup-enhancement
 import { UNSCRAMBLE_TOOL_ENHANCEMENTS } from './tools-unscramble-enhancements';
 import { WORD_FAMILIES_TOOL_ENHANCEMENTS } from './tools-word-families-enhancements';
 import { SCRABBLE_TOOL_RELATED_ADDITIONS } from './content/scrabble-docs-update';
+import { RELATIONSHIP_GAME_TOOLS, RELATIONSHIP_TOOL_ENHANCEMENTS } from './tools-relationship-games';
 
 const TOOL_ENHANCEMENT_OVERRIDES: Record<string, Partial<ToolConfig>> = {
   ...SCRABBLE_TOOL_ENHANCEMENTS,
   ...TEXT_CLEANUP_TOOL_ENHANCEMENTS,
   ...UNSCRAMBLE_TOOL_ENHANCEMENTS,
   ...WORD_FAMILIES_TOOL_ENHANCEMENTS,
+  ...RELATIONSHIP_TOOL_ENHANCEMENTS,
 };
 
-export const TOOLS: ToolConfig[] = RAW_TOOLS.map((t) => {
+const ALL_RAW_TOOLS: ToolConfig[] = [
+  ...RAW_TOOLS,
+  ...RELATIONSHIP_GAME_TOOLS,
+];
+
+export const TOOLS: ToolConfig[] = ALL_RAW_TOOLS.map((t) => {
   const override = TOOL_ENHANCEMENT_OVERRIDES[t.id];
   const withOverride = override ? { ...t, ...override } : t;
   const extraRelated = SCRABBLE_TOOL_RELATED_ADDITIONS[t.id];
@@ -4909,6 +4916,17 @@ const TOOL_CLUSTER_MAP: Record<string, string> = {
   'upskill-payback': 'logistical-mobility',
   'leak-detection': 'logistical-mobility',
   'connection-check': 'logistical-mobility',
+  // relationship games
+  'love-calculator': 'relationship-games',
+  'flames-calculator': 'relationship-games',
+  'how-long-will-we-last': 'relationship-games',
+  'date-night-questions': 'relationship-games',
+  'flirty-truth-or-dare': 'relationship-games',
+  'couples-never-have-i-ever': 'relationship-games',
+  'couples-would-you-rather': 'relationship-games',
+  'red-flag-green-flag': 'relationship-games',
+  'couple-dare-ladder': 'relationship-games',
+  'pillow-talk-cards': 'relationship-games',
 };
 
 for (const t of TOOLS) {

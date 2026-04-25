@@ -94,7 +94,7 @@ export default function ReagentRecon() {
               <div>
                 <div style={{ fontSize: 10, color: DIM, textTransform: 'uppercase', letterSpacing: '0.15em' }}>Potency</div>
                 <div style={{ fontSize: 28, color: GOLD, fontWeight: 700, lineHeight: 1.1 }}>{calc.concMcgMl.toFixed(0)}</div>
-                <div style={{ fontSize: 11, color: DIM }}>mcg / mL</div>
+                <div style={{ fontSize: 11, color: DIM }}>μg / mL</div>
               </div>
             </div>
           ) : (

@@ -15,6 +15,11 @@ export interface DashboardMetrics {
   reagent_waste_pct?: number;
   reagent_potency_pct?: number;      // DEG-1 retained potency after thermal exposure
   mass_loss_pct?: number;            // SAR-1 lean-mass loss ratio
+  // Reagent pipeline syringe selection — flows from Step 2 (Dispense) into
+  // Step 3 (Lookup) so the user only picks a syringe once.
+  reagent_syringe_id?: string;       // 'u100' | 'u40' | 'ins05' | 'ins03' | 'tb1' | 'custom'
+  reagent_syringe_vol_ml?: number;   // effective barrel volume (W)
+  reagent_syringe_divs?: number;     // effective division count (Q)
 }
 
 export interface DashboardFlags {
