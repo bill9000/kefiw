@@ -1,0 +1,113 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RepairVsReplaceCalculator from '~/components/homelab/RepairVsReplaceCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Repair vs Replacement Calculator — Decision Tool | Kefiw Home Lab';
+const description = 'Should you repair the roof or replace it? Decision calculator weighs roof age, damage extent, leak history, sale horizon, and insurance. Reviewed by a Texas-licensed general contractor with insurance-claim experience.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Roof Repair vs Replacement Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/roof-repair-vs-replacement-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/roof-repair-vs-replacement-calculator/"
+  keywords={['roof repair vs replacement', 'should i repair or replace my roof', 'roof replacement decision', 'roof age vs damage', 'insurance roof claim decision']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/roof-repair-vs-replacement-calculator/', label: 'Roof Repair vs Replacement Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Repair vs Replacement Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        The decision homeowners actually face — patch the damage, or replace the whole roof? This calculator weighs the five inputs that move the answer: roof age, damage extent, leak history, your timeline, and whether insurance is in play.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Decision tool" class="mb-8">
+      <RepairVsReplaceCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>The five factors and how they trade off</h2>
+
+      <h3>1. Age</h3>
+      <p>
+        The single biggest factor. A roof at 85%+ of its expected lifespan is on borrowed time; investing in a 20% repair on a roof with 15% life left is poor ROI. Below 65% of expected life, repair is generally the right call assuming damage is contained.
+      </p>
+
+      <h3>2. Damage extent</h3>
+      <p>
+        Beyond about 30% of the roof showing damage, color and lot matching becomes harder than just replacing the whole thing. The patched roof will have visible banding where new meets old.
+      </p>
+
+      <h3>3. Leak history</h3>
+      <p>
+        Surface shingles can be patched; underlayment and decking damage can't be patched without tear-off. Multiple leaks per year almost always indicates damage below the shingles — the visible problem is the iceberg tip.
+      </p>
+
+      <h3>4. Sale horizon</h3>
+      <p>
+        Selling within a year with an aged roof? Inspectors will flag it. New roofs are one of the few pre-sale upgrades that command close to their cost in resale. Selling within a year with a young roof? Repair, document, and let the buyer carry the eventual replacement.
+      </p>
+
+      <h3>5. Insurance claim window</h3>
+      <p>
+        This is the lever most homeowners under-use. If a hailstorm, windstorm, or other named-peril event damaged your roof in the last 12 months, file a claim. If approved, you pay only the deductible — meaning a $4K deductible buys you a $20K replacement. <strong>Always file before deciding repair vs replace.</strong>
+      </p>
+
+      <h2>What the calculator can't see</h2>
+      <ul>
+        <li><strong>Decking condition.</strong> Only visible after tear-off. A roof that looks fine on top can have rotted sheathing underneath.</li>
+        <li><strong>Flashing condition.</strong> Around chimneys, skylights, and wall transitions. Often the actual leak source even when shingles look intact.</li>
+        <li><strong>Local code requirements.</strong> Some jurisdictions require full replacement when damage exceeds a threshold (e.g., 25% of squares).</li>
+        <li><strong>Insurance carrier policy.</strong> Some carriers force replacement when partial repair would compromise warranty; some only pay ACV (depreciated) on partial; some require full scope. Read your policy or call the adjuster.</li>
+      </ul>
+
+      <h2>The right next step after this calculator</h2>
+      <ol>
+        <li>If insurance is plausible, file a claim. Today. Carriers don't reward delay.</li>
+        <li>Get an inspection from a roofer (separate from any insurance adjuster). Have them quote both repair and replacement scopes.</li>
+        <li>If selling: also get a pre-listing home inspector's read on the roof. They're independent and their report carries weight with buyers.</li>
+        <li>Compare the calculator's verdict against the inspection. If they disagree, the inspection wins — they can see things the calculator can't.</li>
+      </ol>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor with active insurance-claim experience in the Houston market. The decision logic favors honest answers over conservative-replace defaults — repair is the right call more often than typical roofing-industry content acknowledges, especially on younger roofs.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

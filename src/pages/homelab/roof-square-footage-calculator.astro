@@ -1,0 +1,99 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofAreaCalculator from '~/components/homelab/RoofAreaCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Square Footage Calculator (2026) — Reviewed by a Texas GC | Kefiw';
+const description = 'Estimate your roof surface area from home sqft + pitch, footprint + pitch, or direct ridge × eave measurements. Reviewed by a Texas-licensed general contractor.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Roof Square Footage Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/roof-square-footage-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/roof-square-footage-calculator/"
+  keywords={['roof square footage calculator', 'roof area calculator', 'roof sqft from home sqft', 'pitch multiplier roof area']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/roof-square-footage-calculator/', label: 'Roof Square Footage Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Square Footage Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Three ways to estimate roof surface area: from your home's interior sqft, from the ground-floor footprint, or from direct ridge × eave measurements. Use the result for shingle ordering or to plug into the cost calculator.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofAreaCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>Why roof area is bigger than home area</h2>
+      <p>
+        Your home's interior square footage measures the floor — flat. The roof adds two things: <strong>pitch</strong> (the slope, which stretches surface across the same footprint) and <strong>overhangs</strong> (the eaves that extend past the wall). A typical 6:12-pitch suburban home has a roof surface around <strong>1.20×</strong> its lived-in sqft. A steep 12:12 roof on the same home is closer to <strong>1.55×</strong>.
+      </p>
+
+      <h2>When each input mode is most accurate</h2>
+      <ul>
+        <li><strong>Home sqft mode</strong> — fastest. Reasonable for typical 1- and 2-story homes. Loses accuracy on homes where the second floor has a smaller footprint than the first (the roof covers the larger first-floor extent).</li>
+        <li><strong>Footprint mode</strong> — best for single-story homes where the floor plan equals the roof footprint.</li>
+        <li><strong>Ridge × eave mode</strong> — most accurate, if you can measure. Each rectangular roof plane is just ridge length × slope length. Add planes together. Pitch is already baked in because you measured the slope.</li>
+      </ul>
+
+      <h2>What we mean by "complexity uplift"</h2>
+      <p>
+        A simple gable is two clean rectangles. A typical hip roof has four planes plus hip ridges and a small uplift for hip cuts. A cut-up roof — with multiple gables, dormers, valleys, skylights — generates extra waste at every cut and needs extra surface to account for it. Add 5–10% for typical hip roofs, 15–25% for cut-up.
+      </p>
+
+      <h2>From sqft to materials</h2>
+      <p>
+        Once you have the roof sqft, divide by 100 to get <strong>squares</strong> — the unit roofers think in. From there:
+      </p>
+      <ul>
+        <li>Shingles: ~3 bundles per square for asphalt, more for designer profiles.</li>
+        <li>Underlayment: 1 roll covers ~4 squares.</li>
+        <li>Drip edge: 1 LF per LF of perimeter.</li>
+        <li>Decking: typically not replaced fully — only rotted sheets. Allow 5–15% replacement budget.</li>
+      </ul>
+      <p>The <a href="/homelab/shingle-bundle-calculator/">shingle bundle calculator</a> handles the conversion if you want it spelled out.</p>
+
+      <h2>About this calculator</h2>
+      <p>
+        Built and reviewed by Eurocraft, a Texas-licensed general contractor. See <a href="/homelab/methodology/">methodology</a> for the multipliers used and <a href="/homelab/about/">about</a> for editorial credentials.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

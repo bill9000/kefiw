@@ -1,0 +1,104 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ShingleBundleCalculator from '~/components/homelab/ShingleBundleCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Shingle Bundle Calculator — Field, Ridge Cap, Starter | Kefiw Home Lab';
+const description = 'How many shingle bundles do you need? Calculator covers field shingles + ridge cap + starter strip, with profile presets and a waste factor by roof complexity. Reviewed by a Texas-licensed GC.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Shingle Bundle Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/shingle-bundle-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/shingle-bundle-calculator/"
+  keywords={['shingle bundle calculator', 'how many shingles do i need', 'roof bundle estimator', 'ridge cap calculator', 'starter strip calculator']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/shingle-bundle-calculator/', label: 'Shingle Bundle Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Shingle Bundle Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Three things get ordered separately and three things get under-ordered: <strong>field shingles</strong>, <strong>ridge cap</strong>, and <strong>starter strip</strong>. This calculator covers all three so the order is complete.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <ShingleBundleCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>The three bundle counts that matter</h2>
+      <ul>
+        <li><strong>Field shingles</strong> — the main surface. Almost all asphalt is sold at 3 bundles per 100 sqft (one square). Heavy designer / luxury profiles can run 4–5.</li>
+        <li><strong>Ridge cap</strong> — runs the top of every hip and ridge. Cheaper to buy purpose-made cap shingles than to cut from field; one cap bundle covers about 35 LF.</li>
+        <li><strong>Starter strip</strong> — runs along the eave and rakes (sometimes). One starter bundle covers ~120 LF. Don't skip this — adhesive-strip starter beats cutting from field every time.</li>
+      </ul>
+
+      <h2>Waste factors that aren't waste</h2>
+      <p>
+        "Waste" is misleading. Most "waste" is actually <strong>cuts</strong> at hips, valleys, rake edges, and around penetrations — the bundle has to cover the cut piece and the offcut. The number to use:
+      </p>
+      <ul>
+        <li><strong>10%</strong> — clean rectangle, simple gable, no penetrations.</li>
+        <li><strong>12–15%</strong> — typical hip roof with 4–6 penetrations.</li>
+        <li><strong>18–22%</strong> — cut-up roof with multiple dormers or many valleys.</li>
+      </ul>
+
+      <h2>Order one extra bundle</h2>
+      <p>
+        Ridge cap is the most likely line item to come up short. A leftover bundle costs $40 and goes in the attic for a future repair; a same-day yard run costs an hour of crew time and risks a different lot number. Order an extra bundle of cap, and a half-bundle of field for the same reason.
+      </p>
+
+      <h2>Color lot matters</h2>
+      <p>
+        Asphalt shingles are dye-lot batched. Two bundles of the same color from different production runs don't always match. If you're buying in stages — initial order plus a make-up order later — you may end up with visible color banding. Order the entire job from one delivery if you can; if you have to add later, buy a bundle from the same shipment now and stage it.
+      </p>
+
+      <h2>Companion calculators</h2>
+      <ul>
+        <li><a href="/homelab/roof-square-footage-calculator/">Roof Square Footage Calculator</a> — get the sqft input.</li>
+        <li><a href="/homelab/roof-pitch-calculator/">Roof Pitch Calculator</a> — pitch sets your area multiplier.</li>
+        <li><a href="/homelab/roof-replacement-cost-calculator/">Roof Replacement Cost Calculator</a> — installed price including labor.</li>
+      </ul>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor. Coverage assumptions follow standard asphalt-shingle install practice; designer profiles and synthetic slate / cedar shake have different bundle counts and aren't covered here.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

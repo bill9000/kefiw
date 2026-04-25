@@ -22,6 +22,10 @@ const STATIC_ROUTES = [
   ...DAILY_GAMES.map((g) => `/daily/${g.slug}/`),
   '/homelab/',
   '/homelab/roof-replacement-cost-calculator/',
+  '/homelab/roof-square-footage-calculator/',
+  '/homelab/roof-pitch-calculator/',
+  '/homelab/shingle-bundle-calculator/',
+  '/homelab/roof-repair-vs-replacement-calculator/',
   '/homelab/methodology/',
   '/homelab/about/',
 ];

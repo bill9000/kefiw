@@ -1,0 +1,95 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofPitchCalculator from '~/components/homelab/RoofPitchCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Pitch Calculator (X:12, degrees, slope %) | Kefiw Home Lab';
+const description = 'Convert between rise:run, degrees, and slope %. Get the pitch band, surface-area multiplier, and walkability category — reviewed by a Texas-licensed general contractor.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Roof Pitch Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/roof-pitch-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/roof-pitch-calculator/"
+  keywords={['roof pitch calculator', 'rise over run', 'roof pitch in degrees', 'roof slope multiplier', 'walkable roof pitch']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/roof-pitch-calculator/', label: 'Roof Pitch Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Pitch Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Pitch in three forms — <strong>rise per 12 inches</strong>, <strong>degrees</strong>, or <strong>common ratio</strong> — and convert between them. Get the surface-area multiplier (for sizing materials) and a walkability category (for understanding labor cost).
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofPitchCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>Why pitch matters for cost</h2>
+      <p>
+        Pitch drives two cost lines: <strong>material</strong> (more surface = more shingle) and <strong>labor</strong> (steeper = slower install + safety setup). The material side is linear — a 12:12 roof has 1.41× the material of a flat one with the same footprint. Labor scales nonlinearly — a 6:12 crew works at full speed; a 12:12 crew uses roof jacks and harnesses, slowing 30–50%; an 18:12 crew needs scaffolding.
+      </p>
+
+      <h2>Common roof pitches and what they mean</h2>
+      <ul>
+        <li><strong>2:12 to 4:12 (low slope)</strong> — usually requires modified bitumen, TPO, or specialty underlayment. Standard asphalt shingles are not rated for slopes under 2:12; under 4:12 they need ice-and-water shield over the entire surface.</li>
+        <li><strong>4:12 to 9:12 (conventional)</strong> — the sweet spot for asphalt shingles. Walkable, cheap to install, no special equipment.</li>
+        <li><strong>10:12 to 12:12 (steep)</strong> — fall protection mandatory, labor +30–50%. Common on Victorian and steep-pitched contemporary homes.</li>
+        <li><strong>13:12+ (very steep / cathedral)</strong> — scaffolding territory. Material has to be hand-walked up; productivity drops significantly.</li>
+      </ul>
+
+      <h2>How to measure pitch yourself</h2>
+      <ol>
+        <li><strong>Attic method:</strong> hold a level horizontally against a rafter on the underside. Measure 12 inches along the level, then measure straight up to the rafter. That vertical distance is your rise per 12.</li>
+        <li><strong>Phone level:</strong> any "level" or "angle" app on a smartphone, laid flat against the roof surface or a rafter, reads the angle in degrees. Switch this calculator to degrees mode.</li>
+        <li><strong>Don't measure pitch from a ground photo</strong> — perspective distortion makes any visual estimate unreliable. Drone shots from a known altitude work; eyeball estimates from the sidewalk do not.</li>
+      </ol>
+
+      <h2>The X:12 convention explained</h2>
+      <p>
+        Roofers always express pitch as rise per 12 inches of horizontal run. Why 12? Because most roofing measurements (shingle exposure, drip edge, ridge cap) are inch-based and the framing square is graduated to 12. A "6:12 pitch" means: for every 12 inches you move horizontally along the roof, the surface rises 6 inches. The ratio fully describes the slope; degrees and percent slope are derived from it.
+      </p>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor. See <a href="/homelab/methodology/">methodology</a> for the multiplier tables.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>
