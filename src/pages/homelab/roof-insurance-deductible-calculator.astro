@@ -1,0 +1,127 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import InsuranceDeductibleCalculator from '~/components/homelab/InsuranceDeductibleCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Insurance Deductible Calculator — RCV / ACV / Out-of-Pocket | Kefiw';
+const description = 'Calculate your real out-of-pocket on a roof insurance claim: deductible (flat or % of dwelling), depreciation hold-back, RCV vs ACV, code upgrades. Reviewed by a Texas-licensed general contractor with active claim experience.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Roof Insurance Deductible Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/roof-insurance-deductible-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/roof-insurance-deductible-calculator/"
+  keywords={['roof insurance deductible calculator', 'roof claim out of pocket', 'RCV vs ACV calculator', 'percentage deductible Texas', 'depreciation hold back roof']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/roof-insurance-deductible-calculator/', label: 'Roof Insurance Deductible Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Insurance Deductible Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        After the adjuster approves your scope, what do you actually pay? This calculator runs the full math: deductible (flat or percentage of dwelling), depreciation hold-back, RCV vs ACV, and any non-covered code upgrades or betterment items.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <InsuranceDeductibleCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>The four numbers nobody explains in plain English</h2>
+
+      <h3>1. RCV — Replacement Cost Value</h3>
+      <p>
+        What it costs to install the same roof <strong>today, with current materials and labor</strong>. This is what the adjuster's scope is written at. RCV is the headline number you'd see on a bid; it's also the maximum your policy will pay before deductibles and depreciation.
+      </p>
+
+      <h3>2. ACV — Actual Cash Value</h3>
+      <p>
+        RCV minus depreciation. The "what's it worth right now" number. A 15-year-old asphalt roof on a 28-year-life shingle has lost about half its value to depreciation; ACV is roughly half of RCV. <strong>This is what you receive first</strong> on every claim, regardless of policy type.
+      </p>
+
+      <h3>3. Recoverable depreciation</h3>
+      <p>
+        On an <strong>RCV policy</strong>, the depreciation that the carrier withheld initially gets <strong>released after the work is complete</strong>. You submit invoices and proof of completion; carrier cuts a second check. End-state: the carrier paid the full RCV minus your deductible. On an ACV policy, depreciation is never released — that gap is yours.
+      </p>
+
+      <h3>4. Deductible</h3>
+      <p>
+        Your share. Two flavors:
+      </p>
+      <ul>
+        <li><strong>Flat deductible:</strong> $1,000 / $2,500 / $5,000. Common in low-hail / low-wind regions.</li>
+        <li><strong>Percentage of dwelling:</strong> 1% / 2% / 5% of Coverage A. <strong>This is where homeowners get blindsided.</strong> A 2% deductible on $425K dwelling is $8,500 — far more than the $1,000 flat deductible most homeowners remember from their old auto-insurance experience. Texas hail markets and Florida wind zones routinely impose 2–5% deductibles.</li>
+      </ul>
+
+      <h2>The single most important thing to verify on your declarations page</h2>
+      <p>
+        Look for the line that says <strong>"Loss Settlement"</strong> followed by either "Replacement Cost" or "Actual Cash Value." If it says ACV, every claim depreciation gap stays with you. Some carriers auto-convert to ACV at roof age 15 or 20 — and don't always notify the homeowner clearly. <strong>Check this before you have a claim, not during.</strong>
+      </p>
+
+      <h2>Code-upgrade endorsements (Ordinance & Law)</h2>
+      <p>
+        The original roof was installed to the code in effect at the time. Today's code may require: synthetic underlayment (vs felt), ice-and-water shield in valleys, drip edge at all eaves, hurricane straps, or impact-rated shingles in some markets. Insurance pays only what was originally there <strong>unless you carry an Ordinance & Law endorsement</strong> — usually 10% of dwelling coverage, often $30–$80/year. If you don't have it, code upgrades come out of your pocket.
+      </p>
+
+      <h2>The Texas/Florida wrinkle: separate wind/hail deductibles</h2>
+      <p>
+        Many TX and FL policies carry a separate, higher deductible for wind and hail (the most common roof claims) than for other perils. Your "general" deductible might be $1,000 flat, but your wind/hail deductible is 2% of dwelling. The deductible that applies to a roof claim is the wind/hail one — not the flat one you remember signing up for.
+      </p>
+
+      <h2>What gets called "betterment" (and why it comes out of your pocket)</h2>
+      <p>
+        If your old roof was 3-tab and you choose architectural, the upgrade is <strong>betterment</strong> — insurance pays for like-kind-and-quality replacement, you pay the difference. Common betterment items:
+      </p>
+      <ul>
+        <li>Shingle grade upgrade (3-tab → architectural, architectural → designer)</li>
+        <li>Color or profile change requiring scope revision</li>
+        <li>Synthetic underlayment when felt was originally installed (sometimes covered by code endorsement, sometimes not)</li>
+        <li>Aesthetic add-ons: ridge vent upgrades, decorative ridge cap</li>
+      </ul>
+
+      <h2>Don't let the contractor "eat the deductible"</h2>
+      <p>
+        It's <strong>illegal in most states</strong> for a contractor to waive or absorb your deductible — Texas explicitly prohibits it. A contractor who offers to "make the deductible go away" is either committing insurance fraud or inflating their bid by your deductible amount and pocketing the difference. Walk away.
+      </p>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor with active hail and wind claim experience in the Houston market. The math is the math; the policy specifics still come from your declarations page and your adjuster's scope. Use this calculator to set expectations, then verify against your actual paperwork.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

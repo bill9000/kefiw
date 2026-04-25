@@ -26,6 +26,12 @@ const STATIC_ROUTES = [
   '/homelab/roof-pitch-calculator/',
   '/homelab/shingle-bundle-calculator/',
   '/homelab/roof-repair-vs-replacement-calculator/',
+  '/homelab/asphalt-shingle-cost-calculator/',
+  '/homelab/metal-roof-cost-calculator/',
+  '/homelab/new-roof-roi-calculator/',
+  '/homelab/roof-insurance-deductible-calculator/',
+  '/homelab/acv-vs-rcv-calculator/',
+  '/homelab/hail-damage-severity-estimator/',
   '/homelab/methodology/',
   '/homelab/about/',
 ];

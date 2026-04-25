@@ -1,0 +1,114 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Metal Roof Cost Calculator (2026) — Standing Seam vs Exposed Fastener | Kefiw';
+const description = 'Metal roof replacement cost — exposed-fastener corrugated or standing seam. Range-based estimate, $/sqft, financing payment, lifecycle comparison. Reviewed by a Texas-licensed general contractor.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Metal Roof Cost Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/metal-roof-cost-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/metal-roof-cost-calculator/"
+  keywords={['metal roof cost calculator', 'standing seam cost', 'corrugated metal roof cost', 'metal roof per square foot', 'metal vs shingle cost']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/metal-roof-cost-calculator/', label: 'Metal Roof Cost Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Metal Roof Cost Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Metal lasts 2–3× as long as asphalt and earns insurance discounts in hail-prone markets — but installed cost is 2–3× too. This calculator filters the main cost calc to the two metal categories so you can compare standing seam against exposed-fastener corrugated on the same roof.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator
+        client:load
+        defaultMaterialId="metal-standing-seam"
+        materialIds={['metal-exposed', 'metal-standing-seam']}
+      />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>Standing seam vs exposed fastener — the real difference</h2>
+      <h3>Exposed-fastener / corrugated metal</h3>
+      <p>
+        Panels are screwed through the face, with neoprene gaskets sealing each fastener. <strong>$380–$620 per square material, 30–45 year lifespan.</strong> Cheaper to install, faster, lighter on the wallet. The catch: every fastener is a potential leak point. Gaskets harden and crack at 15–20 years; you'll replace some by year 25. Common on barns, agricultural buildings, low-cost residential.
+      </p>
+
+      <h3>Standing seam</h3>
+      <p>
+        Panels lock together at raised seams; clips that hold the panels to the deck are <strong>concealed under the seam</strong>. <strong>$700–$1,100 per square material, 40–60 year lifespan.</strong> No exposed fasteners means no gasket failure; the concealed-clip system also lets the metal expand and contract without backing fasteners out. This is what gets called "metal roofing" by most architects and high-end builders.
+      </p>
+
+      <h2>Total installed cost reality check</h2>
+      <p>
+        On a typical 2,400 sqft, 1-story, 6:12 hip roof in Houston:
+      </p>
+      <ul>
+        <li><strong>Architectural asphalt:</strong> $11–$16K typical range</li>
+        <li><strong>Exposed-fastener metal:</strong> $19–$28K typical range</li>
+        <li><strong>Standing seam:</strong> $28–$45K typical range</li>
+      </ul>
+      <p>
+        Steeper pitch and complex roofs hit metal harder than asphalt — install labor scales worse on metal. A cut-up Victorian with multiple dormers is asphalt territory; metal makes most sense on simpler roof geometry.
+      </p>
+
+      <h2>Where metal earns its premium</h2>
+      <ul>
+        <li><strong>Hail-prone markets.</strong> Class 4 impact-rated metal earns 15–35% insurance discounts in TX/OK. Over 30+ years that often pays for the upgrade.</li>
+        <li><strong>Hurricane / high-wind zones.</strong> Standing seam wind ratings to 140+ mph are routine; asphalt tops out around 130 with upgrades.</li>
+        <li><strong>Long-hold properties.</strong> If you'll own 25+ years, metal's lifecycle math wins. If you're selling in 5, asphalt is the right call.</li>
+        <li><strong>Hot climates with cool-roof pigments.</strong> Reflective metal coatings can drop attic temps 20–30°F. Real but not transformative for energy bills.</li>
+      </ul>
+
+      <h2>Where metal disappoints</h2>
+      <ul>
+        <li><strong>Hail dents.</strong> Metal doesn't fail from hail like asphalt does, but it dents. Cosmetic damage isn't covered by most warranties or by insurance after the install.</li>
+        <li><strong>Noise.</strong> Without proper underlayment + decking, metal is loud in rain. Done right (synthetic underlayment + structural decking + insulation) it's actually quieter than asphalt because the panels damp better. Done wrong, it's a tin roof.</li>
+        <li><strong>Modification cost.</strong> Adding a skylight or solar later is 3× more expensive on metal than on asphalt. Plan penetrations during the install.</li>
+        <li><strong>Aesthetic mismatch.</strong> A standing-seam roof on a traditional Houston ranch doesn't always read right. Drive your neighborhood — if no other home has metal, your resale audience may not value it.</li>
+      </ul>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor. Metal-install labor bands assume specialized crews; a generalist asphalt crew taking on a metal job is a common cause of premature failure.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

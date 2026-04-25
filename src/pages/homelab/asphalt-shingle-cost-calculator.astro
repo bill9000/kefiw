@@ -1,0 +1,110 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Asphalt Shingle Roof Cost Calculator (2026) | Kefiw Home Lab';
+const description = 'Asphalt shingle roof replacement cost — 3-tab, architectural / dimensional, or designer luxury. Range-based estimate, $/sqft, financing, reviewed by a Texas-licensed general contractor.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Asphalt Shingle Roof Cost Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/asphalt-shingle-cost-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/asphalt-shingle-cost-calculator/"
+  keywords={['asphalt shingle cost calculator', 'asphalt roof replacement cost', '3-tab vs architectural shingle cost', 'cost per square asphalt']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/asphalt-shingle-cost-calculator/', label: 'Asphalt Shingle Cost Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Asphalt Shingle Roof Cost Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Asphalt is the most common roofing material in the South — cheap, walkable, fast to install. This calculator is the main cost calc with the material list filtered to just the three asphalt grades, so you can see exactly how 3-tab, architectural, and designer prices compare on the same roof.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator
+        client:load
+        defaultMaterialId="asphalt-architectural"
+        materialIds={['asphalt-3tab', 'asphalt-architectural', 'asphalt-designer']}
+      />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>The three asphalt grades</h2>
+      <h3>3-tab — the budget option</h3>
+      <p>
+        Three-tab shingles are flat strips with cutouts forming three "tabs" per shingle. <strong>$85–$115 per square material, 15–20 year lifespan.</strong> Lightest, cheapest, and increasingly rare in new installs because architectural has gotten cheap enough that the price gap doesn't justify the shorter life. Common on rentals, sheds, and older homes that haven't been re-roofed.
+      </p>
+
+      <h3>Architectural / dimensional — the standard</h3>
+      <p>
+        Heavier shingle with a layered, dimensional look. <strong>$130–$185 per square material, 25–30 year lifespan.</strong> Manufacturer "lifetime" warranties almost always refer to this category (with fine print). This is what 80%+ of new installs use in the South.
+      </p>
+
+      <h3>Designer / luxury — the upgrade</h3>
+      <p>
+        Heavier still — synthetic slate look, shake look, tile-mimic profiles. <strong>$280–$420 per square material, 30–40 year lifespan.</strong> Sold under names like Grand Manor, Camelot, Centennial Slate. Adds curb appeal but doesn't pay back at resale relative to architectural in most markets.
+      </p>
+
+      <h2>What changes the price beyond shingle grade</h2>
+      <p>
+        On a typical 2,400 sqft roof, switching from 3-tab to architectural adds about $1,500. Switching from architectural to designer adds another $4,000–$8,000. Compare that to <strong>tear-off + decking surprise</strong> (often $2,000–$5,000 of variability) and <strong>steep pitch labor uplift</strong> (can be $3,000+ on a 12:12 roof). The shingle SKU isn't usually the biggest line item.
+      </p>
+
+      <h2>What an asphalt bid should include</h2>
+      <ul>
+        <li>The exact shingle line and color (e.g., GAF Timberline HDZ Charcoal, not just "30-year architectural")</li>
+        <li>Synthetic underlayment (not 15# felt — felt is a value-engineering tell)</li>
+        <li>Ice-and-water shield at eaves, valleys, and around penetrations</li>
+        <li>Manufacturer-matched starter strip and ridge cap (not field-cut)</li>
+        <li>Drip edge at all eaves and rakes</li>
+        <li>Manufacturer system warranty registered in your name (not "labor warranty only")</li>
+      </ul>
+
+      <h2>Asphalt vs the alternatives</h2>
+      <p>
+        For homeowners weighing materials: <a href="/homelab/metal-roof-cost-calculator/">metal roof cost</a> is roughly 2–3× asphalt installed but lasts 2× as long. Tile is 3–4× asphalt installed and lasts 4–5× as long, but adds structural-load considerations. In hail-prone TX/OK markets, Class 4 impact-rated asphalt earns insurance discounts that can offset the small premium over standard architectural.
+      </p>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor. Numbers reflect mid-2026 South-region pricing. See <a href="/homelab/methodology/">methodology</a> for the full multiplier tables.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

@@ -31,12 +31,23 @@ const fmtPerSqft = (n: number): string => `$${n.toFixed(2)}`;
 
 interface Props {
   defaultPermitProfileId?: string; // city pages can preset
+  defaultMaterialId?: string;      // material-specific pages can preset
+  materialIds?: string[];          // restrict the material dropdown to these IDs
 }
 
-export default function RoofCalculator({ defaultPermitProfileId = "houston_tx" }: Props): JSX.Element {
+export default function RoofCalculator({
+  defaultPermitProfileId = "houston_tx",
+  defaultMaterialId = "asphalt-architectural",
+  materialIds,
+}: Props): JSX.Element {
+  const allowedMaterials = materialIds && materialIds.length > 0
+    ? MATERIALS.filter((m) => materialIds.includes(m.id))
+    : MATERIALS;
   const [areaMode, setAreaMode] = useState<AreaMode>("home");
   const [areaInput, setAreaInput] = useState<number>(2200);
-  const [materialId, setMaterialId] = useState<string>("asphalt-architectural");
+  const [materialId, setMaterialId] = useState<string>(
+    allowedMaterials.find((m) => m.id === defaultMaterialId)?.id ?? allowedMaterials[0].id,
+  );
   const [pitch, setPitch] = useState<PitchBand>("medium");
   const [stories, setStories] = useState<1 | 2 | 3>(1);
   const [complexity, setComplexity] = useState<ComplexityBand>("standard_hip");
@@ -92,7 +103,7 @@ export default function RoofCalculator({ defaultPermitProfileId = "houston_tx" }
 
         <Field label="Material">
           <select value={materialId} onChange={(e) => setMaterialId(e.target.value)} className="w-full rounded border border-slate-300 px-2 py-1 text-sm">
-            {MATERIALS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
+            {allowedMaterials.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
         </Field>
 

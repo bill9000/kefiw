@@ -1,0 +1,108 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofRoiCalculator from '~/components/homelab/RoofRoiCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'New Roof ROI Calculator — Resale Uplift & Net Cost | Kefiw Home Lab';
+const description = 'How much of your roof replacement cost comes back at sale? ROI calculator estimates resale uplift by sale horizon and market condition. Reviewed by a Texas-licensed general contractor.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'New Roof ROI Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/new-roof-roi-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/new-roof-roi-calculator/"
+  keywords={['new roof ROI', 'roof replacement resale value', 'cost vs value roof', 'does a new roof increase home value', 'pre-listing roof replacement']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/new-roof-roi-calculator/', label: 'New Roof ROI Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">New Roof ROI Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        A new roof is one of the few home upgrades that pays back a meaningful share at sale — but only if the math works for your specific timeline. This calculator estimates resale uplift by sale horizon and market condition, plus what a buyer concession looks like if you skip the replacement.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="ROI calculator" class="mb-8">
+      <RoofRoiCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>The ROI math, honestly</h2>
+      <p>
+        New-roof ROI peaks if you sell within 12 months of the install — typically <strong>55–75%</strong> recoup. By year 3 it's down to <strong>40–60%</strong>. By year 10 it's blended into the home's general condition and you can't isolate it. Long-hold ROI isn't the right frame; the right question becomes "is leak-free ownership worth the difference?" and the answer is almost always yes.
+      </p>
+
+      <h2>Why selling with an aged roof hurts more than replacing</h2>
+      <p>
+        On a roof past 20 years, buyers and inspectors will flag it. Their negotiation move:
+      </p>
+      <ul>
+        <li>Estimate replacement cost (often higher than yours — they assume worst case)</li>
+        <li>Add a margin for unknowns and inconvenience</li>
+        <li>Request that as a price reduction or credit at closing</li>
+      </ul>
+      <p>
+        The result: a $14K roof you could have replaced for cash often becomes a <strong>$20–$25K concession demand</strong> at the closing table. Replacing pre-listing isn't always cheaper, but it's often less stressful — and it removes the most common pre-close negotiation friction in the South.
+      </p>
+
+      <h2>The cases where you should NOT replace pre-listing</h2>
+      <ul>
+        <li><strong>Roof has plenty of life.</strong> If the existing roof is under 60% of expected lifespan, replacing burns money. Repair anything visible, document it, and let the buyer carry the eventual replacement.</li>
+        <li><strong>Hot seller's market.</strong> Multiple-offer markets often forgive an aged roof; competing buyers waive contingencies. A 5-year-old roof on a 1990s house in a 2026 Houston bidding war goes ignored.</li>
+        <li><strong>You can offer a credit.</strong> Some sellers prefer to give buyers a closing credit so the buyer picks the roofer and color. Reduces your cash outlay and time-on-market risk.</li>
+      </ul>
+
+      <h2>The cases where you SHOULD replace pre-listing</h2>
+      <ul>
+        <li><strong>Visible damage.</strong> Curling, missing shingles, granule loss visible from the street. Buyers won't see anything else.</li>
+        <li><strong>Buyer's market.</strong> When concessions are common, an aged roof becomes a 30-day-plus delay while you negotiate. Replacing puts the home in the top quartile of its price band.</li>
+        <li><strong>Insurance won't bind for the buyer.</strong> An old roof can make it hard or expensive for the buyer to get a homeowner's policy. This is a deal-killer in TX/FL when the underwriter declines.</li>
+        <li><strong>Inspection in 30 days.</strong> If you're in option period and the inspector flags the roof, you'll re-negotiate from a weaker position than if you'd replaced before listing.</li>
+      </ul>
+
+      <h2>Material matters less than timing</h2>
+      <p>
+        For pre-listing, architectural asphalt is almost always the right call — buyers pay a premium for "new roof," not for "designer shingle." Save the metal upgrade for a long-hold property where lifecycle math justifies it.
+      </p>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor. Recoup percentages draw on Cost vs Value annual data and observed Houston-market patterns; your local market may vary 5–10 percentage points either way.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,125 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import AcvRcvCalculator from '~/components/homelab/AcvRcvCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'ACV vs RCV Calculator — Roof Depreciation Gap | Kefiw Home Lab';
+const description = 'How much does insurance depreciate your roof? ACV vs RCV calculator shows the depreciation gap by roof age and material, and explains why RCV vs ACV is the most important line on your policy.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'ACV vs RCV Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/acv-vs-rcv-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/acv-vs-rcv-calculator/"
+  keywords={['ACV vs RCV calculator', 'roof depreciation calculator', 'actual cash value roof', 'replacement cost value roof', 'roof insurance depreciation']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/acv-vs-rcv-calculator/', label: 'ACV vs RCV Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">ACV vs RCV Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        The difference between Actual Cash Value and Replacement Cost Value is the most important line on your homeowner's policy — and almost no one reads it. This calculator shows the depreciation gap on your specific roof so you know what your policy type actually means in dollars.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <AcvRcvCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>The line on your policy that matters most</h2>
+      <p>
+        Open your declarations page and find the line that reads <strong>"Loss Settlement"</strong> or <strong>"Settlement Type."</strong> It says one of:
+      </p>
+      <ul>
+        <li><strong>Replacement Cost</strong> (RCV) — carrier pays full cost to replace, minus deductible. This is what most homeowners assume they have.</li>
+        <li><strong>Actual Cash Value</strong> (ACV) — carrier pays depreciated value, minus deductible. The depreciation gap is yours.</li>
+      </ul>
+      <p>
+        On a 15-year-old asphalt roof with a $20K replacement cost, that distinction is roughly <strong>$10,000 of out-of-pocket difference</strong> — same roof, same claim, different word on the declarations page.
+      </p>
+
+      <h2>How depreciation is calculated</h2>
+      <p>
+        Most carriers use a linear depreciation model based on age divided by expected life:
+      </p>
+      <pre class="rounded bg-slate-900 p-3 text-xs text-slate-100"><code>depreciation_pct = min(80%, age / lifespan)
+ACV = RCV × (1 − depreciation_pct)
+gap = RCV − ACV  =  RCV × depreciation_pct</code></pre>
+      <p>
+        Some carriers use a steeper curve (depreciating faster early), or "useful life" tables tied to manufacturer warranty rather than realistic install life. The exact formula can usually be requested from your adjuster.
+      </p>
+
+      <h2>The 80% cap</h2>
+      <p>
+        Most carriers cap depreciation around 80% — even a fully end-of-life roof retains some salvage value (the decking, the structure underneath). This means you'll never see a $0 ACV check, but a 25-year-old asphalt roof can drop to ACV ≈ 20% of RCV.
+      </p>
+
+      <h2>Why aged roofs sometimes get force-converted to ACV at renewal</h2>
+      <p>
+        Some carriers automatically switch your roof from RCV to ACV when it crosses age 15 or 20. The mechanism varies — sometimes a policy endorsement, sometimes a renewal schedule change — and it's <strong>often disclosed only in fine print</strong>. If your roof is past 15 years, call your agent and ask explicitly: "Is my roof on RCV or ACV settlement?" Don't assume the policy you signed up for is still in effect.
+      </p>
+
+      <h2>What you can do about an ACV gap</h2>
+      <ul>
+        <li><strong>Replace before the carrier converts.</strong> If you're at year 14 of an 18-year roof and your carrier has a known ACV-at-15 policy, replacing now keeps you on RCV settlement.</li>
+        <li><strong>Add a Roof Replacement Cost endorsement.</strong> Some carriers offer this as a rider for $50–$150/year. Worth it on roofs aged 10+.</li>
+        <li><strong>Shop around at renewal.</strong> If your current carrier is converting to ACV, get quotes from carriers that still write RCV on aged roofs. Premium may be higher; the difference is usually less than the depreciation gap on a single claim.</li>
+        <li><strong>Self-insure the gap.</strong> If you can't get RCV on this roof, set aside the depreciation amount yourself. Treat it as a forced savings account against the next claim.</li>
+      </ul>
+
+      <h2>Material choice and depreciation</h2>
+      <p>
+        Longer-life materials depreciate slower per year, so they hold more ACV value at any given age:
+      </p>
+      <ul>
+        <li>15-year-old <strong>3-tab asphalt</strong> (18-yr life): ~80% depreciated → ACV ≈ 20% of RCV</li>
+        <li>15-year-old <strong>architectural asphalt</strong> (28-yr life): ~54% depreciated → ACV ≈ 46% of RCV</li>
+        <li>15-year-old <strong>standing seam metal</strong> (50-yr life): ~30% depreciated → ACV ≈ 70% of RCV</li>
+        <li>15-year-old <strong>clay tile</strong> (60-yr life): ~25% depreciated → ACV ≈ 75% of RCV</li>
+      </ul>
+      <p>
+        This is one underrated argument for upgrading material: not just longevity, but better insurance settlement throughout the life.
+      </p>
+
+      <h2>About this calculator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor with active claim experience. Lifespans reflect manufacturer expected life; carrier tables sometimes differ. Use this calculator to set your expectations, then verify against your specific policy and adjuster scope.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

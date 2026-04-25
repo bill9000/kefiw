@@ -26,50 +26,80 @@ const description = 'Roof, gutter, and skin-of-the-house cost calculators review
 
     <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
 
-    <section aria-label="Live tools" class="mt-6">
-      <h2 class="mb-3 text-xl font-semibold text-slate-900">Tools</h2>
+    <section aria-label="Cost calculators" class="mt-6">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">Cost calculators</h2>
       <div class="grid gap-4 md:grid-cols-2">
         <a href="/homelab/roof-replacement-cost-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
-          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Calculator</div>
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Main calculator</div>
           <div class="mt-1 text-base font-semibold text-slate-900">Roof Replacement Cost Calculator</div>
-          <p class="mt-1 text-sm text-slate-600">
-            12 inputs → low/typical/high range, $/sqft, material-vs-labor split, financing estimate, and a "questions to ask roofers" checklist.
-          </p>
+          <p class="mt-1 text-sm text-slate-600">12 inputs → low/typical/high range, $/sqft, material/labor split, financing, and questions to ask each roofer.</p>
+        </a>
+        <a href="/homelab/asphalt-shingle-cost-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Material — asphalt</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Asphalt Shingle Cost Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">3-tab vs architectural vs designer asphalt — cost difference on the same roof.</p>
+        </a>
+        <a href="/homelab/metal-roof-cost-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Material — metal</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Metal Roof Cost Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Standing seam vs exposed-fastener corrugated. Lifecycle math vs asphalt.</p>
+        </a>
+        <a href="/homelab/new-roof-roi-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Resale</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">New Roof ROI Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Estimated resale uplift by sale horizon and market condition.</p>
+        </a>
+      </div>
+    </section>
+
+    <section aria-label="Insurance & claims" class="mt-8">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">Insurance &amp; claims</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <a href="/homelab/roof-insurance-deductible-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Out-of-pocket</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Roof Insurance Deductible Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Flat or % deductible, RCV / ACV path, depreciation hold-back, code upgrades — what you actually pay.</p>
+        </a>
+        <a href="/homelab/acv-vs-rcv-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Depreciation</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">ACV vs RCV Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Depreciation gap on your specific roof. The most important line on your declarations page.</p>
+        </a>
+        <a href="/homelab/hail-damage-severity-estimator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Claim outcome</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Hail Damage Severity Estimator</div>
+          <p class="mt-1 text-sm text-slate-600">Will the claim approve full-scope, partial, or get denied? What adjusters look for.</p>
         </a>
         <a href="/homelab/roof-repair-vs-replacement-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
           <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Decision tool</div>
           <div class="mt-1 text-base font-semibold text-slate-900">Roof Repair vs Replacement</div>
-          <p class="mt-1 text-sm text-slate-600">
-            Should you patch the damage or replace the whole roof? Weighs age, damage extent, leak history, sale horizon, and insurance.
-          </p>
+          <p class="mt-1 text-sm text-slate-600">Patch the damage or replace the whole roof? Weighs age, damage, leaks, sale horizon, insurance.</p>
         </a>
+      </div>
+    </section>
+
+    <section aria-label="Measurement & materials" class="mt-8">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">Measurement &amp; materials</h2>
+      <div class="grid gap-4 md:grid-cols-2">
         <a href="/homelab/roof-square-footage-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
           <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Measurement</div>
           <div class="mt-1 text-base font-semibold text-slate-900">Roof Square Footage Calculator</div>
-          <p class="mt-1 text-sm text-slate-600">
-            Estimate roof surface area from home sqft + pitch, footprint + pitch, or direct ridge × eave measurements.
-          </p>
+          <p class="mt-1 text-sm text-slate-600">Roof surface area from home sqft + pitch, footprint + pitch, or direct ridge × eave.</p>
         </a>
         <a href="/homelab/roof-pitch-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
           <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Geometry</div>
           <div class="mt-1 text-base font-semibold text-slate-900">Roof Pitch Calculator</div>
-          <p class="mt-1 text-sm text-slate-600">
-            Convert between rise:run, degrees, and slope %. Get the area multiplier and walkability category.
-          </p>
+          <p class="mt-1 text-sm text-slate-600">Rise:run ↔ degrees ↔ slope %. Area multiplier and walkability category.</p>
         </a>
         <a href="/homelab/shingle-bundle-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
           <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Materials</div>
           <div class="mt-1 text-base font-semibold text-slate-900">Shingle Bundle Calculator</div>
-          <p class="mt-1 text-sm text-slate-600">
-            Field shingles, ridge cap, and starter strip — the three bundle counts that get under-ordered separately.
-          </p>
+          <p class="mt-1 text-sm text-slate-600">Field, ridge cap, and starter strip — the three counts that get under-ordered.</p>
         </a>
         <a href="/homelab/methodology/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
           <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Reference</div>
           <div class="mt-1 text-base font-semibold text-slate-900">Methodology</div>
-          <p class="mt-1 text-sm text-slate-600">
-            How estimates are calculated, what's included and excluded, why prices vary, and why you still need contractor quotes.
-          </p>
+          <p class="mt-1 text-sm text-slate-600">How estimates are calculated, what's included and excluded.</p>
         </a>
       </div>
     </section>
@@ -77,12 +107,11 @@ const description = 'Roof, gutter, and skin-of-the-house cost calculators review
     <section aria-label="Coming next" class="mt-8">
       <h2 class="mb-3 text-xl font-semibold text-slate-900">Coming next</h2>
       <ul class="grid gap-2 text-sm text-slate-700 md:grid-cols-2">
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Asphalt Shingle Cost Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Metal Roof Cost Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">New Roof ROI Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Roof Insurance Deductible Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">ACV vs RCV Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Hail Damage Severity Estimator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Tile Roof Cost Calculator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Underlayment Calculator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Drip Edge Linear-Feet Calculator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Attic Ventilation Calculator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Decking Replacement Calculator</li>
         <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Roof Replacement Cost in Houston / Dallas / Austin / Atlanta / Tampa</li>
       </ul>
     </section>

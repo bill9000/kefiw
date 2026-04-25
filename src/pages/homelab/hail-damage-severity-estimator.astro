@@ -1,0 +1,139 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import HailDamageEstimator from '~/components/homelab/HailDamageEstimator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Hail Damage Severity Estimator — Will My Claim Approve? | Kefiw';
+const description = 'Estimate whether your hail damage claim will likely approve full-scope, partial, or be denied. Inputs: hail size, roof age, material, exposure. Reviewed by a Texas GC with active hail-claim experience.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Hail Damage Severity Estimator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/hail-damage-severity-estimator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/hail-damage-severity-estimator/"
+  keywords={['hail damage roof claim', 'will insurance cover hail damage', 'hail size roof damage chart', 'how adjusters look for hail damage', 'class 4 shingle hail']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/hail-damage-severity-estimator/', label: 'Hail Damage Severity Estimator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Hail Damage Severity Estimator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        After a hailstorm, the question that matters: will my claim approve a full replacement, a partial scope, or get denied? This estimator uses hail size, roof age, material, and exposure to set realistic expectations before you talk to the adjuster.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Estimator" class="mb-8">
+      <HailDamageEstimator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>What size hail actually does damage</h2>
+      <p>
+        Pea-sized and marble-sized hail rarely does claimable damage — granule loss is normal weathering. The threshold for material damage to standard architectural asphalt is about <strong>1″ (quarter-sized)</strong> hail. Below that, adjusters typically deny. Above that, severity scales fast:
+      </p>
+      <ul>
+        <li><strong>1″ to 1.5″ (quarter to half-dollar):</strong> bruising and granule loss likely. Marginal claim — strong scope from a public adjuster or impact-letter from a roofer often makes the difference.</li>
+        <li><strong>1.5″ to 2″ (half-dollar to golf ball):</strong> mat fracture likely. Most carriers approve full slope or full roof.</li>
+        <li><strong>2″+ (golf ball+):</strong> structural damage likely. Adjuster usually approves full replacement plus gutters and downspouts.</li>
+      </ul>
+
+      <h2>What an adjuster actually looks for on asphalt</h2>
+      <p>
+        Adjusters are trained to find <strong>spatter</strong> (impact patterns), <strong>granule loss</strong> exposing the asphalt mat, <strong>bruising</strong> (soft spots when pressed), and <strong>mat fracture</strong> (visible cracks). They look at four corroborating sites:
+      </p>
+      <ol>
+        <li><strong>Roof itself</strong> — chalk-line a 10×10 test square and count damage points.</li>
+        <li><strong>Metal flashing</strong> — dents on flashing prove hail size and direction.</li>
+        <li><strong>Gutters and downspouts</strong> — spatter on gutter tops, dents on downspouts.</li>
+        <li><strong>Soft metal around the property</strong> — A/C fins, mailbox tops, fence post caps.</li>
+      </ol>
+      <p>
+        If your gutters are dented and your A/C condenser fins are spattered, the adjuster has external evidence even before the roof inspection. Don't replace these things before the adjuster sees them.
+      </p>
+
+      <h2>Cosmetic damage exclusions on metal</h2>
+      <p>
+        Most metal-roof policies have a <strong>cosmetic damage exclusion</strong> — the carrier won't pay for dents that don't affect roof function. Hail can dent metal extensively without compromising water-shed performance, and the exclusion lets carriers deny what looks like obvious damage. Read your policy's <strong>cosmetic damage clause</strong> before assuming a metal-roof hail claim will pay.
+      </p>
+
+      <h2>Why older roofs make weaker claims</h2>
+      <p>
+        Counterintuitively, an older asphalt roof is <em>easier</em> to damage but <em>harder</em> to claim. Adjusters see weathered, granule-thinned shingles and call it "wear and tear" — not hail damage. Strong claim documentation on aged roofs requires:
+      </p>
+      <ul>
+        <li>NWS storm-confirmation report for your specific ZIP</li>
+        <li>Photos taken within 30 days of the storm (not weeks later)</li>
+        <li>Independent inspection from a roofer (separate from any adjuster)</li>
+        <li>Pre-storm photos if you have them (Google Street View dates work)</li>
+      </ul>
+
+      <h2>Class 4 impact-rated shingles</h2>
+      <p>
+        Texas hail markets reward Class 4 (FM 4470 / UL 2218 Class IV) impact-rated shingles with insurance discounts of <strong>15–35%</strong>. They cost $20–$40 more per square installed and survive larger hail without claim-grade damage. The math:
+      </p>
+      <ul>
+        <li>$1,500 premium on installation</li>
+        <li>$300–$700/year insurance savings (at typical Houston premium levels)</li>
+        <li>Payback in 2–4 years</li>
+        <li>Plus avoided claims (and deductibles) in future hail events</li>
+      </ul>
+
+      <h2>The 30-day rule</h2>
+      <p>
+        File a claim within <strong>30 days of the event</strong> if at all possible. Some carriers reject claims filed later as "couldn't verify timing." All carriers require notice within 12 months in most states. Don't wait for a roofer's inspection to file — file based on the storm event, then schedule the inspection.
+      </p>
+
+      <h2>Roofer chases and storm-chasers</h2>
+      <p>
+        After a major hail event, out-of-town roofing crews descend on affected ZIPs. Some are legitimate; many are storm-chasers who:
+      </p>
+      <ul>
+        <li>Pressure homeowners to file claims for marginal damage</li>
+        <li>Inflate claim scopes</li>
+        <li>Disappear if work warranty issues arise</li>
+      </ul>
+      <p>
+        Hire a <strong>locally-licensed contractor</strong> who carries proper insurance and was operating in your market before the storm. A simple test: ask for a current TX state contractor license number and verify on the state board's site before signing.
+      </p>
+
+      <h2>About this estimator</h2>
+      <p>
+        Reviewed by Eurocraft, a Texas-licensed general contractor with active hail-claim experience in the Houston market. The severity score is a heuristic, not a guarantee — every claim turns on documentation and adjuster judgment. Use this tool to set expectations before you file, then file anyway if the storm event was real.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>
