@@ -14,20 +14,36 @@ const MODE_OPTIONS: readonly { value: Mode; label: string }[] = [
   { value: 'full', label: 'Full list' },
 ];
 
+// Solver mode — "standard" is single-word anagram (what we had), "phrase"
+// splits into 2-word phrases, "near" allows ±1 letter from the input.
+type SolverMode = 'standard' | 'phrase' | 'near';
+
+interface NearHit { word: string; kind: 'one-less' | 'one-more' }
+
 export default function AnagramSolver() {
   const { send } = useWordWorker();
   const [mode, setMode] = useToolSetting<Mode>('kefiw.mode.anagram', 'fast');
   const [showScores, setShowScores] = useToolBool('kefiw.scores.anagram', true);
   const [letters, setLetters] = useState('');
   const [exact, setExact] = useState(false);
+  const [solverMode, setSolverMode] = useState<SolverMode>('standard');
   const [results, setResults] = useState<string[]>([]);
+  const [phrasePairs, setPhrasePairs] = useState<Array<[string, string]>>([]);
+  const [nearHits, setNearHits] = useState<NearHit[]>([]);
   const [fellBack, setFellBack] = useState(false);
   const [phase, setPhase] = useState<'idle' | 'loading' | 'searching'>('idle');
   const loadedSources = useRef(new Set<string>());
 
   useEffect(() => {
     const v = letters.replace(/\s/g, '');
-    if (!v) { setResults([]); setFellBack(false); setPhase('idle'); return; }
+    if (!v) {
+      setResults([]);
+      setPhrasePairs([]);
+      setNearHits([]);
+      setFellBack(false);
+      setPhase('idle');
+      return;
+    }
     const firstTime = !loadedSources.current.has(mode);
     setPhase(firstTime ? 'loading' : 'searching');
     const t = setTimeout(async () => {
@@ -38,19 +54,35 @@ export default function AnagramSolver() {
         track('dict_loaded', { source: mode, ms: Math.round(performance.now() - t0) });
         setPhase('searching');
       }
-      const { results } = await send<{ results: string[] }>('anagrams', { letters: v, exact, dictSource: mode });
-      const filtered = results.filter((w) => w.length >= 3);
-      if (filtered.length > 0) {
-        setResults(filtered);
+      if (solverMode === 'phrase') {
+        const { results } = await send<{ results: Array<[string, string]> }>('phraseAnagram', { letters: v, dictSource: mode, minWordLen: 3 });
+        setPhrasePairs(results);
+        setResults([]);
+        setNearHits([]);
+        setFellBack(false);
+      } else if (solverMode === 'near') {
+        const { results } = await send<{ results: NearHit[] }>('nearAnagram', { letters: v, dictSource: mode, minLen: 3 });
+        setNearHits(results);
+        setResults([]);
+        setPhrasePairs([]);
         setFellBack(false);
       } else {
-        setResults(results);
-        setFellBack(results.length > 0);
+        const { results } = await send<{ results: string[] }>('anagrams', { letters: v, exact, dictSource: mode });
+        const filtered = results.filter((w) => w.length >= 3);
+        if (filtered.length > 0) {
+          setResults(filtered);
+          setFellBack(false);
+        } else {
+          setResults(results);
+          setFellBack(results.length > 0);
+        }
+        setPhrasePairs([]);
+        setNearHits([]);
       }
       setPhase('idle');
     }, 100);
     return () => clearTimeout(t);
-  }, [letters, exact, mode, send]);
+  }, [letters, exact, mode, solverMode, send]);
 
   return (
     <div className="space-y-4">
@@ -86,10 +118,17 @@ export default function AnagramSolver() {
         );
       })()}
       <div className="flex flex-wrap gap-2">
-        <button type="button" className={`btn ${exact ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setExact(true)}>All letters</button>
-        <button type="button" className={`btn ${!exact ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setExact(false)}>Any letters</button>
+        <button type="button" className={`btn ${solverMode === 'standard' ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setSolverMode('standard')}>Standard</button>
+        <button type="button" className={`btn ${solverMode === 'phrase' ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setSolverMode('phrase')}>Phrase (2-word)</button>
+        <button type="button" className={`btn ${solverMode === 'near' ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setSolverMode('near')}>Near (±1 letter)</button>
         <button type="button" className="btn-ghost ml-auto" onClick={() => setLetters('')} disabled={!letters}>Reset</button>
       </div>
+      {solverMode === 'standard' && (
+        <div className="flex flex-wrap gap-2">
+          <button type="button" className={`btn ${exact ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setExact(true)}>All letters</button>
+          <button type="button" className={`btn ${!exact ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-900'}`} onClick={() => setExact(false)}>Any letters</button>
+        </div>
+      )}
       <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
         <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
           checked={showScores} onChange={(e) => setShowScores(e.target.checked)} />
@@ -100,7 +139,67 @@ export default function AnagramSolver() {
           No 3+ letter matches — showing 2-letter words instead.
         </p>
       )}
-      {phase === 'idle' && results.length > 0 && (() => {
+      {solverMode === 'phrase' && phase === 'idle' && phrasePairs.length > 0 && (
+        <div>
+          <div className="mb-2 text-sm text-slate-600">{phrasePairs.length} two-word phrase{phrasePairs.length === 1 ? '' : 's'} that use every letter exactly once</div>
+          <div className="overflow-x-auto rounded-md border border-slate-200">
+            <table className="w-full text-sm">
+              <thead className="bg-slate-50 text-left text-xs uppercase text-slate-500">
+                <tr>
+                  <th className="p-2">Word 1</th>
+                  <th className="p-2">Word 2</th>
+                  <th className="p-2 text-right">Total len</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {phrasePairs.map(([a, b], i) => (
+                  <tr key={`${a}|${b}|${i}`} className="hover:bg-slate-50">
+                    <td className="p-2 font-mono">{a.toUpperCase()}</td>
+                    <td className="p-2 font-mono">{b.toUpperCase()}</td>
+                    <td className="p-2 text-right text-slate-600">{a.length + b.length}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+      {solverMode === 'phrase' && phase === 'idle' && phrasePairs.length === 0 && letters && (
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+          No two-word phrase uses exactly these letters (minimum 3 letters per word).
+        </div>
+      )}
+      {solverMode === 'near' && phase === 'idle' && nearHits.length > 0 && (() => {
+        const less = nearHits.filter((h) => h.kind === 'one-less');
+        const more = nearHits.filter((h) => h.kind === 'one-more');
+        return (
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">One letter removed ({less.length})</div>
+              <div className="rounded-md border border-slate-200 bg-white p-2 text-sm">
+                {less.length === 0
+                  ? <span className="text-slate-400">None</span>
+                  : <div className="flex flex-wrap gap-1.5">
+                      {less.map((h) => <span key={h.word} className="rounded bg-slate-100 px-2 py-0.5 font-mono text-slate-800">{h.word.toUpperCase()}</span>)}
+                    </div>
+                }
+              </div>
+            </div>
+            <div>
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">One letter added ({more.length})</div>
+              <div className="rounded-md border border-slate-200 bg-white p-2 text-sm">
+                {more.length === 0
+                  ? <span className="text-slate-400">None</span>
+                  : <div className="flex flex-wrap gap-1.5">
+                      {more.map((h) => <span key={h.word} className="rounded bg-slate-100 px-2 py-0.5 font-mono text-slate-800">{h.word.toUpperCase()}</span>)}
+                    </div>
+                }
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+      {solverMode === 'standard' && phase === 'idle' && results.length > 0 && (() => {
         const s = wordStats(results);
         const byLen = countByLengthTopN(s.byLength, 4);
         const cards: MaybeCard[] = [
@@ -130,15 +229,20 @@ export default function AnagramSolver() {
         ];
         return <OutcomeLayer cards={cards} />;
       })()}
-      <ResultList
-        words={results}
-        loading={phase !== 'idle'}
-        group={showScores ? undefined : 'length'}
-        scores={showScores}
-        tool="anagram"
-        loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
-        emptyLabel="Enter a word to see its anagrams."
-      />
+      {solverMode === 'standard' && (
+        <ResultList
+          words={results}
+          loading={phase !== 'idle'}
+          group={showScores ? undefined : 'length'}
+          scores={showScores}
+          tool="anagram"
+          loadingLabel={phase === 'loading' ? 'Loading word list…' : 'Searching…'}
+          emptyLabel="Enter a word to see its anagrams."
+        />
+      )}
+      {phase !== 'idle' && solverMode !== 'standard' && (
+        <div className="text-sm text-slate-500">{phase === 'loading' ? 'Loading word list…' : 'Searching…'}</div>
+      )}
     </div>
   );
 }
