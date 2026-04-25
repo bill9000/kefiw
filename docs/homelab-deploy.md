@@ -4,25 +4,28 @@
 
 `homelab.kefiw.com` should 301 to `kefiw.com/homelab/` so both URLs resolve to the same canonical content with no duplicate-content split.
 
-### Cloudflare DNS
+The redirect is handled by **Cloudflare Pages `_redirects`** (in `public/_redirects`) so the rule lives in the repo and deploys with the build. Wrangler does not manage Redirect Rules / Bulk Redirects directly — those are zone-level features. The Pages `_redirects` approach is cleaner because it's version-controlled.
 
-In the Cloudflare dashboard for `kefiw.com`:
+### One-time dashboard step: attach the subdomain to the Pages project
 
-1. **DNS → Records** → add a CNAME or A record for `homelab` pointing to the same target as `www` (or whatever the apex/Pages target is). Set proxy status to **Proxied** (orange cloud).
+Wrangler does not have a first-class CLI command for Pages custom domains, so this part is dashboard-only:
 
-### Cloudflare Bulk Redirects (preferred — works at the edge, no DNS round-trip)
+1. Cloudflare dashboard → **Workers & Pages** → select the kefiw Pages project.
+2. **Custom domains** → **Set up a custom domain** → enter `homelab.kefiw.com`.
+3. Cloudflare auto-creates the CNAME record on `kefiw.com`. Approve.
+4. Wait until status shows **Active** (usually under a minute, can take up to a few minutes).
 
-1. **Rules → Redirect Rules → Create rule** (or **Bulk Redirects** if using the list-based UI).
-2. Name: `homelab subdomain to subdir`
-3. When incoming requests match: **custom filter expression**
-   ```
-   (http.host eq "homelab.kefiw.com")
-   ```
-4. Then: **Static redirect**
-   - Type: **301 (Permanent)**
-   - URL: `concat("https://kefiw.com/homelab", http.request.uri.path)`
-   - Preserve query string: **on**
-5. Deploy.
+(API alternative if you want to script it: `POST /accounts/{account_id}/pages/projects/{project_name}/domains` with `{"name":"homelab.kefiw.com"}` — same effect, no wrangler subcommand wraps it as of wrangler 4.x.)
+
+### The redirect rule itself
+
+`public/_redirects` already contains:
+
+```
+https://homelab.kefiw.com/* https://kefiw.com/homelab/:splat 301!
+```
+
+This deploys with the next Pages build. No further action needed once the custom domain is attached.
 
 ### Verify
 
