@@ -42,3 +42,9 @@
 /guides/what-is-sarcopenia-guard/     /guides/what-is-mass-retention-guard/  301
 /guides/what-is-weight-trajectory/    /guides/what-is-mass-trajectory/       301
 /guides/what-is-peptide-degradation/  /guides/what-is-vector-decay/          301
+
+# Home Lab subdomain alias → canonical subdir on the apex (Apr 2026).
+# kefiw.com/homelab/ is the canonical content; homelab.kefiw.com is a memorable
+# alias that 301s through to it. Requires homelab.kefiw.com to be attached as a
+# custom domain on the Pages project (one-time dashboard step).
+https://homelab.kefiw.com/* https://kefiw.com/homelab/:splat 301!
