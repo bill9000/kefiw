@@ -1,0 +1,71 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+const title = 'Kefiw Home Lab — Honest home-improvement cost calculators';
+const description = 'Roof, gutter, and skin-of-the-house cost calculators reviewed by a Texas-licensed general contractor. Range-based estimates, transparent methodology, no fake precision.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/"
+  keywords={["home improvement cost", "roof cost calculator", "general contractor reviewed"]}
+>
+  <HomelabBand active="home" />
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/homelab/', label: 'Home Lab' }]} />
+  <article class="container-wide py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Kefiw Home Lab</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Honest home-improvement cost calculators reviewed by a working Texas-licensed general contractor.
+        Range-based estimates, transparent methodology, no fake precision — built so a homeowner can sanity-check a roofer's bid.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <section aria-label="Live tools" class="mt-6">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">Tools</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <a href="/homelab/roof-replacement-cost-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Calculator</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Roof Replacement Cost Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">
+            12 inputs (sqft, material, pitch, stories, tear-off, decking risk, complexity, penetrations, permit, warranty, insurance) → low/typical/high range, $/sqft, material-vs-labor split, financing estimate, and a "questions to ask roofers" checklist.
+          </p>
+        </a>
+        <a href="/homelab/methodology/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Reference</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Methodology</div>
+          <p class="mt-1 text-sm text-slate-600">
+            How estimates are calculated, what's included and excluded, why prices vary, and why you still need contractor quotes.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <section aria-label="Coming next" class="mt-8">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">Coming next</h2>
+      <ul class="grid gap-2 text-sm text-slate-700 md:grid-cols-2">
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Roof Square Footage Calculator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Roof Pitch Calculator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Asphalt vs Metal — Cost by Climate Zone</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Roof Insurance Deductible Calculator</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Hail Damage Roof Cost Guide</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Roof Replacement Cost in Houston / Dallas / Austin / Atlanta / Tampa</li>
+      </ul>
+    </section>
+
+    <section aria-label="Why us" class="mt-8 rounded-md border border-slate-200 bg-white p-4">
+      <h2 class="mb-2 text-xl font-semibold text-slate-900">Why this differs from generic cost calculators</h2>
+      <ul class="space-y-2 text-sm text-slate-700">
+        <li><strong>Reviewed by a working contractor</strong>, not aggregated AI rewrites. Eurocraft is a Texas-licensed general contractor with hands-on insurance-claim experience.</li>
+        <li><strong>Range-based outputs.</strong> A bid in a single dollar number is wrong by definition. Our typical range is what a properly-scoped quote should land in.</li>
+        <li><strong>Decking surprise is modeled.</strong> Most calculators ignore the rotted decking that's only found after tear-off — we surface it as a risk-weighted line.</li>
+        <li><strong>No lead-gen forms, no contractor matching, no tracked phone numbers.</strong> Just the calculator and the math.</li>
+      </ul>
+    </section>
+  </article>
+</BaseLayout>

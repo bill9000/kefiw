@@ -1,0 +1,84 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+const title = 'About Kefiw Home Lab — Editorial credentials & policy | Kefiw';
+const description = 'Kefiw Home Lab is reviewed by Eurocraft, a Texas-licensed general contractor in Houston. Editorial policy, conflict-of-interest disclosure, and how cost data is sourced.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/about/"
+>
+  <HomelabBand active="about" />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/about/', label: 'About' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">About the Home Lab</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Editorial credentials, policy, and conflict-of-interest disclosure for the Kefiw Home Lab.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <section class="prose-tool max-w-3xl">
+      <h2>Who reviews this content</h2>
+      <p>
+        Cost data and contractor-side guidance is reviewed by <strong>Eurocraft</strong>, a licensed Texas general contractor working primarily in the Houston market.
+        Eurocraft has direct, current experience with roof replacements, insurance-claim work, decking and structural repairs,
+        and the day-to-day economics of a working crew.
+      </p>
+      <p>
+        License verification, insurance information, and project portfolio are available at the company website:
+        <a href="https://eurocrafttx.com" rel="external noopener" class="font-semibold underline">eurocrafttx.com</a>.
+      </p>
+
+      <h2>Editorial policy</h2>
+      <ul>
+        <li>Eurocraft <strong>does not solicit business</strong> through this site. There are no quote forms, lead capture, or referral incentives on Home Lab pages.</li>
+        <li>Eurocraft <strong>does not take payment</strong> for content placement, mention of products, or favorable treatment of any contractor, manufacturer, or material brand.</li>
+        <li>Cost data is reviewed quarterly and updated with a visible "last updated" date on every calculator and methodology page.</li>
+        <li>Where a calculator could mislead — e.g., presenting a single dollar number that pretends to be precise — we deliberately use a <strong>range</strong> instead, with the spread reflecting genuine variation in honest bids.</li>
+        <li>Material brand mentions are illustrative of grade categories, not endorsements.</li>
+      </ul>
+
+      <h2>How cost numbers are set</h2>
+      <p>
+        Material per-square ranges come from current South-region distributor pricing across the asphalt, metal, and tile categories.
+        Labor per-square ranges come from working-crew economics — lead, installers, helper, overhead — in the Houston market.
+        Permit and dump fees come from current municipal fee schedules and recent Eurocraft permit pulls.
+        Regional multipliers reflect relative labor wages and delivery costs vs the Houston baseline.
+      </p>
+      <p>
+        See <a href="/homelab/methodology/">methodology</a> for the full formula, multiplier tables, and what's included or excluded.
+      </p>
+
+      <h2>What this site is not</h2>
+      <ul>
+        <li>It is not a contractor directory or matching service.</li>
+        <li>It is not a quote — only a contractor on your roof can produce a quote.</li>
+        <li>It is not a substitute for getting three real bids and comparing them line-by-line.</li>
+        <li>It is not legal or insurance advice; insurance-claim guidance is general orientation, not policy interpretation.</li>
+      </ul>
+
+      <h2>Monetization</h2>
+      <p>
+        Home Lab pages display contextual advertising. Ads are served programmatically and are not selected, endorsed, or reviewed by Eurocraft.
+        We do not run any contractor-lead-generation, sponsored-listing, or referral-fee programs on this section of the site.
+      </p>
+
+      <h2>Corrections</h2>
+      <p>
+        If you spot a calculation error, an out-of-date number, or a region multiplier that doesn't match what you're seeing on real bids,
+        write to <a href="/contact/">contact</a>. Corrections are tracked with a visible update date on the methodology page.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

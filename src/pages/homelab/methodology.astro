@@ -1,0 +1,172 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import { COST_ENGINE_VERSION, COST_ENGINE_UPDATED, MATERIALS, PITCH_LABOR_MULT, COMPLEXITY_LABOR_MULT, PERMIT_PROFILES, REGION_MULT } from '~/lib/homelab/roof-cost-engine';
+const title = 'Home Lab Cost Methodology — How estimates are calculated | Kefiw';
+const description = 'Transparent methodology for the Kefiw Home Lab cost calculators: data sources, formulas, region multipliers, and what is intentionally excluded. Reviewed by a Texas-licensed general contractor.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/methodology/"
+>
+  <HomelabBand active="methodology" />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/methodology/', label: 'Methodology' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Methodology</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        How the Home Lab roof-cost calculator produces its low/typical/high range, what's included and excluded, and why two homes on the same street legitimately get different quotes.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <section class="prose-tool max-w-3xl">
+      <p class="text-xs text-slate-500">
+        Cost engine version <code>{COST_ENGINE_VERSION}</code> · last updated <strong>{COST_ENGINE_UPDATED}</strong>.
+      </p>
+
+      <h2>Data sources</h2>
+      <ul>
+        <li><strong>Material cost per square.</strong> Set from current South-region distributor pricing for each material grade. Brackets brand and warranty-tier variation within the band.</li>
+        <li><strong>Labor cost per square.</strong> Set from working-crew bid-day economics in the Houston market: lead, two installers, helper, plus overhead. Specialty crews (metal, tile) carry their own band.</li>
+        <li><strong>Tear-off and dump fees.</strong> Per-square pricing reflects current Texas/Gulf-region landfill tipping fees and crew time per layer.</li>
+        <li><strong>Decking replacement.</strong> Per-square-foot pricing reflects 7/16″ OSB or 1/2″ plywood at current lumber-yard pricing plus install labor.</li>
+        <li><strong>Permit and dump-fee profiles.</strong> City-level permit ranges set from published municipal fee schedules and recent Eurocraft pulls. HVHZ markets (Miami) carry a structural-review and inspection premium.</li>
+        <li><strong>Regional multipliers.</strong> Applied to the subtotal. Reflects relative labor wages and material-delivery costs vs the Houston baseline.</li>
+      </ul>
+
+      <h2>Formula</h2>
+      <p>The total range is built piece by piece, then a region multiplier is applied:</p>
+      <pre class="rounded bg-slate-900 p-3 text-xs text-slate-100 overflow-x-auto"><code>squares = roof_sqft / 100
+
+material      = squares × material_$/sq
+labor         = squares × labor_$/sq × pitch_mult × story_mult × complexity_mult
+tear_off      = squares × tearoff_$/sq × layers
+decking       = roof_sqft × risk_share × decking_$/sqft
+penetrations  = count × $/penetration
+permit        = jurisdiction-specific flat range
+warranty_add  = (subtotal_ex_permit) × (warranty_mult − 1)
+
+subtotal      = material + labor + tear_off + decking + penetrations + warranty_add + permit
+total         = subtotal × region_mult</code></pre>
+      <p>
+        Each line carries a low and a high. The headline range is the sum of lows × region.low through sum of highs × region.high.
+        Typical is the midpoint — not the most-likely outcome, just the math midpoint. Most legitimate bids will land inside the range; bids well outside it deserve a question.
+      </p>
+
+      <h2>Pitch labor multipliers</h2>
+      <table class="text-sm">
+        <thead><tr><th>Pitch band</th><th>Low</th><th>High</th></tr></thead>
+        <tbody>
+        {Object.entries(PITCH_LABOR_MULT).map(([_, v]) => (
+          <tr><td>{v.label}</td><td>×{v.low.toFixed(2)}</td><td>×{v.high.toFixed(2)}</td></tr>
+        ))}
+        </tbody>
+      </table>
+
+      <h2>Complexity labor multipliers</h2>
+      <table class="text-sm">
+        <thead><tr><th>Complexity</th><th>Low</th><th>High</th></tr></thead>
+        <tbody>
+        {Object.entries(COMPLEXITY_LABOR_MULT).map(([_, v]) => (
+          <tr><td>{v.label}</td><td>×{v.low.toFixed(2)}</td><td>×{v.high.toFixed(2)}</td></tr>
+        ))}
+        </tbody>
+      </table>
+
+      <h2>Material catalog</h2>
+      <table class="text-sm">
+        <thead><tr><th>Material</th><th>Material $/sq</th><th>Labor $/sq</th><th>Lifespan</th></tr></thead>
+        <tbody>
+        {MATERIALS.map((m) => (
+          <tr>
+            <td>{m.label}</td>
+            <td>${m.matLowPerSq}–${m.matHighPerSq}</td>
+            <td>${m.laborLowPerSq}–${m.laborHighPerSq}</td>
+            <td>{m.lifespanLow}–{m.lifespanHigh} yr</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+
+      <h2>Permit jurisdictions</h2>
+      <table class="text-sm">
+        <thead><tr><th>Jurisdiction</th><th>Permit + dump fees</th></tr></thead>
+        <tbody>
+        {PERMIT_PROFILES.map((p) => (
+          <tr><td>{p.label}</td><td>${p.permitLow}–${p.permitHigh}</td></tr>
+        ))}
+        </tbody>
+      </table>
+
+      <h2>Regional multipliers (vs Houston baseline)</h2>
+      <table class="text-sm">
+        <thead><tr><th>Region</th><th>Low</th><th>High</th></tr></thead>
+        <tbody>
+        {Object.entries(REGION_MULT).map(([_, v]) => (
+          <tr><td>{v.label}</td><td>×{v.low.toFixed(2)}</td><td>×{v.high.toFixed(2)}</td></tr>
+        ))}
+        </tbody>
+      </table>
+
+      <h2>What's included</h2>
+      <ul>
+        <li>All material with normal waste factor</li>
+        <li>Labor for tear-off, decking-rot replacement (probabilistic), install, cleanup</li>
+        <li>Underlayment, starter, drip edge, ridge cap as part of material $/sq</li>
+        <li>Standard flashing replacement at penetrations</li>
+        <li>Permit and disposal fees</li>
+        <li>Workmanship-warranty premium when selected</li>
+      </ul>
+
+      <h2>What's intentionally excluded</h2>
+      <ul>
+        <li>Skylight replacement (use a separate skylight calculator)</li>
+        <li>Gutter and downspout replacement</li>
+        <li>Solar panel removal and reinstall</li>
+        <li>Structural repairs beyond decking-sheet replacement (truss work, ridge beam)</li>
+        <li>Sales tax and financing interest</li>
+        <li>Code upgrades beyond ordinary current-code install (separate line item in real bids)</li>
+      </ul>
+
+      <h2>Why prices vary so much</h2>
+      <p>
+        Two homes with identical floor plans on the same block can legitimately get bids 30–40% apart.
+        The big drivers, in order: <strong>access</strong> (steep pitch + 2-stories + tight lot raises labor),
+        <strong>decking surprise</strong> (older homes or any prior leak history),
+        <strong>complexity</strong> (dormers, valleys, multiple gables stack up),
+        <strong>material grade within a category</strong> (architectural shingles span $130–$185 per square),
+        and <strong>contractor overhead</strong> (a roofer with proper insurance, workers' comp, and a real warranty
+        program costs more than a one-truck operation — and is worth it).
+      </p>
+
+      <h2>Why we still ask you to get contractor quotes</h2>
+      <p>
+        A precise number requires three things this calculator cannot provide:
+      </p>
+      <ul>
+        <li>A measurement of your specific roof (drone or hand-measured)</li>
+        <li>A decking inspection (often only possible during tear-off)</li>
+        <li>Current local material availability (lead times move pricing)</li>
+      </ul>
+      <p>
+        Use this calculator to know what range to expect, then collect three real quotes and compare them line-by-line.
+        That's the workflow that produces the right roof at the right price.
+      </p>
+
+      <h2>Editorial independence</h2>
+      <p>
+        Cost data is set by Eurocraft (Texas-licensed general contractor, Houston-area). Eurocraft does not solicit business through Kefiw and does not take payment for content placement.
+        See <a href="/homelab/about/">about</a> for editorial-policy and conflict-of-interest disclosure.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

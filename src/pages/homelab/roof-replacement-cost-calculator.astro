@@ -1,0 +1,127 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Replacement Cost Calculator (2026) — Reviewed by a Texas GC | Kefiw';
+const description = 'Range-based roof replacement cost calculator: enter sqft, material, pitch, stories, tear-off, decking risk, complexity, permit, warranty. Get low/typical/high estimate, $/sqft, financing payment, and questions to ask each roofer.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Roof Replacement Cost Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/roof-replacement-cost-calculator/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/roof-replacement-cost-calculator/"
+  keywords={["roof replacement cost calculator","roof cost estimator","roof cost per square foot","metal vs asphalt roof cost"]}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand active="calculator" />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/roof-replacement-cost-calculator/', label: 'Roof Replacement Cost Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Replacement Cost Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Get a range-based estimate for a full roof replacement — material, labor, tear-off, decking-rot risk, permit and warranty included.
+        Reviewed by a working Texas-licensed general contractor. No lead capture, no fake precision.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+
+    <div class="my-4">
+      <AdSlot client:idle zoneId="ALPHA" />
+    </div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator client:load />
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="GAMMA" />
+    </div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>How to use this calculator</h2>
+      <ol>
+        <li><strong>Pick area input.</strong> "Home sqft" estimates roof area from your floor plan and pitch. "Roof sqft" is more accurate if you have a measurement report.</li>
+        <li><strong>Be honest about pitch and complexity.</strong> A 3-gable suburban hip is "standard hip"; a Victorian with three dormers and a turret is "cut-up."</li>
+        <li><strong>Tear-off layers.</strong> If you don't know, count from the eave: 1 layer is most common; 2 layers means a previous "lay-over" install (legal in some jurisdictions, banned in others).</li>
+        <li><strong>Decking risk.</strong> Older roofs (20+ years) and any history of leaks bump this to "medium" or "high." This is the line item most calculators hide.</li>
+        <li><strong>Compare against bids.</strong> If three bids land inside this range, pick on workmanship and warranty — not price. If one is well below, ask what's missing from the scope.</li>
+      </ol>
+
+      <h2>What a good roofing quote includes</h2>
+      <ul>
+        <li>Tear-off and disposal scope, by layer count</li>
+        <li>Decking replacement contingency — per-sheet price spelled out</li>
+        <li>Underlayment type (synthetic vs felt) and ice/water shield coverage</li>
+        <li>Starter strips and ridge cap (specialty pieces, not field shingles)</li>
+        <li>Flashing replacement at every penetration (not reuse of old flashing)</li>
+        <li>Drip edge install, ridge vent or other ventilation</li>
+        <li>Workmanship warranty length + transferability</li>
+        <li>Manufacturer warranty registered in your name (system warranties require this)</li>
+        <li>Permit pulled by the contractor, not by you as homeowner</li>
+        <li>Certificate of insurance + active state contractor license</li>
+      </ul>
+
+      <h2>Common roof-cost myths</h2>
+      <h3>"My neighbor paid $X, so mine should too."</h3>
+      <p>
+        Neighbor's roof has different pitch, different penetrations, possibly different decking condition.
+        Within the same neighborhood we routinely see 30–40% spread on legitimate, well-scoped bids.
+      </p>
+      <h3>"The cheapest bid wins."</h3>
+      <p>
+        The cheapest bid is usually the one missing scope. Common omissions: drip edge, starter strip,
+        flashing replacement, decking allowance, debris removal, and permit. A bid that quotes square
+        footage and one shingle SKU is not a complete quote.
+      </p>
+      <h3>"Insurance will pay for everything."</h3>
+      <p>
+        Insurance pays scope they approve, minus deductible, minus depreciation hold-back until work
+        is verified complete. <strong>Code upgrades</strong> (e.g., synthetic underlayment now required
+        by code) and <strong>betterment items</strong> (you choose architectural over 3-tab) come out of pocket.
+      </p>
+
+      <h2>Insurance claim notes</h2>
+      <p>
+        If your area took hail or wind in the last 12 months, file a claim before doing anything else.
+        Adjusters look for granular loss, lifted shingles, soft spots from impact, and bruised mat. They
+        will measure, photograph, and produce a scope. Common terms to know:
+      </p>
+      <ul>
+        <li><strong>RCV vs ACV.</strong> Replacement Cost Value pays full like-kind-and-quality. Actual Cash Value subtracts depreciation. Most modern policies are RCV but pay ACV first and release the depreciation after work completes.</li>
+        <li><strong>Code-upgrade endorsement.</strong> Pays the difference between old code and current code (drip edge, ice/water shield, decking spacing). Often optional — check your policy.</li>
+        <li><strong>Supplements.</strong> Items the contractor finds on tear-off that weren't in the original scope (rotted decking, additional flashing). Submit before installing.</li>
+      </ul>
+
+      <h2>About this calculator</h2>
+      <p>
+        Cost data is set by Eurocraft (Texas-licensed general contractor) and reflects mid-2026 South-region pricing.
+        Numbers are reviewed quarterly. See <a href="/homelab/methodology/">methodology</a> for inputs and assumptions,
+        and <a href="/homelab/about/">about</a> for editorial credentials.
+      </p>
+    </section>
+
+    <div class="my-6">
+      <AdSlot client:idle zoneId="DELTA" format="multiplex" />
+    </div>
+  </article>
+</BaseLayout>

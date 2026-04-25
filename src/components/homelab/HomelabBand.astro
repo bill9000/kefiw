@@ -1,0 +1,26 @@
+---
+// Sub-header band that sits under the main Kefiw header on /homelab/* pages.
+// Visually decouples the home-cost vertical from word tools without forking
+// the whole header (so site-wide AdSense + nav stay intact).
+interface Props {
+  active?: "home" | "calculator" | "methodology" | "about";
+}
+const { active = "home" } = Astro.props;
+const linkClass = (key: string) =>
+  active === key
+    ? "text-amber-900 font-semibold"
+    : "text-slate-700 hover:text-amber-800";
+---
+<div class="border-b border-amber-200 bg-amber-50/70">
+  <div class="container-wide flex flex-wrap items-center gap-x-4 gap-y-1 py-2 text-sm">
+    <a href="/homelab/" class="flex items-center gap-2 no-underline">
+      <span class="inline-flex h-5 w-5 items-center justify-center rounded bg-amber-600 text-[11px] font-bold text-white">H</span>
+      <span class="font-semibold text-slate-900">Home Lab</span>
+    </a>
+    <span aria-hidden="true" class="text-amber-300">·</span>
+    <a href="/homelab/roof-replacement-cost-calculator/" class={linkClass("calculator")}>Roof calculator</a>
+    <a href="/homelab/methodology/" class={linkClass("methodology")}>Methodology</a>
+    <a href="/homelab/about/" class={linkClass("about")}>About</a>
+    <span class="ml-auto text-xs text-slate-500">Reviewed by a Texas-licensed GC</span>
+  </div>
+</div>

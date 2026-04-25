@@ -1,0 +1,27 @@
+---
+interface Props {
+  /** Optional last-updated date (YYYY-MM-DD). Falls back to engine version. */
+  updated?: string;
+  /** Compact one-line variant (default true). False = small two-line block. */
+  compact?: boolean;
+}
+const { updated, compact = true } = Astro.props;
+---
+{compact ? (
+  <aside aria-label="Editorial review" class="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-slate-700">
+    <span class="font-semibold uppercase tracking-[0.18em] text-amber-700">Editorial review</span>
+    <span>by <strong>Eurocraft</strong>, a licensed Texas general contractor.</span>
+    <a href="https://eurocrafttx.com" rel="external noopener" class="text-amber-800 hover:underline">Verify credentials →</a>
+    {updated && <span class="ml-auto text-slate-500">Updated {updated}</span>}
+  </aside>
+) : (
+  <aside aria-label="Editorial review" class="mb-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-3 text-xs text-slate-700">
+    <div class="font-semibold uppercase tracking-[0.18em] text-amber-700">Editorial review</div>
+    <div class="mt-1">
+      Reviewed by <strong>Eurocraft</strong>, a licensed Texas general contractor working in the Houston market.
+      Eurocraft does not solicit business through this site; editorial content is independent and not paid for.
+      <a href="https://eurocrafttx.com" rel="external noopener" class="text-amber-800 hover:underline">Verify credentials at eurocrafttx.com →</a>
+    </div>
+    {updated && <div class="mt-1 text-slate-500">Cost data updated {updated}.</div>}
+  </aside>
+)}

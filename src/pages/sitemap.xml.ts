@@ -20,6 +20,10 @@ const STATIC_ROUTES = [
   '/daily/',
   '/daily/leaderboard/',
   ...DAILY_GAMES.map((g) => `/daily/${g.slug}/`),
+  '/homelab/',
+  '/homelab/roof-replacement-cost-calculator/',
+  '/homelab/methodology/',
+  '/homelab/about/',
 ];
 
 function publishedContent(section: 'word-tools' | 'guides' | 'calculators' | 'converters' | 'games'): ContentPageConfig[] {
