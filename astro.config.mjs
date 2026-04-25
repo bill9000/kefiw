@@ -22,5 +22,10 @@ export default defineConfig({
     worker: {
       format: 'es',
     },
+    server: {
+      // Hostnames the Astro dev server accepts. Vite rejects everything else
+      // with "Blocked request". Add tunnel/staging hosts here.
+      allowedHosts: ['kefiw.aivibe.us'],
+    },
   },
 });

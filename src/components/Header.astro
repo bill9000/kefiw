@@ -1,13 +1,13 @@
 ---
 import ToolSearch from './ToolSearch.tsx';
 import SystemTray from './SystemTray.tsx';
+import TodayMenu from './TodayMenu.tsx';
 ---
 <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
-  <div class="container-wide flex h-14 items-center gap-3">
-    <a href="/" class="flex items-center gap-2 font-bold text-slate-900 no-underline" aria-label="Kefiw home">
-      <span class="inline-flex h-7 w-7 items-center justify-center rounded bg-brand-600 text-sm font-bold text-white">K</span>
-      <span>Kefiw</span>
-    </a>
+  <div class="container-wide flex h-14 items-center gap-2">
+    <a href="/" class="inline-flex h-7 w-7 flex-none items-center justify-center rounded bg-brand-600 text-sm font-bold text-white no-underline" aria-label="Kefiw home">K</a>
+    <TodayMenu client:load />
+
     <nav class="ml-4 hidden gap-4 text-sm text-slate-700 sm:flex" aria-label="Primary">
       <a href="/word-tools/" class="hover:text-brand-700">Word Tools</a>
       <a href="/converters/" class="hover:text-brand-700">Converters</a>

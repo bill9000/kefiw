@@ -114,12 +114,14 @@ export default function ConsentAnchor(): JSX.Element | null {
   const [region, setRegion] = useState<Region>('ROW');
   const [mounted, setMounted] = useState(false);
   const [view, setView] = useState<View>('bar');
-  // Menu sections are collapsed by default; clicking expands them.
-  // `expanded` is a record so multiple sections can be open at once.
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  // Single-select accordion — only one section open at a time. Clicking the
+  // open section collapses it, clicking any other replaces the open one.
+  const [openSection, setOpenSection] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const toggleSection = (id: string): void =>
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+    setOpenSection((prev) => (prev === id ? null : id));
+  // Back-compat shim for the section props below that still read `expanded.<id>`.
+  const expanded: Record<string, boolean> = openSection ? { [openSection]: true } : {};
 
   useEffect(() => {
     void initConsent().then(() => {

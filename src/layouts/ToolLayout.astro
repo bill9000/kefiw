@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
-import AuthorityPanel from '~/components/AuthorityPanel.astro';
 import FAQ from '~/components/FAQ.astro';
 import RelatedTools from '~/components/RelatedTools.astro';
 import StartHere from '~/components/StartHere.astro';
@@ -158,9 +157,21 @@ const webAppJsonLd = {
 
     <RelatedTools tool={tool} />
 
-    <div id="review-methodology" class="scroll-mt-24">
-      <AuthorityPanel config={reviewConfig} />
-    </div>
+    {/*
+      The top trust strip already names reviewers + links to /methodology/.
+      No need to repeat the full review panel on every tool — one footer
+      line linking to the canonical trust pages is enough.
+    */}
+    <aside id="review-methodology" aria-label="Review and methodology" class="scroll-mt-24 mt-8 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+      Review &amp; methodology details live on their own pages:{' '}
+      <a href="/about-the-reviewers/" class="text-slate-700 hover:text-brand-700 hover:underline">About the reviewers</a>
+      {' · '}
+      <a href="/methodology/" class="text-slate-700 hover:text-brand-700 hover:underline">Methodology</a>
+      {' · '}
+      <a href="/editorial-policy/" class="text-slate-700 hover:text-brand-700 hover:underline">Editorial policy</a>
+      {' · '}
+      <a href="/sources/" class="text-slate-700 hover:text-brand-700 hover:underline">Sources</a>
+    </aside>
 
     <div class="my-6">
       <AdSlot client:idle zoneId="DELTA" format="multiplex" />

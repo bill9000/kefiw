@@ -2,7 +2,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import BaseLayout from './BaseLayout.astro';
-import AuthorityPanel from '~/components/AuthorityPanel.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import FAQ from '~/components/FAQ.astro';
 import AdSlot from '~/components/ads/AdSlot.tsx';
@@ -32,6 +31,13 @@ function hasOgSocial(slug: string): boolean {
     }
   }
   return OG_SOCIAL_SET.has(`${slug}-social.png`);
+}
+
+function hasPublicAsset(publicPath?: string): boolean {
+  if (!publicPath) return false;
+  const normalized = publicPath.replace(/^\/+/, '');
+  if (!normalized || normalized.includes('..')) return false;
+  return fs.existsSync(path.join(process.cwd(), 'public', normalized));
 }
 
 interface Props {
@@ -130,13 +136,16 @@ const pvStable = resolvePivotTarget(config.pivotSwitch?.stable);
 const pvFallback = resolvePivotTarget(config.pivotSwitch?.fallback);
 const hasPivotSwitch = !!(pvCritical && pvStable && pvFallback);
 
-// Substantial articles (discoverHeadline set) use a per-article hero image at
-// /og/{slug}-social.png when one was shipped. Otherwise the site-wide
-// /og-image.png falls through from BaseLayout's default. Explicit config.ogImage
-// always wins.
-const defaultOgImage = config.discoverHeadline && hasOgSocial(config.slug)
-  ? `/og/${config.slug}-social.png`
+// Substantial articles (discoverHeadline set) use the linked social image when
+// one was shipped. Slug-based lookup remains as the fallback convention.
+// Otherwise the site-wide /og-image.png falls through from BaseLayout's default.
+// Explicit config.ogImage always wins.
+const imageAssetOgImage = config.imageAsset?.socialImage && hasPublicAsset(config.imageAsset.socialImage)
+  ? config.imageAsset.socialImage
   : undefined;
+const defaultOgImage = imageAssetOgImage ?? (config.discoverHeadline && hasOgSocial(config.slug)
+  ? `/og/${config.slug}-social.png`
+  : undefined);
 const resolvedOgImage = config.ogImage ?? defaultOgImage;
 ---
 
@@ -350,9 +359,21 @@ const resolvedOgImage = config.ogImage ?? defaultOgImage;
       <AdSlot client:idle zoneId="EPSILON" />
     </div>
 
-    <div id="review-methodology" class="scroll-mt-24">
-      <AuthorityPanel config={reviewConfig} />
-    </div>
+    {/*
+      The top trust strip already names reviewers + links to /methodology/.
+      No need to repeat the full review panel on every article — a single
+      footer line linking out to the canonical pages is enough.
+    */}
+    <aside id="review-methodology" aria-label="Review and methodology" class="scroll-mt-24 mt-8 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+      Review &amp; methodology details live on their own pages:{' '}
+      <a href="/about-the-reviewers/" class="text-slate-700 hover:text-brand-700 hover:underline">About the reviewers</a>
+      {' · '}
+      <a href="/methodology/" class="text-slate-700 hover:text-brand-700 hover:underline">Methodology</a>
+      {' · '}
+      <a href="/editorial-policy/" class="text-slate-700 hover:text-brand-700 hover:underline">Editorial policy</a>
+      {' · '}
+      <a href="/sources/" class="text-slate-700 hover:text-brand-700 hover:underline">Sources</a>
+    </aside>
 
     <div class="my-6">
       <AdSlot client:idle zoneId="DELTA" format="multiplex" />
