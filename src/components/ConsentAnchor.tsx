@@ -40,6 +40,12 @@ const MONO_FONT = '"JetBrains Mono", ui-monospace, monospace';
 
 type View = 'bar' | 'fab' | 'menu';
 
+declare global {
+  interface Window {
+    __KFW_STICKY_AD_VISIBLE?: boolean;
+  }
+}
+
 function hasInteracted(): boolean {
   if (typeof localStorage === 'undefined') return false;
   return localStorage.getItem(INTERACTED_KEY) === '1';
@@ -84,6 +90,10 @@ function isDisclosurePage(): boolean {
   if (typeof window === 'undefined') return false;
   const path = window.location.pathname;
   return path === '/privacy/' || path === '/terms/' || path === '/privacy/legitimate-interest/';
+}
+function isStickyAdVisibleNow(): boolean {
+  if (typeof window === 'undefined') return false;
+  return Boolean(window.__KFW_STICKY_AD_VISIBLE) || document.querySelector('[data-kfw-zone="STICKY"]') !== null;
 }
 
 function ShieldIcon({ size = 14, color = TEXT }: { size?: number; color?: string }) {
@@ -139,6 +149,7 @@ export default function ConsentAnchor(): JSX.Element | null {
       const pending = currentState === 'pending';
       const interacted = hasInteracted();
       setView(pending || !interacted ? 'bar' : 'fab');
+      setStickyAdVisible(isStickyAdVisibleNow());
       setMounted(true);
     });
     const onChange = (e: Event): void => {

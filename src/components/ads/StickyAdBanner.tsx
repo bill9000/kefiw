@@ -29,6 +29,7 @@ declare global {
       push?: (opts: Record<string, unknown>) => void;
       requestNonPersonalizedAds?: 0 | 1;
     };
+    __KFW_STICKY_AD_VISIBLE?: boolean;
   }
 }
 
@@ -74,14 +75,20 @@ export default function StickyAdBanner(): JSX.Element | null {
     }
   }, []);
 
-  useEffect(() => {
-    window.dispatchEvent(new CustomEvent('kfw:sticky-ad-visibility', { detail: { visible: mounted && visible } }));
-  }, [mounted, visible]);
-
   const consent = typeof window !== 'undefined' ? getConsent() : 'ltd';
   const routeLtd = typeof window !== 'undefined' ? resolveCluster(window.location.pathname).risk_tier === 'ltd' : false;
   const ltd = routeLtd || consent !== 'full';
   const devMode = !PUBLISHER_ID || !SLOT_ID;
+  const bannerRendered = mounted && visible && !(state === 'unfilled' && !devMode);
+
+  useEffect(() => {
+    window.__KFW_STICKY_AD_VISIBLE = bannerRendered;
+    window.dispatchEvent(new CustomEvent('kfw:sticky-ad-visibility', { detail: { visible: bannerRendered } }));
+    return () => {
+      window.__KFW_STICKY_AD_VISIBLE = false;
+      window.dispatchEvent(new CustomEvent('kfw:sticky-ad-visibility', { detail: { visible: false } }));
+    };
+  }, [bannerRendered]);
 
   useEffect(() => {
     if (!mounted || !visible || devMode || typeof window === 'undefined') return;
