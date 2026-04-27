@@ -70,3 +70,20 @@ CREATE TABLE IF NOT EXISTS daily_runs (
 
 CREATE INDEX IF NOT EXISTS idx_daily_runs_day_pipeline ON daily_runs(daily_date, pipeline_id);
 CREATE INDEX IF NOT EXISTS idx_daily_runs_device ON daily_runs(device_hash);
+
+-- Contact requests submitted from /contact/.
+-- These rows contain user-provided contact details and message text.
+CREATE TABLE IF NOT EXISTS contact_requests (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  contact_type TEXT NOT NULL,
+  message TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'new'
+);
+
+CREATE INDEX IF NOT EXISTS idx_contact_requests_created_at ON contact_requests(created_at);
+CREATE INDEX IF NOT EXISTS idx_contact_requests_type_created ON contact_requests(contact_type, created_at);
+CREATE INDEX IF NOT EXISTS idx_contact_requests_status_created ON contact_requests(status, created_at);

@@ -1,0 +1,7 @@
+---
+import ToolLayout from '~/layouts/ToolLayout.astro';
+import { TOOLS_BY_ID } from '~/data/tools';
+import Island from '~/components/tools/RelationshipPromptGame.tsx';
+const tool = TOOLS_BY_ID['red-flag-green-flag'];
+---
+<ToolLayout tool={tool}><Island client:load game="red-flag-green-flag" /></ToolLayout>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RateTriadIsland from '~/components/triad/RateTriad.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/scenarios/', label: 'Scenarios' },
+  { href: '/scenarios/rate-triad/', label: 'Rate Triad' },
+];
+---
+<BaseLayout
+  title="Rate Triad — Conservative · Realistic · Aggressive | Kefiw"
+  description="Three Minimum Viable Rate instances at different utilization assumptions. See how billable-time confidence reshapes the hourly rate that matches a corporate salary."
+  canonical="/scenarios/rate-triad/"
+  keywords={['rate triad', 'freelancer hourly rate scenarios', 'minimum viable rate parallel', 'utilization assumption rate calculator']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">Rate Triad</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Conservative · Realistic · Aggressive</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Three Minimum Viable Rate instances pre-seeded at different utilization assumptions.
+        Same target need (salary + benefits + overhead). Same 40-hour billable week. Only the
+        utilization percentage and billable weeks change — and the resulting hourly rate moves
+        meaningfully.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        The thing most independents under-estimate: <strong>billable utilization</strong>. A 60%
+        utilization on 40 weekly hours is 24 actual billable hours. Drop to 45% and you're at 18.
+        That's the lever that swings the rate, not the salary target.
+      </p>
+    </header>
+
+    <RateTriadIsland client:only="react" />
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">How the triad works</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Each pillar is a namespaced Minimum Viable Rate instance. Scenarios live in separate
+        localStorage keys (<code class="rounded bg-white px-1 text-xs text-cyan-800">minimum-viable-rate-v1__conservative</code>,
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">__realistic</code>,
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">__aggressive</code>). On first
+        visit the triad pre-seeds each with its starting utilization and billable weeks; after that
+        your edits persist per pillar.
+      </p>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Use the spread between Conservative and Aggressive to find a rate you can defend even in a
+        slow quarter — you don't want a number that only works at 75% utilization.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

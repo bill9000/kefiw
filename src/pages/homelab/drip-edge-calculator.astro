@@ -1,0 +1,75 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import DripEdge from '~/components/homelab/DripEdgeCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Drip Edge Calculator — Linear Feet & 10-Foot Pieces | Kefiw Home Lab';
+const description = 'How many feet of drip edge do you need? Calculator handles eave + rake measurements with overlap allowance and 10-foot piece counts. Reviewed by a Texas-licensed general contractor.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/drip-edge-calculator/"
+  keywords={['drip edge calculator', 'how much drip edge', 'eave drip edge linear feet', 'rake drip edge']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/drip-edge-calculator/', label: 'Drip Edge Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Drip Edge Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Drip edge is the L-shaped metal flashing along eaves and rakes. Required by current code; sometimes "value-engineered out" of bids. This calculator gets the right linear footage and 10-foot piece count for a complete order.
+      </p>
+    </header>
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+    <section class="mb-8"><DripEdge client:load /></section>
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+    <section class="prose-tool max-w-3xl">
+      <h2>What drip edge does</h2>
+      <p>
+        Drip edge is L-shaped metal trim that wraps the bottom edge of the roof deck. It does three things:
+      </p>
+      <ol>
+        <li><strong>Sheds water past the fascia</strong> — water flows off the shingles, hits the drip edge's lower flange, and falls clear of the wood fascia behind it.</li>
+        <li><strong>Protects the deck edge</strong> — wood deck edges absorb water and rot if nothing covers them.</li>
+        <li><strong>Provides a finished look</strong> — clean line at the eave instead of exposed deck or shingle bottoms.</li>
+      </ol>
+
+      <h2>Eaves vs rakes: install order matters</h2>
+      <p>
+        At the <strong>eaves (bottom edges)</strong>, drip edge goes <em>under</em> the underlayment (and under any I&amp;W shield). Water that gets past the shingles drains down the underlayment, onto the drip edge, and out.
+      </p>
+      <p>
+        At the <strong>rakes (sloped side edges)</strong>, drip edge goes <em>over</em> the underlayment. Water blown sideways under the rake-edge shingles is shed off the drip edge instead of behind it.
+      </p>
+      <p>
+        A bid that doesn't differentiate "under at eaves, over at rakes" probably has a crew that doesn't either. Ask the question.
+      </p>
+
+      <h2>Profile sizes</h2>
+      <ul>
+        <li><strong>D-style</strong> (most common) — 1.5″ face × 2.5″ deck flange. Standard for residential.</li>
+        <li><strong>F-style</strong> — wider face (typically 3″) — used when fascia needs more coverage, or for older homes with non-standard trim.</li>
+        <li><strong>T-style</strong> — for tile roofs; designed to interlock with starter tiles.</li>
+      </ul>
+
+      <h2>Color matching</h2>
+      <p>
+        Drip edge comes in mill-finish aluminum (silver), white, brown, and several specialty colors. Match it to your <strong>fascia trim color</strong>, not the shingle — drip edge is most visible from the ground at the eave line, where it sits next to the fascia and gutter.
+      </p>
+
+      <h2>About this calculator</h2>
+      <p>Reviewed by Eurocraft, a Texas-licensed general contractor. Pricing per 10-foot piece reflects current South-region distributor cost.</p>
+    </section>
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

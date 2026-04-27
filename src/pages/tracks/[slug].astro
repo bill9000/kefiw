@@ -1,0 +1,220 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import TrackProgress from '~/components/tracks/TrackProgress';
+import { TRACKS, TRACKS_BY_SLUG, trackHref } from '~/data/tracks';
+import type { Track } from '~/data/tracks';
+import { REVIEW_ROLES } from '~/data/review';
+
+export function getStaticPaths() {
+  return TRACKS.map((track) => ({
+    params: { slug: track.slug },
+    props: { track },
+  }));
+}
+
+interface Props {
+  track: Track;
+}
+
+const { track } = Astro.props;
+const approvalReviewers =
+  track.category === 'home'
+    ? [REVIEW_ROLES.contractor, REVIEW_ROLES.engineering, REVIEW_ROLES.science]
+    : track.category === 'property'
+      ? [REVIEW_ROLES.realtor, REVIEW_ROLES.engineering, REVIEW_ROLES.science]
+      : track.category === 'care' || track.category === 'daily'
+        ? [REVIEW_ROLES.nurse, REVIEW_ROLES.engineering, REVIEW_ROLES.science]
+        : [REVIEW_ROLES.engineering, REVIEW_ROLES.science];
+const reviewerLinks =
+  track.category === 'home'
+    ? [
+        { label: 'remodeling contractor', href: REVIEW_ROLES.contractor.href },
+        { label: 'engineering', href: REVIEW_ROLES.engineering.href },
+        { label: 'scientific reviewer', href: REVIEW_ROLES.science.href },
+      ]
+    : track.category === 'property'
+      ? [
+          { label: 'realtor', href: REVIEW_ROLES.realtor.href },
+          { label: 'engineering', href: REVIEW_ROLES.engineering.href },
+          { label: 'scientific reviewer', href: REVIEW_ROLES.science.href },
+        ]
+      : track.category === 'care' || track.category === 'daily'
+        ? [
+            { label: 'registered nurse', href: REVIEW_ROLES.nurse.href },
+            { label: 'scientific reviewer', href: REVIEW_ROLES.science.href },
+          ]
+        : [
+            { label: 'engineering', href: REVIEW_ROLES.engineering.href },
+            { label: 'scientific reviewer', href: REVIEW_ROLES.science.href },
+          ];
+const relatedTracks = track.relatedSlugs
+  .map((slug) => TRACKS_BY_SLUG[slug])
+  .filter((item): item is Track => Boolean(item));
+const progressSteps = track.steps.map(({ title, type, href, description }) => ({
+  title,
+  type,
+  href,
+  description,
+}));
+---
+
+<BaseLayout
+  title={`${track.title} Track | Kefiw`}
+  description={track.description}
+  canonical={trackHref(track)}
+  keywords={track.keywords}
+  ogType="article"
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/tracks/', label: 'Tracks' }, { href: trackHref(track), label: track.title }]} />
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{track.vertical} Track</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{track.title} Track</h1>
+      <p class="mt-3 text-lg text-slate-700">{track.description}</p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <a class="btn-primary no-underline" href="#track-progress">Start track</a>
+        <a class="btn-ghost no-underline" href="#final-plan">See final plan</a>
+      </div>
+    </header>
+
+    {track.safety && (
+      <section class="mt-6 rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-950">
+        <h2 class="text-base font-semibold">Safety note</h2>
+        <p class="mt-1">{track.safety.notice}</p>
+        {track.safety.crisisNotice && (
+          <p class="mt-3 rounded-md border border-red-200 bg-white p-3 font-semibold text-red-800">
+            {track.safety.crisisNotice}
+          </p>
+        )}
+      </section>
+    )}
+
+    <section class="mt-6 grid gap-4 md:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">What this helps you do</h2>
+        <p class="mt-2 text-sm text-slate-700">{track.goal}</p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Who reviewed it</h2>
+        <ul class="mt-2 space-y-1 text-sm text-slate-700">
+          {approvalReviewers.map((reviewer) => (
+            <li>
+              <a class="font-semibold text-brand-700 hover:underline" href={reviewer.href}>{reviewer.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">How long it takes</h2>
+        <p class="mt-2 text-sm text-slate-700">{track.duration}</p>
+        <p class="mt-2 text-sm text-slate-700">{track.steps.length} guided steps with progress saved on this device.</p>
+      </div>
+    </section>
+
+    <section class="mt-8 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+      <h2 class="text-lg font-semibold text-emerald-950">What you will get at the end</h2>
+      <div class="mt-3 grid gap-3 md:grid-cols-2">
+        <div>
+          <h3 class="text-sm font-semibold text-emerald-950">Estimate</h3>
+          <p class="mt-1 text-sm text-emerald-950">{track.finalPlan.estimate}</p>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-emerald-950">Checklist</h3>
+          <ul class="mt-1 list-disc pl-5 text-sm text-emerald-950">
+            {track.finalPlan.checklist.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div id="track-progress" class="scroll-mt-36">
+      <TrackProgress client:load trackSlug={track.slug} steps={progressSteps} />
+    </div>
+
+    <section id="final-plan" class="scroll-mt-36 mt-8">
+      <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="text-xl font-semibold text-slate-900">{track.resultTitle}</h2>
+          <p class="mt-1 text-sm text-slate-600">The final result page collects the estimates, risk flags, questions, checklist, and next calculators.</p>
+        </div>
+        <button type="button" class="btn-ghost text-sm" onclick="window.print()">Print / save page</button>
+      </div>
+      <div class="grid gap-4 lg:grid-cols-2">
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h3 class="text-base font-semibold text-slate-900">Risk flags</h3>
+          <ul class="mt-2 list-disc pl-5 text-sm text-slate-700">
+            {track.finalPlan.riskFlags.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h3 class="text-base font-semibold text-slate-900">Next questions</h3>
+          <ul class="mt-2 list-disc pl-5 text-sm text-slate-700">
+            {track.finalPlan.nextQuestions.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+        <section class="rounded-lg border border-slate-200 bg-white p-4 lg:col-span-2">
+          <h3 class="text-base font-semibold text-slate-900">Recommended next calculators</h3>
+          <div class="mt-3 flex flex-wrap gap-2">
+            {track.finalPlan.recommendedNextCalculators.map((item) => (
+              <a class="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-700 no-underline hover:bg-slate-200" href={item.href}>
+                {item.title}
+              </a>
+            ))}
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="mt-8 grid gap-4 lg:grid-cols-2">
+      <div class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-lg font-semibold text-slate-900">Recommended guides</h2>
+        <ul class="mt-3 space-y-2 text-sm">
+          {track.recommendedGuides.map((guide) => (
+            <li><a class="text-brand-700 hover:underline" href={guide.href}>{guide.title}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-lg font-semibold text-slate-900">Common mistakes</h2>
+        <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+          {track.commonMistakes.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="mt-8 rounded-lg border border-slate-200 bg-white p-4">
+      <h2 class="text-lg font-semibold text-slate-900">Methodology</h2>
+      <p class="mt-1 text-sm text-slate-600">
+        Each Track packages single-intent calculator pages into a guided decision path. The calculators remain in their vertical hubs; the Track links them together and saves progress locally on this device.
+      </p>
+      <ul class="mt-3 grid gap-2 text-sm text-slate-700 md:grid-cols-2">
+        {track.methodology.map((item) => <li class="rounded-md bg-slate-50 p-3">{item}</li>)}
+      </ul>
+    </section>
+
+    {relatedTracks.length > 0 && (
+      <section class="mt-8">
+        <h2 class="mb-3 text-lg font-semibold text-slate-900">Related tracks</h2>
+        <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {relatedTracks.map((item) => (
+            <a
+              class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm"
+              href={trackHref(item)}
+            >
+              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-700">{item.vertical}</div>
+              <h3 class="mt-1 text-base font-semibold">{item.title}</h3>
+              <p class="mt-1 text-sm text-slate-600">{item.resultTitle}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <ReviewMethodologyFooter
+      reviewerLinks={reviewerLinks}
+      includeHealthDisclaimer={track.category === 'care' || track.category === 'daily'}
+    />
+  </article>
+</BaseLayout>

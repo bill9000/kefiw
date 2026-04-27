@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeftRight, TrendingUp, TrendingDown, Minus, Lock, Unlock } from 'lucide-react';
 import GeoArbitrage from '~/components/tools/GeoArbitrage.tsx';
+import MinimumViableRate from '~/components/tools/MinimumViableRate.tsx';
+import GigNetFloor from '~/components/tools/GigNetFloor.tsx';
 import { useSessionField } from '~/lib/use-session-field';
 
 const BG = '#0b1120';
@@ -13,11 +15,20 @@ const GREEN = '#4ade80';
 const RED = '#ef4444';
 const GOLD = '#facc15';
 
-type ToolId = 'geo-arbitrage';
+type ToolId = 'geo-arbitrage' | 'minimum-viable-rate' | 'gig-net-floor';
 
 interface LockableField {
   key: string;
   label: string;
+}
+
+interface Seed {
+  [k: string]: string;
+}
+
+interface ToolSeeds {
+  a?: Seed;
+  b?: Seed;
 }
 
 interface Props {
@@ -28,6 +39,9 @@ interface Props {
   deltaCaption?: string;
   format?: (n: number) => string;
   lockableFields?: LockableField[];
+  // Initial values written into each column's localStorage on first visit.
+  // After that the user owns the state — re-seeding only fills empty slots.
+  seeds?: ToolSeeds;
 }
 
 const GEO_LOCKABLE: LockableField[] = [
@@ -37,6 +51,31 @@ const GEO_LOCKABLE: LockableField[] = [
   { key: 'costThere', label: 'Cost · there' },
   { key: 'moveCost', label: 'One-time move cost' },
 ];
+
+const MVR_LOCKABLE: LockableField[] = [
+  { key: 'targetSalary', label: 'Target salary' },
+  { key: 'benefitsValue', label: 'Benefits value' },
+  { key: 'businessOverhead', label: 'Overhead' },
+  { key: 'livingWageAnnual', label: 'Living wage' },
+];
+
+const GIG_LOCKABLE: LockableField[] = [
+  { key: 'gasPrice', label: 'Gas $/gal' },
+  { key: 'stateMinWage', label: 'Local min wage' },
+  { key: 'shiftsPerWeek', label: 'Shifts / week' },
+];
+
+const STORAGE_PREFIX_FOR_TOOL: Record<ToolId, string> = {
+  'geo-arbitrage': 'geo-arbitrage-v1',
+  'minimum-viable-rate': 'minimum-viable-rate-v1',
+  'gig-net-floor': 'gig-net-floor-v1',
+};
+
+const DEFAULT_LOCKABLE_FOR_TOOL: Record<ToolId, LockableField[]> = {
+  'geo-arbitrage': GEO_LOCKABLE,
+  'minimum-viable-rate': MVR_LOCKABLE,
+  'gig-net-floor': GIG_LOCKABLE,
+};
 
 const defaultMoneyFmt = (n: number) =>
   n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
@@ -49,8 +88,23 @@ export default function ComparisonMatrix({
   deltaCaption,
   format,
   lockableFields,
+  seeds,
 }: Props) {
   const fmt = format ?? defaultMoneyFmt;
+  // Pre-seed namespaced localStorage on first visit. This is what makes
+  // matrix pages "open with sensible defaults" instead of an empty form.
+  useEffect(() => {
+    if (!seeds || typeof window === 'undefined') return;
+    const prefix = STORAGE_PREFIX_FOR_TOOL[tool];
+    const writeIfEmpty = (ns: 'a' | 'b', payload: Seed | undefined) => {
+      if (!payload) return;
+      const key = `${prefix}__${ns}`;
+      if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(payload));
+    };
+    writeIfEmpty('a', seeds.a);
+    writeIfEmpty('b', seeds.b);
+  }, [tool, seeds]);
+
   const a = useSessionField(`${fieldKey}__a`);
   const b = useSessionField(`${fieldKey}__b`);
   const valA = a?.value ?? 0;
@@ -67,7 +121,7 @@ export default function ComparisonMatrix({
     delta < -0.5 ? labelA :
     'Parity';
 
-  const fields = lockableFields ?? (tool === 'geo-arbitrage' ? GEO_LOCKABLE : []);
+  const fields = lockableFields ?? DEFAULT_LOCKABLE_FOR_TOOL[tool] ?? [];
   const [lockedValues, setLockedValues] = useState<Record<string, string>>({});
 
   const toggleLock = (k: string) => {
@@ -76,7 +130,8 @@ export default function ComparisonMatrix({
         const { [k]: _drop, ...rest } = prev;
         return rest;
       }
-      const seed = readField(`${tool}-v1__a`, k) ?? readField(`${tool}-v1__b`, k) ?? '';
+      const prefix = STORAGE_PREFIX_FOR_TOOL[tool];
+      const seed = readField(`${prefix}__a`, k) ?? readField(`${prefix}__b`, k) ?? '';
       return { ...prev, [k]: seed };
     });
   };
@@ -91,8 +146,9 @@ export default function ComparisonMatrix({
       setLockedValues({});
     } else {
       const next: Record<string, string> = {};
+      const prefix = STORAGE_PREFIX_FOR_TOOL[tool];
       fields.forEach((f) => {
-        next[f.key] = lockedValues[f.key] ?? readField(`${tool}-v1__a`, f.key) ?? readField(`${tool}-v1__b`, f.key) ?? '';
+        next[f.key] = lockedValues[f.key] ?? readField(`${prefix}__a`, f.key) ?? readField(`${prefix}__b`, f.key) ?? '';
       });
       setLockedValues(next);
     }
@@ -227,6 +283,8 @@ export default function ComparisonMatrix({
           {tool === 'geo-arbitrage' && (
             <GeoArbitrage namespace="a" lockedFields={lockedValues} onLockedChange={updateLocked} />
           )}
+          {tool === 'minimum-viable-rate' && <MinimumViableRate namespace="a" />}
+          {tool === 'gig-net-floor' && <GigNetFloor namespace="a" />}
         </div>
         <div>
           <div
@@ -248,6 +306,8 @@ export default function ComparisonMatrix({
           {tool === 'geo-arbitrage' && (
             <GeoArbitrage namespace="b" lockedFields={lockedValues} onLockedChange={updateLocked} />
           )}
+          {tool === 'minimum-viable-rate' && <MinimumViableRate namespace="b" />}
+          {tool === 'gig-net-floor' && <GigNetFloor namespace="b" />}
         </div>
       </div>
 

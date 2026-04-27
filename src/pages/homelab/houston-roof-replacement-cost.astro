@@ -1,0 +1,128 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Replacement Cost in Houston (2026) — From a Houston GC | Kefiw';
+const description = 'Houston roof replacement cost — typical $11K–$22K range for 1-story architectural asphalt; broken down by material, pitch, and complexity. Local hail/wind/permit notes from a Texas-licensed general contractor working the Houston market.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Houston Roof Replacement Cost Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/houston-roof-replacement-cost/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/houston-roof-replacement-cost/"
+  keywords={['roof replacement cost Houston', 'Houston roofing cost calculator', 'Houston roof per square foot', 'Houston hail roof claim']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/houston-roof-replacement-cost/', label: 'Houston' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Replacement Cost in Houston</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Houston is our home market. The numbers below reflect what a properly-scoped, properly-permitted, properly-warranted roof actually costs in Harris County in mid-2026 — set by a working Texas-licensed general contractor, not aggregated industry estimates.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator client:load defaultPermitProfileId="houston_tx" />
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>Houston cost ranges, typical scenarios</h2>
+      <ul>
+        <li><strong>1-story, 6:12, simple hip, 2,400 sqft roof, architectural asphalt</strong> — $11,000–$16,000 typical</li>
+        <li><strong>2-story, 7:12, complex (multiple gables), 3,200 sqft roof, architectural</strong> — $16,000–$24,000</li>
+        <li><strong>1-story, 6:12, simple hip, 2,400 sqft roof, standing seam metal</strong> — $28,000–$42,000</li>
+        <li><strong>1.5-story bungalow, 8:12, cut-up roof, 2,800 sqft, designer asphalt</strong> — $18,000–$28,000</li>
+      </ul>
+      <p>
+        Wide ranges are honest — the same-spec roof can land 30–40% apart on legitimate, well-scoped bids. The variation is real (decking, complexity, contractor overhead) and the calculator above breaks it down by line item.
+      </p>
+
+      <h2>Houston-specific factors</h2>
+
+      <h3>Hail history matters more than most homeowners think</h3>
+      <p>
+        Harris County and the surrounding zones (Montgomery, Fort Bend, Brazoria) catch routine hail. Quarter to half-dollar size hail is common; 2024–2025 saw multiple golf-ball events in northwest Houston. If your roof is past 5 years old, there's a non-zero chance you have undocumented hail damage. Before any cash-out replacement, run the <a href="/homelab/hail-damage-severity-estimator/">hail damage estimator</a> and consider filing a claim.
+      </p>
+
+      <h3>Tropical storms and wind-driven rain</h3>
+      <p>
+        Houston isn't a hurricane bullseye like Galveston or Beaumont, but tropical storms and Gulf-edge events bring sustained 50–80 mph wind and horizontal rain. <strong>Ice &amp; water shield at eaves and valleys is essentially mandatory in this market</strong> regardless of code minimums — it's the single best protection against wind-driven water intrusion. Use the <a href="/homelab/ice-water-shield-calculator/">I&amp;W calculator</a> to size it.
+      </p>
+
+      <h3>Heat shortens shingle life</h3>
+      <p>
+        Houston attics regularly hit 150°F+ in summer. That heat conducts through the deck and accelerates shingle aging. Manufacturer-stated 30-year shingles in Houston attics typically deliver 20–22 years before significant granule loss begins. Proper attic ventilation buys back 3–5 years; <a href="/homelab/attic-ventilation-calculator/">size the ventilation correctly</a>.
+      </p>
+
+      <h3>Class 4 impact-rated shingles + insurance discount</h3>
+      <p>
+        Most Texas insurance carriers offer 15–35% premium discounts for Class 4 impact-rated shingles. The upcharge is small ($20–$40 per square installed); the insurance savings often pay back the upcharge in 2–4 years, plus you avoid future hail-claim deductibles. In Houston, this is one of the few unambiguous "yes, do this" upgrades.
+      </p>
+
+      <h3>Permit costs</h3>
+      <p>
+        Harris County permit + dump fees typically run $250–$600 for a residential re-roof. Some incorporated cities within the metro (West U, Bellaire, Memorial Villages) carry higher fees and stricter inspections. Outside Loop 610, jurisdiction matters — confirm with your contractor which authority pulls the permit.
+      </p>
+
+      <h2>Climate-specific material recommendations</h2>
+      <ul>
+        <li><strong>Architectural asphalt with Class 4 impact rating</strong> — the default. Insurance discount, hail tolerance, $13–$18K typical installed on a 2,400 sqft roof.</li>
+        <li><strong>Standing seam metal</strong> — best lifecycle math if you're holding 20+ years. Earns the largest insurance discount; survives hail without claim damage. $28–$42K installed.</li>
+        <li><strong>Concrete tile</strong> — distinctive look, 40+ year life, but heavy enough to require structural review. Common in Memorial / River Oaks; less so in flood-zone neighborhoods where weight is a concern.</li>
+        <li><strong>Synthetic slate / shake</strong> — niche premium product. Looks great, costs designer-asphalt-plus, doesn't carry the lifecycle benefit of metal.</li>
+      </ul>
+
+      <h2>Houston roofer red flags</h2>
+      <ul>
+        <li><strong>Out-of-town crews after a storm</strong> — storm chasers descend on affected ZIPs. Hire someone local who was operating before the storm and can be found after.</li>
+        <li><strong>"We'll eat your deductible"</strong> — illegal in Texas. The contractor is either committing insurance fraud or padding the bid by your deductible.</li>
+        <li><strong>No physical Houston address</strong> — verify on the Texas Secretary of State business search before signing.</li>
+        <li><strong>Pressure to sign before you have written quotes from 2–3 others</strong> — legitimate contractors expect comparison shopping.</li>
+        <li><strong>Cash-only or wire-only payment</strong> — credit cards and checks should be acceptable.</li>
+      </ul>
+
+      <h2>Companion calculators for Houston roofs</h2>
+      <ul>
+        <li><a href="/homelab/roof-replacement-cost-calculator/">Roof Replacement Cost Calculator</a> — full inputs</li>
+        <li><a href="/homelab/roof-insurance-deductible-calculator/">Roof Insurance Deductible Calculator</a> — what you actually pay on a claim</li>
+        <li><a href="/homelab/hail-damage-severity-estimator/">Hail Damage Severity Estimator</a> — will your claim approve?</li>
+        <li><a href="/homelab/attic-ventilation-calculator/">Attic Ventilation Calculator</a> — Houston attics need it</li>
+        <li><a href="/homelab/asphalt-shingle-cost-calculator/">Asphalt Cost Calculator</a> — material grade comparison</li>
+      </ul>
+
+      <h2>About this page</h2>
+      <p>
+        Houston cost data set and reviewed by Eurocraft, a Texas-licensed general contractor working primarily in Harris County. Pricing reflects current Q2 2026 distributor and labor rates; updated quarterly. See <a href="/homelab/methodology/">methodology</a> for the full multiplier tables and <a href="/homelab/about/">about</a> for editorial credentials.
+      </p>
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

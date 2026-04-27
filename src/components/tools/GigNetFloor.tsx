@@ -38,18 +38,23 @@ function formatCurrency(n: number): string {
   return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
 }
 
-export default function GigNetFloor() {
+interface GigNetFloorProps {
+  namespace?: string;
+}
+
+export default function GigNetFloor({ namespace }: GigNetFloorProps = {}) {
+  const storageKey = namespace ? `${STORAGE}__${namespace}` : STORAGE;
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE);
+      const raw = localStorage.getItem(storageKey);
       if (raw) setState({ ...DEFAULT_STATE, ...JSON.parse(raw) });
     } catch {}
     setHydrated(true);
-  }, []);
-  useEffect(() => { if (hydrated) localStorage.setItem(STORAGE, JSON.stringify(state)); }, [state, hydrated]);
+  }, [storageKey]);
+  useEffect(() => { if (hydrated) localStorage.setItem(storageKey, JSON.stringify(state)); }, [state, hydrated, storageKey]);
 
   const gross = parseNum(state.grossPay);
   const miles = parseNum(state.miles);
@@ -74,9 +79,9 @@ export default function GigNetFloor() {
   }, [gross, miles, hours, stateMin, shifts]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || namespace) return;
     writeField(PIPELINE_KEY, monthlyNet, PIPELINE_SOURCE, PIPELINE_LABEL);
-  }, [monthlyNet, hydrated]);
+  }, [monthlyNet, hydrated, namespace]);
 
   const threshold = Math.max(FED_MIN, stateMin);
   const dialMax = Math.max(threshold * 2, grossHourly * 1.1, 30);

@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin1411/
+Disallow: /api/contact-requests
 
 Sitemap: https://kefiw.com/sitemap.xml

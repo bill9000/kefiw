@@ -14,6 +14,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'A quick method that gets the answer in seconds, not minutes.',
     outcomeLine: 'Paste, filter, scan — that\'s the whole workflow.',
     description: 'A short, practical guide to getting the right word out of a word unscrambler fast. Covers input, length filters, wildcards, and when to switch to the anagram solver.',
+    discoverHeadline: 'The word unscrambler trick that cuts a huge result list down fast',
     keywords: ['how to use word unscrambler', 'word unscrambler tips', 'unscramble letters'],
     intro: 'A word unscrambler returns every real English word that can be built from your letters. Used well, it hands you the answer in under five seconds. Used badly, it overwhelms you with 600 matches you can\'t skim.',
     keyPoints: [
@@ -52,6 +53,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'A handful of pattern tricks that beat brute-force rearrangement.',
     outcomeLine: 'Spot the prefix, spot the suffix, lock in the vowels — the word falls out.',
     description: 'Shortcuts and mental patterns that make solving anagrams faster than brute-force letter rearrangement.',
+    discoverHeadline: 'Solve anagrams faster by spotting the pattern before rearranging',
     keywords: ['solve anagrams fast', 'anagram tips', 'anagram strategy'],
     intro: 'Brute-force rearrangement treats every letter as unknown. Pattern-based solving locks in the predictable parts first — vowels, common suffixes, and prefixes — and lets the remaining letters fall into place.',
     keyPoints: [
@@ -91,6 +93,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'Two similar tools, one practical difference that changes your choice.',
     outcomeLine: 'Use Unscrambler for "any word from these letters". Use Anagram Solver for "a word using all these letters".',
     description: 'Word Unscrambler and Anagram Solver look similar but solve different problems. A quick guide to which one handles each situation.',
+    discoverHeadline: 'Unscrambler or anagram solver? The one difference that matters',
     keywords: ['word unscrambler vs anagram solver', 'anagram tool difference'],
     intro: 'A word unscrambler returns every valid word that can be built from any subset of your letters. An anagram solver returns only words that use ALL your letters. Pick based on what the problem asks for.',
     keyPoints: [
@@ -128,6 +131,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'How the ? symbol works, and where it changes the answer.',
     outcomeLine: 'Use ? as a placeholder for any letter — each ? expands every search path.',
     description: 'How to use blank tiles (the ? wildcard) in word unscramblers, pattern finders, and solvers.',
+    discoverHeadline: 'The wildcard mistake that makes word tools return useless lists',
     keywords: ['blank tiles word tools', 'wildcard word search', 'scrabble blanks'],
     intro: 'A blank tile is a placeholder that can become any letter. Every major Kefiw word tool accepts ? as a wildcard. Used right, it unlocks plays you\'d otherwise miss.',
     keyPoints: [
@@ -166,6 +170,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'When every letter scores, length is where the points come from.',
     outcomeLine: 'Set a minimum length, sort by length, skim the top bucket.',
     description: 'How to find the longest word your letters can form — the key for Scrabble bingos, WWF plays, and long-word puzzles.',
+    discoverHeadline: 'Find the longest word from your letters without scanning every result',
     keywords: ['longest word from letters', 'bingo scrabble', 'long word unscrambler'],
     intro: 'In Scrabble and Words With Friends, using all 7 tiles scores a 50-point bingo. Other puzzles reward length directly. The mechanical approach: set a minimum length, sort longest-first, and scan the top bucket.',
     keyPoints: [
@@ -204,6 +209,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'Score-sorted output beats length-sorted when tiles are valued unequally.',
     outcomeLine: 'Sort by score, not length — a short J/Q/X/Z play often beats a long common-letter one.',
     description: 'How to find the highest-scoring word from a rack of letters — why score-sort matters and how to read the results.',
+    discoverHeadline: 'Why your highest-scoring word is often shorter than you expect',
     keywords: ['highest scoring words from letters', 'unscramble by score', 'best score rack'],
     intro: 'Length and score are not the same. A 5-letter word with all 1-point tiles scores 5; a 3-letter word with X or Z scores 15+. A good unscrambler sorts by score and tells you which tiles carry the points.',
     keyPoints: [
@@ -242,6 +248,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'Fast plays, hook plays, and when a 3-letter word outscores a 5-letter one.',
     outcomeLine: 'Short plays win when tiles are high-value or board position is tight.',
     description: 'How to find the best short words from a set of scrambled letters, including when to play short over long.',
+    discoverHeadline: 'Short scrambled-letter words that rescue bad racks and tight boards',
     keywords: ['best short words scrambled letters', 'short unscramble', 'short word finder rack'],
     intro: 'In Scrabble and similar games, short words are often the right play — for tile dumping, hook plays, and tight board positions. Unscrambling with a short-word filter is a different search than "longest word from my letters".',
     keyPoints: [
@@ -279,6 +286,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'The three length filters and when each one is the right choice.',
     outcomeLine: 'Exact for fixed-length puzzles, min/max for flexible rack searches.',
     description: 'How to use length filters in a word-unscrambler — exact length, minimum, maximum, and the ranges that fit common use cases.',
+    discoverHeadline: 'The word-length filter that turns a messy search into a shortlist',
     keywords: ['search by word length', 'word length filter', 'unscrambler length'],
     intro: 'Most unscramblers let you filter output by length. Choosing exact vs. minimum vs. maximum is the difference between a useful shortlist and a flood of unusable options.',
     keyPoints: [
@@ -317,6 +325,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'Your rack plus one board letter is a different search — and often more productive.',
     outcomeLine: 'Add board letters as extras and the tool finds plays that hook into what is already placed.',
     description: 'How to include already-placed board letters in unscrambler searches to find hook plays and better board-contact words.',
+    discoverHeadline: 'Use board letters with your rack to find plays a rack search misses',
     keywords: ['board letters rack tool', 'scrabble hook finder', 'rack plus board letters'],
     intro: 'An unscrambler that only sees your rack gives incomplete answers. In real Scrabble, the board already has letters you can build from — adding those as extras to your search opens up plays you otherwise miss.',
     keyPoints: [
@@ -355,6 +364,7 @@ export const SUPPORT_UNSCRAMBLE: ContentPageConfig[] = [
     subhead: 'The five or six letter combinations that carry most anagram puzzles.',
     outcomeLine: 'Recognise -ING, -ED, TH-, ST-, vowel clusters — and most anagrams fall open in seconds.',
     description: 'The most common anagram building blocks — suffix groups, consonant clusters, vowel runs — for faster solving.',
+    discoverHeadline: 'The common anagram patterns that make jumbled letters click',
     keywords: ['common anagram patterns', 'anagram solving technique', 'how to solve anagrams fast'],
     intro: 'Anagrams are puzzles in pattern recognition. Once you can spot a likely -ING ending or a TH- opening inside a jumble, the rest of the word usually sorts itself.',
     keyPoints: [

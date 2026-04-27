@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
-const updated = '2026-04-20';
+const updated = '2026-04-26';
 ---
 <BaseLayout
   title="Privacy Policy — Kefiw"
@@ -18,6 +18,7 @@ const updated = '2026-04-20';
       <li>Values you type into tools stay in your browser and are never sent to our servers.</li>
       <li>Ads default to <strong>contextual only</strong> (non-personalised). You may opt in to personalised ads via the privacy anchor at the bottom of every page.</li>
       <li>Health tools (<code>/health/*</code>) remain contextual-only regardless of your choice.</li>
+      <li>Contact form submissions are stored server-side because you intentionally submit them.</li>
     </ul>
 
     <h2>Consent Management</h2>
@@ -53,6 +54,7 @@ const updated = '2026-04-20';
         <tr><td><code>kfw_context</code></td><td>Session diagnostics context (viewport, route cluster, risk tier)</td></tr>
         <tr><td><code>kfw-bridge-metrics</code></td><td>Cross-tool numeric bridge values (no user-typed strings)</td></tr>
         <tr><td><code>kfw-tool-state-*</code></td><td>Per-tool input persistence so you don't lose work on reload. User-typed values in these entries never leave your device.</td></tr>
+        <tr><td><code>kfw_track_progress:*</code></td><td>Per-track progress so guided Tracks can remember completed or skipped steps on this device.</td></tr>
       </tbody>
     </table>
 
@@ -66,8 +68,13 @@ const updated = '2026-04-20';
     <h2>Health tools</h2>
     <p>Tools under <code>/health/*</code> use generic reagent identifiers (Reagent-A, Reagent-B, …) rather than specific compound names. Values you enter are stored in your browser's local storage and never transmitted. These tools are contextual-only for advertising and are not clinical advice.</p>
 
+    <h2>Contact form submissions</h2>
+    <p>
+      If you submit the contact form, Kefiw stores the name, email, phone number, contact type, and message text you provide in a Cloudflare D1 database. We use this to review corrections, bugs, complaints, solicitations, and other requests. We do not promise replies, phone calls, text messages, support tickets, vendor follow-ups, or individual back-and-forth.
+    </p>
+
     <h2>Data retention</h2>
-    <p>On-device storage (cookies and localStorage) persists for the max age declared above or until you clear it. Server-side aggregate telemetry is retained for up to 395 days.</p>
+    <p>On-device storage (cookies and localStorage) persists for the max age declared above or until you clear it. Server-side aggregate telemetry is retained for up to 395 days. Contact form submissions are retained until reviewed and no longer operationally useful.</p>
 
     <h2>Your rights</h2>
     <p>You can:</p>

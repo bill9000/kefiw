@@ -1,0 +1,41 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+---
+
+<BaseLayout
+  title="Corrections — Kefiw"
+  description="How Kefiw handles corrections, formula fixes, source updates, and user-reported issues."
+  canonical="/corrections/"
+  keywords={['corrections', 'kefiw corrections', 'formula corrections']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Corrections</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw corrects pages when formulas, assumptions, source framing, or implementation behavior are wrong or materially unclear.
+    </p>
+
+    <TrustNav current="/corrections/" />
+
+    <h2>What counts as a correction</h2>
+    <ul>
+      <li>a formula bug or incorrect unit conversion</li>
+      <li>a default assumption that no longer matches the stated methodology</li>
+      <li>a source or review label that does not support the surrounding claim</li>
+      <li>a UI behavior that changes the practical result a user sees</li>
+    </ul>
+
+    <h2>How to report one</h2>
+    <p>
+      Send the page URL, the expected result, the actual result, and any source or calculation that supports the report through the <a href="/contact/">contact page</a>.
+    </p>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

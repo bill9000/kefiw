@@ -236,6 +236,7 @@ Cognitive engagement is worth building into a daily routine, but games are not a
     outcomeLine: 'For most older adults, 10 to 20 minutes of mixed, enjoyable play beats one hard puzzle that makes tomorrow feel optional.',
     description: 'A practical brain-game routine for seniors using Kefiw word games and Sudoku. Includes evidence-backed guardrails, a realistic schedule, and when to stop self-managing and ask for evaluation.',
     metaDescription: 'A senior-friendly brain-game routine using word games and Sudoku. Learn how to keep play enjoyable, what evidence says, and when to get checked for memory changes.',
+    discoverHeadline: 'Brain games for seniors that stay fun enough to keep doing daily',
     keywords: [
       'brain games for seniors',
       'word games for seniors',
@@ -425,6 +426,7 @@ That is a real brain-health week.
     outcomeLine: 'Word games can keep you mentally engaged, but midlife memory concerns still deserve sleep, stress, medication, vascular, and medical review.',
     description: 'What to do if memory changes show up in your 40s or 50s, what puzzles can help with, and why evaluation still matters. Includes a realistic Kefiw routine and red flags to take seriously.',
     metaDescription: 'Noticing memory changes after 40? Learn where word games and puzzles fit, what official guidance says, and when to seek evaluation instead of self-testing.',
+    discoverHeadline: 'Memory changes after 40: what to check before you panic',
     keywords: [
       'memory changes after 40',
       'forgetful in 40s',
@@ -606,6 +608,7 @@ The goal is not to turn yourself into a math machine. The goal is to keep using 
     outcomeLine: 'Estimate first, reveal second, and ordinary calculators become quick drills for numeracy, working memory, and attention.',
     description: 'How to turn everyday calculators into mental-math games by guessing first and scoring the gap. Includes where this fits in a broader brain-health routine and why Kefiw plans scored calculator game modes.',
     metaDescription: 'Use everyday calculators as mental-math games. Learn the estimate-first method, where it fits in a brain-health routine, and how scored calculator game modes can help.',
+    discoverHeadline: 'Turn every calculator into a mental-math guessing game',
     keywords: [
       'mental math practice',
       'calculator guessing game',

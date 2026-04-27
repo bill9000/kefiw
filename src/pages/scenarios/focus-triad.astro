@@ -1,0 +1,53 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import FocusTriadIsland from '~/components/triad/FocusTriad.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/scenarios/', label: 'Scenarios' },
+  { href: '/scenarios/focus-triad/', label: 'Focus Triad' },
+];
+---
+<BaseLayout
+  title="Focus Triad — Distracted · Typical · Deep | Kefiw"
+  description="Three Task Switching Tax instances in parallel. Distracted (8 contexts), Typical (3), Deep (single-thread). Watch how the same workday produces different effective hours under each profile."
+  canonical="/scenarios/focus-triad/"
+  keywords={['focus triad', 'task switching tax parallel', 'context overhead calculator', 'deep work vs distracted']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">Focus Triad</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Distracted · Typical · Deep</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Three Task Switching Tax instances pre-seeded with different concurrent-task counts.
+        Distracted assumes 8 contexts in flight (modern knowledge-worker default). Typical is 3 (one
+        primary project, batched messaging, one strategic block). Deep is single-threaded — the
+        thing most people never actually try.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        The math: retention = 0.80<sup>(n−1)</sup>. At n=8, only 21% of your hours survive
+        context-switching overhead. At n=3 it's 64%. At n=1 it's 100%.
+      </p>
+    </header>
+
+    <FocusTriadIsland client:only="react" />
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">How the triad works</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Each pillar is a namespaced Task Switching Tax instance. State is kept in separate
+        localStorage keys (<code class="rounded bg-white px-1 text-xs text-cyan-800">task-switching-tax-v1__distracted</code>,
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">__typical</code>,
+        <code class="rounded bg-white px-1 text-xs text-cyan-800">__deep</code>). On first visit the
+        triad pre-seeds each with its starting tasks/hours; after that your edits persist per pillar.
+      </p>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Adjust any column to explore your specific situation — change "Distracted" from 8 to 12 to
+        see what a Slack-saturated week looks like, or push "Deep" up to 10 hours to model a
+        weekend retreat.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

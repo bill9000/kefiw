@@ -43,6 +43,12 @@ function readRegion(): Region | null {
   return v === 'EU' || v === 'UK' || v === 'US' || v === 'ROW' ? v : null;
 }
 
+function readRegionOverride(): Region | null {
+  if (typeof window === 'undefined') return null;
+  const v = new URLSearchParams(window.location.search).get('kfw_region');
+  return v === 'EU' || v === 'UK' || v === 'US' || v === 'ROW' ? v : null;
+}
+
 function writeRegion(region: Region): void {
   if (typeof localStorage === 'undefined') return;
   localStorage.setItem(REGION_KEY, region);
@@ -79,6 +85,14 @@ export function getConsent(): ConsentState {
 
 export async function initConsent(): Promise<void> {
   if (typeof window === 'undefined') return;
+  const regionOverride = readRegionOverride();
+  if (regionOverride) {
+    const stored = read();
+    window.__KFW_REGION = regionOverride;
+    writeRegion(regionOverride);
+    setConsent(stored ?? defaultForRegion(regionOverride), { silent: true });
+    return;
+  }
   const stored = read();
   if (stored) {
     const region = readRegion() ?? 'ROW';

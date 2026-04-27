@@ -25,6 +25,8 @@ interface Props {
   format?: 'auto' | 'rectangle' | 'banner' | 'multiplex';
   minHeight?: number;
   className?: string;
+  closeable?: boolean;
+  fullBleed?: boolean;
 }
 
 const PUBLISHER_ID = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID as string | undefined) ?? '';
@@ -58,7 +60,10 @@ export default function AdSlot({
   format = 'auto',
   minHeight,
   className,
+  closeable = true,
+  fullBleed = true,
 }: Props): JSX.Element {
+  const [mounted, setMounted] = useState(false);
   const [state, setState] = useState<'loading' | 'filled' | 'unfilled'>('loading');
   const [dismissedUntil, setDismissedUntil] = useState<number>(0);
   const [now, setNow] = useState<number>(() => Date.now());
@@ -70,10 +75,14 @@ export default function AdSlot({
   const shellRef = useRef<HTMLDivElement | null>(null);
 
   const height = minHeight ?? DEFAULT_MIN_HEIGHT[zoneId];
-  const routeLtd = typeof window !== 'undefined' ? isLtdRoute() : false;
-  const consent = typeof window !== 'undefined' ? getConsent() : 'ltd';
+  const routeLtd = mounted ? isLtdRoute() : false;
+  const consent = mounted ? getConsent() : 'ltd';
   const ltd = routeLtd || consent !== 'full';
   const devMode = !PUBLISHER_ID || !slotId;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (devMode || typeof window === 'undefined') return;
@@ -149,9 +158,9 @@ export default function AdSlot({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100vw',
-    marginLeft: 'calc(50% - 50vw)',
-    marginRight: 'calc(50% - 50vw)',
+    width: fullBleed ? '100vw' : '100%',
+    marginLeft: fullBleed ? 'calc(50% - 50vw)' : 0,
+    marginRight: fullBleed ? 'calc(50% - 50vw)' : 0,
   };
 
   const closeBtnStyle: React.CSSProperties = {
@@ -218,9 +227,9 @@ export default function AdSlot({
       'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     fontSize: 11,
     color: '#94a3b8',
-    width: '100vw',
-    marginLeft: 'calc(50% - 50vw)',
-    marginRight: 'calc(50% - 50vw)',
+    width: fullBleed ? '100vw' : '100%',
+    marginLeft: fullBleed ? 'calc(50% - 50vw)' : 0,
+    marginRight: fullBleed ? 'calc(50% - 50vw)' : 0,
   };
 
   if (dismissed) {
@@ -240,7 +249,7 @@ export default function AdSlot({
     return (
       <div ref={shellRef} style={shellStyle} className={className} data-kfw-zone={zoneId}>
         <div style={labelStyle}>Advertisement</div>
-        <button type="button" style={closeBtnStyle} onClick={close} aria-label="Close advertisement">×</button>
+        {closeable && <button type="button" style={closeBtnStyle} onClick={close} aria-label="Close advertisement">×</button>}
         <div style={stateTextStyle}>
           Ad placeholder · {height}px · {ltd ? 'contextual' : 'personalized'}
         </div>
@@ -251,7 +260,7 @@ export default function AdSlot({
   return (
     <div ref={shellRef} style={shellStyle} className={className} data-kfw-zone={zoneId}>
       <div style={labelStyle}>Advertisement</div>
-      <button type="button" style={closeBtnStyle} onClick={close} aria-label="Close advertisement">×</button>
+      {closeable && <button type="button" style={closeBtnStyle} onClick={close} aria-label="Close advertisement">×</button>}
 
       {state === 'loading' && (
         <div style={stateTextStyle}>Loading…</div>

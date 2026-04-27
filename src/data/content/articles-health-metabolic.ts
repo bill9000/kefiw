@@ -1173,7 +1173,7 @@ export const ARTICLES_HEALTH_METABOLIC: ContentPageConfig[] = [
     relatedIds: ['metabolic-floor', 'fuel-partition', 'kinetic-expenditure', 'art-hm-what-is-bmr-tdee', 'art-hm-interpreting-tdee-zones'],
     clusterId: 'bio-maintenance',
     faq: [
-      { q: 'How accurate is this?', a: 'TDEE estimates run ±10-15% vs doubly-labelled water. Activity multiplier is the biggest error source — most people over-claim activity. Re-anchor by tracking for 14 days: stable weight at a fixed intake = your real TDEE.' },
+      { q: 'How accurate is a TDEE estimate?', a: 'TDEE estimates usually run ±10-15% versus doubly-labelled water in normal use. Activity multiplier is the biggest error source because most people over-claim activity. Re-anchor by tracking for 14 days: stable weight at a fixed intake gives a better personal TDEE.' },
       { q: 'Should I recompute after weight loss?', a: 'Yes. Every 10 kg lost cuts BMR by ~100 kcal. Recompute monthly during active cuts and drop the target so the deficit stays 500 kcal, not inflates to 700 kcal.' },
       { q: 'Why is sedentary only 1.2?', a: 'Sedentary covers basal non-exercise activity (fidgeting, posture, daily movement) — about 20% over BMR. Add exercise on top by shifting the multiplier up one bucket per 3 weekly training hours.' },
     ],

@@ -4,12 +4,16 @@ import type { ToolCategory } from './tools';
 export const REVIEW_LINKS = {
   hub: '/about-the-reviewers/',
   nurse: '/registered-nurse-review/',
+  contractor: '/remodeling-contractor-review/',
+  realtor: '/realtor-review/',
   engineering: '/engineering-review/',
   science: '/scientific-review/',
   editorial: '/editorial-policy/',
   methodology: '/methodology/',
   sources: '/sources/',
   healthDisclaimer: '/health-disclaimer/',
+  advertisingDisclosure: '/advertising-disclosure/',
+  corrections: '/corrections/',
 } as const;
 
 export interface ReviewLink {
@@ -53,8 +57,28 @@ const SCIENCE_ROLE: ReviewRole = {
 const NURSE_ROLE: ReviewRole = {
   label: 'Registered nurse review',
   href: REVIEW_LINKS.nurse,
-  note: 'Engaged only on health-related pages. Reviews safety wording, escalation language, and red-flag copy. Non-health pages (word tools, calculators, games, guides) are not reviewed by a nurse.',
+  note: 'Engaged on health, care, senior-care, and wellbeing pages. Reviews safety wording, escalation language, red-flag copy, and non-diagnosis boundaries.',
 };
+
+const CONTRACTOR_ROLE: ReviewRole = {
+  label: 'Remodeling contractor review',
+  href: REVIEW_LINKS.contractor,
+  note: 'Approves Home and Home Lab scope, bid-language, material and labor assumptions, quote checklists, and homeowner risk flags.',
+};
+
+const REALTOR_ROLE: ReviewRole = {
+  label: 'Realtor review',
+  href: REVIEW_LINKS.realtor,
+  note: 'Approves Property workflow, seller proceeds framing, commission and closing-cost assumptions, net-sheet language, and real-estate next questions.',
+};
+
+export const REVIEW_ROLES = {
+  engineering: ENGINEERING_ROLE,
+  science: SCIENCE_ROLE,
+  nurse: NURSE_ROLE,
+  contractor: CONTRACTOR_ROLE,
+  realtor: REALTOR_ROLE,
+} as const;
 
 function sharedLinks(includeHealthDisclaimer = false): ReviewLink[] {
   const links: ReviewLink[] = [

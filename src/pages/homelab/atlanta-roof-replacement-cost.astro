@@ -1,0 +1,116 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Replacement Cost in Atlanta (2026) — Reviewed by a TX GC | Kefiw';
+const description = 'Atlanta roof replacement cost — local pricing reflects high humidity, frequent thunderstorms, and Georgia\'s mature suburban housing stock with steep-pitch architecture. Reviewed by a Texas-licensed general contractor.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/atlanta-roof-replacement-cost/"
+  keywords={['roof replacement cost Atlanta', 'Atlanta GA roofing cost', 'Fulton County roof', 'Atlanta humidity roof']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/atlanta-roof-replacement-cost/', label: 'Atlanta' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Replacement Cost in Atlanta</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Atlanta runs about 2% under Houston on labor and similar on materials. The big drivers in the Atlanta market are the steep-pitch architecture common in Georgia housing stock, frequent thunderstorms, and dense tree canopy that traps moisture against the roof.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator client:load defaultPermitProfileId="atlanta_ga" />
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>Atlanta typical scenarios</h2>
+      <ul>
+        <li><strong>1-story, 6:12, simple hip, 2,400 sqft roof, architectural asphalt</strong> — $11,000–$16,000 typical</li>
+        <li><strong>2-story Colonial, 9:12 steep, 3,200 sqft, architectural</strong> — $16,500–$25,000</li>
+        <li><strong>1-story metal, 2,400 sqft</strong> — $28,000–$42,000</li>
+      </ul>
+      <p>
+        Note the steep-pitch labor uplift on the 2-story Colonial — a 9:12 roof costs 15–25% more in labor than the equivalent 6:12 due to fall-protection and slower install pace.
+      </p>
+
+      <h2>Atlanta-specific factors</h2>
+
+      <h3>Steep-pitch architecture is common</h3>
+      <p>
+        Atlanta housing stock — especially the older suburbs like Buckhead, Druid Hills, Ansley Park, and the inner-perimeter neighborhoods — features Colonial, Federal, and Georgian architecture with 8:12 to 12:12 pitches. Practical implications:
+      </p>
+      <ul>
+        <li><strong>Labor cost is meaningfully higher</strong> than Houston-style 6:12 ranches.</li>
+        <li><strong>Fall protection and roof jacks add to crew time.</strong></li>
+        <li><strong>Material waste is higher</strong> on steep, complex Colonial roofs — 12–15% waste typical, vs 10% on simple gable.</li>
+      </ul>
+      <p>
+        Use the <a href="/homelab/roof-pitch-calculator/">pitch calculator</a> if you're not sure of your pitch — it makes a real cost difference here.
+      </p>
+
+      <h3>Humidity + tree canopy = decking and ventilation issues</h3>
+      <p>
+        Atlanta's combination of high humidity and dense tree cover creates two related issues: <strong>decking rot</strong> from prolonged moisture exposure, and <strong>algae streaking</strong> on shingles from shade keeping the roof damp. Practical mitigations:
+      </p>
+      <ul>
+        <li><strong>Algae-resistant shingles</strong> (most current architectural shingles include AR granules) — adds zinc/copper for natural algae prevention.</li>
+        <li><strong>Strong attic ventilation</strong> — humid attics rot decking from below.</li>
+        <li><strong>Tree-canopy management</strong> — trim back branches to give the roof at least morning sun on every slope.</li>
+      </ul>
+      <p>
+        Run the <a href="/homelab/decking-replacement-calculator/">decking replacement calculator</a> with at least 12% replacement assumption — Atlanta roofs surprise more often than dry-climate markets.
+      </p>
+
+      <h3>Thunderstorm wind, not hurricane</h3>
+      <p>
+        Atlanta sits north of hurricane impact zones but catches frequent severe thunderstorms with 50–70 mph winds and occasional tornadoes. Wind damage claims (lifted shingles, missing tabs) are more common than hail claims here. Insurance carriers typically use flat deductibles ($1,000–$2,500) rather than the percentage deductibles common in TX/FL.
+      </p>
+
+      <h3>City of Atlanta and metro permits</h3>
+      <p>
+        Permits run $250–$650 typical. Decatur, Sandy Springs, Brookhaven, and other metro municipalities each have their own permit process. Historic-district overlays in Inman Park, Grant Park, and similar require design review.
+      </p>
+
+      <h2>Material recommendations for Atlanta</h2>
+      <ul>
+        <li><strong>Algae-resistant architectural asphalt</strong> — the default for shaded lots.</li>
+        <li><strong>Designer asphalt</strong> — common on premium homes (Buckhead, Brookhaven). Looks right on Colonial architecture.</li>
+        <li><strong>Standing seam metal</strong> — gaining traction in Atlanta contemporary and farmhouse-style homes; humidity-tolerant.</li>
+        <li><strong>Concrete tile</strong> — uncommon in Atlanta; structural review needed if specified.</li>
+      </ul>
+
+      <h2>Companion calculators</h2>
+      <ul>
+        <li><a href="/homelab/roof-replacement-cost-calculator/">Roof Replacement Cost Calculator</a></li>
+        <li><a href="/homelab/roof-pitch-calculator/">Roof Pitch Calculator</a> — Atlanta's steep-pitch labor matters</li>
+        <li><a href="/homelab/decking-replacement-calculator/">Decking Replacement Calculator</a> — humidity issues</li>
+        <li><a href="/homelab/attic-ventilation-calculator/">Attic Ventilation Calculator</a> — moisture mitigation</li>
+      </ul>
+
+      <h2>About this page</h2>
+      <p>
+        Atlanta cost adjustments and editorial review by Eurocraft, a Texas-licensed general contractor. Numbers reflect Q2 2026 Atlanta-market pricing.
+      </p>
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

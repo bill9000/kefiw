@@ -51,14 +51,47 @@ const jsonLd = {
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
 
-  <aside class="border-b border-cyan-200 bg-gradient-to-r from-cyan-50 via-cyan-50 to-white">
+  <section class="container-wide py-8 sm:py-12">
+    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-700">Kefiw</p>
+    <h1 class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">Fast calculators, guides, and daily tools.</h1>
+    <p class="mt-3 max-w-2xl text-lg text-slate-600">
+      Choose a decision area first, then use the calculator, track, guide, or game that fits the job.
+    </p>
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <a href="/property/" class="rounded-md border border-slate-200 bg-white p-4 no-underline transition hover:border-brand-300 hover:bg-brand-50">
+        <div class="text-sm font-semibold text-slate-900">Property</div>
+        <div class="mt-1 text-xs leading-5 text-slate-600">Improve, estimate, buy, sell, own, invest, and insure.</div>
+      </a>
+      <a href="/business/" class="rounded-md border border-slate-200 bg-white p-4 no-underline transition hover:border-brand-300 hover:bg-brand-50">
+        <div class="text-sm font-semibold text-slate-900">Business</div>
+        <div class="mt-1 text-xs leading-5 text-slate-600">Tax, pricing, hiring, revenue, and cloud planning.</div>
+      </a>
+      <a href="/care/" class="rounded-md border border-slate-200 bg-white p-4 no-underline transition hover:border-brand-300 hover:bg-brand-50">
+        <div class="text-sm font-semibold text-slate-900">Care</div>
+        <div class="mt-1 text-xs leading-5 text-slate-600">Senior care, caregiving, Medicare, insurance, and wellbeing.</div>
+      </a>
+      <a href="/tracks/" class="rounded-md border border-slate-200 bg-white p-4 no-underline transition hover:border-brand-300 hover:bg-brand-50">
+        <div class="text-sm font-semibold text-slate-900">Tracks</div>
+        <div class="mt-1 text-xs leading-5 text-slate-600">Guided pipelines that turn related tools into a plan.</div>
+      </a>
+    </div>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a href="/calculators/" class="btn-ghost">Tools</a>
+      <a href="/games/" class="btn-ghost">Play</a>
+      <a href="/guides/" class="btn-ghost">Guides</a>
+      <a href="/word-tools/" class="btn-ghost">Word Tools</a>
+      <a href="/converters/" class="btn-ghost">Converters</a>
+    </div>
+  </section>
+
+  <aside class="border-y border-cyan-200 bg-gradient-to-r from-cyan-50 via-cyan-50 to-white">
     <div class="container-wide py-4">
       <div class="flex items-center gap-2">
         <span class="inline-flex items-center rounded-full bg-cyan-600 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white">Daily</span>
         <p class="text-sm font-semibold text-cyan-900">
           Short, repeatable play that makes daily cognitive engagement easy to stick with —
           <a href="/guides/word-games-and-puzzles-brain-health-routine/" class="underline hover:text-cyan-700">not a cure, not a diagnosis</a>,
-          just a routine you&rsquo;ll actually keep. Four pipelines: word, math, verbal, spatial.
+          just a routine you&rsquo;ll actually keep.
         </p>
       </div>
       <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -97,23 +130,6 @@ const jsonLd = {
       </div>
     </div>
   </aside>
-
-  <section class="container-wide py-10 sm:py-14">
-    <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Small tools, big time saver.</h1>
-    <p class="mt-3 max-w-2xl text-lg text-slate-600">
-      Word unscramblers, converters, calculators, and lightweight games. Everything runs in your browser — no signup, no tracking, mobile-first.
-    </p>
-    <div class="mt-6 flex flex-wrap gap-2">
-      <a href="/word-tools/" class="btn-ghost">Word Tools</a>
-      <a href="/converters/" class="btn-ghost">Converters</a>
-      <a href="/calculators/" class="btn-ghost">Calculators</a>
-      <a href="/finance/" class="btn-ghost">Finance</a>
-      <a href="/health/" class="btn-ghost">Health</a>
-      <a href="/logic/" class="btn-ghost">Logic</a>
-      <a href="/games/" class="btn-ghost">Games</a>
-      <a href="/guides/" class="btn-ghost">Guides</a>
-    </div>
-  </section>
 
   <PopularTools tools={popular} />
 

@@ -1,0 +1,123 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Admin 1411 — Contact Requests | Kefiw"
+  description="Private Kefiw contact request review page."
+  canonical="/admin1411/"
+  noindex
+>
+  <article class="container-wide py-8">
+    <header class="mb-6 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Private admin</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight">Contact Requests</h1>
+      <p class="mt-2 text-sm text-slate-600">
+        URL-gated request list. No login form is displayed. On Cloudflare Pages, this same route is served by a Pages Function that reads D1 directly.
+      </p>
+    </header>
+
+    <section class="mt-6">
+      <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="text-xl font-semibold text-slate-900">Latest submissions</h2>
+        <a href="/admin1411/" class="btn-ghost text-sm no-underline">Refresh</a>
+      </div>
+      <div id="contact-request-list" class="grid gap-3">
+        <p class="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600">
+          Loading requests from the admin route...
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<script is:inline>
+  const listEl = document.getElementById('contact-request-list');
+
+  function typeLabel(value) {
+    const labels = {
+      correction: 'Correction',
+      addition: 'Addition / new tool',
+      idea: 'Idea',
+      solicitation: 'Solicitation / sales pitch',
+      bug: 'Bug',
+      complaint: 'Complaint',
+      advertising: 'Advertising / partnership',
+      'review-source': 'Review or source note',
+      'legal-privacy': 'Legal / privacy',
+      other: 'Other',
+    };
+    return labels[value] || value || 'Unknown';
+  }
+
+  function addText(parent, tag, className, text) {
+    const node = document.createElement(tag);
+    node.className = className;
+    node.textContent = text;
+    parent.appendChild(node);
+    return node;
+  }
+
+  function renderRows(rows) {
+    if (!listEl) return;
+    listEl.textContent = '';
+    if (!rows.length) {
+      addText(listEl, 'p', 'rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600', 'No contact requests yet.');
+      return;
+    }
+
+    for (const row of rows) {
+      const card = document.createElement('article');
+      card.className = 'rounded-lg border border-slate-200 bg-white p-4 shadow-sm';
+
+      const top = document.createElement('div');
+      top.className = 'flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between';
+      card.appendChild(top);
+
+      const titleWrap = document.createElement('div');
+      top.appendChild(titleWrap);
+      addText(titleWrap, 'div', 'text-xs font-semibold uppercase tracking-[0.16em] text-brand-700', typeLabel(row.contact_type));
+      addText(titleWrap, 'h3', 'mt-1 text-lg font-semibold text-slate-900', row.name || 'Unknown');
+
+      const meta = document.createElement('div');
+      meta.className = 'text-sm text-slate-600 sm:text-right';
+      const date = new Date(row.created_at).toLocaleString();
+      addText(meta, 'div', '', date);
+      addText(meta, 'div', 'mt-1 font-mono text-xs text-slate-500', `#${row.id} · ${row.status || 'new'}`);
+      top.appendChild(meta);
+
+      const contact = document.createElement('div');
+      contact.className = 'mt-3 grid gap-2 text-sm text-slate-700 sm:grid-cols-2';
+      addText(contact, 'div', '', `Email: ${row.email || ''}`);
+      addText(contact, 'div', '', `Phone: ${row.phone || ''}`);
+      card.appendChild(contact);
+
+      addText(card, 'p', 'mt-3 whitespace-pre-wrap rounded-md bg-slate-50 p-3 text-sm text-slate-800', row.message || '');
+      listEl.appendChild(card);
+    }
+  }
+
+  async function loadRequests() {
+    try {
+      const response = await fetch('/admin1411/?format=json&limit=100');
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.ok !== true || result.error) {
+        throw new Error(result.error || `HTTP ${response.status}`);
+      }
+      renderRows(result.requests || []);
+    } catch {
+      renderRows([]);
+      if (listEl) {
+        listEl.textContent = '';
+        addText(
+          listEl,
+          'p',
+          'rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900',
+          'Requests load from the Cloudflare Pages Function at this same URL. Plain Astro dev cannot read the D1 database.'
+        );
+      }
+    }
+  }
+
+  void loadRequests();
+</script>

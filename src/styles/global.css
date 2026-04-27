@@ -36,4 +36,11 @@
   .prose-tool p  { @apply my-3 text-slate-700; }
   .prose-tool ul { @apply my-3 list-disc pl-6 text-slate-700; }
   .prose-tool li { @apply my-1; }
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
 }

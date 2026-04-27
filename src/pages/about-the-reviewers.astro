@@ -5,9 +5,9 @@ import TrustNav from '~/components/TrustNav.astro';
 
 <BaseLayout
   title="About the Reviewers — Kefiw"
-  description="Meet the review roles behind Kefiw: registered nurse review, engineering review, scientific review, and the editorial policy that defines what each one covers."
+  description="Meet the staff review roles behind Kefiw: engineering, scientific, registered nurse, remodeling contractor, realtor, and the editorial policy that defines what each one approves."
   canonical="/about-the-reviewers/"
-  keywords={['about the reviewers', 'kefiw reviewers', 'registered nurse review', 'engineering review', 'scientific review']}
+  keywords={['about the reviewers', 'kefiw reviewers', 'registered nurse review', 'engineering review', 'scientific review', 'contractor review', 'realtor review']}
 >
   <article class="container-narrow py-10 prose-tool">
     <h1 class="text-3xl font-bold tracking-tight">About the Reviewers</h1>
@@ -19,19 +19,21 @@ import TrustNav from '~/components/TrustNav.astro';
 
     <h2>Why this exists</h2>
     <p>
-      Most tool sites say a page is &ldquo;reviewed&rdquo; without saying what that means. Kefiw does the opposite. The review label should tell you whether a page was checked for implementation accuracy, evidence framing, health-safety wording, or some combination of those. That matters because a word-game helper, a percentage calculator, and a health-routing page do not carry the same risk.
+      Most tool sites say a page is &ldquo;reviewed&rdquo; without saying what that means. Kefiw does the opposite. The review label tells you whether a page was checked for implementation accuracy, evidence framing, health-safety wording, contractor scope, real-estate workflow, or some combination of those. That matters because a word-game helper, a roof estimate, a seller proceeds calculator, and a health-routing page do not carry the same risk.
     </p>
 
-    <h2>The three review lanes</h2>
+    <h2>The review roles</h2>
     <ul>
-      <li><strong>Registered nurse review</strong> — <em>engaged only on health-related pages (pages under <a href="/health/">/health/</a>)</em>. Covers health-safety wording, escalation language, and red-flag copy. Not engaged for word tools, calculators, converters, finance tools, games, or general guides.</li>
-      <li><strong>Engineering review</strong> covers formulas, calculations, input handling, browser behavior, unit conversions, and implementation correctness. Engaged on every page.</li>
-      <li><strong>Scientific review</strong> covers source quality, evidence framing, assumptions, uncertainty, and clear explanation of limits. Engaged on every page.</li>
+      <li><strong><a href="/engineering-review/">Engineering review</a></strong> covers formulas, calculations, input handling, browser behavior, unit conversions, and implementation correctness. Engaged on every page.</li>
+      <li><strong><a href="/scientific-review/">Scientific review</a></strong> covers source quality, evidence framing, assumptions, uncertainty, and clear explanation of limits. Engaged on every page.</li>
+      <li><strong><a href="/registered-nurse-review/">Registered nurse review</a></strong> covers health and care safety wording, escalation language, red-flag copy, and non-diagnosis boundaries. Engaged on health pages, Care pages, senior-care planning, and wellbeing Tracks.</li>
+      <li><strong><a href="/remodeling-contractor-review/">Remodeling contractor review</a></strong> covers Home and Home Lab pages where scope, materials, labor assumptions, bid language, and quote-risk questions matter.</li>
+      <li><strong><a href="/realtor-review/">Realtor review</a></strong> covers Property pages where seller proceeds, buyer cash-to-close, commission, closing costs, ownership, and real-estate workflow assumptions matter.</li>
     </ul>
 
     <h2>How the roles work together</h2>
     <p>
-      The same page can carry more than one review lane. A health calculator may be engineered for deterministic math, reviewed scientifically for how the underlying model is framed, and checked by an RN so the safety wording is clear and not overstated. A word tool or game helper usually does not need RN review, but it still benefits from engineering review for search logic and scientific review for claim discipline.
+      The same page can carry more than one review role. A roof Track is engineered for deterministic math, scientifically reviewed for uncertainty language, and approved by contractor review for scope and quote questions. A seller proceeds Track is engineered for the calculation, scientifically reviewed for assumptions, and approved by realtor review for workflow framing. Health and care pages add RN approval for safety wording.
     </p>
 
     <h2>What users are usually trying to do</h2>
@@ -44,7 +46,7 @@ import TrustNav from '~/components/TrustNav.astro';
       <li>It does not mean a page is personalized to your situation.</li>
       <li>It does not mean a tool replaces a clinician, lawyer, accountant, financial adviser, or any other licensed professional.</li>
       <li>It does not mean a single reviewer approves every sentence on the site for every possible use case.</li>
-      <li>It does mean the page has an identified review scope, which is documented in plain language.</li>
+      <li>It does mean the page has an identified staff approval scope, which is documented in plain language and linked from the page.</li>
     </ul>
 
     <h2>Read the details</h2>

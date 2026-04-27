@@ -3,6 +3,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import HomelabBand from '~/components/homelab/HomelabBand.astro';
 import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
 import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
 const title = 'Kefiw Home Lab — Honest home-improvement cost calculators';
 const description = 'Roof, gutter, and skin-of-the-house cost calculators reviewed by a Texas-licensed general contractor. Range-based estimates, transparent methodology, no fake precision.';
@@ -104,15 +105,110 @@ const description = 'Roof, gutter, and skin-of-the-house cost calculators review
       </div>
     </section>
 
+    <section aria-label="Spec helpers" class="mt-8">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">Spec helpers</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <a href="/homelab/underlayment-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Spec</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Underlayment Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Synthetic vs 15# / 30# felt — rolls and cost.</p>
+        </a>
+        <a href="/homelab/ice-water-shield-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Spec</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Ice &amp; Water Shield Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Eaves + valleys + low-slope + penetrations coverage.</p>
+        </a>
+        <a href="/homelab/drip-edge-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Spec</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Drip Edge Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Eave + rake linear feet, 10-foot piece count, cost.</p>
+        </a>
+        <a href="/homelab/attic-ventilation-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Spec</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Attic Ventilation Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Required NFA, ridge / soffit / box-vent quantities.</p>
+        </a>
+        <a href="/homelab/decking-replacement-calculator/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Spec</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Decking Replacement Calculator</div>
+          <p class="mt-1 text-sm text-slate-600">Sheets + cost (OSB or plywood) by replacement %.</p>
+        </a>
+      </div>
+    </section>
+
+    <section aria-label="City pages" class="mt-8">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">By city</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <a href="/homelab/houston-roof-replacement-cost/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Texas — home market</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Houston</div>
+          <p class="mt-1 text-sm text-slate-600">Hail belt, hurricane-edge, heat-aged shingles. $11K–$22K typical.</p>
+        </a>
+        <a href="/homelab/dallas-roof-replacement-cost/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Texas</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Dallas / DFW</div>
+          <p class="mt-1 text-sm text-slate-600">Worst hail belt in the US — Class 4 default, percentage deductibles standard.</p>
+        </a>
+        <a href="/homelab/austin-roof-replacement-cost/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Texas</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Austin</div>
+          <p class="mt-1 text-sm text-slate-600">UV-driven aging, Hill Country terrain, WUI fire considerations.</p>
+        </a>
+        <a href="/homelab/san-antonio-roof-replacement-cost/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Texas</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">San Antonio</div>
+          <p class="mt-1 text-sm text-slate-600">Lower labor rates, historic district overlays, tile prevalence.</p>
+        </a>
+        <a href="/homelab/atlanta-roof-replacement-cost/" class="block rounded-md border border-slate-200 bg-white p-4 transition hover:border-amber-500 hover:shadow-sm">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Georgia</div>
+          <div class="mt-1 text-base font-semibold text-slate-900">Atlanta</div>
+          <p class="mt-1 text-sm text-slate-600">Steep-pitch Colonials, humidity-driven decking issues, algae-resistant shingle defaults.</p>
+        </a>
+      </div>
+    </section>
+
+    <section aria-label="Home Lab expansion roadmap" class="mt-8">
+      <h2 class="mb-3 text-xl font-semibold text-slate-900">Expansion roadmap</h2>
+      <p class="mb-4 max-w-3xl text-sm text-slate-600">
+        Roof is the first reviewed Home Lab cluster. The commercial home-improvement clusters below are approved as the structure for navigation, guides, and calculator pages.
+      </p>
+      <div class="grid gap-4 md:grid-cols-2">
+        <section id="hvac" class="scroll-mt-24 rounded-md border border-slate-200 bg-white p-4">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Next cluster</div>
+          <h3 class="mt-1 text-base font-semibold text-slate-900">HVAC</h3>
+          <p class="mt-1 text-sm text-slate-600">HVAC replacement cost, AC replacement, furnace replacement, heat pump cost, ductwork cost, and repair-vs-replace logic.</p>
+        </section>
+        <section id="remodel" class="scroll-mt-24 rounded-md border border-slate-200 bg-white p-4">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Major contractor vertical</div>
+          <h3 class="mt-1 text-base font-semibold text-slate-900">Remodel</h3>
+          <p class="mt-1 text-sm text-slate-600">Kitchen remodel, bathroom remodel, basement remodel, flooring, painting, siding, deck and patio calculators.</p>
+        </section>
+        <section id="windows" class="scroll-mt-24 rounded-md border border-slate-200 bg-white p-4">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Envelope</div>
+          <h3 class="mt-1 text-base font-semibold text-slate-900">Windows &amp; Doors</h3>
+          <p class="mt-1 text-sm text-slate-600">Window replacement cost, door replacement cost, and window ROI calculators.</p>
+        </section>
+        <section id="solar" class="scroll-mt-24 rounded-md border border-slate-200 bg-white p-4">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Energy investment</div>
+          <h3 class="mt-1 text-base font-semibold text-slate-900">Solar</h3>
+          <p class="mt-1 text-sm text-slate-600">Solar savings, solar payback, battery backup cost, and utility-bill offset calculators.</p>
+        </section>
+        <section id="energy" class="scroll-mt-24 rounded-md border border-slate-200 bg-white p-4 md:col-span-2">
+          <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">Operating cost</div>
+          <h3 class="mt-1 text-base font-semibold text-slate-900">Energy</h3>
+          <p class="mt-1 text-sm text-slate-600">Insulation savings, appliance savings, energy savings, ventilation, and attic-efficiency calculators.</p>
+        </section>
+      </div>
+    </section>
+
     <section aria-label="Coming next" class="mt-8">
       <h2 class="mb-3 text-xl font-semibold text-slate-900">Coming next</h2>
       <ul class="grid gap-2 text-sm text-slate-700 md:grid-cols-2">
         <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Tile Roof Cost Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Underlayment Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Drip Edge Linear-Feet Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Attic Ventilation Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Decking Replacement Calculator</li>
-        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Roof Replacement Cost in Houston / Dallas / Austin / Atlanta / Tampa</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Cost city: Tampa / Orlando</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Cost city: Miami (HVHZ)</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Cost city: Charlotte / Nashville</li>
+        <li class="rounded-md border border-slate-200 bg-slate-50 p-3">Skin-of-house: gutters, siding, soffit / fascia</li>
       </ul>
     </section>
 
@@ -120,10 +216,18 @@ const description = 'Roof, gutter, and skin-of-the-house cost calculators review
       <h2 class="mb-2 text-xl font-semibold text-slate-900">Why this differs from generic cost calculators</h2>
       <ul class="space-y-2 text-sm text-slate-700">
         <li><strong>Reviewed by a working contractor</strong>, not aggregated AI rewrites. Eurocraft is a Texas-licensed general contractor with hands-on insurance-claim experience.</li>
-        <li><strong>Range-based outputs.</strong> A bid in a single dollar number is wrong by definition. Our typical range is what a properly-scoped quote should land in.</li>
+        <li><strong>Range-based outputs.</strong> A bid in a single dollar number is wrong by definition. Our typical range is where a properly-scoped quote usually lands.</li>
         <li><strong>Decking surprise is modeled.</strong> Most calculators ignore the rotted decking that's only found after tear-off — we surface it as a risk-weighted line.</li>
         <li><strong>No lead-gen forms, no contractor matching, no tracked phone numbers.</strong> Just the calculator and the math.</li>
       </ul>
     </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'remodeling contractor', href: '/remodeling-contractor-review/' },
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
   </article>
 </BaseLayout>

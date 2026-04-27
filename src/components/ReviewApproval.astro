@@ -1,0 +1,47 @@
+---
+import type { ReviewRole } from '~/data/review';
+
+interface Props {
+  title?: string;
+  intro: string;
+  reviewers: ReviewRole[];
+  scope: string[];
+  caution?: string;
+}
+
+const {
+  title = 'Staff review approval',
+  intro,
+  reviewers,
+  scope,
+  caution = 'Informational only. Use these tools to organize a decision and verify assumptions before acting.',
+} = Astro.props;
+---
+
+<section aria-label="Staff review approval" class="mt-8 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+  <div class="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700">Approved for publication</div>
+  <h2 class="mt-2 text-xl font-semibold text-emerald-950">{title}</h2>
+  <p class="mt-2 max-w-3xl text-sm text-emerald-950">{intro}</p>
+
+  <div class="mt-5 grid gap-3 lg:grid-cols-2">
+    <article class="rounded-lg border border-emerald-200 bg-white p-4">
+      <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Approved by</div>
+      <ul class="mt-2 space-y-2">
+        {reviewers.map((reviewer) => (
+          <li>
+            <a href={reviewer.href} class="text-sm font-semibold text-brand-700 hover:underline">{reviewer.label}</a>
+            <p class="mt-0.5 text-sm text-slate-700">{reviewer.note}</p>
+          </li>
+        ))}
+      </ul>
+    </article>
+    <article class="rounded-lg border border-emerald-200 bg-white p-4">
+      <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Approval covers</div>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+        {scope.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+  </div>
+
+  <p class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{caution}</p>
+</section>

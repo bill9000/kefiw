@@ -1,0 +1,85 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ComparisonMatrix from '~/components/matrix/ComparisonMatrix.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/comparisons/', label: 'Comparisons' },
+  { href: '/comparisons/role-economics/', label: 'Role Economics' },
+];
+
+// Seed Hire (salaried offer) vs Contract (1099 with overhead).
+// Salaried path: lower nominal salary but employer benefits absorbed; higher utilization (a salaried
+// employee is "always working" — utilization isn't really their concept).
+// Contract path: higher nominal salary target to compensate for self-funded benefits + business overhead;
+// lower utilization to reflect non-billable admin/sales/sick time.
+const hireSeed = {
+  targetSalary: '120000',
+  benefitsValue: '0',          // baked into the role
+  businessOverhead: '0',
+  billableWeeks: '50',
+  billableHoursPerWeek: '40',
+  utilizationPct: '90',         // salaried = mostly working
+  livingWageAnnual: '55000',
+};
+const contractSeed = {
+  targetSalary: '120000',
+  benefitsValue: '24000',       // health, 401k, PTO out of pocket
+  businessOverhead: '12000',    // tools, accounting, equipment, sales
+  billableWeeks: '47',
+  billableHoursPerWeek: '40',
+  utilizationPct: '60',         // 24 truly-billable hours per week
+  livingWageAnnual: '55000',
+};
+---
+<BaseLayout
+  title="Role Economics — Hire vs Contract | Kefiw"
+  description="Same target take-home, two paths: salaried offer or contract rate. Side-by-side Minimum Viable Rate matrix with the delta bar showing which path actually nets more after invisible costs."
+  canonical="/comparisons/role-economics/"
+  keywords={['hire vs contract calculator', 'salary vs hourly rate', 'w2 vs 1099 rate', 'contractor rate vs salary equivalent']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">Comparison Matrix</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Role Economics — Hire vs Contract</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Same target take-home, two delivery paths. Left column is the salaried offer — benefits absorbed,
+        high utilization (you're "always working"). Right column is the contract path — self-funded benefits,
+        business overhead, lower billable utilization. The delta bar below shows which path nets more on
+        an apples-to-apples basis.
+      </p>
+      <p class="mt-2 text-sm text-slate-600">
+        The honest answer most contractors discover: matching a $120K salaried role at 60% utilization
+        requires roughly $130–$150 per hour, not the $60 hourly equivalent the math-of-2080-hours suggests.
+      </p>
+    </header>
+
+    <ComparisonMatrix
+      client:load
+      tool="minimum-viable-rate"
+      fieldKey="target_hourly_rate"
+      labelA="Hire (W-2)"
+      labelB="Contract (1099)"
+      deltaCaption="Contract rate − Hire equivalent rate"
+      seeds={{ a: hireSeed, b: contractSeed }}
+      format={(n) => `$${n.toLocaleString('en-US', { maximumFractionDigits: 0 })}/hr`}
+    />
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">What the comparison reveals</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        The contract column will almost always show a higher hourly number — because contract has to
+        cover self-employment tax, health insurance, retirement, paid time off, sales time, admin,
+        and slow weeks. Don't read that gap as "contracting pays more." Read it as "this is what the
+        contract rate has to be to <em>match</em> the salaried offer."
+      </p>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Useful exercise: take a contract rate you've been quoting and plug it into the right column
+        with realistic utilization. If the resulting take-home doesn't match what a similar W-2 role
+        pays, you're underpriced.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

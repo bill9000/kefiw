@@ -21,11 +21,16 @@ function cpuColor(usage: number): string {
   return GREEN;
 }
 
-export default function TaskSwitchingTax() {
+interface TaskSwitchingTaxProps {
+  namespace?: string;
+}
+
+export default function TaskSwitchingTax({ namespace }: TaskSwitchingTaxProps = {}) {
+  const storageKey = namespace ? `${STORAGE}__${namespace}` : STORAGE;
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
-  useEffect(() => { try { const r = localStorage.getItem(STORAGE); if (r) setState({ ...DEFAULT_STATE, ...(JSON.parse(r) as State) }); } catch {} setHydrated(true); }, []);
-  useEffect(() => { if (hydrated) localStorage.setItem(STORAGE, JSON.stringify(state)); }, [state, hydrated]);
+  useEffect(() => { try { const r = localStorage.getItem(storageKey); if (r) setState({ ...DEFAULT_STATE, ...(JSON.parse(r) as State) }); } catch {} setHydrated(true); }, [storageKey]);
+  useEffect(() => { if (hydrated) localStorage.setItem(storageKey, JSON.stringify(state)); }, [state, hydrated, storageKey]);
 
   const calc = useMemo(() => {
     const n = Math.max(1, Math.min(20, parseNum(state.tasks)));
@@ -40,9 +45,11 @@ export default function TaskSwitchingTax() {
   const col = cpuColor(calc.overheadPct);
 
   useEffect(() => {
-    if (!hydrated) return;
+    // Only the unnamespaced (default) instance writes to the shared session
+    // pipeline. Triad/matrix instances stay isolated to their namespace.
+    if (!hydrated || namespace) return;
     writeField(PIPELINE_KEY, calc.effective, PIPELINE_SOURCE, PIPELINE_LABEL);
-  }, [calc.effective, hydrated]);
+  }, [calc.effective, hydrated, namespace]);
 
   const shell: React.CSSProperties = { background: BG, color: TEXT, padding: '1.5rem', borderRadius: 12, fontFamily: '"JetBrains Mono", ui-monospace, monospace', border: `1px solid ${BORDER}` };
   const panel: React.CSSProperties = { background: PANEL, border: `1px solid ${BORDER}`, padding: '1rem', borderRadius: 8 };

@@ -1,0 +1,75 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ComparisonMatrix from '~/components/matrix/ComparisonMatrix.tsx';
+
+const crumbs = [
+  { href: '/', label: 'Home' },
+  { href: '/comparisons/', label: 'Comparisons' },
+  { href: '/comparisons/platform-arbitrage/', label: 'Platform Arbitrage' },
+];
+
+// DoorDash mileage profile — long routes, lower per-mile pay.
+const dashSeed = {
+  grossPay: '140',
+  miles: '95',
+  hours: '6',
+  gasPrice: '3.50',
+  stateMinWage: '15',
+  shiftsPerWeek: '4',
+};
+// Uber routes — denser city work, fewer miles per dollar.
+const uberSeed = {
+  grossPay: '160',
+  miles: '70',
+  hours: '6',
+  gasPrice: '3.50',
+  stateMinWage: '15',
+  shiftsPerWeek: '4',
+};
+---
+<BaseLayout
+  title="Platform Arbitrage — DoorDash vs Uber | Kefiw"
+  description="Two Gig-Net Floor instances side-by-side. Compare DoorDash mileage routes against Uber city work on real hourly after IRS mileage depreciation. The delta bar picks a winner."
+  canonical="/comparisons/platform-arbitrage/"
+  keywords={['DoorDash vs Uber', 'gig platform comparison', 'rideshare vs delivery hourly', 'gig-net floor matrix']}
+>
+  <Breadcrumb crumbs={crumbs} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-600">Comparison Matrix</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Platform Arbitrage — DoorDash vs Uber</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Two gig platforms, same driver, same shift length — different mileage profiles. Delivery
+        routes typically rack up more miles per dollar than urban rideshare; rideshare typically pays
+        more per hour but with denser city wear. The delta bar shows which one actually nets more
+        after the IRS mileage rate (which captures gas + depreciation + maintenance).
+      </p>
+    </header>
+
+    <ComparisonMatrix
+      client:load
+      tool="gig-net-floor"
+      fieldKey="side_hustle_monthly_net"
+      labelA="DoorDash"
+      labelB="Uber"
+      deltaCaption="Uber monthly net − DoorDash monthly net"
+      seeds={{ a: dashSeed, b: uberSeed }}
+    />
+
+    <section class="mx-auto mt-10 max-w-4xl rounded-lg border border-cyan-200 bg-cyan-50 p-5">
+      <h2 class="text-lg font-semibold text-cyan-900">What this matrix surfaces</h2>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        The IRS standard mileage rate ($0.67/mile in 2024) is the rough proxy for the true cost of a
+        gig mile — gas plus maintenance plus depreciation. A platform that pays $40/hour but burns
+        100 miles per shift is paying about $0.40/mile in pure gas, but trading $67 of asset wear for
+        every 100 miles. Rideshare in a dense urban core often beats delivery on real hourly even
+        when nominal pay looks similar.
+      </p>
+      <p class="mt-2 text-sm text-cyan-900/90">
+        Adjust either column with your own real numbers from a recent week. Most drivers are
+        surprised how the rankings flip when miles are honestly counted.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

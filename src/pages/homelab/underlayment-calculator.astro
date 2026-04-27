@@ -1,0 +1,71 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import Underlayment from '~/components/homelab/UnderlaymentCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Underlayment Calculator — Synthetic vs 15# Felt vs 30# Felt | Kefiw Home Lab';
+const description = 'How many rolls of underlayment do you need? Calculator handles synthetic, 15# felt, and 30# felt with overlap allowance and current price ranges. Reviewed by a Texas-licensed general contractor.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/underlayment-calculator/"
+  keywords={['underlayment calculator', 'synthetic underlayment cost', '15 lb felt vs synthetic', 'roofing underlayment rolls']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/underlayment-calculator/', label: 'Underlayment Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Underlayment Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Underlayment is the layer between the deck and the shingles. Get the right number of rolls — synthetic, 15# felt, or 30# felt — accounting for overlap and current pricing.
+      </p>
+    </header>
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+    <section class="mb-8"><Underlayment client:load /></section>
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+    <section class="prose-tool max-w-3xl">
+      <h2>The synthetic vs felt fight, settled</h2>
+      <p>
+        Synthetic underlayment is now standard on virtually every residential roof in the South. The case is straightforward:
+      </p>
+      <ul>
+        <li><strong>Tear resistance</strong> — felt rips when a contractor walks on it. Synthetic doesn't.</li>
+        <li><strong>UV stability</strong> — synthetic stays usable for 90+ days exposed; felt degrades in days.</li>
+        <li><strong>Lighter</strong> — one synthetic roll covers ~1,000 sqft vs 432 sqft for 15# felt. Faster install.</li>
+        <li><strong>Lifespan</strong> — synthetic is rated for the life of the shingle; felt is not.</li>
+      </ul>
+      <p>
+        On a typical 2,400 sqft roof, the upcharge from felt to synthetic is $200–$400. Cost-of-failure math heavily favors synthetic; if your bid quotes 15# felt, ask why.
+      </p>
+
+      <h2>When 30# felt makes sense</h2>
+      <p>
+        30# felt is heavier and slightly more durable than 15#. It's required by code under <strong>tile roofs</strong> in some jurisdictions, and sometimes specified for low-slope sections. Outside of those use cases, synthetic outperforms it on every dimension.
+      </p>
+
+      <h2>The order of layers, top to bottom</h2>
+      <ol>
+        <li>Shingles or panels</li>
+        <li><strong>Underlayment</strong> (this calculator) — covers the entire roof</li>
+        <li>Ice &amp; Water Shield at eaves, valleys, low-slope sections, and around penetrations (<a href="/homelab/ice-water-shield-calculator/">calculator</a>)</li>
+        <li>Drip edge at eaves goes <em>under</em> I&amp;W; drip edge at rakes goes <em>over</em> underlayment (<a href="/homelab/drip-edge-calculator/">calculator</a>)</li>
+        <li>Roof decking (OSB or plywood)</li>
+        <li>Rafters / trusses</li>
+      </ol>
+
+      <h2>About this calculator</h2>
+      <p>Reviewed by Eurocraft, a Texas-licensed general contractor. Pricing reflects mid-2026 South-region distributor cost.</p>
+    </section>
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

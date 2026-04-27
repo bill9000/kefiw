@@ -1,0 +1,44 @@
+---
+interface Props {
+  approvalText?: string;
+  reviewerLinks?: Array<{ label: string; href: string }>;
+  includeHealthDisclaimer?: boolean;
+}
+
+const { approvalText, reviewerLinks = [], includeHealthDisclaimer = false } = Astro.props;
+const hasReviewerLinks = reviewerLinks.length > 0;
+---
+
+<aside id="review-methodology" aria-label="Review and methodology" class="scroll-mt-24 mt-8 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+  {hasReviewerLinks ? (
+    <p class="mb-1 font-medium text-slate-700">
+      Reviewed and approved by{' '}
+      {reviewerLinks.map((reviewer, index) => (
+        <>
+          {index > 0 && (index === reviewerLinks.length - 1 ? ' and ' : ', ')}
+          <a href={reviewer.href} class="text-slate-800 hover:text-brand-700 hover:underline">
+            {reviewer.label}{index === reviewerLinks.length - 1 ? '.' : ''}
+          </a>
+        </>
+      ))}
+    </p>
+  ) : approvalText && (
+    <p class="mb-1 font-medium text-slate-700">{approvalText}</p>
+  )}
+  <p>
+    Review &amp; methodology details live on their own pages:{' '}
+    <a href="/about-the-reviewers/" class="text-slate-700 hover:text-brand-700 hover:underline">About the reviewers</a>
+    {' · '}
+    <a href="/methodology/" class="text-slate-700 hover:text-brand-700 hover:underline">Methodology</a>
+    {' · '}
+    <a href="/editorial-policy/" class="text-slate-700 hover:text-brand-700 hover:underline">Editorial policy</a>
+    {' · '}
+    <a href="/sources/" class="text-slate-700 hover:text-brand-700 hover:underline">Sources</a>
+    {includeHealthDisclaimer && (
+      <>
+        {' · '}
+        <a href="/health-disclaimer/" class="text-slate-700 hover:text-brand-700 hover:underline">Health disclaimer</a>
+      </>
+    )}
+  </p>
+</aside>

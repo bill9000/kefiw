@@ -80,6 +80,11 @@ function statusColor(state: ConsentState): string {
   if (state === 'ltd') return GREEN;
   return AMBER;
 }
+function isDisclosurePage(): boolean {
+  if (typeof window === 'undefined') return false;
+  const path = window.location.pathname;
+  return path === '/privacy/' || path === '/terms/' || path === '/privacy/legitimate-interest/';
+}
 
 function ShieldIcon({ size = 14, color = TEXT }: { size?: number; color?: string }) {
   return (
@@ -114,6 +119,8 @@ export default function ConsentAnchor(): JSX.Element | null {
   const [region, setRegion] = useState<Region>('ROW');
   const [mounted, setMounted] = useState(false);
   const [view, setView] = useState<View>('bar');
+  const [compactBar, setCompactBar] = useState(false);
+  const [stickyAdVisible, setStickyAdVisible] = useState(false);
   // Single-select accordion — only one section open at a time. Clicking the
   // open section collapses it, clicking any other replaces the open one.
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -143,8 +150,17 @@ export default function ConsentAnchor(): JSX.Element | null {
   }, []);
 
   useEffect(() => {
+    const update = (): void => setCompactBar(window.innerWidth < 560);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  useEffect(() => {
     if (view !== 'menu') return;
     const onClick = (e: MouseEvent): void => {
+      const target = e.target as Element | null;
+      if (target?.closest('[data-kfw-menu-trigger="true"]')) return;
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setView('fab');
       }
@@ -153,9 +169,24 @@ export default function ConsentAnchor(): JSX.Element | null {
     return () => window.removeEventListener('mousedown', onClick);
   }, [view]);
 
+  useEffect(() => {
+    const onOpenMenu = (): void => setView((current) => current === 'menu' ? 'fab' : 'menu');
+    const onStickyVisibility = (e: Event): void => {
+      const detail = (e as CustomEvent<{ visible?: boolean }>).detail;
+      setStickyAdVisible(!!detail?.visible);
+    };
+    window.addEventListener('kfw:open-consent-menu', onOpenMenu);
+    window.addEventListener('kfw:sticky-ad-visibility', onStickyVisibility);
+    return () => {
+      window.removeEventListener('kfw:open-consent-menu', onOpenMenu);
+      window.removeEventListener('kfw:sticky-ad-visibility', onStickyVisibility);
+    };
+  }, []);
+
   if (!mounted) return null;
 
   const isHardGate = region === 'EU' || region === 'UK';
+  const disclosurePage = isDisclosurePage();
   const sColor = statusColor(state);
 
   const applyConsent = (next: ConsentState): void => {
@@ -163,13 +194,12 @@ export default function ConsentAnchor(): JSX.Element | null {
     markInteracted();
     window.setTimeout(() => setView('fab'), 900);
   };
-
   // -------------------------------------------------------------------------
   // EU/UK HARD-GATE MODAL — affirmative opt-in required (GDPR / UK GDPR).
   // Shown instead of the compact bar when state is 'pending' and region is
   // EU/UK. Both choices are equally prominent; no dismiss, no pre-check.
   // -------------------------------------------------------------------------
-  if (view === 'bar' && state === 'pending' && isHardGate) {
+  if (view === 'bar' && state === 'pending' && isHardGate && !disclosurePage) {
     return (
       <>
         <div style={modalBackdrop} aria-hidden="true" />
@@ -183,39 +213,31 @@ export default function ConsentAnchor(): JSX.Element | null {
           </h2>
           <p style={modalBody}>
             Kefiw is free because we show ads. Before any ads load, please pick how they should be
-            chosen for you. You can change this any time from the privacy menu at the bottom-right.
+            chosen for you. You can change this from the bottom-right menu any time.
           </p>
           <div style={modalOptions}>
-            <div style={modalOptionBlock}>
+            <button
+              type="button"
+              style={{ ...modalChoiceButton, ...modalChoicePersonalized }}
+              onClick={() => applyConsent('full')}
+              autoFocus
+            >
               <div style={modalOptionTitle}>Personalized ads</div>
               <div style={modalOptionDesc}>
                 Google uses anonymous signals (pages you visit, rough location) to show ads that
                 match your interests. More relevant ads, typically more revenue for the site.
               </div>
-            </div>
-            <div style={modalOptionBlock}>
+            </button>
+            <button
+              type="button"
+              style={{ ...modalChoiceButton, ...modalChoiceContextual }}
+              onClick={() => applyConsent('ltd')}
+            >
               <div style={modalOptionTitle}>Contextual ads only</div>
               <div style={modalOptionDesc}>
                 Ads are chosen based on the page you&rsquo;re reading right now — never your history
                 or profile. Less personalization, less data shared with Google.
               </div>
-            </div>
-          </div>
-          <div style={modalButtonRow}>
-            <button
-              type="button"
-              style={modalBtnPrimary}
-              onClick={() => applyConsent('full')}
-              autoFocus
-            >
-              Enable personalized ads
-            </button>
-            <button
-              type="button"
-              style={modalBtnSecondary}
-              onClick={() => applyConsent('ltd')}
-            >
-              Contextual only
             </button>
           </div>
           <p style={modalFootnote}>
@@ -235,44 +257,84 @@ export default function ConsentAnchor(): JSX.Element | null {
   // -------------------------------------------------------------------------
   if (view === 'bar') {
     return (
-      <div style={barShell} role="region" aria-label="Privacy anchor">
-        <ShieldIcon color={sColor} />
-        <span style={stamp} aria-hidden="true">KFW</span>
-        <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', color: TEXT, fontWeight: 600 }}>
-          Privacy: <span style={{ color: sColor }}>{statusLabel(state)}</span>
-        </span>
-        <span style={{ color: DIM, fontSize: 11 }} className="anchor-region">{region}</span>
+      <div
+        style={{ ...barShell, ...(compactBar ? compactBarShell : null), ...(state !== 'pending' ? dismissibleBarShell : null) }}
+        role="region"
+        aria-label="Privacy anchor"
+        onClick={() => {
+          if (state === 'pending') return;
+          markInteracted();
+          setView('fab');
+        }}
+      >
+        <div style={{ ...barStatusRow, ...(compactBar ? compactBarStatusRow : null) }}>
+          <ShieldIcon color={sColor} />
+          <span style={stamp} aria-hidden="true">KFW</span>
+          <span style={barStatusText}>
+            Privacy: <span style={{ color: sColor }}>{statusLabel(state)}</span>
+          </span>
+          <span style={{ color: DIM, fontSize: 11, flexShrink: 0 }} className="anchor-region">{region}</span>
+        </div>
 
-        {state === 'pending' && (
-          <>
-            <button type="button" style={btnPrimary} onClick={() => applyConsent('full')}>
-              Enable personalized
+        <div style={{ ...barActionRow, ...(compactBar ? compactBarActionRow : null) }}>
+          {state === 'pending' && (
+            <>
+              <button type="button" style={{ ...btnPrimary, ...(compactBar ? compactBarButton : null) }} onClick={(e) => { e.stopPropagation(); applyConsent('full'); }}>
+                Enable personalized
+              </button>
+              <button type="button" style={{ ...btnSecondary, ...(compactBar ? compactBarButton : null) }} onClick={(e) => { e.stopPropagation(); applyConsent('ltd'); }}>
+                Contextual only
+              </button>
+            </>
+          )}
+          {state !== 'pending' && (
+            <span style={barMenuHint}>
+              Change from the menu →
+            </span>
+          )}
+          {state !== 'pending' && (
+            <button
+              type="button"
+              style={barMenuButton}
+              data-kfw-menu-trigger="true"
+              onClick={(e) => {
+                e.stopPropagation();
+                setView((current) => current === 'menu' ? 'fab' : 'menu');
+              }}
+              aria-label={`Open menu. Privacy: ${statusLabel(state)}.`}
+              aria-expanded={false}
+            >
+              <span
+                style={{
+                  width: 24,
+                  height: 24,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 21,
+                  lineHeight: 1,
+                  transform: 'translateY(-1px)',
+                }}
+                aria-hidden="true"
+              >
+                🍔
+              </span>
+              <span
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  right: 5,
+                  width: 8,
+                  height: 8,
+                  borderRadius: 8,
+                  background: sColor,
+                  border: '1px solid #ffffff',
+                }}
+                aria-hidden="true"
+              />
             </button>
-            <button type="button" style={btnSecondary} onClick={() => applyConsent('ltd')}>
-              Contextual only
-            </button>
-          </>
-        )}
-        {state === 'ltd' && (
-          <button type="button" style={btnPrimary} onClick={() => applyConsent('full')}>
-            Enable personalized
-          </button>
-        )}
-        {state === 'full' && (
-          <button type="button" style={btnDanger} onClick={() => applyConsent('ltd')}>
-            Switch back to contextual
-          </button>
-        )}
-        {state !== 'pending' && (
-          <button
-            type="button"
-            style={btnGhost}
-            onClick={() => { markInteracted(); setView('fab'); }}
-            aria-label="Hide privacy bar"
-          >
-            Hide
-          </button>
-        )}
+          )}
+        </div>
       </div>
     );
   }
@@ -283,7 +345,7 @@ export default function ConsentAnchor(): JSX.Element | null {
   if (view === 'menu') {
     const helpCopy =
       state === 'full'
-        ? 'You allow Google to use anonymous signals (like the page you\u2019re on) to match ads to your interests. You can switch back to contextual-only anytime.'
+        ? 'You allow Google to use anonymous signals (like the page you\u2019re on) to match ads to your interests. You can use contextual-only ads anytime.'
         : state === 'ltd'
           ? 'Kefiw shows contextual ads only. Google doesn\u2019t use personal signals to choose what you see. You can turn on personalized ads if you prefer more relevant ones.'
           : 'Please pick how ads should work on Kefiw. This choice is saved on this device and can be changed anytime.';
@@ -336,7 +398,7 @@ export default function ConsentAnchor(): JSX.Element | null {
             )}
             {state === 'full' && (
               <button type="button" style={btnDanger} onClick={() => applyConsent('ltd')}>
-                Switch back to contextual
+                Use contextual ads only
               </button>
             )}
           </div>
@@ -365,68 +427,147 @@ export default function ConsentAnchor(): JSX.Element | null {
           </div>
         </CollapsibleSection>
 
-        {/* -- Pipelines ------------------------------------------------ */}
+        {/* -- Buyer-intent navigation ---------------------------------- */}
         <CollapsibleSection
-          id="pipelines"
-          open={!!expanded.pipelines}
-          onToggle={() => toggleSection('pipelines')}
-          title="Pipelines"
-          subtitle="Multi-step workflows"
+          id="property"
+          open={!!expanded.property}
+          onToggle={() => toggleSection('property')}
+          title="Property"
+          subtitle="Improve · buy/sell · own"
         >
-          <p style={helpText}>Tools where each stage\u2019s output flows into the next.</p>
+          <p style={helpText}>Owning, improving, buying, selling, investing, and insuring property.</p>
           <ul style={linkList}>
-            <li><a href="/health/reagent-pipeline/" style={linkStyle}>Reagent Pipeline \u2014 reconstitute → dispense → lookup</a></li>
+            <li><a href="/property/" style={linkStyle}>Property Lab</a></li>
+            <li><a href="/homelab/" style={linkStyle}>Improve</a></li>
+            <li><a href="/property/" style={linkStyle}>Estimate</a></li>
+            <li><a href="/property/#sell" style={linkStyle}>Buy/Sell</a></li>
+            <li><a href="/property/#own" style={linkStyle}>Own</a></li>
+            <li><a href="/property/#invest" style={linkStyle}>Invest</a></li>
+            <li><a href="/homelab/roof-insurance-deductible-calculator/" style={linkStyle}>Insure</a></li>
+            <li><a href="/tracks/#property-tracks" style={linkStyle}>Property Tracks</a></li>
+            <li><a href="/property/" style={linkStyle}>Property Guides</a></li>
+            <li><a href="/property/#browse-by-state" style={linkStyle}>Browse by State</a></li>
+            <li><a href="/property/#browse-by-city" style={linkStyle}>Browse by City</a></li>
           </ul>
         </CollapsibleSection>
 
-        {/* -- Chains --------------------------------------------------- */}
         <CollapsibleSection
-          id="chains"
-          open={!!expanded.chains}
-          onToggle={() => toggleSection('chains')}
-          title="Chains"
-          subtitle="Deterministic engine"
+          id="business"
+          open={!!expanded.business}
+          onToggle={() => toggleSection('business')}
+          title="Business"
+          subtitle="Tax · pricing · hiring"
         >
-          <p style={helpText}>Chained calculators with shared session context.</p>
+          <p style={helpText}>Self-employed tax, pricing, hiring, revenue, and cloud cost calculators.</p>
           <ul style={linkList}>
-            <li><a href="/chains/" style={linkStyle}>Chains hub</a></li>
-            <li><a href="/chains/survival-01/" style={linkStyle}>Survival-01 \u2014 financial floor</a></li>
-            <li><a href="/chains/pivot-02/" style={linkStyle}>Pivot-02 \u2014 career change</a></li>
-            <li><a href="/chains/move-03/" style={linkStyle}>Move-03 \u2014 relocation math</a></li>
-            <li><a href="/chains/focus-04/" style={linkStyle}>Focus-04 \u2014 attention audit</a></li>
+            <li><a href="/business/" style={linkStyle}>Business Lab</a></li>
+            <li><a href="/business/#tax" style={linkStyle}>Tax</a></li>
+            <li><a href="/business/#pricing" style={linkStyle}>Pricing</a></li>
+            <li><a href="/business/#hiring" style={linkStyle}>Hiring</a></li>
+            <li><a href="/business/#revenue" style={linkStyle}>Revenue</a></li>
+            <li><a href="/business/#cloud" style={linkStyle}>Cloud</a></li>
+            <li><a href="/tracks/#business-tracks" style={linkStyle}>Business Tracks</a></li>
+            <li><a href="/business/" style={linkStyle}>Business Guides</a></li>
           </ul>
         </CollapsibleSection>
 
-        {/* -- Scenarios ------------------------------------------------ */}
         <CollapsibleSection
-          id="scenarios"
-          open={!!expanded.scenarios}
-          onToggle={() => toggleSection('scenarios')}
-          title="Scenarios"
-          subtitle="Baseline · Optimized · Crisis"
+          id="care"
+          open={!!expanded.care}
+          onToggle={() => toggleSection('care')}
+          title="Care"
+          subtitle="Senior care · caregiving"
         >
-          <p style={helpText}>Run one decision under three assumption sets in parallel.</p>
+          <p style={helpText}>Care-cost planning, Medicare, insurance, and wellbeing tools with nurse-review boundaries.</p>
           <ul style={linkList}>
-            <li><a href="/scenarios/" style={linkStyle}>Scenarios hub</a></li>
-            <li><a href="/scenarios/stress-test-triad/" style={linkStyle}>Stress-Test Triad</a></li>
-            <li><a href="/comparisons/dual-career-path/" style={linkStyle}>Dual-Career Path comparison</a></li>
+            <li><a href="/care/" style={linkStyle}>Care Lab</a></li>
+            <li><a href="/care/#senior-care" style={linkStyle}>Senior Care</a></li>
+            <li><a href="/care/#caregiving" style={linkStyle}>Caregiving</a></li>
+            <li><a href="/care/#medicare" style={linkStyle}>Medicare</a></li>
+            <li><a href="/care/#insurance" style={linkStyle}>Insurance</a></li>
+            <li><a href="/health/" style={linkStyle}>Wellbeing</a></li>
+            <li><a href="/tracks/#care-tracks" style={linkStyle}>Care Tracks</a></li>
+            <li><a href="/care/" style={linkStyle}>Care Guides</a></li>
+            <li><a href="/health/" style={linkStyle}>Health Calculators</a></li>
           </ul>
         </CollapsibleSection>
 
-        {/* -- Explore -------------------------------------------------- */}
         <CollapsibleSection
-          id="explore"
-          open={!!expanded.explore}
-          onToggle={() => toggleSection('explore')}
-          title="Explore"
-          subtitle="Hubs and suites"
+          id="tracks"
+          open={!!expanded.tracks}
+          onToggle={() => toggleSection('tracks')}
+          title="Tracks"
+          subtitle="Guided plans"
+        >
+          <p style={helpText}>Goal → calculators → checklist → guide → comparison → next-step recommendation.</p>
+          <ul style={linkList}>
+            <li><a href="/tracks/" style={linkStyle}>All Tracks</a></li>
+            <li><a href="/tracks/#property-tracks" style={linkStyle}>Property Tracks</a></li>
+            <li><a href="/tracks/#business-tracks" style={linkStyle}>Business Tracks</a></li>
+            <li><a href="/tracks/#care-tracks" style={linkStyle}>Care Tracks</a></li>
+            <li><a href="/tracks/#daily-tracks" style={linkStyle}>Daily Tracks</a></li>
+          </ul>
+        </CollapsibleSection>
+
+        <CollapsibleSection
+          id="tools"
+          open={!!expanded.tools}
+          onToggle={() => toggleSection('tools')}
+          title="Tools"
+          subtitle="All utility indexes"
+        >
+          <ul style={linkList}>
+            <li><a href="/calculators/" style={linkStyle}>All Tools</a></li>
+            <li><a href="/calculators/" style={linkStyle}>All Calculators</a></li>
+            <li><a href="/property/" style={linkStyle}>Property Calculators</a></li>
+            <li><a href="/business/" style={linkStyle}>Business Calculators</a></li>
+            <li><a href="/care/" style={linkStyle}>Care Calculators</a></li>
+            <li><a href="/finance/" style={linkStyle}>Finance Calculators</a></li>
+            <li><a href="/health/" style={linkStyle}>Health Calculators</a></li>
+            <li><a href="/word-tools/" style={linkStyle}>Word Tools</a></li>
+            <li><a href="/converters/" style={linkStyle}>Converters</a></li>
+            <li><a href="/logic/" style={linkStyle}>Math &amp; Logic</a></li>
+          </ul>
+        </CollapsibleSection>
+
+        <CollapsibleSection
+          id="play"
+          open={!!expanded.play}
+          onToggle={() => toggleSection('play')}
+          title="Play"
+          subtitle="Daily · Vibe · Sudoku"
+        >
+          <ul style={linkList}>
+            <li><a href="/daily/" style={linkStyle}>Daily Challenges</a></li>
+            <li><a href="/games/daily-word/" style={linkStyle}>Word Games</a></li>
+            <li><a href="/games/sudoku/" style={linkStyle}>Sudoku</a></li>
+            <li><a href="/logic/" style={linkStyle}>Logic Games</a></li>
+            <li><a href="/games/vibecircuit/" style={linkStyle}>VibeCircuit</a></li>
+            <li><a href="/games/vibematch/" style={linkStyle}>VibeMatch</a></li>
+            <li><a href="/games/vibecrypt/" style={linkStyle}>VibeCrypt</a></li>
+            <li><a href="/games/" style={linkStyle}>All Games</a></li>
+          </ul>
+        </CollapsibleSection>
+
+        <CollapsibleSection
+          id="guides"
+          open={!!expanded.guides}
+          onToggle={() => toggleSection('guides')}
+          title="Guides"
+          subtitle="Editorial + trust"
           last
         >
-          <ul style={{ ...linkList, borderTop: 'none', paddingTop: 0 }}>
-            <li><a href="/clusters/" style={linkStyle}>All clusters</a></li>
-            <li><a href="/comparisons/" style={linkStyle}>All comparisons</a></li>
-            <li><a href="/finance/" style={linkStyle}>Finance suite</a></li>
-            <li><a href="/daily/" style={linkStyle}>Daily challenges</a></li>
+          <ul style={linkList}>
+            <li><a href="/guides/" style={linkStyle}>All Guides</a></li>
+            <li><a href="/property/" style={linkStyle}>Property Guides</a></li>
+            <li><a href="/business/" style={linkStyle}>Business Guides</a></li>
+            <li><a href="/care/" style={linkStyle}>Care Guides</a></li>
+            <li><a href="/health/" style={linkStyle}>Health Guides</a></li>
+            <li><a href="/guides/" style={linkStyle}>Game Guides</a></li>
+            <li><a href="/about-the-reviewers/" style={linkStyle}>Review Board</a></li>
+            <li><a href="/methodology/" style={linkStyle}>Calculator Methodology</a></li>
+            <li><a href="/sources/" style={linkStyle}>Data Sources</a></li>
+            <li><a href="/editorial-policy/" style={linkStyle}>Editorial Policy</a></li>
           </ul>
         </CollapsibleSection>
       </div>
@@ -438,17 +579,29 @@ export default function ConsentAnchor(): JSX.Element | null {
   // without the "Privacy" label taking over what is now a general system menu.
   // -------------------------------------------------------------------------
   return (
+    stickyAdVisible ? null :
     <button
       type="button"
       style={fabStyle}
+      data-kfw-menu-trigger="true"
       onClick={() => setView('menu')}
       aria-label={`Open menu. Privacy: ${statusLabel(state)}.`}
       aria-expanded={false}
     >
-      <span style={{ display: 'inline-flex', flexDirection: 'column', gap: 3 }} aria-hidden="true">
-        <span style={{ width: 16, height: 2, background: TEXT, borderRadius: 1 }} />
-        <span style={{ width: 16, height: 2, background: TEXT, borderRadius: 1 }} />
-        <span style={{ width: 16, height: 2, background: TEXT, borderRadius: 1 }} />
+      <span
+        style={{
+          width: 28,
+          height: 28,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 23,
+          lineHeight: 1,
+          transform: 'translateY(-1px)',
+        }}
+        aria-hidden="true"
+      >
+        🍔
       </span>
       <span
         style={{
@@ -532,7 +685,81 @@ const barShell: React.CSSProperties = {
   borderBottom: `1px solid ${BORDER}`,
   fontFamily: SYS_FONT,
   fontSize: 13,
+};
+
+const compactBarShell: React.CSSProperties = {
+  flexDirection: 'column',
+  alignItems: 'stretch',
+  gap: 6,
+  padding: '8px 10px',
+};
+
+const dismissibleBarShell: React.CSSProperties = {
+  cursor: 'pointer',
+};
+
+const barStatusRow: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+  flex: '1 1 260px',
+  minWidth: 0,
+};
+
+const compactBarStatusRow: React.CSSProperties = {
+  flex: '1 1 100%',
+  width: '100%',
+};
+
+const barStatusText: React.CSSProperties = {
+  flex: 1,
+  minWidth: 140,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  color: TEXT,
+  fontWeight: 600,
+};
+
+const barActionRow: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  gap: 8,
   flexWrap: 'wrap',
+};
+
+const compactBarActionRow: React.CSSProperties = {
+  justifyContent: 'flex-end',
+  width: '100%',
+};
+
+const compactBarButton: React.CSSProperties = {
+  flex: '1 1 auto',
+};
+
+const barMenuHint: React.CSSProperties = {
+  color: TEXT_2,
+  fontSize: 12,
+  fontWeight: 600,
+};
+
+const barMenuButton: React.CSSProperties = {
+  position: 'relative',
+  width: 40,
+  height: 36,
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 0,
+  background: BG,
+  color: TEXT,
+  border: `1px solid ${STRONG_BORDER}`,
+  borderRadius: 8,
+  cursor: 'pointer',
+  fontFamily: SYS_FONT,
+  boxShadow: '0 2px 8px rgba(15, 23, 42, 0.10)',
+  flex: '0 0 auto',
 };
 
 // Lifted above the 60px sticky ad banner (bottom: 0, height: 60). 76px = 60 + 16px gap.
@@ -824,11 +1051,24 @@ const modalOptions: React.CSSProperties = {
   gap: 10,
 };
 
-const modalOptionBlock: React.CSSProperties = {
+const modalChoiceButton: React.CSSProperties = {
   padding: 12,
-  border: `1px solid ${BORDER}`,
   borderRadius: 8,
-  background: SUBTLE_BG,
+  background: '#ffffff',
+  cursor: 'pointer',
+  textAlign: 'left',
+  fontFamily: SYS_FONT,
+  minHeight: 132,
+};
+
+const modalChoicePersonalized: React.CSSProperties = {
+  border: '1px solid #86efac',
+  boxShadow: 'inset 4px 0 0 #16a34a',
+};
+
+const modalChoiceContextual: React.CSSProperties = {
+  border: '1px solid #fecaca',
+  boxShadow: 'inset 4px 0 0 #dc2626',
 };
 
 const modalOptionTitle: React.CSSProperties = {
@@ -842,40 +1082,6 @@ const modalOptionDesc: React.CSSProperties = {
   fontSize: 12.5,
   lineHeight: 1.5,
   color: TEXT_2,
-};
-
-const modalButtonRow: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: 10,
-  marginTop: 2,
-};
-
-// Equal prominence: same height, same weight, same border radius.
-// One filled blue, one outlined — both large and same size. No dark pattern.
-const modalBtnBase: React.CSSProperties = {
-  padding: '12px 14px',
-  fontFamily: SYS_FONT,
-  fontSize: 14,
-  fontWeight: 600,
-  cursor: 'pointer',
-  borderRadius: 8,
-  lineHeight: 1.2,
-  minHeight: 44,
-};
-
-const modalBtnPrimary: React.CSSProperties = {
-  ...modalBtnBase,
-  background: BRAND,
-  color: '#ffffff',
-  border: `1px solid ${BRAND}`,
-};
-
-const modalBtnSecondary: React.CSSProperties = {
-  ...modalBtnBase,
-  background: '#ffffff',
-  color: TEXT,
-  border: `1px solid ${STRONG_BORDER}`,
 };
 
 const modalFootnote: React.CSSProperties = {

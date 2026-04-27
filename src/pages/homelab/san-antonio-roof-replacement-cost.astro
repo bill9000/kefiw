@@ -1,0 +1,108 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Replacement Cost in San Antonio (2026) — Reviewed by a TX GC | Kefiw';
+const description = 'San Antonio roof replacement cost — local pricing runs slightly under Houston, with notes on heat aging, occasional hail, and the city\'s historic district considerations. Reviewed by a Texas-licensed general contractor.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/san-antonio-roof-replacement-cost/"
+  keywords={['roof replacement cost San Antonio', 'San Antonio TX roofing cost', 'Bexar County roof permit']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/san-antonio-roof-replacement-cost/', label: 'San Antonio' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Replacement Cost in San Antonio</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        San Antonio runs about 5% under Houston on labor — Bexar County has lower overall wage pressure than the major metros to the north and east. Material costs are similar; permit fees are lower.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator client:load defaultPermitProfileId="san_antonio_tx" />
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>San Antonio typical scenarios</h2>
+      <ul>
+        <li><strong>1-story, 6:12, simple hip, 2,400 sqft roof, architectural asphalt</strong> — $10,500–$15,000 typical</li>
+        <li><strong>2-story, 7:12, complex, 3,200 sqft</strong> — $15,500–$23,000</li>
+        <li><strong>1-story standing seam metal, 2,400 sqft</strong> — $26,500–$40,000</li>
+      </ul>
+
+      <h2>San Antonio-specific factors</h2>
+
+      <h3>Heat is the #1 issue</h3>
+      <p>
+        San Antonio summers are brutal. Attic temperatures routinely exceed Houston's, and shingle UV exposure is higher than DFW. Architectural asphalt typically delivers 18–22 years before significant aging — slightly less than the package rating. Mitigation: reflective shingle colors, proper attic ventilation, and avoiding south-and-west-facing dark roofs where possible.
+      </p>
+
+      <h3>Hail risk — lower than DFW or Austin</h3>
+      <p>
+        San Antonio sees hail less frequently than the central Texas hail alley. Quarter-to-half-dollar events occur but are less reliably annual. Class 4 impact-rated shingles still earn the insurance discount; the math is closer to break-even than in DFW.
+      </p>
+
+      <h3>Historic district overlays</h3>
+      <p>
+        Several San Antonio neighborhoods carry historic-district status — King William, Monte Vista, Alta Vista, Tobin Hill. Re-roofs in these areas often require:
+      </p>
+      <ul>
+        <li>Material approval (some districts restrict to specific shingle profiles or require tile/metal)</li>
+        <li>Color matching to district guidelines</li>
+        <li>Longer permit timelines (review by Office of Historic Preservation)</li>
+      </ul>
+      <p>
+        Verify district status before getting bids; the wrong material spec can mean a re-do.
+      </p>
+
+      <h3>Bexar County permits</h3>
+      <p>
+        Permits run $200–$500 for typical residential re-roof — among the lower in Texas. Outside city limits in unincorporated Bexar, permitting is even simpler.
+      </p>
+
+      <h3>Tile roofs are more common here</h3>
+      <p>
+        Spanish Colonial Revival and Mediterranean-style homes — common in Alamo Heights, Olmos Park, and some historic neighborhoods — often carry concrete or clay tile. Tile is heavier (structural review may be required) and more expensive ($24K–$45K typical) but lasts 50+ years and matches the architectural style.
+      </p>
+
+      <h2>Material recommendations</h2>
+      <ul>
+        <li><strong>Architectural asphalt with cool-roof rating</strong> — heat mitigation matters here.</li>
+        <li><strong>Standing seam metal in light colors</strong> — best heat performance.</li>
+        <li><strong>Concrete or clay tile</strong> — common on Mediterranean / Spanish Colonial homes; requires structural-load review.</li>
+      </ul>
+
+      <h2>Companion calculators</h2>
+      <ul>
+        <li><a href="/homelab/roof-replacement-cost-calculator/">Roof Replacement Cost Calculator</a></li>
+        <li><a href="/homelab/attic-ventilation-calculator/">Attic Ventilation Calculator</a> — heat mitigation</li>
+        <li><a href="/homelab/roof-insurance-deductible-calculator/">Roof Insurance Deductible Calculator</a></li>
+      </ul>
+
+      <h2>About this page</h2>
+      <p>
+        San Antonio cost adjustments and editorial review by Eurocraft, a Texas-licensed general contractor.
+      </p>
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

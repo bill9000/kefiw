@@ -1,0 +1,106 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Replacement Cost in Austin (2026) — Reviewed by a TX GC | Kefiw';
+const description = 'Austin roof replacement cost — local pricing reflects higher labor rates, sun-baked shingle aging, and limestone/cliff-side terrain considerations. Reviewed by a Texas-licensed general contractor.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/austin-roof-replacement-cost/"
+  keywords={['roof replacement cost Austin', 'Austin roofing cost calculator', 'Austin TX roof per square foot', 'Hill Country roof']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/austin-roof-replacement-cost/', label: 'Austin' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Replacement Cost in Austin</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Austin sits between the DFW hail belt and the Gulf-coast humidity zone. Roof replacement costs run 5–10% above Houston due to labor wage pressure from Austin's tech-sector economy.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator client:load defaultPermitProfileId="austin_tx" />
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>Austin typical scenarios</h2>
+      <ul>
+        <li><strong>1-story, 6:12, simple hip, 2,400 sqft roof, architectural asphalt</strong> — $12,000–$17,500 typical</li>
+        <li><strong>2-story, 7:12, complex Hill Country with multiple gables, 3,200 sqft</strong> — $18,000–$27,000</li>
+        <li><strong>1-story, standing seam metal on a typical Austin contemporary</strong> — $30,000–$45,000</li>
+      </ul>
+
+      <h2>Austin-specific factors</h2>
+
+      <h3>UV intensity and shingle aging</h3>
+      <p>
+        Austin's combination of altitude (higher than Houston) and clear-sky days delivers more direct UV than coastal Texas markets. Architectural asphalt rated 30 years on the package typically delivers 20–25 years in Austin attics. The mitigation is reflective ("cool roof") shingle colors and proper attic ventilation — both worth specifying.
+      </p>
+
+      <h3>Hail risk — moderate</h3>
+      <p>
+        Austin and Travis County see hail, but at lower frequency than DFW. Quarter-to-half-dollar events most common; baseball-size events rare. Class 4 impact-rated shingles still earn insurance discounts, but the math is closer to break-even than in DFW.
+      </p>
+
+      <h3>Hill Country terrain</h3>
+      <p>
+        West and northwest Austin sites — Westlake, Lake Travis, Spicewood — often involve steep lots and cliff-side construction. Practical implications:
+      </p>
+      <ul>
+        <li><strong>Material delivery is harder</strong> on tight or sloped driveways. Some sites require crane delivery; budget $300–$800 extra.</li>
+        <li><strong>Pitched roofs are more common</strong> than in flat Houston. 8:12 to 12:12 is typical on Hill Country contemporary architecture.</li>
+        <li><strong>Cedar shake replacement</strong> is occasionally encountered on older Hill Country homes — usually re-roofed to architectural asphalt or metal due to wildfire concerns and insurance availability.</li>
+      </ul>
+
+      <h3>Wildfire wind/ember exposure</h3>
+      <p>
+        Austin's western fringe sits in WUI (Wildland-Urban Interface) territory. Some HOAs and insurers require Class A fire-rated roofing — almost all asphalt and metal qualify, but cedar shake does not. If your home is in a WUI zone and you have shake, replacement is often a code or insurance compliance issue, not just maintenance.
+      </p>
+
+      <h3>City of Austin permit process</h3>
+      <p>
+        Austin permits run $400–$900 for residential re-roof. Historic district overlays (Hyde Park, Travis Heights, Old West Austin) can require additional design review and longer permit timelines.
+      </p>
+
+      <h2>Material recommendations for Austin</h2>
+      <ul>
+        <li><strong>Architectural asphalt with reflective ("cool roof") rating</strong> — manages UV-driven aging.</li>
+        <li><strong>Standing seam metal in a light or natural color</strong> — pairs well with Hill Country contemporary architecture; reflects more UV than dark colors.</li>
+        <li><strong>Concrete tile</strong> — common on Mediterranean / Spanish Colonial homes (Tarrytown, West Austin). Structural-load review usually required.</li>
+        <li><strong>Class A fire-rated</strong> always — non-negotiable in WUI zones.</li>
+      </ul>
+
+      <h2>Companion calculators</h2>
+      <ul>
+        <li><a href="/homelab/roof-replacement-cost-calculator/">Roof Replacement Cost Calculator</a></li>
+        <li><a href="/homelab/attic-ventilation-calculator/">Attic Ventilation Calculator</a> — UV mitigation</li>
+        <li><a href="/homelab/roof-pitch-calculator/">Roof Pitch Calculator</a> — common on Hill Country roofs</li>
+      </ul>
+
+      <h2>About this page</h2>
+      <p>
+        Austin cost adjustments and editorial review by Eurocraft, a Texas-licensed general contractor. Numbers reflect Q2 2026 Austin-market pricing.
+      </p>
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

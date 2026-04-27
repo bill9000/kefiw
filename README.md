@@ -14,10 +14,23 @@ Mobile-first, SEO-first utility site. Astro + Tailwind, static-by-default.
 
 ```
 pnpm install
-pnpm dev       # local dev server
+pnpm dev       # fast Astro dev server at localhost:4321, no Pages Functions/D1
 pnpm build     # static build to ./dist
-pnpm preview   # preview the build
+pnpm dev:cf    # build, then run Cloudflare Pages Functions + D1 at localhost:8788
+pnpm preview   # preview the build without Pages Functions/D1
 ```
+
+For routes that need Cloudflare Pages Functions or D1, such as `/contact/` and
+`/admin1411/`, use Wrangler instead of plain Astro dev:
+
+```
+pnpm db:contact:schema:local
+pnpm dev:cf
+```
+
+Then open `http://localhost:8788/contact/` or
+`http://localhost:8788/admin1411/`. Plain `pnpm dev` is still the fastest loop
+for layout, calculators, games, and pages that do not need the database.
 
 ## Structure
 
@@ -54,7 +67,7 @@ Primary target: Cloudflare Pages (static). DNS via Cloudflare, domain registered
 ### Wrangler (local preview / CLI deploy)
 
 ```
-pnpm dlx wrangler pages dev dist
+pnpm pages:dev
 pnpm dlx wrangler pages deploy dist --project-name kefiw
 ```
 

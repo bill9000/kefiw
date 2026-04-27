@@ -15,6 +15,14 @@ interface Level {
   cols: number;
   rows: number;
   pairs: Pair[];
+  solution?: Partial<Record<ColorKey, Coord[]>>;
+}
+
+interface LevelTemplate {
+  id: string;
+  cols: number;
+  rows: number;
+  pairCount: number;
 }
 
 const COLOR_SPEC: Record<ColorKey, { base: string; glow: string; label: string }> = {
@@ -25,46 +33,17 @@ const COLOR_SPEC: Record<ColorKey, { base: string; glow: string; label: string }
   crimson: { base: '#f43f5e', glow: '#fda4af', label: 'Crimson' },
 };
 
-const LEVELS: Level[] = [
-  { id: 'L1', cols: 5, rows: 5, pairs: [
-    { color: 'cyan',    a: [0, 0], b: [2, 2] },
-    { color: 'magenta', a: [4, 0], b: [0, 4] },
-    { color: 'lime',    a: [4, 2], b: [4, 4] },
-  ]},
-  { id: 'L2', cols: 5, rows: 5, pairs: [
-    { color: 'cyan',    a: [0, 0], b: [2, 2] },
-    { color: 'magenta', a: [4, 0], b: [0, 4] },
-    { color: 'lime',    a: [4, 4], b: [4, 2] },
-    { color: 'gold',    a: [1, 1], b: [3, 3] },
-  ]},
-  { id: 'L3', cols: 6, rows: 6, pairs: [
-    { color: 'cyan',    a: [0, 0], b: [5, 5] },
-    { color: 'magenta', a: [5, 0], b: [0, 5] },
-    { color: 'lime',    a: [2, 2], b: [3, 3] },
-    { color: 'gold',    a: [1, 4], b: [4, 1] },
-  ]},
-  { id: 'L4', cols: 6, rows: 6, pairs: [
-    { color: 'cyan',    a: [0, 0], b: [5, 0] },
-    { color: 'magenta', a: [0, 5], b: [5, 5] },
-    { color: 'lime',    a: [1, 2], b: [4, 2] },
-    { color: 'gold',    a: [1, 3], b: [4, 3] },
-    { color: 'crimson', a: [0, 2], b: [0, 3] },
-  ]},
-  { id: 'L5', cols: 6, rows: 6, pairs: [
-    { color: 'cyan',    a: [0, 0], b: [5, 4] },
-    { color: 'magenta', a: [1, 1], b: [5, 5] },
-    { color: 'lime',    a: [3, 1], b: [4, 5] },
-    { color: 'gold',    a: [2, 2], b: [4, 4] },
-    { color: 'crimson', a: [0, 5], b: [3, 0] },
-  ]},
-  { id: 'L6', cols: 6, rows: 6, pairs: [
-    { color: 'cyan',    a: [0, 2], b: [3, 2] },
-    { color: 'magenta', a: [1, 3], b: [3, 4] },
-    { color: 'lime',    a: [2, 0], b: [5, 3] },
-    { color: 'gold',    a: [4, 0], b: [4, 5] },
-    { color: 'crimson', a: [2, 1], b: [5, 5] },
-  ]},
+const LEVEL_TEMPLATES: LevelTemplate[] = [
+  { id: 'L1', cols: 5, rows: 5, pairCount: 3 },
+  { id: 'L2', cols: 5, rows: 5, pairCount: 4 },
+  { id: 'L3', cols: 6, rows: 6, pairCount: 5 },
+  { id: 'L4', cols: 6, rows: 6, pairCount: 5 },
+  { id: 'L5', cols: 5, rows: 7, pairCount: 5 },
+  { id: 'L6', cols: 6, rows: 8, pairCount: 5 },
+  { id: 'L7', cols: 7, rows: 8, pairCount: 5 },
 ];
+
+const COLOR_ORDER: ColorKey[] = ['cyan', 'magenta', 'lime', 'gold', 'crimson'];
 
 const CELL = 64;
 const STORAGE = 'vibecircuit-stats-v1';
@@ -76,6 +55,56 @@ const COLOR_DIM = '#64748b';
 
 function coordEq(a: Coord, b: Coord) { return a[0] === b[0] && a[1] === b[1]; }
 function isAdj(a: Coord, b: Coord) { return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) === 1; }
+
+function snakeCells(cols: number, rows: number): Coord[] {
+  const cells: Coord[] = [];
+  for (let y = 0; y < rows; y += 1) {
+    if (y % 2 === 0) {
+      for (let x = 0; x < cols; x += 1) cells.push([x, y]);
+    } else {
+      for (let x = cols - 1; x >= 0; x -= 1) cells.push([x, y]);
+    }
+  }
+  return cells;
+}
+
+function seededRandom(seed: number): () => number {
+  let n = seed >>> 0;
+  return () => {
+    n += 0x6D2B79F5;
+    let t = n;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function generateLevel(template: LevelTemplate, variant: number): Level {
+  const cells = snakeCells(template.cols, template.rows);
+  const rng = seededRandom((template.id.charCodeAt(1) * 4099) + variant * 131);
+  const cuts = new Set<number>();
+  while (cuts.size < template.pairCount - 1) {
+    const min = Math.max(2, Math.floor(cells.length * 0.12));
+    const max = Math.min(cells.length - 3, Math.floor(cells.length * 0.88));
+    const cut = min + Math.floor(rng() * (max - min + 1));
+    const tooClose = [...cuts].some((existing) => Math.abs(existing - cut) < 3);
+    if (!tooClose) cuts.add(cut);
+  }
+  const ends = [...cuts].sort((a, b) => a - b);
+  const starts = [0, ...ends.map((end) => end + 1)];
+  ends.push(cells.length - 1);
+  const solution: Partial<Record<ColorKey, Coord[]>> = {};
+  const pairs: Pair[] = starts.map((start, i) => {
+    const color = COLOR_ORDER[i];
+    solution[color] = cells.slice(start, ends[i] + 1);
+    return {
+      color,
+      a: cells[start],
+      b: cells[ends[i]],
+    };
+  });
+  return { id: template.id, cols: template.cols, rows: template.rows, pairs, solution };
+}
 
 function solveLevel(level: Level): Partial<Record<ColorKey, Coord[]>> | null {
   const { cols, rows, pairs } = level;
@@ -145,6 +174,9 @@ function solveLevel(level: Level): Partial<Record<ColorKey, Coord[]>> | null {
 
 export default function VibeCircuit() {
   const [levelIndex, setLevelIndex] = useState(0);
+  const [variants, setVariants] = useState<number[]>(() =>
+    LEVEL_TEMPLATES.map(() => Math.floor(Math.random() * 1_000_000))
+  );
   const [paths, setPaths] = useState<Partial<Record<ColorKey, Coord[]>>>({});
   const [dragging, setDragging] = useState<ColorKey | null>(null);
   const [circuitsOptimized, setCircuitsOptimized] = useState(0);
@@ -153,10 +185,13 @@ export default function VibeCircuit() {
   const [countedConnect, setCountedConnect] = useState(false);
   const [countedPerfect, setCountedPerfect] = useState(false);
 
-  const level = LEVELS[levelIndex];
+  const level = useMemo(
+    () => generateLevel(LEVEL_TEMPLATES[levelIndex], variants[levelIndex] ?? 0),
+    [levelIndex, variants]
+  );
   const { cols, rows, pairs } = level;
 
-  const solution = useMemo(() => solveLevel(level), [level]);
+  const solution = useMemo(() => level.solution ?? solveLevel(level), [level]);
 
   useEffect(() => {
     try {
@@ -180,7 +215,7 @@ export default function VibeCircuit() {
     setDragging(null);
     setCountedConnect(false);
     setCountedPerfect(false);
-  }, [levelIndex]);
+  }, [levelIndex, variants]);
 
   function nodeAt(x: number, y: number): Pair | null {
     for (const p of pairs) {
@@ -315,6 +350,9 @@ export default function VibeCircuit() {
   }
 
   function resetLevel() {
+    setVariants((current) => current.map((v, i) => (
+      i === levelIndex ? Math.floor(Math.random() * 1_000_000) : v
+    )));
     setPaths({});
     setDragging(null);
     setCountedConnect(false);
@@ -328,7 +366,7 @@ export default function VibeCircuit() {
     setDragging(null);
   }
   function prevLevel() { setLevelIndex((i) => Math.max(0, i - 1)); }
-  function nextLevel() { setLevelIndex((i) => Math.min(LEVELS.length - 1, i + 1)); }
+  function nextLevel() { setLevelIndex((i) => Math.min(LEVEL_TEMPLATES.length - 1, i + 1)); }
 
   const width = cols * CELL;
   const height = rows * CELL;
@@ -504,15 +542,15 @@ export default function VibeCircuit() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8, maxWidth: 520, margin: '0 auto 16px' }}>
         <button onClick={prevLevel} disabled={levelIndex === 0} style={ctrlBtn(COLOR_DIM, levelIndex === 0)}>← PREV</button>
         <button onClick={resetLevel} style={ctrlBtn(COLOR_SPEC.crimson.base, false)}>
-          <RotateCcw size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />RESET
+          <RotateCcw size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />RES
         </button>
         <button onClick={showSolution} disabled={!solution} style={ctrlBtn(COLOR_SPEC.gold.base, !solution)}>
-          <Key size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />{solution ? 'SOLUTION' : 'NO SOLUTION'}
+          <Key size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} />{solution ? 'SOL' : 'NO SOL'}
         </button>
-        <button onClick={nextLevel} disabled={levelIndex === LEVELS.length - 1} style={ctrlBtn(COLOR_SPEC.cyan.base, levelIndex === LEVELS.length - 1)}>NEXT →</button>
+        <button onClick={nextLevel} disabled={levelIndex === LEVEL_TEMPLATES.length - 1} style={ctrlBtn(COLOR_SPEC.cyan.base, levelIndex === LEVEL_TEMPLATES.length - 1)}>NEXT →</button>
       </div>
 
       <div style={{ maxWidth: 520, margin: '0 auto', fontSize: 11, color: COLOR_DIM, lineHeight: 1.6 }}>
@@ -525,15 +563,17 @@ export default function VibeCircuit() {
 
 function ctrlBtn(color: string, disabled: boolean): React.CSSProperties {
   return {
-    padding: '8px 14px',
+    minWidth: 0,
+    padding: '8px 6px',
     border: `1px solid ${color}`,
     background: 'transparent',
     color,
     borderRadius: 6,
     fontFamily: 'inherit',
-    fontSize: 12,
-    letterSpacing: '.08em',
+    fontSize: 11,
+    letterSpacing: '.04em',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.35 : 1,
+    whiteSpace: 'nowrap',
   };
 }

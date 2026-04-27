@@ -111,7 +111,12 @@ interface MetricRow {
   help: string;
 }
 
-export default function SystemTray(): JSX.Element | null {
+interface SystemTrayProps {
+  compact?: boolean;
+  placement?: 'below-right' | 'above-right';
+}
+
+export default function SystemTray({ compact = false, placement = 'below-right' }: SystemTrayProps): JSX.Element | null {
   const [state, setState] = useState<DashboardState | null>(null);
   const [path, setPath] = useState<string>('');
   const [dailyStreak, setDailyStreak] = useState<number>(0);
@@ -241,6 +246,11 @@ export default function SystemTray(): JSX.Element | null {
     });
   }
 
+  const buttonSize = compact ? 28 : 36;
+  const panelPlacement: React.CSSProperties = placement === 'above-right'
+    ? { bottom: 'calc(100% + 6px)', right: 0 }
+    : { top: 'calc(100% + 6px)', right: 0 };
+
   return (
     <div ref={panelRef} style={{ position: 'relative' }}>
       <button
@@ -251,25 +261,33 @@ export default function SystemTray(): JSX.Element | null {
         title={`Dashboard · ${ledLabel}`}
         style={{
           position: 'relative',
-          width: 36,
-          height: 36,
+          width: buttonSize,
+          height: buttonSize,
           padding: 0,
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           background: BG,
           border: `1px solid ${STRONG_BORDER}`,
-          borderRadius: 8,
+          borderRadius: compact ? 6 : 8,
           cursor: 'pointer',
           color: TEXT_2,
         }}
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <rect x="2" y="2" width="5" height="5" stroke="currentColor" strokeWidth="1.5" rx="1" />
-          <rect x="9" y="2" width="5" height="5" stroke="currentColor" strokeWidth="1.5" rx="1" />
-          <rect x="2" y="9" width="5" height="5" stroke="currentColor" strokeWidth="1.5" rx="1" />
-          <rect x="9" y="9" width="5" height="5" stroke="currentColor" strokeWidth="1.5" rx="1" />
-        </svg>
+        <span
+          style={{
+            width: 24,
+            height: 24,
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 23,
+            lineHeight: 1,
+          }}
+          aria-hidden="true"
+        >
+          📊
+        </span>
         <span
           style={{
             position: 'absolute',
@@ -290,11 +308,10 @@ export default function SystemTray(): JSX.Element | null {
         <div
           role="dialog"
           aria-label="Your dashboard"
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 6px)',
-            right: 0,
-            width: 'min(320px, calc(100vw - 16px))',
+        style={{
+          position: 'absolute',
+          ...panelPlacement,
+          width: 'min(320px, calc(100vw - 16px))',
             background: BG,
             border: `1px solid ${STRONG_BORDER}`,
             borderRadius: 10,

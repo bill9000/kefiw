@@ -1,0 +1,83 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import DeckingReplacement from '~/components/homelab/DeckingReplacementCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Decking Replacement Calculator — OSB & Plywood Sheets | Kefiw Home Lab';
+const description = 'How many sheets of decking do you need to replace, and what does it cost? Calculator handles OSB and plywood by thickness, with material + labor pricing. Reviewed by a Texas-licensed GC.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/decking-replacement-calculator/"
+  keywords={['roof decking replacement cost', 'OSB plywood roof sheathing', 'how many sheets decking', 'decking replacement per sheet']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/decking-replacement-calculator/', label: 'Decking Replacement Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Decking Replacement Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Decking surprise is the #1 cost variability on a roof replacement. This calculator estimates the sheet count and total cost (material + labor) for the percentage of decking you expect to replace — so you can spot a sandbagged or inflated bid.
+      </p>
+    </header>
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+    <section class="mb-8"><DeckingReplacement client:load /></section>
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+    <section class="prose-tool max-w-3xl">
+      <h2>OSB vs plywood</h2>
+      <h3>OSB (Oriented Strand Board)</h3>
+      <p>
+        Cheaper, lighter, and code-acceptable for most residential roof sheathing. The downside: OSB <strong>swells when it gets wet and doesn't fully recover</strong>. In a humid attic with marginal ventilation, OSB can soften over years even without a leak. 7/16″ is the most common thickness; 19/32″ is required by code in some high-wind regions.
+      </p>
+      <h3>Plywood (CDX)</h3>
+      <p>
+        Slightly more expensive, slightly heavier, but <strong>tolerates moisture cycles much better</strong>. 1/2″ is the standard upgrade; 5/8″ is required by some HVHZ codes (Florida) and is often specified in Gulf-coast hurricane zones.
+      </p>
+
+      <h2>How decking replacement actually plays out on a job</h2>
+      <ol>
+        <li>Tear-off begins. Crew rips shingles and underlayment down to bare deck.</li>
+        <li>Crew lead walks the deck looking for <strong>sponginess, soft spots, visible rot, fasteners that don't hold</strong>.</li>
+        <li>Bad sheets are marked, removed, and replaced with new material — typically the same thickness as the original.</li>
+        <li>Sheet count is documented; you're charged per sheet (or per the contracted decking allowance).</li>
+      </ol>
+
+      <h2>The contractor sandbag</h2>
+      <p>
+        Some contractors quote a flat "decking allowance" (e.g., $500 included). What you don't see: their bid <strong>assumes the allowance is exhausted</strong> and they pocket the difference if it's not. A more honest contractor itemizes:
+      </p>
+      <ul>
+        <li>Per-sheet price for replacement (including labor)</li>
+        <li>Crew documentation: which sheets were replaced, photos before/after</li>
+        <li>Final true-up: you pay for what was actually replaced, not a flat allowance</li>
+      </ul>
+      <p>
+        Ask for itemized decking pricing in writing. Get the per-sheet number agreed before tear-off — not after the crew is already on the roof.
+      </p>
+
+      <h2>Signs you'll need more replacement than typical</h2>
+      <ul>
+        <li><strong>Roof age 25+ years</strong> — the longer it's been on, the more cumulative moisture exposure.</li>
+        <li><strong>Past leak history</strong> — caulk-and-patch repairs trap moisture under shingles.</li>
+        <li><strong>Visible sag</strong> between rafters — soft spots underfoot during walk-around.</li>
+        <li><strong>Ceiling stains below</strong> — chimney, vent, valley areas are common rot zones.</li>
+        <li><strong>Inadequate attic ventilation</strong> — moisture builds up, decking rots from below.</li>
+        <li><strong>Multi-layer roof</strong> — second layer holds heat and moisture against the first.</li>
+      </ul>
+
+      <h2>About this calculator</h2>
+      <p>Reviewed by Eurocraft, a Texas-licensed general contractor. Material pricing reflects current South-region lumber-yard cost; labor reflects Houston-market crew economics.</p>
+    </section>
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

@@ -7,6 +7,7 @@ import StartHere from '~/components/StartHere.astro';
 import ToolTips from '~/components/ToolTips.astro';
 import FollowUpTools from '~/components/FollowUpTools.astro';
 import AdSlot from '~/components/ads/AdSlot.tsx';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
 import { reviewPanelForArea } from '~/data/review';
 import type { ToolConfig } from '~/data/tools';
 import { CATEGORIES, toolHref } from '~/data/tools';
@@ -17,6 +18,13 @@ const { tool } = Astro.props;
 const cat = CATEGORIES[tool.category];
 const cluster = tool.clusterId ? CLUSTERS_BY_SLUG[tool.clusterId] : undefined;
 const reviewConfig = reviewPanelForArea(tool.category);
+const usesHealthReview = reviewConfig.reviewers.some((reviewer) => reviewer.href === '/registered-nurse-review/');
+const reviewApprovalLinks = usesHealthReview
+  ? [
+      { label: 'registered nurse', href: '/registered-nurse-review/' },
+      { label: 'scientific reviewer', href: '/scientific-review/' },
+    ]
+  : undefined;
 const crumbs = [
   { href: '/', label: 'Home' },
   { href: `/${cat.slug}/`, label: cat.title },
@@ -33,6 +41,37 @@ const webAppJsonLd = {
   url: new URL(toolHref(tool), Astro.site).toString(),
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 };
+
+const numericToolIds = new Set([
+  'average-calculator',
+  'percentage-calculator',
+  'percent-of-calculator',
+  'percent-change-calculator',
+  'ratio-calculator',
+  'fraction-calculator',
+  'hours-calculator',
+  'discount-calculator',
+  'tip-calculator',
+  'markup-margin-calculator',
+  'break-even-calculator',
+  'mortgage-calculator',
+  'mortgage-extra-payment-calculator',
+  'markup-calculator',
+  'margin-calculator',
+  'savings-goal-calculator',
+]);
+
+const cueText =
+  tool.id === 'average-calculator'
+      ? 'Enter numbers below'
+      : numericToolIds.has(tool.id)
+        ? 'Enter values below'
+        : tool.category === 'word-tools'
+          ? 'Enter letters or text below'
+          : tool.category === 'converters'
+            ? 'Enter a value below'
+            : 'Start below';
+const cueHelp = 'Scroll up for overview, down for guides';
 ---
 <BaseLayout
   title={tool.title}
@@ -57,8 +96,8 @@ const webAppJsonLd = {
     </header>
 
     {/*
-      Compact trust strip. The full review-methodology panel lives at the
-      bottom of the page (anchor #review-methodology).
+      Compact trust strip. The full review-methodology links live at the
+      bottom of the page, so this stays as a short credential signal.
     */}
     <aside aria-label="Review credential" class="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
       <span class="font-semibold uppercase tracking-[0.18em] text-slate-500">Built by</span>
@@ -68,17 +107,36 @@ const webAppJsonLd = {
       {reviewConfig.reviewers.slice(0, 2).map((r) => (
         <a href={r.href} class="text-slate-700 hover:text-brand-700 hover:underline">{r.label}</a>
       ))}
-      <span aria-hidden="true" class="text-slate-300">·</span>
-      <a href="/methodology/" class="text-slate-700 hover:text-brand-700 hover:underline">Methodology</a>
-      <span aria-hidden="true" class="text-slate-300">·</span>
-      <a href="#review-methodology" class="text-slate-500 hover:text-brand-700 hover:underline">Details ↓</a>
     </aside>
 
     <div class="my-6">
       <AdSlot client:idle zoneId="ALPHA" />
     </div>
 
-    <section aria-label="Tool" class="mb-8">
+    <section
+      id="tool-start"
+      aria-label="Tool"
+      class="mb-8"
+      data-tool-state-key={tool.category === 'calculators' ? `kfw_tool_state:${tool.id}` : undefined}
+    >
+      {tool.category === 'games' ? (
+        <div class="flex h-2.5 items-center gap-2 overflow-hidden text-[9px] uppercase leading-none tracking-[0.10em] text-slate-500">
+          <span class="h-px flex-1 bg-slate-200" aria-hidden="true"></span>
+          <span class="whitespace-nowrap">{cueHelp}</span>
+          <span class="h-px flex-1 bg-slate-200" aria-hidden="true"></span>
+        </div>
+      ) : (
+        <div class="mb-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-center uppercase text-slate-500">
+          <div class="flex items-center gap-3 text-[11px] tracking-[0.16em]">
+            <span class="h-px flex-1 bg-slate-200" aria-hidden="true"></span>
+            <span class="whitespace-nowrap font-semibold text-slate-700">{cueText}</span>
+            <span class="h-px flex-1 bg-slate-200" aria-hidden="true"></span>
+          </div>
+          <div class="mt-1 text-[10px] tracking-[0.12em]">
+            {cueHelp}
+          </div>
+        </div>
+      )}
       <slot />
     </section>
 
@@ -157,24 +215,119 @@ const webAppJsonLd = {
 
     <RelatedTools tool={tool} />
 
-    {/*
-      The top trust strip already names reviewers + links to /methodology/.
-      No need to repeat the full review panel on every tool — one footer
-      line linking to the canonical trust pages is enough.
-    */}
-    <aside id="review-methodology" aria-label="Review and methodology" class="scroll-mt-24 mt-8 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
-      Review &amp; methodology details live on their own pages:{' '}
-      <a href="/about-the-reviewers/" class="text-slate-700 hover:text-brand-700 hover:underline">About the reviewers</a>
-      {' · '}
-      <a href="/methodology/" class="text-slate-700 hover:text-brand-700 hover:underline">Methodology</a>
-      {' · '}
-      <a href="/editorial-policy/" class="text-slate-700 hover:text-brand-700 hover:underline">Editorial policy</a>
-      {' · '}
-      <a href="/sources/" class="text-slate-700 hover:text-brand-700 hover:underline">Sources</a>
-    </aside>
+    <ReviewMethodologyFooter reviewerLinks={reviewApprovalLinks} includeHealthDisclaimer={usesHealthReview} />
 
     <div class="my-6">
       <AdSlot client:idle zoneId="DELTA" format="multiplex" />
     </div>
   </article>
+  <script is:inline>
+    (() => {
+      if (window.location.hash) return;
+      const target = document.getElementById('tool-start');
+      if (!target) return;
+      const scrollToTool = () => {
+        const header = document.querySelector('header.sticky, body > header, header');
+        const headerHeight = header instanceof HTMLElement ? header.getBoundingClientRect().height : 0;
+        const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+      };
+      requestAnimationFrame(scrollToTool);
+      window.setTimeout(scrollToTool, 350);
+      window.setTimeout(scrollToTool, 900);
+    })();
+  </script>
+  <script is:inline>
+    (() => {
+      const root = document.getElementById('tool-start');
+      const key = root?.dataset.toolStateKey;
+      if (!root || !key) return;
+
+      const selector = 'input, textarea, select';
+      const eventOptions = { bubbles: true };
+
+      const elementKey = (el, index) => {
+        const id = el.getAttribute('id');
+        const name = el.getAttribute('name');
+        return `${el.tagName.toLowerCase()}:${id || name || index}`;
+      };
+
+      const controls = () => Array.from(root.querySelectorAll(selector))
+        .filter((el) => {
+          if (el.disabled) return false;
+          if (el instanceof HTMLInputElement) {
+            return !['button', 'submit', 'reset', 'file', 'password'].includes(el.type);
+          }
+          return true;
+        });
+
+      const readState = () => {
+        const state = {};
+        controls().forEach((el, index) => {
+          const id = elementKey(el, index);
+          if (el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio')) {
+            state[id] = { checked: el.checked };
+            return;
+          }
+          state[id] = { value: el.value };
+        });
+        return state;
+      };
+
+      const applyValue = (el, value) => {
+        const proto = el instanceof HTMLTextAreaElement
+          ? HTMLTextAreaElement.prototype
+          : el instanceof HTMLSelectElement
+            ? HTMLSelectElement.prototype
+            : HTMLInputElement.prototype;
+        const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+        if (setter) setter.call(el, value);
+        else el.value = value;
+      };
+
+      const restoreState = () => {
+        let saved;
+        try {
+          saved = JSON.parse(localStorage.getItem(key) || '{}');
+        } catch {
+          saved = {};
+        }
+        if (!saved || typeof saved !== 'object') return;
+
+        controls().forEach((el, index) => {
+          const item = saved[elementKey(el, index)];
+          if (!item) return;
+          if (el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio')) {
+            el.checked = !!item.checked;
+            el.dispatchEvent(new Event('change', eventOptions));
+            el.dispatchEvent(new Event('input', eventOptions));
+            return;
+          }
+          if ('value' in item) {
+            applyValue(el, String(item.value ?? ''));
+            el.dispatchEvent(new Event('input', eventOptions));
+            el.dispatchEvent(new Event('change', eventOptions));
+          }
+        });
+      };
+
+      let saveTimer = 0;
+      const scheduleSave = () => {
+        window.clearTimeout(saveTimer);
+        saveTimer = window.setTimeout(() => {
+          try {
+            localStorage.setItem(key, JSON.stringify(readState()));
+          } catch {
+            /* storage unavailable */
+          }
+        }, 120);
+      };
+
+      root.addEventListener('input', scheduleSave);
+      root.addEventListener('change', scheduleSave);
+      requestAnimationFrame(restoreState);
+      window.setTimeout(restoreState, 400);
+      window.setTimeout(restoreState, 900);
+    })();
+  </script>
 </BaseLayout>

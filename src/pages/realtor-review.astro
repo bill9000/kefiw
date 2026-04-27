@@ -1,0 +1,47 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+---
+
+<BaseLayout
+  title="Realtor Review — Kefiw"
+  description="What realtor review means on Kefiw Property pages: sale proceeds, closing costs, commission framing, net sheets, buyer cash to close, ownership, and rental-property assumptions."
+  canonical="/realtor-review/"
+  keywords={['realtor review', 'real estate calculator review', 'seller proceeds review', 'property calculator review']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Realtor Review</h1>
+    <p class="lead text-lg text-slate-700">
+      Realtor review on Kefiw means Property pages have been checked by staff with real-estate experience for selling, buying, ownership, closing-cost, commission, and net-sheet framing.
+    </p>
+
+    <aside class="my-4 rounded-md border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-950">
+      <strong>Approval scope:</strong> Pages carrying this label are approved for publication for real-estate workflow, proceeds framing, offer comparison language, and the practical questions a user should bring to an agent, title company, lender, or tax professional.
+    </aside>
+
+    <TrustNav current="/realtor-review/" />
+
+    <h2>What realtor review covers</h2>
+    <ul>
+      <li>seller proceeds, commission, concessions, closing costs, and net-sheet workflow</li>
+      <li>buyer cash-to-close, mortgage points, buydowns, affordability, and rent-vs-buy framing</li>
+      <li>ownership cost assumptions such as property tax, escrow, refinance break-even, and home equity</li>
+      <li>rental-property and investment calculators where agent-market assumptions affect interpretation</li>
+    </ul>
+
+    <h2>Where it applies</h2>
+    <p>
+      Realtor review is attached to Property Lab pages, Property Tracks, selling calculators, buyer calculators, ownership calculators, and real-estate guide sections. It works alongside <a href="/engineering-review/">engineering review</a> and <a href="/scientific-review/">scientific review</a>.
+    </p>
+
+    <h2>What the approval means</h2>
+    <p>
+      The approval means the page&rsquo;s approach, assumptions, and next-step guidance match the stated realtor-review scope. It does not mean Kefiw is acting as a brokerage, giving individualized real-estate advice, valuing a property, or replacing local professional guidance.
+    </p>
+
+    <h2>Why this matters</h2>
+    <p>
+      Real-estate decisions are usually made under deadline pressure. Realtor review helps the page keep the numbers useful without pretending that a national calculator can know local negotiations, contract terms, title details, or market conditions perfectly.
+    </p>
+  </article>
+</BaseLayout>

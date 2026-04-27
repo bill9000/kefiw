@@ -1,0 +1,76 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import IceWaterShield from '~/components/homelab/IceWaterShieldCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Ice & Water Shield Calculator — Eaves, Valleys, Low-Slope | Kefiw Home Lab';
+const description = 'How many rolls of ice & water shield do you need? Calculator covers eaves, valleys, low-slope sections, and penetrations with code-compliant coverage. Reviewed by a Texas-licensed GC.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/ice-water-shield-calculator/"
+  keywords={['ice water shield calculator', 'eave membrane calculator', 'valley underlayment', 'wind driven rain protection']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/ice-water-shield-calculator/', label: 'Ice & Water Shield Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Ice &amp; Water Shield Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Self-adhering membrane that seals around fasteners — applied at eaves, valleys, low-slope sections, and around penetrations. In the South it's not for ice; it's for wind-driven rain.
+      </p>
+    </header>
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+    <section class="mb-8"><IceWaterShield client:load /></section>
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+    <section class="prose-tool max-w-3xl">
+      <h2>What "ice & water shield" actually does</h2>
+      <p>
+        It's a peel-and-stick membrane that <strong>self-seals around nails and fasteners</strong>. When you penetrate it with a roofing nail, the membrane closes back around the shaft instead of leaving a hole. That's the magic — and why it matters.
+      </p>
+      <p>
+        In cold climates the use case is ice dams: snow melts, refreezes at the eave, and water backs up under the shingles. I&amp;W shield seals the deck so backup water can't penetrate.
+      </p>
+      <p>
+        In Texas, Florida, and Gulf-coast markets the use case is <strong>wind-driven rain</strong> during tropical storms and thunderstorm fronts. Same underlying physics: water pushed sideways past the shingle's intended water-shed pattern. I&amp;W shield is the seal of last resort.
+      </p>
+
+      <h2>Code requirements (IRC R905.1.2)</h2>
+      <ul>
+        <li><strong>Eaves</strong> in regions with average January temperatures of 25°F or less: I&amp;W shield required to extend 24″ inside the heated wall. Texas and most of the Gulf are exempt by raw temperature, but many local codes still require eave protection.</li>
+        <li><strong>Valleys</strong> on all asphalt-shingle roofs: required.</li>
+        <li><strong>Low-slope (under 4:12)</strong>: required full coverage when shingles are used.</li>
+        <li><strong>Around penetrations</strong>: best practice; not always code-required but always smart.</li>
+      </ul>
+
+      <h2>Why coastal / hurricane markets specify more</h2>
+      <p>
+        Florida HVHZ (High Velocity Hurricane Zone) code requires expanded I&amp;W coverage. Some Texas Gulf coast counties have similar requirements. If your insurance carrier offers a wind-mitigation discount, full I&amp;W coverage of the entire roof (not just edges) is one of the qualifying upgrades — typically 5–15% premium discount.
+      </p>
+
+      <h2>Standard install order</h2>
+      <ol>
+        <li>Decking installed</li>
+        <li>Drip edge at eaves (under)</li>
+        <li><strong>I&amp;W shield</strong> at eaves, valleys, low-slope, penetrations</li>
+        <li>Field underlayment over the rest of the roof</li>
+        <li>Drip edge at rakes (over underlayment)</li>
+        <li>Shingles</li>
+      </ol>
+
+      <h2>About this calculator</h2>
+      <p>Reviewed by Eurocraft, a Texas-licensed general contractor. Roll coverage assumes standard 36″ × 65′ rolls (~200 sqft).</p>
+    </section>
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,43 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+---
+
+<BaseLayout
+  title="Advertising Disclosure — Kefiw"
+  description="How Kefiw uses advertising, how ads relate to editorial work, and what ad personalization controls are available."
+  canonical="/advertising-disclosure/"
+  keywords={['advertising disclosure', 'kefiw ads', 'ad disclosure']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Advertising Disclosure</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw is free because it shows advertising. Ads do not decide calculator formulas, rankings, examples, review labels, or methodology pages.
+    </p>
+
+    <TrustNav current="/advertising-disclosure/" />
+
+    <h2>How advertising appears</h2>
+    <p>
+      Ads may appear in header, footer, inline, or sticky placements. The site separates ad containers from tool output so users can still inspect the formula, assumptions, and result.
+    </p>
+
+    <h2>Editorial separation</h2>
+    <p>
+      A calculator or guide may cover commercial topics, but the output logic should remain deterministic and auditable. Sponsored claims, hidden lead-gen routing, and paid ranking are not part of the current Kefiw model.
+    </p>
+
+    <h2>Privacy controls</h2>
+    <p>
+      Use the bottom-right menu to choose personalized or contextual-only ads where regional rules allow that choice.
+    </p>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

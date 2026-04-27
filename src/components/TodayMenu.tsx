@@ -64,7 +64,12 @@ function snapshotForPipeline(
   };
 }
 
-export default function TodayMenu(): JSX.Element {
+interface TodayMenuProps {
+  compact?: boolean;
+  placement?: 'below' | 'above-right';
+}
+
+export default function TodayMenu({ compact = false, placement = 'below' }: TodayMenuProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const [dailyDate, setDailyDate] = useState('');
   const [countdown, setCountdown] = useState(0);
@@ -122,18 +127,40 @@ export default function TodayMenu(): JSX.Element {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="inline-flex items-center gap-1 font-bold text-slate-900 hover:text-brand-700"
+        className={compact
+          ? 'inline-flex h-7 w-7 items-center justify-center rounded border border-slate-300 bg-white text-slate-900 shadow-sm'
+          : 'inline-flex items-center gap-1 font-bold text-slate-900 hover:text-brand-700'}
+        aria-label={compact ? "Open today's menu" : undefined}
       >
-        Kefiw
-        <svg viewBox="0 0 10 6" width="8" height="6" aria-hidden="true" className="text-slate-500">
-          <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        {compact ? (
+          <span
+            style={{
+              width: 24,
+              height: 24,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 23,
+              lineHeight: 1,
+            }}
+            aria-hidden="true"
+          >
+            🗓️
+          </span>
+        ) : (
+          <>
+            Kefiw
+            <span aria-hidden="true" className="text-lg leading-none">🗓️</span>
+          </>
+        )}
       </button>
       {open && (
         <div
           role="menu"
           aria-label="Today's pipelines"
-          className="absolute left-0 top-full z-50 mt-1 w-80 max-w-[90vw] rounded-lg border border-slate-200 bg-white p-3 shadow-xl"
+          className={`absolute z-50 w-80 max-w-[90vw] rounded-lg border border-slate-200 bg-white p-3 shadow-xl ${
+            placement === 'above-right' ? 'bottom-full right-0 mb-1' : 'left-0 top-full mt-1'
+          }`}
         >
           <header className="flex items-baseline justify-between border-b border-slate-100 pb-2">
             <div>

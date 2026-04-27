@@ -3,7 +3,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import HomelabBand from '~/components/homelab/HomelabBand.astro';
 import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
-import ShingleBundleCalculator from '~/components/homelab/ShingleBundleCalculator.tsx';
+import ShingleBundle from '~/components/homelab/ShingleBundleCalculator.tsx';
 import AdSlot from '~/components/ads/AdSlot.tsx';
 import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
 
@@ -49,7 +49,7 @@ const webApp = {
     </div>
 
     <section aria-label="Calculator" class="mb-8">
-      <ShingleBundleCalculator client:load />
+      <ShingleBundle client:load />
     </section>
 
     <div class="my-6">

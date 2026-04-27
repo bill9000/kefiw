@@ -44,18 +44,23 @@ function formatCurrency(n: number): string {
   return n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 }
 
-export default function MinimumViableRate() {
+interface MinimumViableRateProps {
+  namespace?: string;
+}
+
+export default function MinimumViableRate({ namespace }: MinimumViableRateProps = {}) {
+  const storageKey = namespace ? `${STORAGE}__${namespace}` : STORAGE;
   const [state, setState] = useState<State>(DEFAULT_STATE);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE);
+      const raw = localStorage.getItem(storageKey);
       if (raw) setState({ ...DEFAULT_STATE, ...JSON.parse(raw) });
     } catch {}
     setHydrated(true);
-  }, []);
-  useEffect(() => { if (hydrated) localStorage.setItem(STORAGE, JSON.stringify(state)); }, [state, hydrated]);
+  }, [storageKey]);
+  useEffect(() => { if (hydrated) localStorage.setItem(storageKey, JSON.stringify(state)); }, [state, hydrated, storageKey]);
 
   const salary = parseNum(state.targetSalary);
   const benefits = parseNum(state.benefitsValue);
@@ -76,11 +81,13 @@ export default function MinimumViableRate() {
   }, [salary, benefits, overhead, weeks, hoursPerWeek, utilization, living]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    // Namespaced (triad/matrix) instances do not write to the shared
+    // session-context pipeline — only the standalone tool feeds downstream.
+    if (!hydrated || namespace) return;
     writeField(PIPELINE_RATE_KEY, targetRate, PIPELINE_SOURCE, PIPELINE_LABEL);
     const monthlyNeed = (salary + benefits + overhead) / 12;
     writeField(PIPELINE_NEED_KEY, monthlyNeed, PIPELINE_SOURCE, PIPELINE_LABEL);
-  }, [targetRate, salary, benefits, overhead, hydrated]);
+  }, [targetRate, salary, benefits, overhead, hydrated, namespace]);
 
   const max = Math.max(targetRate, livingRate, 1);
   const targetPct = (targetRate / max) * 100;

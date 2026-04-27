@@ -1,0 +1,77 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import AtticVentilation from '~/components/homelab/AtticVentilationCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Attic Ventilation Calculator — Required NFA & Vent Quantities | Kefiw Home Lab';
+const description = 'Calculate required Net Free Area (NFA) for your attic and convert to ridge vent / soffit vent / box vent quantities. Code-compliant 1:300 and 1:150 ratios. Reviewed by a Texas-licensed GC.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/attic-ventilation-calculator/"
+  keywords={['attic ventilation calculator', 'NFA attic vent', 'ridge vent vs box vent', 'soffit vent NFA', '1:300 attic ventilation']}
+>
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/attic-ventilation-calculator/', label: 'Attic Ventilation Calculator' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Attic Ventilation Calculator</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        Code-compliant attic ventilation requires a balanced system of intake (low) and exhaust (high) vents totaling a specific Net Free Area (NFA). This calculator computes the required NFA and tells you whether your current vent layout meets it.
+      </p>
+    </header>
+    <EurocraftByline updated={COST_ENGINE_UPDATED} />
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+    <section class="mb-8"><AtticVentilation client:load /></section>
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+    <section class="prose-tool max-w-3xl">
+      <h2>Why attic ventilation isn't optional</h2>
+      <p>
+        Inadequate attic ventilation is the single biggest cause of premature roof failure in hot climates. Houston attics regularly hit 150–160°F in summer; that heat conducts through the decking and bakes the underside of the shingles. Manufacturers cite inadequate ventilation as a warranty exclusion — and they enforce it.
+      </p>
+      <p>
+        Heat shortens shingle life by 20–40%. Moisture (from kitchen / bathroom exhaust + slow leaks) rots decking from below. A properly-vented attic typically runs 15–25°F cooler in summer; that's the difference between 25-year shingle life and 18-year shingle life.
+      </p>
+
+      <h2>The 1:300 vs 1:150 rule</h2>
+      <p>
+        Code (IRC R806) requires <strong>1 sq.ft. of NFA per 300 sq.ft. of attic floor area</strong> when:
+      </p>
+      <ul>
+        <li>A vapor retarder is installed on the warm-in-winter side, AND</li>
+        <li>Intake/exhaust is balanced 50/50 with at least 40% of vents in the upper half (within 3′ of the ridge)</li>
+      </ul>
+      <p>
+        Without those conditions, the requirement doubles to <strong>1:150</strong>. Most modern Texas homes hit 1:300 because they have vapor retarders and balanced ventilation.
+      </p>
+
+      <h2>The most efficient pairing: ridge vent + soffit vent</h2>
+      <p>
+        <strong>Continuous ridge vent</strong> exhausts the hottest air at the highest point. <strong>Continuous soffit vent</strong> intakes the coolest air at the lowest point. The natural stack effect drives airflow with no electricity required. This is the universally-accepted pairing — manufacturers, code officials, and warranty programs all approve it.
+      </p>
+
+      <h2>Why mixing exhaust types backfires</h2>
+      <p>
+        A roof with both <strong>ridge vent</strong> and <strong>box vents</strong> in the same attic creates a short circuit: the ridge vent pulls air from the closer box vent (the easy path) instead of from the soffit (the right path). The attic still gets hot, the bottom of the roof still gets no fresh air, and the moisture issue stays. Pick one exhaust type per continuous attic space.
+      </p>
+
+      <h2>Power vents (powered attic ventilators) — controversial</h2>
+      <p>
+        Solar or electric-powered attic fans pull more air than passive systems, but in air-conditioned homes they often pull <strong>conditioned air</strong> from the living space (through ceiling penetrations) faster than they pull from outside — the AC is "fighting" the fan. Most modern building science says skip them; pair ridge + soffit vents instead and let stack effect do the work.
+      </p>
+
+      <h2>About this calculator</h2>
+      <p>Reviewed by Eurocraft, a Texas-licensed general contractor. NFA values per linear foot reflect typical product specifications; check manufacturer literature for your specific vent profile.</p>
+    </section>
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>

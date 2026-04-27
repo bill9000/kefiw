@@ -87,7 +87,24 @@ export default {
     }
 
     if (url.pathname === "/health") {
-      return json({ ok: true, ts: Date.now() }, { headers: cors });
+      // Quick D1 ping — confirms the binding is alive and the DB responds.
+      // Wrapped in a try so a transient D1 hiccup downgrades the response
+      // instead of throwing an unhandled error.
+      let d1: "ok" | "error" = "ok";
+      let d1_latency_ms: number | undefined;
+      const dbStart = Date.now();
+      try {
+        await env.DB.prepare("SELECT 1 AS ping").first();
+        d1_latency_ms = Date.now() - dbStart;
+      } catch {
+        d1 = "error";
+        d1_latency_ms = Date.now() - dbStart;
+      }
+      const ok = d1 === "ok";
+      return json(
+        { ok, ts: Date.now(), d1, d1_latency_ms },
+        { status: ok ? 200 : 503, headers: cors },
+      );
     }
 
     if (url.pathname === "/telemetry" && req.method === "POST") {

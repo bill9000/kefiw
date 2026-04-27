@@ -3,14 +3,83 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 ---
 <BaseLayout
   title="Contact — Kefiw"
-  description="Get in touch with Kefiw. Report a bug, suggest a new tool, or send general feedback."
+  description="Submit a Kefiw contact request. Send corrections, additions, ideas, solicitations, bugs, complaints, advertising notes, privacy issues, or other feedback."
   canonical="/contact/"
-  keywords={['contact kefiw', 'feedback', 'bug report']}
+  keywords={['contact kefiw', 'feedback', 'bug report', 'correction request', 'contact form']}
 >
   <article class="container-narrow py-10 prose-tool">
     <h1 class="text-3xl font-bold tracking-tight">Contact</h1>
-    <p>We&rsquo;d love to hear from you. Whether it&rsquo;s a bug, a feature request, or a new tool idea, the best way to reach us is email:</p>
-    <p><a href="mailto:hello@kefiw.com"><strong>hello@kefiw.com</strong></a></p>
+    <p>
+      Use this form for corrections, additions, ideas, solicitations, bugs, complaints, advertising notes,
+      review/source notes, legal/privacy issues, or anything that does not fit those buckets.
+    </p>
+    <p>
+      We read submissions in batches. We do not promise replies, phone calls, text messages, support tickets,
+      vendor follow-ups, or individual back-and-forth. Your contact details help de-duplicate requests and
+      understand context; they do not mean we will contact you back.
+    </p>
+
+    <form id="contact-request-form" class="not-prose mt-6 space-y-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block">
+          <span class="label">Name</span>
+          <input class="input" name="name" autocomplete="name" required minlength="2" maxlength="120" />
+        </label>
+        <label class="block">
+          <span class="label">Email</span>
+          <input class="input" name="email" type="email" autocomplete="email" required maxlength="254" />
+        </label>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block">
+          <span class="label">Phone</span>
+          <input class="input" name="phone" type="tel" autocomplete="tel" required minlength="7" maxlength="40" />
+        </label>
+        <label class="block">
+          <span class="label">Type of contact</span>
+          <select class="input" name="contact_type" required>
+            <option value="">Choose one</option>
+            <option value="correction">Correction</option>
+            <option value="addition">Addition / new tool</option>
+            <option value="idea">Idea</option>
+            <option value="solicitation">Solicitation / sales pitch</option>
+            <option value="bug">Bug</option>
+            <option value="complaint">Complaint</option>
+            <option value="advertising">Advertising / partnership</option>
+            <option value="review-source">Review or source note</option>
+            <option value="legal-privacy">Legal / privacy</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="hidden" aria-hidden="true">
+        Company website
+        <input name="company_website" tabindex="-1" autocomplete="off" />
+      </label>
+
+      <label class="block">
+        <span class="label">Message</span>
+        <textarea
+          class="input min-h-44"
+          name="message"
+          required
+          minlength="10"
+          maxlength="6000"
+          placeholder="Include the page URL, expected result, actual result, source, or example if relevant."
+        ></textarea>
+      </label>
+
+      <div class="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+        Do not submit passwords, payment information, medical records, legal documents, emergency requests, or anything urgent.
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <button type="submit" class="btn-primary">Submit request</button>
+        <p id="contact-request-status" class="m-0 text-sm text-slate-600" role="status" aria-live="polite"></p>
+      </div>
+    </form>
 
     <h2>When reporting a bug</h2>
     <p>Include the following so we can reproduce it quickly:</p>
@@ -25,3 +94,49 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
     <p>Tell us what you&rsquo;d use it for. Concrete examples help more than abstract requests — e.g. &ldquo;I need to convert between oven temperatures in three countries&rdquo; beats &ldquo;add more converters&rdquo;.</p>
   </article>
 </BaseLayout>
+
+<script is:inline>
+  const form = document.getElementById('contact-request-form');
+  const statusEl = document.getElementById('contact-request-status');
+
+  function setStatus(message, tone = 'neutral') {
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.className = tone === 'error' ? 'm-0 text-sm text-red-700' : tone === 'success' ? 'm-0 text-sm text-emerald-700' : 'm-0 text-sm text-slate-600';
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const submit = form.querySelector('button[type="submit"]');
+    const data = new FormData(form);
+    const payload = {
+      name: data.get('name'),
+      email: data.get('email'),
+      phone: data.get('phone'),
+      contact_type: data.get('contact_type'),
+      message: data.get('message'),
+      company_website: data.get('company_website'),
+    };
+
+    submit?.setAttribute('disabled', 'disabled');
+    setStatus('Submitting...');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.error) {
+        throw new Error(result.error || `HTTP ${response.status}`);
+      }
+      form.reset();
+      setStatus('Request submitted. Thank you.', 'success');
+    } catch {
+      setStatus('The request could not be submitted from this page. Try again after deployment or from the Cloudflare Pages dev server.', 'error');
+    } finally {
+      submit?.removeAttribute('disabled');
+    }
+  });
+</script>

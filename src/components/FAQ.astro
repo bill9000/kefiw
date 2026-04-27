@@ -2,10 +2,27 @@
 import type { FaqItem } from '~/data/tools';
 interface Props { items: FaqItem[]; }
 const { items } = Astro.props;
+
+function inferIntent(f: FaqItem): string | undefined {
+  if (f.faq_intent) return f.faq_intent;
+  const q = f.q.toLowerCase();
+  if (q.startsWith('what is') || q.startsWith('what are')) return 'definition';
+  if (q.includes(' vs ') || q.includes('versus') || q.includes('difference') || q.includes('better')) return 'comparison';
+  if (q.includes('why') || q.includes('wrong') || q.includes('stuck') || q.includes('not working')) return 'troubleshooting';
+  if (q.startsWith('how') || q.startsWith('when')) return 'how-to';
+  if (q.startsWith('is') || q.startsWith('can') || q.startsWith('should')) return 'trust';
+  return undefined;
+}
+
+const itemsWithIntent = items.map((item) => ({
+  ...item,
+  faq_intent: inferIntent(item),
+}));
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: items.map((f) => {
+  mainEntity: itemsWithIntent.map((f) => {
     const question: Record<string, unknown> = {
       '@type': 'Question',
       name: f.q,
@@ -34,7 +51,7 @@ const intentLabel: Record<string, string> = {
 <section class="container-wide mt-10">
   <h2 class="mb-3 text-xl font-semibold">Frequently asked questions</h2>
   <div class="divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white">
-    {items.map((f) => (
+    {itemsWithIntent.map((f) => (
       <details class="group p-4" data-faq-intent={f.faq_intent ?? undefined}>
         <summary class="cursor-pointer list-none font-medium text-slate-900 marker:hidden">
           <span class="inline-block w-5 text-brand-600 transition group-open:rotate-90">›</span>

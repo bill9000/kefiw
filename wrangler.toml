@@ -1,3 +1,8 @@
 name = "kefiw"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-04-01"
+
+[[d1_databases]]
+binding = "CONTACT_DB"
+database_name = "kefiw-telemetry"
+database_id = "72b319c3-7f4a-47b7-848a-027573804c0e"

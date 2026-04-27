@@ -1,0 +1,41 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import StatusBoard from '~/components/StatusBoard.tsx';
+
+const title = 'Kefiw — System Status';
+const description = 'Live status of kefiw.com, the API worker, and the D1 database. Auto-refreshes every 30 seconds.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/status/"
+  noindex={true}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/status/', label: 'Status' },
+  ]} />
+  <article class="container-wide max-w-3xl py-6">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">System Status</h1>
+      <p class="mt-2 text-slate-700">
+        Live heartbeat. The page itself proves Cloudflare Pages is reachable; the API worker is checked over the network; D1 is checked through the worker.
+      </p>
+    </header>
+
+    <StatusBoard client:only="react" />
+
+    <section class="mt-8 rounded-md border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+      <h2 class="text-base font-semibold text-slate-900">What this page checks</h2>
+      <ul class="mt-2 list-disc pl-5 text-sm">
+        <li><strong>Site</strong> — if you can read this, Cloudflare Pages is serving traffic.</li>
+        <li><strong>API worker</strong> — direct HTTPS GET to <code>kefiw-worker.bill9000.workers.dev/health</code>. 5-second timeout.</li>
+        <li><strong>D1 database</strong> — the worker runs <code>SELECT 1 AS ping</code> against D1 and reports the latency.</li>
+      </ul>
+      <p class="mt-3 text-xs text-slate-600">
+        Programmatic monitors should use <a href="/api/health" class="underline">/api/health</a> (Cloudflare Pages Function — JSON-only response, returns HTTP 503 on degraded/down) or hit the worker directly at <a href="https://kefiw-worker.bill9000.workers.dev/health" class="underline">kefiw-worker.bill9000.workers.dev/health</a>.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

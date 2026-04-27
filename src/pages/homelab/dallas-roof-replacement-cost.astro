@@ -1,0 +1,112 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import HomelabBand from '~/components/homelab/HomelabBand.astro';
+import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RoofCalculator from '~/components/homelab/RoofCalculator.tsx';
+import AdSlot from '~/components/ads/AdSlot.tsx';
+import { COST_ENGINE_UPDATED } from '~/lib/homelab/roof-cost-engine';
+
+const title = 'Roof Replacement Cost in Dallas / DFW (2026) — Reviewed by a TX GC | Kefiw';
+const description = 'Dallas-Fort Worth roof replacement cost — local pricing, hail-belt severity, percentage deductibles, and the Class 4 shingle insurance angle. Reviewed by a Texas-licensed general contractor.';
+
+const webApp = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Dallas Roof Replacement Cost Calculator',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  url: new URL('/homelab/dallas-roof-replacement-cost/', Astro.site).toString(),
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="/homelab/dallas-roof-replacement-cost/"
+  keywords={['roof replacement cost Dallas', 'DFW roofing cost', 'Dallas hail roof', 'Plano roofer cost', 'Class 4 shingle Dallas insurance']}
+>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(webApp)} />
+  <HomelabBand />
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/dallas-roof-replacement-cost/', label: 'Dallas' },
+  ]} />
+  <article class="container-wide py-6">
+    <header class="mb-4">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Roof Replacement Cost in Dallas / DFW</h1>
+      <p class="mt-2 max-w-3xl text-slate-700">
+        DFW sits in the worst hail belt in the United States. Roof replacement isn't a once-in-a-lifetime event in this market — many homeowners replace every 7–12 years on insurance claims. The numbers below reflect that reality.
+      </p>
+    </header>
+
+    <EurocraftByline updated={COST_ENGINE_UPDATED} compact={false} />
+
+    <div class="my-4"><AdSlot client:idle zoneId="ALPHA" /></div>
+
+    <section aria-label="Calculator" class="mb-8">
+      <RoofCalculator client:load defaultPermitProfileId="dallas_tx" />
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="GAMMA" /></div>
+
+    <section class="prose-tool max-w-3xl">
+      <h2>DFW typical scenarios</h2>
+      <ul>
+        <li><strong>1-story, 6:12, simple hip, 2,400 sqft roof, architectural asphalt</strong> — $11,500–$16,500 typical</li>
+        <li><strong>2-story, 7:12, complex, 3,200 sqft, Class 4 impact-rated</strong> — $17,000–$25,000</li>
+        <li><strong>1-story, 6:12, simple hip, 2,400 sqft, standing seam metal</strong> — $29,000–$44,000</li>
+      </ul>
+      <p>
+        DFW labor runs slightly higher than Houston due to wage pressure from the broader Dallas economy. Material costs are similar.
+      </p>
+
+      <h2>The DFW hail reality</h2>
+      <p>
+        Dallas-Fort Worth has more hail damage claims per capita than any other US metro. Tarrant, Denton, Collin, and Dallas counties all sit in the Texas hail alley. The April–June storm season routinely produces quarter-to-baseball-size hail. Practical implications:
+      </p>
+      <ul>
+        <li><strong>Most homeowners replace via insurance claim, not cash.</strong> If your roof is past 5 years and you haven't filed a claim, you're probably leaving money on the table.</li>
+        <li><strong>Percentage deductibles are standard.</strong> Most DFW homeowner policies carry 1–2% of dwelling coverage as the wind/hail deductible — meaning a $400K home has an $8,000 deductible. <a href="/homelab/roof-insurance-deductible-calculator/">Run the deductible math</a> before assuming a claim is "free."</li>
+        <li><strong>Class 4 impact-rated shingles are the default upgrade</strong>, not premium. The 15–35% insurance discount + improved hail survival typically pays back inside 4 years.</li>
+      </ul>
+
+      <h2>The DFW storm-chaser problem</h2>
+      <p>
+        After every major hail event, out-of-state roofing crews descend on affected zip codes — Plano, Frisco, McKinney, Allen during the 2024 events. They knock doors, push immediate signed contracts, and often disappear after collecting deposits or after warranty issues arise. <strong>Verify any roofer's Texas license, insurance, and physical local address before signing.</strong> Storm chasers make legitimate local contractors harder to find but worth the search.
+      </p>
+
+      <h2>Permit and code notes</h2>
+      <ul>
+        <li><strong>City permits</strong> — Dallas, Fort Worth, Plano, Frisco, Arlington each have their own permit process. Costs $300–$700 typical; HOA approval often required separately.</li>
+        <li><strong>Class 4 not yet code-mandatory</strong>, but many HOAs in newer developments require it.</li>
+        <li><strong>Drip edge and synthetic underlayment</strong> are now code-required in most DFW jurisdictions.</li>
+      </ul>
+
+      <h2>Material recommendations for DFW</h2>
+      <ul>
+        <li><strong>Class 4 impact-rated architectural asphalt</strong> — the default. Insurance discount + hail survival.</li>
+        <li><strong>Standing seam metal</strong> — best for long-hold properties. Survives all but the largest hail; biggest insurance discount tier.</li>
+        <li><strong>Designer asphalt</strong> — Park Cities, Highland Park, premium neighborhoods. Aesthetic upgrade; no real lifecycle advantage over Class 4 architectural in this hail climate.</li>
+        <li><strong>Concrete tile</strong> — distinctive look, but Class 4 architectural typically delivers similar protection at half the cost in DFW.</li>
+      </ul>
+
+      <h2>Companion calculators for DFW roofs</h2>
+      <ul>
+        <li><a href="/homelab/roof-replacement-cost-calculator/">Roof Replacement Cost Calculator</a></li>
+        <li><a href="/homelab/roof-insurance-deductible-calculator/">Roof Insurance Deductible Calculator</a> — critical for percentage deductibles</li>
+        <li><a href="/homelab/hail-damage-severity-estimator/">Hail Damage Severity Estimator</a></li>
+        <li><a href="/homelab/acv-vs-rcv-calculator/">ACV vs RCV Calculator</a> — DFW carriers sometimes force-convert aged roofs to ACV</li>
+      </ul>
+
+      <h2>About this page</h2>
+      <p>
+        DFW cost adjustments and editorial review by Eurocraft, a Texas-licensed general contractor. Numbers reflect Q2 2026 DFW market pricing; updated quarterly.
+      </p>
+    </section>
+
+    <div class="my-6"><AdSlot client:idle zoneId="DELTA" format="multiplex" /></div>
+  </article>
+</BaseLayout>
