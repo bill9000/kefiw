@@ -31,7 +31,7 @@ const webApp = {
   <HomelabBand active="calculator" />
   <Breadcrumb crumbs={[
     { href: '/', label: 'Home' },
-    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/', label: 'Property Improve' },
     { href: '/homelab/roof-replacement-cost-calculator/', label: 'Roof Replacement Cost Calculator' },
   ]} />
   <article class="container-wide py-6">
@@ -64,8 +64,62 @@ const webApp = {
         <li><strong>Be honest about pitch and complexity.</strong> A 3-gable suburban hip is "standard hip"; a Victorian with three dormers and a turret is "cut-up."</li>
         <li><strong>Tear-off layers.</strong> If you don't know, count from the eave: 1 layer is most common; 2 layers means a previous "lay-over" install (legal in some jurisdictions, banned in others).</li>
         <li><strong>Decking risk.</strong> Older roofs (20+ years) and any history of leaks bump this to "medium" or "high." This is the line item most calculators hide.</li>
+        <li><strong>Test one cost-saving strategy at a time.</strong> Roof-over, owner-supplied materials, installer-only labor, selective flashing reuse, and trimming upsells are different risks. Do not blend them into one vague cheap bid.</li>
         <li><strong>Compare against bids.</strong> If three bids land inside this range, pick on workmanship and warranty — not price. If one is well below, ask what's missing from the scope.</li>
       </ol>
+
+      <h2>Real ways to reduce the roof cost</h2>
+      <p>
+        The calculator now includes a cost-saving strategy selector because "new roof cost" is not one decision.
+        A full contractor scope is the baseline. A roof-over, owner-supplied material order, installer-only crew,
+        selective flashing reuse, or trimmed warranty/upgrade package can lower the first invoice, but each moves
+        risk to a different place.
+      </p>
+      <ul>
+        <li><strong>Roof-over:</strong> can save tear-off and dump fees, but only when code allows it and the existing roof is flat, dry, one layer, and structurally sound.</li>
+        <li><strong>Buy materials yourself:</strong> can pressure markup, but you own shortages, damaged bundles, wrong SKUs, color-lot mismatch, returns, and sometimes warranty conflict.</li>
+        <li><strong>Installer-only labor:</strong> can be cheapest, but the contract must name insurance, permit, dry-in, cleanup, lien waivers, and who owns leaks.</li>
+        <li><strong>Selective flashing reuse:</strong> pipe boots and damaged metal are usually cheap to replace; buried step or counterflashing may be reused if it is sound and correctly lapped.</li>
+        <li><strong>Trim upsells:</strong> separate gutters, premium shingles, warranty packages, vague ventilation work, and cosmetic trim from the base roof.</li>
+      </ul>
+      <p>
+        More detail: <a href="/guides/save-on-roof-replacement-cost/">How to save on roof replacement cost</a>,
+        <a href="/guides/roof-over-vs-tear-off/"> roof-over vs tear-off</a>, and
+        <a href="/guides/buy-roofing-materials-yourself/"> buying roofing materials yourself</a>.
+      </p>
+
+      <h2>Items to handle while roofers are already up there</h2>
+      <p>
+        Roof replacement is the cheap-access moment. You already have ladders, tear-off, dry-in, and crews on site.
+        Before final scope, walk the roof accessories and nearby trees with photos.
+      </p>
+      <ul>
+        <li><strong>Pipe boots and vent flashings:</strong> replace brittle rubber collars and cracked boots instead of burying them under new shingles.</li>
+        <li><strong>Chimney cap, chase cover, flue cap, storm collar, and visible flue corrosion:</strong> separate masonry/flue safety from roofing scope, but do not ignore a failing cap while access is easy.</li>
+        <li><strong>Chimney flashing:</strong> price step flashing, counterflashing, back pan, cricket, and kick-out flashing separately. Replace failed metal; reuse sound buried counterflashing only if everyone agrees in writing.</li>
+        <li><strong>Skylights and curbs:</strong> older skylights often deserve new flashing kits or replacement before new shingles lock them in.</li>
+        <li><strong>Vents and ventilation:</strong> verify ridge/off-ridge vents, intake, bath/kitchen exhaust routing, and wind/rain-rated vents in storm zones.</li>
+        <li><strong>Decking, fascia, soffit, and gutter edge:</strong> decide per-sheet decking price and edge wood repair before tear-off surprises become change-order pressure.</li>
+        <li><strong>Trees touching the roof:</strong> branches rubbing shingles remove granules, hold moisture, feed algae, clog valleys, and create a maintenance argument for future insurance claims. Trim before the new roof goes on.</li>
+      </ul>
+
+      <h2>Insurance discounts: hail rating, wind rating, and paperwork</h2>
+      <p>
+        Hail-resistant shingles and wind-mitigation roof work are different things. Class 3 or Class 4 impact resistance
+        can help with hail credits if your carrier recognizes the product. Windstorm discounts or eligibility may depend on
+        installed details: nailing, deck attachment, sealed deck, edges, vents, and certification.
+      </p>
+      <ul>
+        <li><strong>Two layers, not three:</strong> in many code-based reroof rules, one existing asphalt layer may be recoverable; two existing layers means tear-off. Do not create a third layer.</li>
+        <li><strong>Impact form:</strong> in Texas/TWIA contexts, ask for TDI Form PC068 after installation for impact-resistant roofing documentation. Private carriers may use their own form.</li>
+        <li><strong>Class 3 / Class 4 proof:</strong> collect packaging photos showing UL 2218 classification, manufacturer, year, and product brand before the packaging leaves the site.</li>
+        <li><strong>Shingle nailing:</strong> ask whether the manufacturer high-wind installation requires six nails per shingle and require photos of the package instructions and installed pattern.</li>
+        <li><strong>Roof deck nailing:</strong> for FORTIFIED-style re-roofs, IBHS guidance calls for 8d ring-shank nails at 6 inches on center, and 4 inches on center at gable ends, with photo documentation.</li>
+        <li><strong>Windstorm certification:</strong> coastal Texas work may need WPI-8 or WPI-8E windstorm documentation for TWIA/windstorm coverage eligibility.</li>
+      </ul>
+      <p>
+        More detail: <a href="/guides/roof-hail-wind-insurance-discounts/">Roof hail and wind insurance discounts</a>.
+      </p>
 
       <h2>What a good roofing quote includes</h2>
       <ul>
@@ -73,7 +127,10 @@ const webApp = {
         <li>Decking replacement contingency — per-sheet price spelled out</li>
         <li>Underlayment type (synthetic vs felt) and ice/water shield coverage</li>
         <li>Starter strips and ridge cap (specialty pieces, not field shingles)</li>
-        <li>Flashing replacement at every penetration (not reuse of old flashing)</li>
+        <li>Flashing scope at every penetration and transition: replace, reuse, or repair-in-place with reasons</li>
+        <li>Tree-limb rub inspection and branch trimming plan before new shingles are installed</li>
+        <li>Class 3 / Class 4 impact-resistant paperwork if you expect an insurance discount</li>
+        <li>High-wind nailing pattern and deck-attachment documentation where discounts or windstorm certification depend on it</li>
         <li>Drip edge install, ridge vent or other ventilation</li>
         <li>Workmanship warranty length + transferability</li>
         <li>Manufacturer warranty registered in your name (system warranties require this)</li>
@@ -92,6 +149,18 @@ const webApp = {
         The cheapest bid is usually the one missing scope. Common omissions: drip edge, starter strip,
         flashing replacement, decking allowance, debris removal, and permit. A bid that quotes square
         footage and one shingle SKU is not a complete quote.
+      </p>
+      <h3>"Never roof over old shingles."</h3>
+      <p>
+        A roof-over can be legitimate on the right house, but it is not a magic discount. It needs code permission,
+        one existing layer, flat shingles, no active leaks, no sagging, and a sound deck. If those facts are not
+        checked, tear-off is buying information, not just labor.
+      </p>
+      <h3>"Always replace all flashing."</h3>
+      <p>
+        Replace cheap failed pieces such as pipe boots, rusted valley metal, and damaged drip edge. But step
+        flashing or counterflashing buried behind siding, stucco, brick, or stone should be discussed separately.
+        Sometimes reuse is rational; sometimes it is the future leak. A good quote names each decision.
       </p>
       <h3>"Insurance will pay for everything."</h3>
       <p>

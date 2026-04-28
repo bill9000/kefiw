@@ -63,7 +63,7 @@ const NURSE_ROLE: ReviewRole = {
 const CONTRACTOR_ROLE: ReviewRole = {
   label: 'Remodeling contractor review',
   href: REVIEW_LINKS.contractor,
-  note: 'Approves Home and Home Lab scope, bid-language, material and labor assumptions, quote checklists, and homeowner risk flags.',
+  note: 'Approves Property Improve scope, bid-language, material and labor assumptions, quote checklists, and homeowner risk flags.',
 };
 
 const REALTOR_ROLE: ReviewRole = {

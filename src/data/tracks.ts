@@ -100,7 +100,13 @@ export const TRACKS: Track[] = [
         title: 'Roof Replacement Cost Calculator',
         type: 'calculator',
         href: '/homelab/roof-replacement-cost-calculator/',
-        description: 'Create a low, typical, and high cost range with material and labor assumptions.',
+        description: 'Create a low, typical, and high cost range, then test roof-over, material-supply, installer-only, flashing, and scope-trim options.',
+      },
+      {
+        title: 'Save on Roof Cost Guide',
+        type: 'guide',
+        href: '/guides/save-on-roof-replacement-cost/',
+        description: 'Separate real savings from shortcuts that hide rot, break warranty, or move liability onto the homeowner.',
       },
       {
         title: 'Repair vs Replace Calculator',
@@ -137,10 +143,14 @@ export const TRACKS: Track[] = [
       ],
     },
     recommendedGuides: [
-      { title: 'Home Lab Methodology', href: '/homelab/methodology/' },
+      { title: 'Save on Roof Replacement Cost', href: '/guides/save-on-roof-replacement-cost/' },
+      { title: 'Roof-over vs Tear-off', href: '/guides/roof-over-vs-tear-off/' },
+      { title: 'Buying Roofing Materials Yourself', href: '/guides/buy-roofing-materials-yourself/' },
+      { title: 'Roof Hail and Wind Insurance Discounts', href: '/guides/roof-hail-wind-insurance-discounts/' },
+      { title: 'Property Improve Methodology', href: '/homelab/methodology/' },
       { title: 'About the Reviewers', href: '/about-the-reviewers/' },
     ],
-    commonMistakes: ['comparing quotes with different scopes', 'forgetting deductible cash flow', 'ignoring roof pitch labor impact'],
+    commonMistakes: ['comparing quotes with different scopes', 'treating roof-over as safe without deck inspection', 'forgetting deductible cash flow', 'ignoring roof pitch labor impact'],
     methodology: ['Range-based estimating', 'Pitch and area multipliers', 'Contractor-scope review', 'Insurance out-of-pocket framing'],
     relatedSlugs: ['replace-my-hvac', 'plan-my-remodel'],
     keywords: ['replace my roof', 'roof replacement plan', 'roof replacement cost calculator', 'roof insurance deductible'],
@@ -165,37 +175,43 @@ export const TRACKS: Track[] = [
       {
         title: 'Home Size / Load Estimate',
         type: 'calculator',
-        href: '/homelab/#hvac',
-        description: 'Start with square footage, climate, insulation, windows, and rough capacity flags.',
+        href: '/property/hvac-load-estimate/',
+        description: 'Start with square footage, equipment path, duct scope, access, efficiency, and rough capacity flags.',
+      },
+      {
+        title: 'HVAC Diagnosis Live Matrix',
+        type: 'checklist',
+        href: '/property/hvac-diagnosis-live-matrix/',
+        description: 'Map dead AC, gas heat, electric heat, thermostat, and board symptoms before accepting a replacement scope.',
       },
       {
         title: 'HVAC Replacement Cost',
         type: 'calculator',
-        href: '/homelab/#hvac',
+        href: '/property/hvac-replacement-cost/',
         description: 'Create a system replacement range for AC, furnace, heat pump, or combined equipment.',
       },
       {
         title: 'AC vs Heat Pump',
         type: 'comparison',
-        href: '/homelab/#hvac',
-        description: 'Compare operating cost, climate fit, and backup heat needs.',
+        href: '/property/heat-pump-cost/',
+        description: 'Compare AC-only, full HVAC, and heat-pump paths with rebate and backup-heat questions.',
       },
       {
         title: 'Ductwork Cost',
         type: 'calculator',
-        href: '/homelab/#hvac',
+        href: '/property/ductwork-cost/',
         description: 'Estimate whether duct repairs or replacement should be part of the quote.',
       },
       {
         title: 'Repair vs Replace',
         type: 'comparison',
-        href: '/homelab/#hvac',
+        href: '/property/hvac-repair-vs-replace/',
         description: 'Weigh system age, repair cost, comfort issues, and upcoming replacement likelihood.',
       },
       {
         title: 'Energy Savings',
         type: 'calculator',
-        href: '/homelab/#energy',
+        href: '/property/energy-savings-estimate/',
         description: 'Estimate payback from higher efficiency and behavior-sensitive energy assumptions.',
       },
       {
@@ -210,12 +226,13 @@ export const TRACKS: Track[] = [
       nextQuestions: ['Was a load calculation performed?', 'Are ducts included?', 'What rebates apply?', 'What is the backup heat plan?'],
       checklist: ['home size', 'current system age', 'comfort symptoms', 'duct condition', 'equipment path', 'rebate notes'],
       recommendedNextCalculators: [
-        { title: 'Home Energy Savings', href: '/homelab/#energy' },
-        { title: 'Solar Savings', href: '/homelab/#solar' },
+        { title: 'Home Energy Savings', href: '/property/energy-savings-estimate/' },
+        { title: 'AC Replacement Cost', href: '/property/ac-replacement-cost/' },
+        { title: 'Furnace Replacement Cost', href: '/property/furnace-replacement-cost/' },
       ],
     },
     recommendedGuides: [
-      { title: 'Home Lab HVAC Roadmap', href: '/homelab/#hvac' },
+      { title: 'HVAC Replacement Cost', href: '/property/hvac-replacement-cost/' },
       { title: 'Methodology', href: '/methodology/' },
     ],
     commonMistakes: ['buying tonnage by square footage alone', 'leaving ducts out of the decision', 'treating rebate value as guaranteed'],
@@ -295,11 +312,11 @@ export const TRACKS: Track[] = [
       checklist: ['project type', 'finish tier', 'labor trades', 'timeline', 'permits', 'quote exclusions'],
       recommendedNextCalculators: [
         { title: 'Break-Even Calculator', href: '/calculators/break-even-calculator/' },
-        { title: 'Home Lab', href: '/homelab/' },
+        { title: 'Property Improve', href: '/homelab/' },
       ],
     },
     recommendedGuides: [
-      { title: 'Home Lab Remodel Roadmap', href: '/homelab/#remodel' },
+      { title: 'Property Improve Remodel Roadmap', href: '/homelab/#remodel' },
       { title: 'Advertising Disclosure', href: '/advertising-disclosure/' },
     ],
     commonMistakes: ['treating allowances as final prices', 'forgetting permit and inspection time', 'not separating must-have and nice-to-have scope'],
@@ -327,37 +344,43 @@ export const TRACKS: Track[] = [
       {
         title: 'Home Value Estimate Input',
         type: 'calculator',
-        href: '/property/#sell',
+        href: '/property/seller-proceeds-calculator/',
         description: 'Start with your expected sale price or range.',
       },
       {
         title: 'Seller Proceeds',
         type: 'calculator',
-        href: '/property/#sell',
+        href: '/property/seller-proceeds-calculator/',
         description: 'Estimate cash out after payoff, commission, closing costs, and concessions.',
       },
       {
         title: 'Commission Calculator',
         type: 'calculator',
-        href: '/property/#sell',
+        href: '/property/commission-calculator/',
         description: 'Compare commission structures and the net effect of each percentage point.',
       },
       {
         title: 'Closing Cost Calculator',
         type: 'calculator',
-        href: '/property/#sell',
+        href: '/property/closing-cost-calculator/',
         description: 'Estimate seller-side closing costs, credits, taxes, and fees.',
+      },
+      {
+        title: 'Title, Tax, and Association Line Items',
+        type: 'calculator',
+        href: '/property/title-company-cost-calculator/',
+        description: 'Break out title company cost, tax proration, resale certificate, dues, and transfer fees.',
       },
       {
         title: 'Home Sale Prep ROI',
         type: 'comparison',
-        href: '/property/#sell',
+        href: '/property/home-sale-prep-roi-calculator/',
         description: 'Compare prep costs against likely sale-price or time-on-market improvement.',
       },
       {
         title: 'Net Sheet',
         type: 'guide',
-        href: '/property/#sell',
+        href: '/property/net-sheet-calculator/',
         description: 'Bring the pieces together into an offer-by-offer net sheet.',
       },
       {
@@ -368,12 +391,13 @@ export const TRACKS: Track[] = [
     ],
     finalPlan: {
       estimate: 'Sale price range, payoff, commission, closing costs, prep budget, and expected net proceeds.',
-      riskFlags: ['prep spend without ROI', 'concession assumptions missing', 'payoff estimate stale', 'tax and escrow timing unclear'],
-      nextQuestions: ['What price range is realistic?', 'What concessions are likely?', 'What repairs matter most?', 'What is the latest payoff quote?'],
-      checklist: ['sale price', 'mortgage payoff', 'commission', 'closing costs', 'prep budget', 'net sheet'],
+      riskFlags: ['prep spend without ROI', 'concession assumptions missing', 'payoff estimate stale', 'tax and escrow timing unclear', 'missing resale certificate or association transfer fee'],
+      nextQuestions: ['What price range is realistic?', 'What concessions are likely?', 'What repairs matter most?', 'What is the latest payoff quote?', 'Which title, tax proration, resale, and HOA fees apply?'],
+      checklist: ['sale price', 'mortgage payoff', 'commission', 'title company cost', 'tax proration', 'resale certificate', 'association dues', 'association transfer fee', 'prep budget', 'net sheet'],
       recommendedNextCalculators: [
         { title: 'Mortgage Calculator', href: '/calculators/mortgage-calculator/' },
         { title: 'Rent vs Buy / Hold Horizon', href: '/finance/horizon-point/' },
+        { title: 'Cash to Close', href: '/property/cash-to-close-calculator/' },
       ],
     },
     recommendedGuides: [
@@ -411,13 +435,13 @@ export const TRACKS: Track[] = [
       {
         title: 'Self-Employment Tax',
         type: 'calculator',
-        href: '/business/#tax',
+        href: '/business/self-employed-tax-calculator/',
         description: 'Frame the extra payroll-tax burden and assumptions that need confirmation.',
       },
       {
         title: 'Quarterly Tax',
         type: 'calculator',
-        href: '/business/#tax',
+        href: '/business/quarterly-tax-estimate-calculator/',
         description: 'Estimate quarterly set-aside logic from income, profit, and tax assumptions.',
       },
       {
@@ -429,14 +453,20 @@ export const TRACKS: Track[] = [
       {
         title: 'Business Expense Budget',
         type: 'checklist',
-        href: '/business/#pricing',
-        description: 'List software, insurance, hardware, training, and admin costs.',
+        href: '/business/business-expense-budget-calculator/',
+        description: 'List software, insurance, hardware, training, admin costs, and deduction support.',
       },
       {
         title: 'LLC vs S-Corp',
         type: 'comparison',
-        href: '/business/#tax',
+        href: '/business/llc-vs-s-corp-calculator/',
         description: 'Compare when entity structure may matter and what requires a professional review.',
+      },
+      {
+        title: 'Deduction Risk Check',
+        type: 'checklist',
+        href: '/business/dangerous-deduction-checker/',
+        description: 'Flag home office, vehicle, meals, travel, family payroll, and mixed-use deductions that need stronger support.',
       },
       {
         title: 'Final Freelance Plan',
@@ -452,6 +482,7 @@ export const TRACKS: Track[] = [
       recommendedNextCalculators: [
         { title: 'Markup and Margin', href: '/calculators/markup-margin-calculator/' },
         { title: 'Revenue per Employee', href: '/calculators/revenue-per-head/' },
+        { title: 'Self-Employed Deduction Finder', href: '/business/self-employed-deduction-finder/' },
       ],
     },
     recommendedGuides: [
@@ -483,44 +514,50 @@ export const TRACKS: Track[] = [
       {
         title: 'Care Needs Checklist',
         type: 'checklist',
-        href: '/care/#caregiving',
+        href: '/care/care-needs-checklist/',
         description: 'List daily activities, supervision needs, transportation, medication support, and safety flags.',
       },
       {
         title: 'Home Care Cost',
         type: 'calculator',
-        href: '/care/#senior-care',
+        href: '/care/home-care-cost-calculator/',
         description: 'Estimate home-care cost by hours per week and local hourly assumptions.',
       },
       {
         title: 'Assisted Living Cost',
         type: 'calculator',
-        href: '/care/#senior-care',
+        href: '/care/assisted-living-cost-calculator/',
         description: 'Compare facility monthly cost, add-ons, and move-in expenses.',
       },
       {
         title: 'Nursing Home Cost',
         type: 'calculator',
-        href: '/care/#senior-care',
+        href: '/care/nursing-home-cost-calculator/',
         description: 'Frame higher-acuity cost scenarios and duration sensitivity.',
       },
       {
         title: 'Caregiver Hours',
         type: 'calculator',
-        href: '/care/#caregiving',
+        href: '/care/caregiver-hours-calculator/',
         description: 'Estimate family and paid-care workload across a week.',
       },
       {
         title: 'Medicare Cost',
         type: 'calculator',
-        href: '/care/#medicare',
+        href: '/care/medicare-cost-planner/',
         description: 'Capture premiums, likely out-of-pocket items, and what Medicare does not cover.',
       },
       {
         title: 'Family Care Budget',
         type: 'calculator',
-        href: '/care/#caregiving',
+        href: '/care/family-care-budget-calculator/',
         description: 'Bring paid care, unpaid hours, transportation, supplies, and insurance together.',
+      },
+      {
+        title: 'Care Cost Reduction and Foreign Caregiver Options',
+        type: 'guide',
+        href: '/care/care-cost-reduction-planner/',
+        description: 'Compare cost-reduction paths, household employment duties, and lawful foreign-caregiver constraints.',
       },
       {
         title: 'Final Senior Care Plan',
@@ -534,8 +571,8 @@ export const TRACKS: Track[] = [
       nextQuestions: ['What level of help is needed daily?', 'What costs are recurring?', 'What does insurance cover?', 'Who is available for unpaid care?'],
       checklist: ['care needs', 'home care cost', 'facility cost', 'caregiver hours', 'Medicare assumptions', 'family budget'],
       recommendedNextCalculators: [
-        { title: 'Health Calculators', href: '/health/' },
-        { title: 'Care Lab', href: '/care/' },
+        { title: 'Care Cost Reduction Planner', href: '/care/care-cost-reduction-planner/' },
+        { title: 'Foreign Caregiver Options', href: '/care/foreign-caregiver-options/' },
       ],
     },
     recommendedGuides: [
@@ -729,13 +766,24 @@ export const TRACKS_BY_SLUG: Record<string, Track | undefined> = Object.fromEntr
   TRACKS.map((track) => [track.slug, track])
 );
 
-export const TRACK_GROUPS = TRACK_CATEGORY_ORDER.map((category) => ({
-  category,
-  id: `${category}-tracks`,
-  label: TRACK_CATEGORY_LABELS[category],
-  description: TRACK_CATEGORY_DESCRIPTIONS[category],
-  tracks: TRACKS.filter((track) => track.category === category),
-}));
+export const TRACK_GROUPS = [
+  {
+    category: 'property' as TrackCategory,
+    id: 'property-tracks',
+    label: 'Property Tracks',
+    description: 'Property improvement, sale, ownership, and real-estate decision tracks.',
+    tracks: TRACKS.filter((track) => track.category === 'home' || track.category === 'property'),
+  },
+  ...TRACK_CATEGORY_ORDER
+    .filter((category) => category !== 'home' && category !== 'property')
+    .map((category) => ({
+      category,
+      id: `${category}-tracks`,
+      label: TRACK_CATEGORY_LABELS[category],
+      description: TRACK_CATEGORY_DESCRIPTIONS[category],
+      tracks: TRACKS.filter((track) => track.category === category),
+    })),
+];
 
 export function trackHref(track: Pick<Track, 'slug'> | string): string {
   const slug = typeof track === 'string' ? track : track.slug;

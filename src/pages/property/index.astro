@@ -2,10 +2,107 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
+
+const propertyPages = VERTICAL_CALCULATORS_BY_AREA.property;
+const pageBySlug = new Map(propertyPages.map((page) => [page.slug, page]));
+const pagesFor = (slugs: string[]) =>
+  slugs
+    .map((slug) => pageBySlug.get(slug))
+    .filter((page): page is NonNullable<typeof page> => Boolean(page));
+const pageLinksFor = (slugs: string[]) =>
+  pagesFor(slugs).map((page) => ({
+    href: verticalCalculatorHref(page),
+    title: page.h1,
+    summary: page.summary,
+  }));
+
+const calculatorGroups = [
+  {
+    id: 'roof',
+    title: 'Roof, storm, and insurance decisions',
+    description: 'Roof work is a Property decision, not a separate Home Lab. Start with scope, repair-vs-replace, insurance, and discount paperwork before comparing bids.',
+    links: [
+      {
+        href: '/homelab/roof-replacement-cost-calculator/',
+        title: 'Roof Replacement Cost Calculator',
+        summary: 'Estimate full roof cost, then test roof-over, owner materials, installer-only, flashing, and scope-trim strategies.',
+      },
+      {
+        href: '/homelab/roof-repair-vs-replacement-calculator/',
+        title: 'Roof Repair vs Replacement Calculator',
+        summary: 'Compare age, damage, leaks, sale horizon, and insurance pressure before replacing the whole roof.',
+      },
+      {
+        href: '/homelab/roof-insurance-deductible-calculator/',
+        title: 'Roof Insurance Deductible Calculator',
+        summary: 'Model deductible, ACV/RCV, depreciation holdback, code upgrades, and claim out-of-pocket cost.',
+      },
+      {
+        href: '/homelab/hail-damage-severity-estimator/',
+        title: 'Hail Damage Severity Estimator',
+        summary: 'Check claim strength, hail/wind evidence, maintenance risks, tree-rub issues, and adjuster questions.',
+      },
+      {
+        href: '/guides/save-on-roof-replacement-cost/',
+        title: 'How to Save on Roof Replacement Cost',
+        summary: 'Real homeowner tactics: bid scope, roof-over, material ordering, installer-only bids, flashing decisions, and hidden risks.',
+      },
+      {
+        href: '/guides/roof-hail-wind-insurance-discounts/',
+        title: 'Roof Hail and Wind Insurance Discounts',
+        summary: 'Class 3/Class 4 impact paperwork, wind forms, nail patterns, and documentation to collect before final payment.',
+      },
+    ],
+  },
+  {
+    id: 'improve',
+    title: 'HVAC and energy decisions',
+    description: 'Diagnosis, replacement, repair-vs-replace, duct, and energy decisions. These should answer what to do before they answer what it costs.',
+    links: pageLinksFor([
+      'hvac-diagnosis-live-matrix',
+      'hvac-load-estimate',
+      'hvac-replacement-cost',
+      'hvac-repair-vs-replace',
+      'ductwork-cost',
+      'energy-savings-estimate',
+    ]),
+  },
+  {
+    id: 'sell',
+    title: 'Sell and net sheet decisions',
+    description: 'Prep, price, commission, closing costs, and seller proceeds. These tools should explain which line item changes the actual check.',
+    links: pageLinksFor([
+      'home-sale-prep-roi-calculator',
+      'seller-proceeds-calculator',
+      'net-sheet-calculator',
+      'commission-calculator',
+      'closing-cost-calculator',
+    ]),
+  },
+  {
+    id: 'closing-details',
+    title: 'Closing line-item helpers',
+    description: 'Use these when a title estimate, tax proration, resale certificate, or association fee needs its own line instead of being buried in a percentage.',
+    links: pageLinksFor([
+      'title-company-cost-calculator',
+      'tax-proration-calculator',
+      'resale-certificate-calculator',
+      'association-dues-calculator',
+      'association-transfer-fee-calculator',
+    ]),
+  },
+  {
+    id: 'buy',
+    title: 'Buy and cash-to-close decisions',
+    description: 'Buyer cash requirements, mortgage math, and rent-vs-buy timing.',
+    links: pageLinksFor(['cash-to-close-calculator']),
+  },
+];
 ---
 
 <BaseLayout
-  title="Property Lab — Seller, Buyer, Owner, and Rental Calculators | Kefiw"
+  title="Property Calculators — Seller, Buyer, Owner, and Rental Tools | Kefiw"
   description="Property calculators for selling, buying, owning, refinancing, and rental investing. Seller proceeds, cash to close, mortgage math, cap rate, and cash-flow planning."
   canonical="/property/"
   keywords={['property calculators', 'seller proceeds calculator', 'closing costs calculator', 'cash to close calculator', 'rental property calculator']}
@@ -13,7 +110,7 @@ import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro'
   <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/property/', label: 'Property' }]} />
   <article class="container-wide py-6">
     <header class="mb-8 max-w-3xl">
-      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Property Lab</p>
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Property</p>
       <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Property</h1>
       <p class="mt-3 text-slate-700">
         Real-estate calculators belong in their own vertical: selling, buying, owning, and investing have different questions than generic finance.
@@ -21,42 +118,65 @@ import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro'
       </p>
     </header>
 
-    <div class="grid gap-4 md:grid-cols-2">
-      <section id="sell" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Sell</h2>
-        <p class="mt-1 text-sm text-slate-600">Seller proceeds, closing costs, commission, prep ROI, and net sheet calculators.</p>
+    <section id="calculators" class="grid gap-4 md:grid-cols-2">
+      {calculatorGroups.map((group) => (
+        <section id={group.id} class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-lg font-semibold text-slate-900">{group.title}</h2>
+          <p class="mt-1 text-sm text-slate-600">{group.description}</p>
+          <div class="mt-3 grid gap-2">
+            {group.links.map((item) => (
+              <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-slate-900 no-underline transition hover:border-brand-300 hover:bg-white" href={item.href}>
+                <div class="text-sm font-semibold text-brand-800">{item.title}</div>
+                <div class="mt-1 text-xs text-slate-600">{item.summary}</div>
+              </a>
+            ))}
+            {group.id === 'buy' && (
+              <>
+                <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-slate-900 no-underline transition hover:border-brand-300 hover:bg-white" href="/calculators/mortgage-calculator/">
+                  <div class="text-sm font-semibold text-brand-800">Mortgage Calculator</div>
+                  <div class="mt-1 text-xs text-slate-600">Monthly payment, loan balance, and affordability context.</div>
+                </a>
+                <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-slate-900 no-underline transition hover:border-brand-300 hover:bg-white" href="/finance/horizon-point/">
+                  <div class="text-sm font-semibold text-brand-800">Rent vs Buy / Horizon Point</div>
+                  <div class="mt-1 text-xs text-slate-600">Compare ownership horizon against renting and transaction costs.</div>
+                </a>
+              </>
+            )}
+          </div>
+        </section>
+      ))}
+
+      <section id="tracks" class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-lg font-semibold text-slate-900">Property tracks</h2>
+        <p class="mt-1 text-sm text-slate-600">Guided workflows connect calculators into final plans.</p>
         <ul class="mt-3 space-y-1 text-sm">
-          <li><a class="text-brand-700 hover:underline" href="#sell">Seller Proceeds</a></li>
-          <li><a class="text-brand-700 hover:underline" href="#sell">Closing Costs</a></li>
-          <li><a class="text-brand-700 hover:underline" href="#sell">Net Sheet Calculator</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/tracks/replace-my-roof/">Replace My Roof</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/tracks/replace-my-hvac/">Replace My HVAC</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/tracks/sell-my-home/">Sell My Home</a></li>
         </ul>
       </section>
 
-      <section id="buy" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Buy</h2>
-        <p class="mt-1 text-sm text-slate-600">Cash to close, rent vs buy, mortgage points, buydowns, and affordability.</p>
-        <ul class="mt-3 space-y-1 text-sm">
-          <li><a class="text-brand-700 hover:underline" href="/calculators/mortgage-calculator/">Mortgage Calculator</a></li>
-          <li><a class="text-brand-700 hover:underline" href="/calculators/mortgage-extra-payment-calculator/">Mortgage Extra Payment</a></li>
-          <li><a class="text-brand-700 hover:underline" href="/finance/horizon-point/">Rent vs Buy / Horizon Point</a></li>
+      <section id="guides" class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-lg font-semibold text-slate-900">High-value guides</h2>
+          <p class="mt-1 text-sm text-slate-600">Practical counter-scope advice for expensive contractor decisions.</p>
+          <ul class="mt-3 space-y-1 text-sm">
+          <li><a class="text-brand-700 hover:underline" href="/guides/hvac-diagnosis-live-matrix/">HVAC Diagnosis Live Matrix</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/guides/ac-dead-not-always-replacement/">Your AC Is Dead: Why That Does Not Always Mean Replacement</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/guides/save-on-roof-replacement-cost/">How to Save on Roof Replacement Cost</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/guides/roof-over-vs-tear-off/">Roof-over vs Tear-off</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/guides/buy-roofing-materials-yourself/">Buying Roofing Materials Yourself</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/guides/roof-hail-wind-insurance-discounts/">Roof Hail and Wind Insurance Discounts</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/guides/hvac-full-replacement-alternatives/">Before You Replace Your HVAC</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/guides/mini-splits-vs-central-ac/">Mini-Splits vs Central AC</a></li>
         </ul>
       </section>
-
-      <section id="own" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Own</h2>
-        <p class="mt-1 text-sm text-slate-600">Property tax, escrow, refinance break-even, home equity, and ownership cost planning.</p>
-      </section>
-
-      <section id="invest" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Invest</h2>
-        <p class="mt-1 text-sm text-slate-600">Rental property, cap rate, cash flow, BRRRR, and short-term rental calculators.</p>
-      </section>
-    </div>
+    </section>
 
     <section class="mt-8 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950">
       <h2 class="text-base font-semibold">Current approved tool coverage</h2>
       <p class="mt-1">
-        Existing mortgage and rent-vs-buy tools remain linked here while Property Lab groups the real-estate decision path under realtor-approved workflow language.
+        Property now links real calculators for HVAC replacement, seller proceeds, closing costs, cash to close, title company costs,
+        tax proration, resale certificates, association dues, and association transfer fees.
       </p>
     </section>
 

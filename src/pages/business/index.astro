@@ -2,65 +2,111 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref, type VerticalCalculatorPage } from '~/data/vertical-calculators';
+
+const businessPages = VERTICAL_CALCULATORS_BY_AREA.business;
+const groupOrder = ['Tax', 'Pricing', 'Hiring', 'Revenue', 'Cloud'];
+const groupCopy: Record<string, { tagline: string; promise: string; id: string }> = {
+  Tax: {
+    id: 'tax',
+    tagline: 'Stop letting tax season be your business plan.',
+    promise: 'Estimate obligations, entity tradeoffs, deductions, and owner-pay assumptions before they surprise cash flow.',
+  },
+  Pricing: {
+    id: 'pricing',
+    tagline: 'Charge enough to stay useful.',
+    promise: 'Turn income goals, non-billable time, taxes, expenses, margin, and uncertainty into prices that do not punish you.',
+  },
+  Hiring: {
+    id: 'hiring',
+    tagline: 'Do not hire your way into a heavier business.',
+    promise: 'Estimate employee, contractor, payroll, productivity, and automation tradeoffs before adding permanent overhead.',
+  },
+  Revenue: {
+    id: 'revenue',
+    tagline: 'Make revenue feel less imaginary.',
+    promise: 'Forecast revenue, sales targets, churn, subscription pricing, and operating leverage with assumptions you can inspect.',
+  },
+  Cloud: {
+    id: 'cloud',
+    tagline: 'Stop letting tools quietly become payroll.',
+    promise: 'Estimate SaaS, seat, cloud, AI, and software ROI before tool sprawl becomes permanent cost structure.',
+  },
+};
+
+function pagesFor(group: string): VerticalCalculatorPage[] {
+  return businessPages.filter((page) => page.group === group);
+}
 ---
 
 <BaseLayout
-  title="Business Lab — Tax, Pricing, Hiring, Revenue, and SaaS Calculators | Kefiw"
-  description="Business calculators for self-employed tax planning, freelance rates, markup and margin, break-even math, hiring cost, revenue targets, and cloud/SaaS spend."
+  title="Business Decision Calculators — Tax, Pricing, Hiring, Revenue, and SaaS | Kefiw"
+  description="Business calculators for self-employed taxes, pricing, hiring, revenue forecasts, churn, SaaS costs, cloud costs, and software ROI."
   canonical="/business/"
-  keywords={['business calculators', 'self employed tax calculator', 'freelance rate calculator', 'markup margin calculator', 'break even calculator']}
+  keywords={['business decision calculators', 'small business cost calculators', 'business what if calculator', 'small business planning calculators 2026']}
 >
   <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }]} />
   <article class="container-wide py-6">
-    <header class="mb-8 max-w-3xl">
-      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business Lab</p>
-      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Business</h1>
-      <p class="mt-3 text-slate-700">
-        A calculator-first vertical for self-employed operators, small businesses, consultants, and technical teams.
-        Tax pages show assumptions plainly; pricing and hiring pages keep the math auditable and approved as educational business planning.
+    <header class="mb-8 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Run the number before the number runs you.</h1>
+      <p class="mt-3 text-lg text-slate-700">
+        Kefiw helps operators test taxes, pricing, hiring, revenue, and software costs before the decision becomes expensive.
+      </p>
+      <p class="mt-2 max-w-3xl text-sm text-slate-600">
+        This section is built around specific, anxious, threshold-based searches: is it worth it, what if income changes,
+        can I afford this, where is the hidden cost, and when does the math stop working.
       </p>
     </header>
 
-    <div class="grid gap-4 md:grid-cols-2">
-      <section id="tax" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Tax</h2>
-        <p class="mt-1 text-sm text-slate-600">Self-employed tax, quarterly estimates, S-Corp savings, LLC vs S-Corp, and reasonable salary.</p>
-      </section>
+    <nav aria-label="Business calculator sections" class="mb-8 flex flex-wrap gap-2 text-sm">
+      {groupOrder.map((group) => (
+        <a href={`#${groupCopy[group].id}`} class="rounded-md border border-slate-200 bg-white px-3 py-2 font-semibold text-slate-700 hover:border-brand-300 hover:text-brand-800">
+          {group}
+        </a>
+      ))}
+    </nav>
 
-      <section id="pricing" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Pricing</h2>
-        <p class="mt-1 text-sm text-slate-600">Freelance rate, consultant rate, markup, margin, break-even, and profit calculators.</p>
-        <ul class="mt-3 space-y-1 text-sm">
-          <li><a class="text-brand-700 hover:underline" href="/calculators/minimum-viable-rate/">Minimum Viable / Freelance Rate</a></li>
-          <li><a class="text-brand-700 hover:underline" href="/calculators/markup-margin-calculator/">Markup &amp; Margin</a></li>
-          <li><a class="text-brand-700 hover:underline" href="/calculators/break-even-calculator/">Break-Even Calculator</a></li>
-        </ul>
-      </section>
+    <div class="space-y-10">
+      {groupOrder.map((group) => (
+        <section id={groupCopy[group].id} class="scroll-mt-32">
+          <div class="mb-4 max-w-3xl">
+            <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{group}</p>
+            <h2 class="mt-1 text-2xl font-bold tracking-tight text-slate-950">{groupCopy[group].tagline}</h2>
+            <p class="mt-2 text-slate-700">{groupCopy[group].promise}</p>
+          </div>
 
-      <section id="hiring" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Hiring</h2>
-        <p class="mt-1 text-sm text-slate-600">Hiring cost, contractor vs employee, revenue per employee, payroll burden, and automation tradeoffs.</p>
-        <ul class="mt-3 space-y-1 text-sm">
-          <li><a class="text-brand-700 hover:underline" href="/calculators/hire-vs-automate/">Hire vs Automate</a></li>
-          <li><a class="text-brand-700 hover:underline" href="/calculators/revenue-per-head/">Revenue per Employee</a></li>
-        </ul>
-      </section>
-
-      <section id="revenue" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Revenue</h2>
-        <p class="mt-1 text-sm text-slate-600">Revenue forecasts, sales targets, churn, subscription pricing, and operating leverage.</p>
-      </section>
-
-      <section id="cloud" class="rounded-lg border border-slate-200 bg-white p-4 md:col-span-2">
-        <h2 class="text-lg font-semibold text-slate-900">Cloud &amp; SaaS</h2>
-        <p class="mt-1 text-sm text-slate-600">SaaS cost, cloud cost, seat cost, and software ROI calculators.</p>
-        <ul class="mt-3 space-y-1 text-sm">
-          <li><a class="text-brand-700 hover:underline" href="/calculators/cloud-exit/">Cloud Exit</a></li>
-          <li><a class="text-brand-700 hover:underline" href="/finance/crossover-calculator/">Subscription vs Lifetime Crossover</a></li>
-          <li><a class="text-brand-700 hover:underline" href="/calculators/tech-debt-interest/">Software ROI / Tech Debt Interest</a></li>
-        </ul>
-      </section>
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {pagesFor(group).map((page) => (
+              <a href={verticalCalculatorHref(page)} class="flex min-h-64 flex-col rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm">
+                <div class="text-sm font-bold text-slate-950">{page.h1}</div>
+                {page.tagline && <div class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</div>}
+                <p class="mt-2 text-sm text-slate-700">{page.promise ?? page.summary}</p>
+                {page.bestFor && <p class="mt-3 text-xs text-slate-600"><span class="font-semibold text-slate-800">Best for:</span> {page.bestFor}</p>}
+                {page.seoTargets && page.seoTargets.length > 0 && (
+                  <div class="mt-3">
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Search angles</div>
+                    <ul class="mt-1 space-y-1 text-xs text-slate-600">
+                      {page.seoTargets.slice(0, 3).map((target) => <li>{target}</li>)}
+                    </ul>
+                  </div>
+                )}
+                <span class="mt-auto pt-4 text-sm font-semibold text-brand-700">Run calculator</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <h2 class="text-lg font-semibold text-slate-900">How to use this section</h2>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+        <li>Run conservative, expected, and aggressive scenarios. One number is a guess; three numbers are a plan.</li>
+        <li>Look for hidden costs: taxes, non-billable time, churn, unused seats, review work, payroll burden, and collection delay.</li>
+        <li>Use the tool to ask better questions. Tax, legal, payroll, and compliance decisions still need the right professional when risk is material.</li>
+      </ul>
+    </section>
 
     <ReviewMethodologyFooter
       reviewerLinks={[

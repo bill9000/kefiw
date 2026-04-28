@@ -15,11 +15,19 @@ import {
   type ComplexityBand,
   type DeckingRisk,
   type PitchBand,
+  type RoofEstimate,
   type RoofInputs,
   type WarrantyLevel,
 } from "~/lib/homelab/roof-cost-engine";
 
 type AreaMode = "roof" | "home";
+type SavingsStrategyId =
+  | "baseline"
+  | "roof_over"
+  | "owner_materials"
+  | "installer_only"
+  | "selective_flashing"
+  | "scope_trim";
 
 const fmtUSD = (n: number): string =>
   n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
@@ -57,6 +65,7 @@ export default function RoofCalculator({
   const [permitProfileId, setPermitProfileId] = useState<string>(defaultPermitProfileId);
   const [warranty, setWarranty] = useState<WarrantyLevel>("extended");
   const [insurancePossible, setInsurancePossible] = useState<boolean>(false);
+  const [savingsStrategy, setSavingsStrategy] = useState<SavingsStrategyId>("baseline");
   const [aprPct, setAprPct] = useState<number>(11.99);
   const [termMonths, setTermMonths] = useState<number>(120);
 
@@ -75,6 +84,10 @@ export default function RoofCalculator({
   const fin = useMemo(
     () => financingPayment(est.total.typical, aprPct, termMonths),
     [est.total.typical, aprPct, termMonths],
+  );
+  const strategy = useMemo(
+    () => roofSavingsStrategy(savingsStrategy, est, inputs),
+    [savingsStrategy, est, inputs],
   );
 
   return (
@@ -157,6 +170,20 @@ export default function RoofCalculator({
           </select>
         </Field>
 
+        <Field label="Cost-saving strategy to test">
+          <select value={savingsStrategy} onChange={(e) => setSavingsStrategy(e.target.value as SavingsStrategyId)} className="w-full rounded border border-slate-300 px-2 py-1 text-sm">
+            <option value="baseline">Baseline: full contractor scope</option>
+            <option value="roof_over">Roof-over / no tear-off if allowed</option>
+            <option value="owner_materials">Owner buys materials, roofer installs</option>
+            <option value="installer_only">Installer-only labor scope</option>
+            <option value="selective_flashing">Reuse serviceable flashing only</option>
+            <option value="scope_trim">Trim upsells and vague bundled scope</option>
+          </select>
+          <p className="mt-1 text-xs text-slate-500">
+            This does not recommend cheap work blindly. It shows what the shortcut may save and what it can break.
+          </p>
+        </Field>
+
         <label className="mt-2 flex items-center gap-2 text-sm text-slate-700">
           <input type="checkbox" checked={insurancePossible} onChange={(e) => setInsurancePossible(e.target.checked)} />
           <span>Insurance claim is likely (hail/wind damage)</span>
@@ -199,6 +226,20 @@ export default function RoofCalculator({
           A precise bid still requires a roof measurement, decking inspection, and current local material availability.
           Use this range to compare quotes — anything well outside it deserves a question.
         </p>
+
+        <div className={`mt-4 rounded-md border p-3 text-sm ${strategy.risk === "high" ? "border-red-200 bg-red-50" : strategy.risk === "medium" ? "border-amber-200 bg-amber-50" : "border-emerald-200 bg-emerald-50"}`}>
+          <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Cost-saving reality check</div>
+          <h4 className="mt-1 text-sm font-semibold text-slate-950">{strategy.title}</h4>
+          <div className="mt-1 text-lg font-bold tabular-nums text-slate-950">{strategy.headline}</div>
+          <p className="mt-1 text-xs text-slate-700">{strategy.verdict}</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-700">
+            {strategy.details.map((detail) => <li key={detail}>{detail}</li>)}
+          </ul>
+          <div className="mt-2 text-xs font-semibold text-slate-900">Ask it this way</div>
+          <ul className="mt-1 list-disc space-y-1 pl-5 text-xs text-slate-700">
+            {strategy.questions.map((question) => <li key={question}>{question}</li>)}
+          </ul>
+        </div>
 
         <div className="mt-4">
           <h4 className="text-sm font-semibold text-slate-900">Material / labor split (typical)</h4>
@@ -263,6 +304,12 @@ export default function RoofCalculator({
             <li>Is the permit pulled in your name or mine? (Yours is the right answer.)</li>
             <li>Will you provide a certificate of insurance and current state contractor license?</li>
             <li>Is full-system manufacturer warranty offered (e.g., GAF Golden Pledge)?</li>
+            <li>If I buy materials or use an installer-only scope, who owns shortages, returns, delivery damage, warranty registration, and code compliance?</li>
+            <li>If you propose a roof-over, what code section allows it here and how did you verify the deck is sound?</li>
+            <li>How many existing roof layers are there? If there are already two layers, tear-off is the real scope; do not create a third layer.</li>
+            <li>Will you photograph tree-rub damage, trimmed branches, decking, flashing, pipe boots, chimney cap/flue details, and vent details before covering them?</li>
+            <li>For a Class 3 or Class 4 impact roof, will you provide product-label photos and the carrier/TDI impact-resistant roofing form?</li>
+            <li>For high-wind or FORTIFIED-style work, what nail pattern is included: six nails per shingle, 8d ring-shank deck nails at 6&quot; o.c., and tighter gable-end fastening if required?</li>
             {insurancePossible && <li>Will you bill the supplements you find directly to my carrier?</li>}
           </ul>
         </div>
@@ -285,9 +332,13 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function SplitBar({ material, labor, overhead }: { material: number; labor: number; overhead: number }): JSX.Element {
-  const m = Math.max(0, Math.min(1, material));
-  const l = Math.max(0, Math.min(1, labor));
-  const o = Math.max(0, 1 - m - l);
+  const rawM = Math.max(0, material);
+  const rawL = Math.max(0, labor);
+  const rawO = Math.max(0, overhead);
+  const total = rawM + rawL + rawO || 1;
+  const m = Math.min(1, rawM / total);
+  const l = Math.min(1, rawL / total);
+  const o = Math.min(1, rawO / total);
   return (
     <div className="mt-2">
       <div className="flex h-3 overflow-hidden rounded bg-slate-100" role="img" aria-label="Cost split">
@@ -302,4 +353,146 @@ function SplitBar({ material, labor, overhead }: { material: number; labor: numb
       </div>
     </div>
   );
+}
+
+interface RoofSavingsStrategy {
+  title: string;
+  headline: string;
+  verdict: string;
+  details: string[];
+  questions: string[];
+  risk: "low" | "medium" | "high";
+}
+
+const midRange = (low: number, high: number): number => (low + high) / 2;
+
+function roofSavingsStrategy(id: SavingsStrategyId, est: RoofEstimate, inputs: RoofInputs): RoofSavingsStrategy {
+  const materialMid = midRange(est.material.low, est.material.high);
+  const tearOffMid = midRange(est.tearOff.low, est.tearOff.high);
+  const deckingMid = midRange(est.decking.low, est.decking.high);
+  const flashingMid = midRange(est.penetrations.low, est.penetrations.high);
+  const warrantyMid = midRange(est.warrantyAdd.low, est.warrantyAdd.high);
+  const roofOverPossible = inputs.tearOffLayers === 1 && inputs.deckingRisk !== "high";
+
+  if (id === "roof_over") {
+    const savingsLow = Math.max(0, tearOffMid * 0.75);
+    const savingsHigh = Math.max(savingsLow, tearOffMid + deckingMid * 0.6);
+    return {
+      title: "Roof-over / no tear-off",
+      headline: roofOverPossible ? `${fmtUSD(savingsLow)}-${fmtUSD(savingsHigh)} possible upfront savings` : "Usually not a good fit from these inputs",
+      verdict: roofOverPossible
+        ? "This can be a legitimate budget path only when local code allows it, there is exactly one existing layer, the old shingles lie flat, and the deck is sound."
+        : "A roof-over is weak here because the existing layer count or decking risk points toward tear-off and inspection.",
+      details: [
+        "It saves tear-off and disposal now, but it hides decking rot and makes future tear-off more expensive.",
+        "It can reduce curb quality, impact ratings, warranty options, and the ability to fix flashing correctly.",
+        "It is not a repair for leaks, sagging, soft decking, uneven shingles, or bad ventilation.",
+      ],
+      questions: [
+        "How many existing layers are on the roof, and does local code allow this exact roof-over?",
+        "Where did you inspect down to the deck, and did you find rot, gaps, sagging, or soft spots?",
+        "What warranty changes if this is installed over old shingles?",
+      ],
+      risk: roofOverPossible ? "medium" : "high",
+    };
+  }
+
+  if (id === "owner_materials") {
+    const savingsLow = materialMid * 0.05;
+    const savingsHigh = materialMid * 0.12;
+    return {
+      title: "Owner buys materials",
+      headline: `${fmtUSD(savingsLow)}-${fmtUSD(savingsHigh)} potential markup pressure`,
+      verdict: "This can work when you know the exact material list and the installer agrees in writing, but it moves ordering mistakes onto you.",
+      details: [
+        "Materials are not just field shingles: starter, ridge cap, underlayment, ice/water, drip edge, nails, pipe boots, vents, valley metal, and waste matter.",
+        "You own shortages, damaged bundles, color-lot mismatch, delivery timing, returns, and leftover material unless the contract says otherwise.",
+        "Some roofers will not warranty labor normally when they did not supply the system.",
+      ],
+      questions: [
+        "Give me the full material takeoff by SKU, quantity, waste factor, and delivery date.",
+        "If materials run short, who pays the crew downtime and who orders the exact matching lot?",
+        "Does owner-supplied material change workmanship or manufacturer warranty registration?",
+      ],
+      risk: "medium",
+    };
+  }
+
+  if (id === "installer_only") {
+    const savingsLow = materialMid * 0.08 + warrantyMid * 0.5;
+    const savingsHigh = materialMid * 0.18 + warrantyMid;
+    return {
+      title: "Installer-only labor scope",
+      headline: `${fmtUSD(savingsLow)}-${fmtUSD(savingsHigh)} possible bid reduction`,
+      verdict: "This is the most aggressive savings path. It can save money, but only if insurance, permits, safety, cleanup, and warranty are explicit.",
+      details: [
+        "A crew is not the same thing as a licensed, insured roofing contractor responsible for the system.",
+        "You need written scope for tear-off, dry-in, flashing, ventilation, cleanup, magnet sweep, dump fees, and weather protection.",
+        "Do not become the uninsured general contractor by accident.",
+      ],
+      questions: [
+        "Who pulls the permit, carries workers comp/liability, and signs the workmanship warranty?",
+        "What happens if rain arrives with the roof open?",
+        "Will I receive lien waivers from labor and material suppliers?",
+      ],
+      risk: "high",
+    };
+  }
+
+  if (id === "selective_flashing") {
+    const savingsLow = Math.max(150, flashingMid * 0.2);
+    const savingsHigh = Math.max(savingsLow, flashingMid * 0.55);
+    return {
+      title: "Selective flashing reuse",
+      headline: `${fmtUSD(savingsLow)}-${fmtUSD(savingsHigh)} possible scope movement`,
+      verdict: "Do not blindly reuse all flashing, but do not blindly pay to tear apart good wall/counterflashing either.",
+      details: [
+        "Pipe boots, drip edge, rusty valley metal, and obviously damaged flashing are usually cheap enough to replace.",
+        "Step flashing or counterflashing buried behind siding, stucco, brick, or stone can become a bigger project; reuse may be rational if it is sound and correctly lapped.",
+        "The quote should separate replace, reuse, and repair-in-place flashing decisions.",
+      ],
+      questions: [
+        "Which flashing pieces are being replaced, which are reused, and why?",
+        "Are pipe boots, drip edge, valley metal, sidewall, headwall, chimney, and skylight flashing separately addressed?",
+        "If old flashing leaks later, is it excluded from the workmanship warranty?",
+      ],
+      risk: "medium",
+    };
+  }
+
+  if (id === "scope_trim") {
+    const savingsLow = Math.max(250, warrantyMid * 0.35 + flashingMid * 0.15);
+    const savingsHigh = Math.max(savingsLow, warrantyMid + Math.min(1800, flashingMid * 0.5));
+    return {
+      title: "Trim vague upsells",
+      headline: `${fmtUSD(savingsLow)}-${fmtUSD(savingsHigh)} possible cleanup`,
+      verdict: "The cleanest savings often comes from removing vague bundled extras, not weakening the water-management parts of the roof.",
+      details: [
+        "Push gutters, premium warranty, designer shingles, ventilation changes, decking allowances, and cosmetic upgrades into separate line items.",
+        "Keep underlayment, starter, ridge cap, drip edge, correct nailing, and leak-prone flashing details in the base scope.",
+        "A lower price is useful only if the remaining scope still produces a dry, insurable, permitted roof.",
+      ],
+      questions: [
+        "What line items can be removed without changing code compliance or leak risk?",
+        "What is required for the shingle warranty, and what is just a sales package?",
+        "Can you quote base architectural shingles, Class 4 shingles, and premium shingles separately?",
+      ],
+      risk: "low",
+    };
+  }
+
+  return {
+    title: "Baseline full contractor scope",
+    headline: "No shortcut selected",
+    verdict: "Use the main estimate as the defensible comparison point, then test specific savings paths one at a time.",
+    details: [
+      "A complete roof quote should spell out tear-off, disposal, decking, dry-in, flashing, ventilation, permit, cleanup, and warranty.",
+      "The cheapest bid is usually missing a scope line. The best bid makes tradeoffs visible.",
+    ],
+    questions: [
+      "What exactly is included, excluded, and priced only as an allowance?",
+      "What would you remove from the scope if I had to save money, and what would you refuse to remove?",
+    ],
+    risk: "low",
+  };
 }

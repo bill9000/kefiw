@@ -4,8 +4,8 @@ import HomelabBand from '~/components/homelab/HomelabBand.astro';
 import EurocraftByline from '~/components/homelab/EurocraftByline.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import { COST_ENGINE_VERSION, COST_ENGINE_UPDATED, MATERIALS, PITCH_LABOR_MULT, COMPLEXITY_LABOR_MULT, PERMIT_PROFILES, REGION_MULT } from '~/lib/homelab/roof-cost-engine';
-const title = 'Home Lab Cost Methodology — How estimates are calculated | Kefiw';
-const description = 'Transparent methodology for the Kefiw Home Lab cost calculators: data sources, formulas, region multipliers, and what is intentionally excluded. Reviewed by a Texas-licensed general contractor.';
+const title = 'Property Improve Cost Methodology — How estimates are calculated | Kefiw';
+const description = 'Transparent methodology for the Kefiw Property Improve cost calculators: data sources, formulas, region multipliers, and what is intentionally excluded. Reviewed by a Texas-licensed general contractor.';
 ---
 <BaseLayout
   title={title}
@@ -15,14 +15,14 @@ const description = 'Transparent methodology for the Kefiw Home Lab cost calcula
   <HomelabBand active="methodology" />
   <Breadcrumb crumbs={[
     { href: '/', label: 'Home' },
-    { href: '/homelab/', label: 'Home Lab' },
+    { href: '/homelab/', label: 'Property Improve' },
     { href: '/homelab/methodology/', label: 'Methodology' },
   ]} />
   <article class="container-wide py-6">
     <header class="mb-4">
       <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Methodology</h1>
       <p class="mt-2 max-w-3xl text-slate-700">
-        How the Home Lab roof-cost calculator produces its low/typical/high range, what's included and excluded, and why two homes on the same street legitimately get different quotes.
+        How the roof-cost calculator in Property Improve produces its low/typical/high range, what's included and excluded, and why two homes on the same street legitimately get different quotes.
       </p>
     </header>
 

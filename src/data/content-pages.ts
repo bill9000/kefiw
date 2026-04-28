@@ -143,6 +143,8 @@ import { ARTICLES_BRAIN_GAMES } from './content/articles-brain-games';
 import { ARTICLES_RELATIONSHIP_GAMES } from './content/articles-relationship-games';
 import { ARTICLES_LOGIC_GUIDES } from './content/articles-logic-guides';
 import { ARTICLES_CLUSTER_OVERVIEW_GUIDES } from './content/articles-cluster-overview-guides';
+import { ARTICLES_PROPERTY_HVAC } from './content/articles-property-hvac';
+import { ARTICLES_PROPERTY_ROOF } from './content/articles-property-roof';
 
 // Writer-AI V3 enhancement overrides (merged in at export time below).
 import { SCRABBLE_ENHANCEMENTS } from './content/scrabble-enhancements';
@@ -190,6 +192,8 @@ const RAW_CONTENT_PAGES: ContentPageConfig[] = [
   ...ARTICLES_RELATIONSHIP_GAMES,
   ...ARTICLES_LOGIC_GUIDES,
   ...ARTICLES_CLUSTER_OVERVIEW_GUIDES,
+  ...ARTICLES_PROPERTY_HVAC,
+  ...ARTICLES_PROPERTY_ROOF,
 ];
 
 const ENHANCEMENT_OVERRIDES: Record<string, Partial<ContentPageConfig>> = {

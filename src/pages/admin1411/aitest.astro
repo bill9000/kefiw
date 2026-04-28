@@ -1,0 +1,269 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="AI Test — Kefiw Admin"
+  description="Private AIvibe server-side API test page."
+  canonical="/admin1411/aitest/"
+  noindex
+>
+  <article class="container-wide py-8">
+    <header class="mb-6 max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Private admin</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight">AIvibe API Test</h1>
+      <p class="mt-2 text-sm text-slate-600">
+        Server-side AI calls through Kefiw. The browser never receives the AIvibe token.
+      </p>
+    </header>
+
+    <section class="grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(320px,0.55fr)]">
+      <form class="card grid gap-4" data-ai-form>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label>
+            <span class="label">Provider</span>
+            <select class="input" name="provider" data-provider required>
+              <option value="groq-free">Groq Free</option>
+            </select>
+          </label>
+          <label>
+            <span class="label">Intelligence level</span>
+            <select class="input" name="intelligenceLevel" data-level required>
+              <option value="minimum">minimum</option>
+              <option value="low">low</option>
+              <option value="medium">medium</option>
+              <option value="high">high</option>
+              <option value="maximum">maximum</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span class="label">Prompt context</span>
+          <input
+            class="input font-mono text-sm"
+            name="promptContext"
+            data-prompt-context
+            placeholder="Optional database promptId, e.g. EuroCraftTX-EstimateV1"
+          />
+        </label>
+
+        <label>
+          <span class="label">Prompt or promptParameters JSON</span>
+          <textarea
+            class="input min-h-44 font-mono text-sm"
+            name="prompt"
+            data-prompt
+            required
+          >Write a one paragraph summary of server-to-server AI access.</textarea>
+        </label>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label>
+            <span class="label">Temperature</span>
+            <input class="input" name="temperature" type="number" min="0" max="2" step="0.1" value="0.2" />
+          </label>
+          <label>
+            <span class="label">Max tokens</span>
+            <input class="input" name="maxTokens" type="number" min="1" max="4000" step="1" value="300" />
+          </label>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button class="btn-primary" type="submit" data-submit>Run AI</button>
+          <button class="btn-ghost" type="button" data-refresh>Refresh Providers</button>
+          <span class="text-sm text-slate-600" data-status>Loading provider data...</span>
+        </div>
+      </form>
+
+      <aside class="card">
+        <h2 class="text-lg font-semibold text-slate-900">Active config</h2>
+        <p class="mt-2 text-sm text-slate-600">
+          Provider discovery comes from AIvibe pricing endpoints. Calls are sent by provider plus intelligence level.
+        </p>
+        <pre class="mt-4 max-h-96 overflow-auto rounded-md bg-slate-950 p-3 text-xs text-slate-100" data-active>{}</pre>
+      </aside>
+    </section>
+
+    <section class="mt-6 card">
+      <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <h2 class="text-lg font-semibold text-slate-900">Result</h2>
+        <div class="text-sm text-slate-600" data-usage></div>
+      </div>
+      <pre class="min-h-44 whitespace-pre-wrap rounded-md bg-slate-50 p-4 text-sm text-slate-900" data-output>Run a prompt to see output.</pre>
+      <details class="mt-4">
+        <summary class="cursor-pointer text-sm font-medium text-slate-700">Raw response</summary>
+        <pre class="mt-3 max-h-96 overflow-auto rounded-md bg-slate-950 p-3 text-xs text-slate-100" data-raw>{}</pre>
+      </details>
+    </section>
+  </article>
+
+  <script is:inline>
+    const form = document.querySelector('[data-ai-form]');
+    const providerSelect = document.querySelector('[data-provider]');
+    const levelSelect = document.querySelector('[data-level]');
+    const statusEl = document.querySelector('[data-status]');
+    const outputEl = document.querySelector('[data-output]');
+    const rawEl = document.querySelector('[data-raw]');
+    const usageEl = document.querySelector('[data-usage]');
+    const activeEl = document.querySelector('[data-active]');
+    const submitButton = document.querySelector('[data-submit]');
+    const refreshButton = document.querySelector('[data-refresh]');
+    const levels = ['minimum', 'low', 'medium', 'high', 'maximum'];
+
+    function setStatus(message) {
+      statusEl.textContent = message || '';
+    }
+
+    function buildRunPayload(data) {
+      const promptContext = String(data.promptContext || '').trim();
+      const base = {
+        provider: data.provider,
+        intelligenceLevel: data.intelligenceLevel,
+        parameters: {
+          temperature: Number(data.temperature),
+          maxTokens: Number(data.maxTokens),
+        },
+      };
+
+      if (!promptContext) {
+        return {
+          ...base,
+          prompt: data.prompt,
+        };
+      }
+
+      let promptParameters;
+      try {
+        promptParameters = JSON.parse(String(data.prompt || '{}'));
+      } catch {
+        throw new Error('Prompt area must contain valid JSON when Prompt context is filled.');
+      }
+
+      return {
+        ...base,
+        promptId: promptContext,
+        promptParameters,
+      };
+    }
+
+    function pretty(value) {
+      return JSON.stringify(value, null, 2);
+    }
+
+    function normalizeActive(data) {
+      if (!data || typeof data !== 'object') return {};
+      if (Array.isArray(data)) {
+        return data.reduce((acc, item) => {
+          const provider = item.provider || item.providerKey;
+          const level = item.intelligenceLevel || item.level;
+          if (provider && level) {
+            acc[provider] = acc[provider] || {};
+            acc[provider][level] = item;
+          }
+          return acc;
+        }, {});
+      }
+      return data;
+    }
+
+    function activeLevelsFor(provider, active) {
+      const config = active?.[provider];
+      if (!config || typeof config !== 'object') return levels;
+      const found = levels.filter((level) => Boolean(config[level]));
+      return found.length ? found : levels;
+    }
+
+    async function fetchJson(path, options) {
+      const response = await fetch(path, options);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP ${response.status}`);
+      }
+      return data;
+    }
+
+    async function loadDiscovery() {
+      setStatus('Loading provider data...');
+      const [providers, activeRaw] = await Promise.all([
+        fetchJson('/api/aivibe/providers'),
+        fetchJson('/api/aivibe/active'),
+      ]);
+      const active = normalizeActive(activeRaw);
+      activeEl.textContent = pretty(activeRaw);
+
+      providerSelect.textContent = '';
+      const providerRows = Array.isArray(providers) && providers.length
+        ? providers
+        : [{ provider: 'groq-free', displayName: 'Groq Free' }];
+      for (const item of providerRows) {
+        const option = document.createElement('option');
+        option.value = item.provider;
+        option.textContent = item.displayName || item.provider;
+        providerSelect.appendChild(option);
+      }
+
+      function syncLevels() {
+        const current = levelSelect.value || 'minimum';
+        const available = activeLevelsFor(providerSelect.value, active);
+        levelSelect.textContent = '';
+        for (const level of available) {
+          const option = document.createElement('option');
+          option.value = level;
+          option.textContent = level;
+          levelSelect.appendChild(option);
+        }
+        levelSelect.value = available.includes(current) ? current : (available.includes('minimum') ? 'minimum' : available[0]);
+      }
+
+      providerSelect.addEventListener('change', syncLevels, { once: true });
+      providerSelect.addEventListener('change', syncLevels);
+      syncLevels();
+      setStatus('Ready.');
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      outputEl.textContent = 'Running...';
+      rawEl.textContent = '{}';
+      usageEl.textContent = '';
+      setStatus('Calling AIvibe...');
+      submitButton.disabled = true;
+
+      try {
+        const result = await fetchJson('/api/aivibe/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(buildRunPayload(data)),
+        });
+
+        outputEl.textContent = result?.output?.content || '';
+        rawEl.textContent = pretty(result);
+        if (result.usage) {
+          const usage = result.usage;
+          usageEl.textContent = `${usage.totalTokens ?? 0} tokens · ${usage.costCents ?? 0} cents · ${usage.latencyMs ?? 0} ms`;
+        }
+        setStatus('Done.');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'AI request failed.';
+        outputEl.textContent = message;
+        setStatus('Failed.');
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    refreshButton.addEventListener('click', () => {
+      loadDiscovery().catch((error) => {
+        const message = error instanceof Error ? error.message : 'Provider discovery failed.';
+        setStatus(message);
+      });
+    });
+
+    loadDiscovery().catch((error) => {
+      const message = error instanceof Error ? error.message : 'Provider discovery failed.';
+      setStatus(message);
+    });
+  </script>
+</BaseLayout>

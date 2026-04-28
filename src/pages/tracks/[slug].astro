@@ -3,6 +3,7 @@ import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
 import TrackProgress from '~/components/tracks/TrackProgress';
+import TrackWhatIfPlanner from '~/components/tracks/TrackWhatIfPlanner';
 import { TRACKS, TRACKS_BY_SLUG, trackHref } from '~/data/tracks';
 import type { Track } from '~/data/tracks';
 import { REVIEW_ROLES } from '~/data/review';
@@ -132,6 +133,8 @@ const progressSteps = track.steps.map(({ title, type, href, description }) => ({
     <div id="track-progress" class="scroll-mt-36">
       <TrackProgress client:load trackSlug={track.slug} steps={progressSteps} />
     </div>
+
+    <TrackWhatIfPlanner client:load trackSlug={track.slug} resultTitle={track.resultTitle} steps={progressSteps} />
 
     <section id="final-plan" class="scroll-mt-36 mt-8">
       <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

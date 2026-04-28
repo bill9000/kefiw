@@ -8,6 +8,8 @@ import {
 } from '~/data/content-pages';
 import { CLUSTERS, clusterHref } from '~/data/clusters';
 import { DAILY_GAMES } from '~/data/daily-games';
+import { TRACKS, trackHref } from '~/data/tracks';
+import { VERTICAL_CALCULATORS, verticalCalculatorHref } from '~/data/vertical-calculators';
 
 const STATIC_ROUTES = [
   '/',
@@ -17,6 +19,18 @@ const STATIC_ROUTES = [
   '/contact/',
   '/privacy/',
   '/terms/',
+  '/about-the-reviewers/',
+  '/methodology/',
+  '/editorial-policy/',
+  '/sources/',
+  '/engineering-review/',
+  '/scientific-review/',
+  '/registered-nurse-review/',
+  '/remodeling-contractor-review/',
+  '/realtor-review/',
+  '/health-disclaimer/',
+  '/advertising-disclosure/',
+  '/corrections/',
   '/daily/',
   '/daily/leaderboard/',
   ...DAILY_GAMES.map((g) => `/daily/${g.slug}/`),
@@ -52,6 +66,10 @@ const STATIC_ROUTES = [
   '/homelab/atlanta-roof-replacement-cost/',
   '/homelab/methodology/',
   '/homelab/about/',
+  '/property/',
+  '/business/',
+  '/care/',
+  '/tracks/',
 ];
 
 function publishedContent(section: 'word-tools' | 'guides' | 'calculators' | 'converters' | 'games'): ContentPageConfig[] {
@@ -71,6 +89,8 @@ export const GET: APIRoute = ({ site }) => {
   const { pages: seoPages } = buildSeoPages();
   const urls = [
     ...STATIC_ROUTES,
+    ...TRACKS.map(trackHref),
+    ...VERTICAL_CALCULATORS.map(verticalCalculatorHref),
     ...CLUSTERS.map(clusterHref),
     // Exclude noindex tools (reagent-* etc.) — same rationale as above.
     ...TOOLS.filter((t) => !t.comingSoon && !t.noindex).map(toolHref),

@@ -1,0 +1,19 @@
+---
+import VerticalCalculatorLayout from '~/layouts/VerticalCalculatorLayout.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, type VerticalCalculatorPage } from '~/data/vertical-calculators';
+
+export function getStaticPaths() {
+  return VERTICAL_CALCULATORS_BY_AREA.business.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+interface Props {
+  page: VerticalCalculatorPage;
+}
+
+const { page } = Astro.props;
+---
+
+<VerticalCalculatorLayout page={page} />
