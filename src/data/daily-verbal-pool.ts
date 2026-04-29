@@ -5,6 +5,12 @@
 //
 // Each pool feeds `src/lib/daily-verbal-puzzles.ts`, which deterministically
 // picks one puzzle per (dailyDate, gameId).
+//
+// AI boundary: AI can be used offline/nightly to propose candidate puzzles,
+// clue sets, themes, and distractors. Candidates should not be published until
+// deterministic validators check uniqueness, solvability, difficulty, banned
+// words, duplicate themes, quote/licensing safety, and answer-key integrity.
+// Do not call AI during a player session just to create that player's puzzle.
 
 // ---------------------------------------------------------------------------
 // Cryptogram quotes (verbal-crypt)

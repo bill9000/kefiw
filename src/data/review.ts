@@ -2,6 +2,7 @@ import type { ContentSection } from './content-pages';
 import type { ToolCategory } from './tools';
 
 export const REVIEW_LINKS = {
+  trust: '/trust/',
   hub: '/about-the-reviewers/',
   nurse: '/registered-nurse-review/',
   contractor: '/remodeling-contractor-review/',

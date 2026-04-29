@@ -1,5 +1,6 @@
 ---
 import { execSync } from 'node:child_process';
+import TrustSignalBadges from '~/components/TrustSignalBadges.astro';
 
 const year = new Date().getFullYear();
 
@@ -37,6 +38,7 @@ const { sha, date } = gitInfo();
     <p class="mb-4 max-w-2xl text-xs text-slate-500">
       Kefiw is a short, memorable name for a site built around quick wins: word tools, calculators, decision tools, and daily challenges.
     </p>
+    <TrustSignalBadges class="mb-6" />
     <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-start">
       <div>© {year} Kefiw. Built static-first.</div>
       <div class="grid gap-4 text-xs sm:grid-cols-3 sm:text-right">
@@ -56,6 +58,7 @@ const { sha, date } = gitInfo();
           <div class="mb-1 font-semibold uppercase tracking-[0.16em] text-slate-500">Trust</div>
           <div class="flex flex-wrap gap-x-3 gap-y-1 sm:justify-end">
             <a href="/about/">About</a>
+            <a href="/trust/">Trust &amp; Standards</a>
             <a href="/about-the-reviewers/">Review Board</a>
             <a href="/remodeling-contractor-review/">Contractor Review</a>
             <a href="/realtor-review/">Realtor Review</a>

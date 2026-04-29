@@ -9,10 +9,10 @@ export const ARTICLES_PROPERTY_ROOF: ContentPageConfig[] = [
     guideCategory: 'Property',
     title: 'How to Save on Roof Replacement Cost Without Buying a Bad Roof',
     h1: 'How to Save on Roof Replacement Cost',
-    subhead: 'Real ways to reduce a new roof quote: roof-over, owner-supplied materials, installer-only labor, flashing decisions, scope cleanup, and warranty tradeoffs.',
+    subhead: 'Real ways to reduce a new roof quote: roof-over, owner-supplied materials, installer-only labor, flashing decisions, insurance-scope review, and warranty tradeoffs.',
     outcomeLine: 'Save money by exposing scope tradeoffs, not by deleting the parts that keep water out.',
-    description: 'Practical homeowner guide to saving on roof replacement cost without accepting a bad roof: roof-over, material buying, installer-only crews, flashing reuse, quote cleanup, and code/warranty cautions.',
-    keywords: ['save on roof replacement cost', 'roof over existing shingles', 'buy roofing materials yourself', 'installer only roof replacement', 'roof flashing reuse'],
+    description: 'Practical homeowner guide to saving on roof replacement cost without accepting a bad roof: roof-over, material buying, installer-only crews, flashing reuse, insurance-scope omissions, quote cleanup, and code/warranty cautions.',
+    keywords: ['save on roof replacement cost', 'roof over existing shingles', 'buy roofing materials yourself', 'installer only roof replacement', 'roof flashing reuse', 'roof insurance estimate missing items'],
     intro:
       'Roof replacement pricing is negotiable because scope is negotiable. The point is to separate real savings from shortcuts that only look cheap on day one.',
     keyPoints: [
@@ -20,6 +20,7 @@ export const ARTICLES_PROPERTY_ROOF: ContentPageConfig[] = [
       'Buying materials yourself can reduce markup, but you own shortages, wrong SKUs, delivery damage, color lots, returns, and some warranty risk.',
       'Installer-only labor can be cheaper, but only with written insurance, permit, dry-in, cleanup, and lien-waiver terms.',
       'A roof replacement is the cheapest time to handle pipe boots, chimney cap/flue details, flashing, vents, rotten decking, and tree-rub damage because the crew is already up there.',
+      'On insurance jobs, use a private scope checklist first, then ask the adjuster item-specific questions about omitted drip edge, starter, ridge cap, flashing, vents, decking, code upgrades, and access/labor items.',
       'For insurance discounts, get impact-resistant roof paperwork before the crew leaves: product labels, Class 3 or Class 4 rating, installation certification, photos, and wind-mitigation nail documentation where required.',
       'Do not blindly replace every buried flashing detail, but do not blindly reuse rusty, damaged, or leak-prone flashing either.',
       'The best savings usually come from itemizing the bid: base shingle, Class 4 upgrade, gutters, ventilation, decking allowance, warranty package, and cosmetic extras.',
@@ -30,6 +31,7 @@ export const ARTICLES_PROPERTY_ROOF: ContentPageConfig[] = [
       { label: 'Roof-over vs Tear-off', href: '/guides/roof-over-vs-tear-off/' },
       { label: 'Buying Roofing Materials Yourself', href: '/guides/buy-roofing-materials-yourself/' },
       { label: 'Roof Hail and Wind Insurance Discounts', href: '/guides/roof-hail-wind-insurance-discounts/' },
+      { label: 'Roof Insurance Deductible Calculator', href: '/homelab/roof-insurance-deductible-calculator/' },
       { label: 'Shingle Bundle Calculator', href: '/homelab/shingle-bundle-calculator/' },
       { label: 'Roof Repair vs Replacement', href: '/homelab/roof-repair-vs-replacement-calculator/' },
     ],
@@ -37,6 +39,7 @@ export const ARTICLES_PROPERTY_ROOF: ContentPageConfig[] = [
     secondaryCtas: [
       { label: 'Estimate shingle bundles', href: '/homelab/shingle-bundle-calculator/' },
       { label: 'Check repair vs replace', href: '/homelab/roof-repair-vs-replacement-calculator/' },
+      { label: 'Request a Texas roof estimate', href: 'https://eurocrafttx.com/?utm_source=kefiw&utm_medium=referral&utm_campaign=roof_estimate' },
     ],
     longformMarkdown: `
 ## First: make the quote itemized
@@ -193,6 +196,101 @@ For wind, do not confuse hail rating with wind installation. Hail rating is abou
 
 Do not let the roofer say "Class 4" and skip the paperwork. Ask for packaging photos, product labels, installed-roof photos, nail/fastener documentation, permit or windstorm certificate, and the completed impact-resistant roofing form before final payment.
 
+## Insurance scope omissions: where real money gets missed
+
+On an insurance roof job, savings can come from the other direction: making sure the approved scope actually matches the roof that has to be restored. This is not about padding a claim. It is about catching documentable items that are required by the roof system, local code, storm-damage repair method, or the actual site conditions.
+
+Ask for the insurer's full estimate or scope of loss, not only the check summary. Then compare it against:
+
+- the roof measurement report,
+- the contractor's itemized scope,
+- local reroof code requirements,
+- manufacturer installation instructions,
+- photos of every slope, edge, valley, wall intersection, chimney, skylight, vent, and penetration,
+- your policy language for replacement cost, actual cash value, deductible, ordinance/law, and cosmetic exclusions.
+
+Common roof-scope omissions to look for:
+
+- <strong>Drip edge and gutter apron:</strong> often missed at eaves and rakes, even though current asphalt-shingle reroof rules commonly require edge metal and wind programs may require specific fastening.
+- <strong>Starter strip and ridge cap:</strong> these should be actual starter/ridge materials or approved equivalents, not silently cut from field shingles if the warranty or wind rating needs the system pieces.
+- <strong>Ice/water membrane and valleys:</strong> check eaves, valleys, low-slope transitions, sidewalls, and leak-prone areas. A scope that lists only generic felt may miss required self-adhered membrane.
+- <strong>Synthetic underlayment or sealed roof deck:</strong> current code, windstorm, FORTIFIED, or ordinance/law coverage may change the required underlayment or deck-sealing method.
+- <strong>Decking repair and deck re-nailing:</strong> rotten sheets, spaced plank issues, bad fastener retention, and wind-mitigation re-nailing are often unknown until tear-off, but the per-sheet and documentation rule should be agreed before work starts.
+- <strong>Pipe boots and roof penetrations:</strong> plumbing boots, exhaust vents, bath/kitchen vents, dryer vents, furnace flues, and old abandoned penetrations need replace, reset, or remove decisions.
+- <strong>Chimney and wall flashing:</strong> step flashing, counterflashing, back pan, cricket, kick-out flashing, apron flashing, and storm collars should be named, not hidden under a vague "flashing" line.
+- <strong>Skylights and curbs:</strong> old skylights may need flashing kits, curb repair, or replacement before new shingles lock them in.
+- <strong>Detach/reset items:</strong> gutters, screens, satellite mounts, antenna brackets, solar standoffs, security cameras, and roof-mounted accessories may need removal and reinstallation.
+- <strong>Steep/high/access labor:</strong> pitch, two-story access, multiple layers, protection, tarping, haul-off, dump fees, permit fees, and magnet sweep are labor realities that may be under-scoped.
+- <strong>Interior or collateral damage:</strong> gutters, fascia, soffit, fence, AC fins, window screens, and interior leak stains are separate from the roof but can be part of the same storm claim if damaged.
+
+The practical method is simple:
+
+1. Mark every roof component that appears in the contractor bid but not in the insurer scope.
+2. For each missing item, write why it belongs: damaged, required by current code, required by manufacturer instructions, required by wind/hail certification, or required to restore the roof without creating a leak.
+3. Attach photos, measurements, product instructions, permit/code notes, and the exact estimate line item if your contractor uses estimating software.
+4. Submit it as a supplement or ask a licensed public adjuster to handle claim negotiation if your state requires that.
+
+Be careful with roles. In Texas, for example, the insurance department says a contractor doing the work cannot also act as a public insurance adjuster, and Texas law prohibits deductible waivers. A contractor can document technical scope problems, but claim negotiation may be your job or a licensed public adjuster's job depending on state law.
+
+Good supplement language sounds like: "The adjuster scope omits drip edge at rakes and eaves. Current reroof requirements and the attached roof-edge photos show edge metal is required for the work being performed." Bad language sounds like: "Find enough supplement money to cover my deductible." That second path creates fraud risk and usually attracts the wrong contractor.
+
+## How to use the checklist with the adjuster
+
+Use the checklist for yourself first. Do not walk into the inspection waving a generic "things adjusters miss" list. That makes the visit feel like a dispute before the facts are even clear.
+
+The better approach is:
+
+1. Review the insurer scope privately.
+2. Mark only items that actually apply to your roof.
+3. Gather photos, measurements, code notes, manufacturer instructions, or contractor documentation.
+4. Ask the adjuster narrow questions about each item.
+5. If an item is missing, ask whether it can be reviewed as a documented supplement.
+
+Good adjuster questions sound like:
+
+- "Where is drip edge included in the estimate?"
+- "Does this scope include starter strip and ridge cap as separate system materials?"
+- "How are valleys and ice/water membrane handled?"
+- "Is pipe boot replacement included, or only shingle replacement around the boots?"
+- "Where are detach/reset items listed for gutters, screens, mounts, or roof accessories?"
+- "Does my policy include ordinance/law coverage for code-triggered upgrades?"
+- "If rotten decking appears during tear-off, what documentation do you need before it is covered or denied?"
+- "If the contractor finds a missing item during tear-off, should they pause and photograph it before installation?"
+
+Avoid language that sounds like you are trying to force a payout:
+
+- "My roofer says you missed everything."
+- "I need enough supplement money to cover the deductible."
+- "Can you add these items so the job works out?"
+- "The internet says adjusters always omit this."
+
+Use language that keeps the issue factual:
+
+- "Can we verify whether this item is included?"
+- "If this is required by local code, what documentation do you need?"
+- "If this product requires a starter or ridge system for warranty, should the scope list it separately?"
+- "Can this photo and measurement be reviewed with the estimate?"
+
+Private homeowner scope-review worksheet:
+
+- Paperwork: declarations page, deductible type, RCV/ACV language, ordinance/law endorsement, cosmetic exclusion, adjuster scope, roof measurement report.
+- Roof edges: drip edge, gutter apron, starter strip, rake/eave details, edge fastening where wind documentation matters.
+- Roof field: shingle type, waste factor, tear-off layers, underlayment, ice/water membrane, valleys, ridge cap.
+- Deck: rotten sheathing allowance, per-sheet price, spaced plank issues, re-nailing requirements, sealed deck requirements.
+- Penetrations: pipe boots, roof vents, bath/kitchen/dryer vents, flues, abandoned mounts, satellite brackets, solar standoffs.
+- Flashing: chimney step flashing, counterflashing, back pan, cricket, kick-out flashing, sidewall/headwall flashing, skylight flashing kits.
+- Access and labor: steep/high charges, two-story access, protection, tarping, dump fees, permit, cleanup, magnet sweep.
+- Collateral damage: gutters, fascia, soffit, window screens, AC fins, fence, interior leak stains, ceiling drywall.
+- Proof package: photos before work, photos during tear-off, product labels, packaging, permit notes, manufacturer instructions, final invoice.
+
+The best time to ask is during or immediately after the adjuster visit, while the roof details are fresh. The best time to submit a supplement is after you have item-specific proof. A checklist without proof is just an argument. A checklist with photos, code notes, and product instructions is a scope review.
+
+## Getting a contractor estimate
+
+If the roof is in Eurocraft's Texas service area and you want a contractor estimate instead of only calculator ranges, use [Eurocraft's roof estimate request](https://eurocrafttx.com/?utm_source=kefiw&utm_medium=referral&utm_campaign=roof_estimate).
+
+Kefiw should treat that link as referral-source attribution only. Do not attach private claim documents, insurer estimates, roof photos, or personal financial details to Kefiw. A real lead handoff or conversion tracker would need explicit privacy language and a matching Eurocraft-side tracking path.
+
 ## Sources and code checks
 
 Roof-over rules are local. The safest pattern is to confirm the adopted code with your city or county before accepting a recover quote. ARMA's asphalt shingle reroofing bulletin says local code may limit roof-over options and gives practical conditions where old shingles likely need removal. NRCA's reroofing guidance emphasizes studying the existing roof and confirming the deck is sound before planning a recover. Some local permit worksheets explicitly allow covering one asphalt layer only when it is an adequate base.
@@ -204,6 +302,8 @@ Useful references:
 - [Example reroof worksheet for asphalt shingles](https://lcf.ca.gov/wp-content/uploads/2025/06/Reroof-Worksheet_AsphaultShingles.pdf)
 - [Professional Roofing overview of reroofing code context](https://www.professionalroofing.net/Articles/Reroofing-by-the-book--02-01-2019/4400)
 - [TDI impact-resistant roofing credits and PC068 form](https://www.tdi.texas.gov/company/roofing-discounts.html)
+- [TDI roofing and insurance law guidance](https://www.tdi.texas.gov/consumer/storms/roofing-and-insurance-know-the-law.html)
+- [TDI replacement cost vs actual cash value explanation](https://www.tdi.texas.gov/tips/home-insurance-policies-replacement-cost-or-actual-cash-value.html)
 - [IBHS FORTIFIED Roof guidance](https://fortifiedhome.org/roof/)
 - [IBHS FORTIFIED re-roofing checklist](https://ibhs.org/wp-content/uploads/member_docs/FORTIFIED-Re-Roof-Checklist.pdf)
 `,
@@ -223,6 +323,14 @@ Useful references:
       {
         q: 'What insurance discount paperwork should I get after a hail-resistant roof?',
         a: 'Ask for the product packaging label, impact classification, manufacturer and brand, photos, and the completed carrier form. In Texas/TWIA contexts, TDI Form PC068 is the impact-resistant roofing installation form; private insurers may use their own forms.',
+      },
+      {
+        q: 'What roof items are commonly missing from an insurance estimate?',
+        a: 'Common omissions include drip edge, starter strip, ridge cap, ice/water membrane, valley metal, pipe boots, vents, chimney flashing, skylight flashing, decking repair, detach/reset work, steep/high labor, permits, and code-upgrade items. The point is not to inflate a claim; it is to document what is damaged, required, or needed to restore the roof correctly.',
+      },
+      {
+        q: 'Should I show the adjuster a roof-claim checklist?',
+        a: 'Use the checklist privately first. During the inspection, ask narrow questions about items that actually apply to your roof, such as drip edge, starter, ridge cap, flashing, decking, vents, or ordinance/law coverage. If something is omitted, support it with photos, measurements, code notes, manufacturer instructions, or contractor documentation before asking for a supplement.',
       },
     ],
   },

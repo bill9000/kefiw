@@ -829,6 +829,16 @@ const businessMethodSections: VerticalContentSection[] = [
     title: 'When the decision usually goes wrong',
     body: 'Operators usually get hurt by hidden costs: non-billable time, ramp time, management burden, unused seats, tax reserve, scope creep, collection delay, and software maintenance. Those costs are easy to ignore because they do not always arrive as one invoice.',
   },
+  {
+    title: 'Static decision worksheet: what to ask next',
+    body: 'Use the result as a question list, not as an AI verdict. The next move should be driven by the risky assumptions the calculator exposed.',
+    bullets: [
+      'Tax pages: ask which income, withholding, safe-harbor, state, payroll, and documentation assumptions need professional review.',
+      'Hiring pages: ask whether the work is capacity, process cleanup, role design, classification risk, or payroll cash-flow pressure.',
+      'Pricing pages: ask whether billable hours, revision creep, sales time, discounts, or slow months are the real reason the number feels uncomfortable.',
+      'SaaS and cloud pages: ask which seats, renewals, duplicate tools, contract terms, adoption rates, review time, and exit costs are driving the result.',
+    ],
+  },
 ];
 
 const pricingSections: VerticalContentSection[] = [

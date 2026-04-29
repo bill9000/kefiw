@@ -1,4 +1,6 @@
 ---
+import TrustSignalBadges from '~/components/TrustSignalBadges.astro';
+
 interface Props {
   approvalText?: string;
   reviewerLinks?: Array<{ label: string; href: string }>;
@@ -41,4 +43,5 @@ const hasReviewerLinks = reviewerLinks.length > 0;
       </>
     )}
   </p>
+  <TrustSignalBadges compact showIntro={false} class="mt-2 border-t border-slate-200 pt-2" />
 </aside>

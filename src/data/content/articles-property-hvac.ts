@@ -120,6 +120,22 @@ A real board diagnosis should name the failed input or output:
 
 Ask what cheaper component was ruled out before the board quote.
 
+## Service-call worksheet: questions by symptom
+
+Use this as a private script before the technician arrives. The point is not to diagnose the system yourself. The point is to keep the conversation tied to symptoms, measurements, and cheaper causes before the quote becomes a replacement package.
+
+For cooling that seems dead, write down whether the thermostat is blank, whether the indoor blower runs, whether the outdoor unit is silent, humming, spinning without cooling, or tripping the breaker. Then ask which low-voltage call, safety switch, capacitor, contactor, motor, compressor, and breaker readings support the recommendation.
+
+For weak cooling, write down whether the filter was dirty, whether the coil iced over, whether airflow feels weak, whether one room is the problem, and whether anything changed recently. Then ask whether airflow, static pressure, indoor coil condition, condenser cleanliness, duct leakage, and refrigerant charge were checked in that order.
+
+For gas heat, write down whether the inducer runs, whether the igniter glows, whether flame starts and drops out, whether the blower starts, and whether any safety switch is open. Then ask for the failed sequence step: pressure switch, igniter, gas valve, flame sensor, rollout, limit, board input, or board output.
+
+For electric heat, write down whether the blower runs, whether heat is weak or absent, whether only auxiliary heat works, and whether a breaker trips. Then ask which sequencer, relay, heat-strip stage, thermostat call, and amperage reading was tested.
+
+For heat pumps, write down whether cooling works, whether outdoor heat works, whether auxiliary heat stages, whether defrost happens, and whether the thermostat was recently replaced. Then ask whether the thermostat is configured for the exact equipment type and whether the reversing valve, outdoor unit, and auxiliary heat were tested separately.
+
+If replacement is still recommended, ask for the evidence sentence: "The symptom was X, the measured failed item was Y, cheaper causes A/B/C were ruled out, and replacement is recommended because Z." If the answer is only "it is old," you do not have a diagnosis yet.
+
 ## Replacement is valid when the diagnosis supports it
 
 Replacement becomes more serious when multiple major parts are failing, the compressor is confirmed shorted or mechanically locked, the heat exchanger is unsafe, the coil is old and leaking, refrigerant economics are ugly, or the system is near end of life and repair cost is high.
@@ -137,7 +153,11 @@ But the quote should still connect the homeowner symptom to evidence. "Old" is n
       },
       {
         q: 'Should I replace the HVAC control board?',
-          a: 'Only after the technician explains which board input or output failed and rules out thermostat power, safeties, sensors, relays, wiring, and obvious service-call causes.',
+        a: 'Only after the technician explains which board input or output failed and rules out thermostat power, safeties, sensors, relays, wiring, and obvious service-call causes.',
+      },
+      {
+        q: 'What should I ask the HVAC technician before accepting replacement?',
+        a: 'Ask them to connect your symptom to test readings, name the failed sequence step, and list the cheaper causes they ruled out. A serious replacement quote should explain why capacitor, contactor, thermostat, safety switch, flame sensor, sequencer, airflow, duct, or board-output problems do not explain the failure.',
       },
     ],
   },

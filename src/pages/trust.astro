@@ -1,0 +1,50 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TrustNav from '~/components/TrustNav.astro';
+import TrustSignalBadges from '~/components/TrustSignalBadges.astro';
+---
+
+<BaseLayout
+  title="Trust & Standards - Kefiw"
+  description="Kefiw trust signals: HTTPS production delivery, advertising consent, reviewer scope, source-linked methodology, corrections, privacy, and advertising disclosures."
+  canonical="/trust/"
+  keywords={['kefiw trust', 'trust standards', 'review methodology', 'privacy advertising disclosure']}
+>
+  <article class="container-narrow py-10 prose-tool">
+    <h1 class="text-3xl font-bold tracking-tight">Trust &amp; Standards</h1>
+    <p class="lead text-lg text-slate-700">
+      Kefiw uses visible trust signals for standards it actually maintains: secure production delivery, documented review scope, source-linked methodology, privacy disclosures, advertising consent, and corrections.
+    </p>
+
+    <TrustSignalBadges class="my-6" />
+    <TrustNav current="/trust/" />
+
+    <h2>What these signals mean</h2>
+    <ul>
+      <li><strong>HTTPS production:</strong> production pages are served over HTTPS. The browser address bar remains the authoritative security indicator; Kefiw does not use an in-page padlock as a substitute for browser security UI.</li>
+      <li><strong>IAB ad consent:</strong> advertising consent is handled through Google AdSense Privacy &amp; Messaging where required, while Kefiw documents its own storage and telemetry choices on the privacy page.</li>
+      <li><strong>Source-linked methods:</strong> calculators and guides are expected to show assumptions, formulas, limitations, and source families rather than hiding the basis of a result.</li>
+      <li><strong>Staff review lanes:</strong> reviewer pages explain what engineering, scientific, registered nurse, remodeling contractor, and realtor review cover.</li>
+      <li><strong>Corrections process:</strong> users can report stale rules, bad assumptions, bugs, confusing explanations, or missing context through the contact and corrections pages.</li>
+      <li><strong>Ads disclosed:</strong> advertising and monetization boundaries live on a separate disclosure page so ads do not masquerade as methodology or review.</li>
+    </ul>
+
+    <h2>About third-party badges</h2>
+    <p>
+      Kefiw does not display decorative third-party trust seals unless the claim can be verified and the referenced organization actually certifies or reviews the site. A fake security badge would be worse than no badge because it asks users to trust a graphic instead of an auditable standard.
+    </p>
+    <p>
+      When a third-party system is relevant, Kefiw names the system and links to the policy page that explains it. Examples include Google advertising consent, Google AdSense advertising behavior, Cloudflare Web Analytics, and production HTTPS delivery.
+    </p>
+
+    <h2>Where to check the details</h2>
+    <ul>
+      <li><a href="/privacy/">Privacy Policy</a> explains local storage, telemetry, advertising consent, and contact form submissions.</li>
+      <li><a href="/advertising-disclosure/">Advertising Disclosure</a> explains monetization boundaries.</li>
+      <li><a href="/methodology/">Methodology</a> explains how formulas, assumptions, examples, and limits are handled.</li>
+      <li><a href="/sources/">Sources</a> explains how source families are selected for different page types.</li>
+      <li><a href="/about-the-reviewers/">About the Reviewers</a> explains each review lane and its limits.</li>
+      <li><a href="/corrections/">Corrections</a> explains how users can report errors or stale assumptions.</li>
+    </ul>
+  </article>
+</BaseLayout>

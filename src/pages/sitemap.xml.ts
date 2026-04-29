@@ -19,6 +19,7 @@ const STATIC_ROUTES = [
   '/contact/',
   '/privacy/',
   '/terms/',
+  '/trust/',
   '/about-the-reviewers/',
   '/methodology/',
   '/editorial-policy/',
