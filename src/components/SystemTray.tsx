@@ -116,10 +116,32 @@ interface SystemTrayProps {
   placement?: 'below-right' | 'above-right';
 }
 
+interface SavedWork {
+  calculators: number;
+  tracks: number;
+}
+
+function readSavedWork(): SavedWork {
+  if (typeof window === 'undefined') return { calculators: 0, tracks: 0 };
+  try {
+    let calculators = 0;
+    let tracks = 0;
+    for (let i = 0; i < window.localStorage.length; i += 1) {
+      const key = window.localStorage.key(i) ?? '';
+      if (key.startsWith('kfw_vertical_calculator:')) calculators += 1;
+      if (key.startsWith('kfw_track_progress:')) tracks += 1;
+    }
+    return { calculators, tracks };
+  } catch {
+    return { calculators: 0, tracks: 0 };
+  }
+}
+
 export default function SystemTray({ compact = false, placement = 'below-right' }: SystemTrayProps): JSX.Element | null {
   const [state, setState] = useState<DashboardState | null>(null);
   const [path, setPath] = useState<string>('');
   const [dailyStreak, setDailyStreak] = useState<number>(0);
+  const [savedWork, setSavedWork] = useState<SavedWork>({ calculators: 0, tracks: 0 });
   const [open, setOpen] = useState<boolean>(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
@@ -136,9 +158,14 @@ export default function SystemTray({ compact = false, placement = 'below-right' 
         setDailyStreak(0);
       }
     };
+    const refreshSavedWork = () => setSavedWork(readSavedWork());
     refreshStreak();
+    refreshSavedWork();
     const unsub = subscribeDashboard(() => setState(readDashboard()));
-    const id = setInterval(refreshStreak, 5000);
+    const id = setInterval(() => {
+      refreshStreak();
+      refreshSavedWork();
+    }, 5000);
     return () => {
       unsub();
       clearInterval(id);
@@ -190,12 +217,14 @@ export default function SystemTray({ compact = false, placement = 'below-right' 
     ? MAGENTA
     : CYAN;
 
+  const hasSavedWork = savedWork.calculators > 0 || savedWork.tracks > 0;
   const hasAnyMetric =
     r !== undefined ||
     cl !== undefined ||
     bio !== undefined ||
     hasPeptide ||
-    dailyStreak > 0;
+    dailyStreak > 0 ||
+    hasSavedWork;
 
   const health = getSystemHealth(state);
   const ledColor = hasAnyMetric ? LED_COLOR[health] : GRAY;
@@ -237,6 +266,22 @@ export default function SystemTray({ compact = false, placement = 'below-right' 
       help: 'Reagent prep status — potency, lean retention, or waste.',
     });
   }
+  if (savedWork.calculators > 0) {
+    rows.push({
+      label: 'Saved tools',
+      value: String(savedWork.calculators),
+      color: CYAN,
+      help: 'Vertical calculator states saved in this browser.',
+    });
+  }
+  if (savedWork.tracks > 0) {
+    rows.push({
+      label: 'Tracks',
+      value: String(savedWork.tracks),
+      color: CYAN,
+      help: 'Guided track progress saved in this browser.',
+    });
+  }
   if (dailyStreak > 0) {
     rows.push({
       label: 'Streak',
@@ -256,7 +301,7 @@ export default function SystemTray({ compact = false, placement = 'below-right' 
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={`Dashboard · ${ledLabel}${rows.length ? ' · ' + rows.length + ' metrics' : ''}`}
+        aria-label={`Dashboard · ${ledLabel}${rows.length ? ' · ' + rows.length + ' items' : ''}`}
         aria-expanded={open}
         title={`Dashboard · ${ledLabel}`}
         style={{
@@ -391,19 +436,22 @@ export default function SystemTray({ compact = false, placement = 'below-right' 
             </ul>
           ) : (
             <div style={{ padding: '16px 14px', color: TEXT_2, fontSize: 13, lineHeight: 1.5 }}>
-              <p style={{ margin: 0, marginBottom: 10, fontWeight: 600 }}>Your dashboard is empty.</p>
+              <p style={{ margin: 0, marginBottom: 10, fontWeight: 600 }}>Nothing saved here yet.</p>
               <p style={{ margin: 0, marginBottom: 10, color: DIM, fontSize: 12 }}>
-                It lights up when you run a calculator that writes a metric. Try one:
+                Use a planner, calculator, or cognitive routine. Useful local signals and saved progress stay in this browser.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 6 }}>
                 <li>
-                  <a href="/finance/runway-zero/" style={emptyLinkStyle}>Runway Zero <span style={{ color: DIM }}>→ Runway months</span></a>
+                  <a href="/tracks/replace-my-hvac/" style={emptyLinkStyle}>Replace My HVAC <span style={{ color: DIM }}>→ Property track</span></a>
                 </li>
                 <li>
-                  <a href="/health/metabolic-floor/" style={emptyLinkStyle}>Metabolic Floor <span style={{ color: DIM }}>→ Body %</span></a>
+                  <a href="/business/minimum-viable-freelance-rate-calculator/" style={emptyLinkStyle}>Price My Work <span style={{ color: DIM }}>→ Business calculator</span></a>
                 </li>
                 <li>
-                  <a href="/daily/" style={emptyLinkStyle}>Daily challenges <span style={{ color: DIM }}>→ Streak</span></a>
+                  <a href="/tracks/plan-senior-care/" style={emptyLinkStyle}>Plan Senior Care <span style={{ color: DIM }}>→ Care track</span></a>
+                </li>
+                <li>
+                  <a href="/daily/" style={emptyLinkStyle}>Daily cognitive play <span style={{ color: DIM }}>→ Streak</span></a>
                 </li>
               </ul>
             </div>
@@ -423,7 +471,7 @@ export default function SystemTray({ compact = false, placement = 'below-right' 
             }}
           >
             <span style={{ flex: 1 }}>
-              Values come from calculators you ran in this browser.
+              Dashboard values, track progress, and streaks stay in this browser.
             </span>
             {rows.length > 0 && (
               <button
