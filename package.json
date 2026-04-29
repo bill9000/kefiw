@@ -10,6 +10,7 @@
     "start": "astro dev",
     "build": "astro build && node scripts/scrub-guard.mjs",
     "build:og": "node scripts/build-og.mjs",
+    "indexnow:submit": "node scripts/indexnow-submit.mjs",
     "preview": "astro preview",
     "pages:dev": "wrangler pages dev dist --port 8788 --persist-to .wrangler/state",
     "pages:deploy": "wrangler pages deploy dist --project-name kefiw",
