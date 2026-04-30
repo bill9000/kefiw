@@ -1,0 +1,151 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import CareTrustFooter from '~/components/CareTrustFooter.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { CARE_PLAYBOOKS, PLAYBOOK_CATEGORY_LABELS, carePlaybookHref, type CarePlaybookCategory } from '~/data/care-playbooks';
+
+const categoryOrder: CarePlaybookCategory[] = [
+  'safety',
+  'hospital-transition',
+  'facility-decision',
+  'caregiver-support',
+  'dementia',
+  'care-refusal',
+  'cost-pressure',
+  'aging-in-place',
+  'family-care-costs',
+  'medicaid-planning',
+  'insurance-claim',
+  'medicare-review',
+  'family-conflict',
+  'shared-costs',
+  'driving-safety',
+  'facility-concern',
+];
+const categoryDescriptions: Record<CarePlaybookCategory, string> = {
+  safety: 'Falls, urgent changes, home safety, and care-plan reassessment.',
+  'hospital-transition': 'Discharge, rehab, first-night planning, medication changes, and equipment.',
+  'facility-decision': 'Assisted living, memory care, nursing home, contract, and cost decisions.',
+  'caregiver-support': 'Burnout, sleep disruption, backup care, respite, and workload sharing.',
+  dementia: 'Wandering, nighttime confusion, medication risk, refusal of care, and supervision.',
+  'care-refusal': 'Dignity-first support when a parent refuses help, safety changes, or care.',
+  'cost-pressure': 'Home care bills, uncovered family hours, respite, adult day care, and care-setting comparison.',
+  'aging-in-place': 'Home safety, emergency access, no-answer rules, and stay-home conditions.',
+  'family-care-costs': 'Rising care bills, family payments, payment sources, and budget scenarios.',
+  'medicaid-planning': 'Private-pay runway, state-specific Medicaid questions, HCBS, documents, and look-back concerns.',
+  'insurance-claim': 'Long-term care insurance claims, policy review, elimination periods, and documentation.',
+  'medicare-review': 'Open Enrollment, doctors, drugs, pharmacies, networks, IRMAA, and annual plan checks.',
+  medicare: 'Open enrollment, plan review, coverage checks, and cost questions.',
+  insurance: 'Long-term care insurance claims, policy review, and documentation.',
+  'family-conflict': 'Sibling support, task ownership, family meetings, backup coverage, and caregiver workload.',
+  'shared-costs': 'Family budget, reimbursement, contribution rules, payment authority, and professional review.',
+  'driving-safety': 'Driving events, respectful conversations, transportation alternatives, clinician input, and licensing escalation.',
+  'facility-concern': 'Concern logs, facility response, ombudsman, APS, state survey agency, and Medicare quality complaint routes.',
+};
+const groupedPlaybooks = categoryOrder
+  .map((category) => ({
+    category,
+    label: PLAYBOOK_CATEGORY_LABELS[category],
+    description: categoryDescriptions[category],
+    playbooks: CARE_PLAYBOOKS.filter((playbook) => playbook.category === category),
+  }))
+  .filter((group) => group.playbooks.length > 0 || ['family-conflict', 'shared-costs', 'driving-safety', 'facility-concern'].includes(group.category));
+---
+
+<BaseLayout
+  title="Care Playbooks: Step-by-Step Help for Family Care Moments | Kefiw"
+  description="Use Kefiw Care Playbooks for falls, hospital discharge, facility decisions, caregiver burnout, dementia safety, Medicare review, insurance claims, and family care planning."
+  canonical="/care/playbooks/"
+  keywords={['care playbooks', 'family caregiver playbooks', 'hospital discharge checklist', 'fall follow-up checklist', 'caregiver burnout plan']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/care/', label: 'Care' }, { href: '/care/playbooks/', label: 'Care Playbooks' }]} />
+
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">Care Playbooks</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Care Playbooks</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">
+        Step-by-step help for common family care moments: falls, hospital discharge, facility decisions, caregiver burnout, dementia safety, Medicare review, insurance claims, family conflict, driving safety, and facility concerns.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="/care/playbooks/parent-had-a-fall/">
+          Start with fall playbook
+        </a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/start/">
+          Not sure where to start?
+        </a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/family-care-plan-summary/">
+          Build family summary
+        </a>
+      </div>
+      <p class="mt-4 max-w-3xl rounded-md border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm leading-6 text-cyan-950">
+        A playbook is a working checklist for a specific care situation. It helps you decide what to do today, this week, what to document, who to call, what to print, and when to escalate.
+      </p>
+    </header>
+
+    <section class="mb-8 rounded-lg border border-amber-200 bg-amber-50 p-4">
+      <h2 class="text-lg font-semibold text-amber-950">Safety boundary</h2>
+      <p class="mt-1 text-sm leading-6 text-amber-950">
+        If someone may be experiencing a medical emergency or immediate danger, call emergency services now. Kefiw playbooks help organize care planning; they do not diagnose, triage clinically, or replace qualified professional guidance.
+      </p>
+    </section>
+
+    <section class="space-y-8">
+      {groupedPlaybooks.map((group) => (
+        <section class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 class="text-xl font-semibold text-slate-950">{group.label}</h2>
+              <p class="mt-1 text-sm leading-6 text-slate-600">{group.description}</p>
+            </div>
+            {group.playbooks.length === 0 ? <span class="w-fit rounded border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-600">Coming next</span> : null}
+          </div>
+          {group.playbooks.length > 0 ? (
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              {group.playbooks.map((playbook) => (
+                <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href={carePlaybookHref(playbook)}>
+                  <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{playbook.hero.eyebrow}</p>
+                  <h3 class="mt-1 text-lg font-semibold">{playbook.title}</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-700">{playbook.hero.subheading}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <span class="rounded border border-brand-200 bg-brand-50 px-2 py-1 text-xs font-semibold text-brand-800">{playbook.hero.primaryCta}</span>
+                    <span class="rounded border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-700">
+                      Related: {playbook.recommendedTools.slice(0, 2).map((tool) => tool.name).join(', ')}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p class="mt-3 text-sm leading-6 text-slate-600">
+              This section is planned for the next playbook batches. Current guide pages remain available while the structured playbook layer is expanded.
+            </p>
+          )}
+        </section>
+      ))}
+    </section>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-white p-4">
+      <h2 class="text-lg font-semibold text-slate-950">How playbooks connect to the care plan</h2>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-700">
+        Each playbook can send intake answers, documentation, checked actions, call scripts, recommended tools, and a suggested review date into the Family Care Plan Summary.
+      </p>
+      <div class="mt-4 grid gap-3 md:grid-cols-4">
+        <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/start/">Start Here intake</a>
+        <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/care-needs-checklist/">Care Needs Checklist</a>
+        <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/caregiver-hours-calculator/">Caregiver Hours Calculator</a>
+        <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/family-care-plan-summary/">Family Care Plan Summary</a>
+      </div>
+    </section>
+
+    <CareTrustFooter variant="guide" />
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'registered nurse', href: '/registered-nurse-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+      includeHealthDisclaimer
+    />
+  </article>
+</BaseLayout>

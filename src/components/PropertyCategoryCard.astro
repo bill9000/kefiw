@@ -1,0 +1,15 @@
+---
+import type { PropertyCategoryCard as Card } from '~/data/property-categories';
+
+interface Props {
+  card: Card;
+}
+
+const { card } = Astro.props;
+---
+
+<a href={card.href} class="block rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm">
+  {card.eyebrow && <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{card.eyebrow}</p>}
+  <h3 class="mt-1 text-base font-semibold">{card.title}</h3>
+  <p class="mt-2 text-sm leading-6 text-slate-600">{card.text}</p>
+</a>

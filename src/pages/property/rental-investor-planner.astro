@@ -1,0 +1,62 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import RentalInvestorPlannerIsland from '~/components/property/RentalInvestorPlanner';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+---
+
+<BaseLayout
+  title="Rental Investor Planner: Cash Flow, Cap Rate, DSCR, and Reserves | Kefiw"
+  description="Stress-test rental property cash flow with rent, vacancy, expenses, reserves, mortgage payment, cap rate, cash-on-cash return, DSCR, and reserve risk."
+  canonical="/property/rental-investor-planner/"
+  keywords={['rental property calculator', 'cap rate calculator', 'cash flow calculator', 'cash on cash return calculator']}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/property/', label: 'Property' },
+    { href: '/property/invest/', label: 'Invest' },
+    { href: '/property/rental-investor-planner/', label: 'Rental Investor Planner' },
+  ]} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Property Investor Tool</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Rental Investor Planner</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">
+        Check whether a rental still works after vacancy, operating expenses, repairs, capex, management, debt service, and cash reserve needs.
+      </p>
+      <p class="mt-3 max-w-3xl rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-950">
+        This is a planning model, not investment, tax, legal, lending, insurance, appraisal, or property-management advice. Verify local rules and deal documents before acting.
+      </p>
+    </header>
+
+    <RentalInvestorPlannerIsland client:load />
+
+    <section class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/property/checklists/rental-due-diligence-documents/">
+        <div class="text-sm font-semibold">Due diligence checklist</div>
+        <p class="mt-1 text-xs leading-5 text-slate-600">Collect rent, leases, expenses, repairs, reserve, and rule evidence.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/property/decision-packet/">
+        <div class="text-sm font-semibold">Build decision packet</div>
+        <p class="mt-1 text-xs leading-5 text-slate-600">Turn the deal into a printable evidence and risk summary.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/calculators/mortgage-calculator/">
+        <div class="text-sm font-semibold">Mortgage calculator</div>
+        <p class="mt-1 text-xs leading-5 text-slate-600">Estimate payment and interest assumptions outside this model.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/finance/horizon-point/">
+        <div class="text-sm font-semibold">Hold horizon</div>
+        <p class="mt-1 text-xs leading-5 text-slate-600">Compare transaction costs against the time you expect to hold.</p>
+      </a>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'realtor', href: '/realtor-review/' },
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

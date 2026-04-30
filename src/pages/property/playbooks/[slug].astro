@@ -1,0 +1,149 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { PROPERTY_PLAYBOOKS, propertyPlaybookHref, type PropertyPlaybook } from '~/data/property-playbooks';
+
+export function getStaticPaths() {
+  return PROPERTY_PLAYBOOKS.map((playbook) => ({
+    params: { slug: playbook.slug },
+    props: { playbook },
+  }));
+}
+
+interface Props {
+  playbook: PropertyPlaybook;
+}
+
+const { playbook } = Astro.props;
+const canonical = propertyPlaybookHref(playbook);
+---
+
+<BaseLayout
+  title={playbook.title}
+  description={playbook.description}
+  canonical={canonical}
+  keywords={playbook.keywords}
+  ogType="article"
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/property/', label: 'Property' },
+    { href: '/property/playbooks/', label: 'Playbooks' },
+    { href: canonical, label: playbook.h1 },
+  ]} />
+
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Property Playbook</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{playbook.h1}</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">{playbook.description}</p>
+      <p class="mt-3 max-w-3xl rounded-md border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm leading-6 text-cyan-950">
+        <span class="font-semibold">Best for:</span> {playbook.bestFor}
+      </p>
+      {playbook.warning && (
+        <p class="mt-3 max-w-3xl rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-950">
+          {playbook.warning}
+        </p>
+      )}
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="/property/decision-packet/">Build decision packet</a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/start/">Use Start Here</a>
+      </div>
+    </header>
+
+    <section class="mt-8 rounded-lg border border-brand-200 bg-brand-50 p-4">
+      <h2 class="text-lg font-semibold text-slate-950">First move</h2>
+      <p class="mt-2 text-sm leading-6 text-slate-700">{playbook.firstMove}</p>
+    </section>
+
+    <div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div class="space-y-8">
+        <section class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-base font-semibold text-slate-900">Mistake check</h2>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+              {playbook.mistakeChecks.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-base font-semibold text-slate-900">What people forget</h2>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+              {playbook.forgottenItems.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-base font-semibold text-slate-900">What makes it go bad</h2>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+              {playbook.failureModes.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">Step-by-step</h2>
+          <ol class="mt-4 space-y-4">
+            {playbook.steps.map((step, index) => (
+              <li class="rounded-md border border-slate-200 bg-slate-50 p-4">
+                <div class="text-xs font-semibold uppercase tracking-wide text-brand-700">Step {index + 1}</div>
+                <h3 class="mt-1 text-base font-semibold text-slate-900">{step.title}</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-700">{step.body}</p>
+                {step.ask && <p class="mt-2 text-sm font-semibold leading-6 text-slate-900">{step.ask}</p>}
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">Documents to collect</h2>
+          <ul class="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+            {playbook.documents.map((item) => (
+              <li class="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700">{item}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="rounded-lg border border-cyan-200 bg-cyan-50 p-4">
+          <h2 class="text-lg font-semibold text-cyan-950">Packet prompt</h2>
+          <p class="mt-2 text-sm leading-6 text-cyan-950">{playbook.packetPrompt}</p>
+          <a class="mt-3 inline-block text-sm font-semibold text-brand-700 hover:underline" href="/property/decision-packet/">Open the decision packet</a>
+        </section>
+      </div>
+
+      <aside class="h-fit rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Use next</h2>
+        <div class="mt-3 space-y-4">
+          <section>
+            <h3 class="text-sm font-semibold text-slate-900">Calculators</h3>
+            <div class="mt-2 grid gap-2">
+              {playbook.calculators.map((item) => (
+                <a class="rounded-md border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-brand-700 no-underline hover:border-brand-400" href={item.href}>
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </section>
+          <section class="border-t border-slate-200 pt-4">
+            <h3 class="text-sm font-semibold text-slate-900">Guides and tracks</h3>
+            <div class="mt-2 grid gap-2">
+              {playbook.guides.map((item) => (
+                <a class="rounded-md border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-brand-700 no-underline hover:border-brand-400" href={item.href}>
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </section>
+        </div>
+      </aside>
+    </div>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'realtor', href: '/realtor-review/' },
+        { label: 'remodeling contractor', href: '/remodeling-contractor-review/' },
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

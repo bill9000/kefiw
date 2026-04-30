@@ -1,0 +1,52 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { PROPERTY_PLAYBOOKS, propertyPlaybookHref } from '~/data/property-playbooks';
+---
+
+<BaseLayout
+  title="Property Playbooks: Roof, HVAC, Selling, Buying, and Closing Scenarios | Kefiw"
+  description="Scenario playbooks for property decisions: storm roof leaks, dead AC, cheap contractor bids, selling with repairs, concessions, and closing-cash surprises."
+  canonical="/property/playbooks/"
+  keywords={['property playbooks', 'home repair checklist', 'real estate decision checklist', 'contractor quote checklist']}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/property/', label: 'Property' },
+    { href: '/property/playbooks/', label: 'Playbooks' },
+  ]} />
+
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Property Playbooks</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">What should I do this week?</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">
+        Use these playbooks when the real problem is not the number yet. It is the mistake, missing item, paperwork gap, quote pressure, or next call.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="/property/start/">Start here</a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/decision-packet/">Build decision packet</a>
+      </div>
+    </header>
+
+    <section class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {PROPERTY_PLAYBOOKS.map((playbook) => (
+        <a href={propertyPlaybookHref(playbook)} class="block rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm">
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Playbook</p>
+          <h2 class="mt-1 text-lg font-semibold">{playbook.h1}</h2>
+          <p class="mt-2 text-sm leading-6 text-slate-600">{playbook.trigger}</p>
+        </a>
+      ))}
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'realtor', href: '/realtor-review/' },
+        { label: 'remodeling contractor', href: '/remodeling-contractor-review/' },
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

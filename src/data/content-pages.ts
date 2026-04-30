@@ -145,6 +145,30 @@ import { ARTICLES_LOGIC_GUIDES } from './content/articles-logic-guides';
 import { ARTICLES_CLUSTER_OVERVIEW_GUIDES } from './content/articles-cluster-overview-guides';
 import { ARTICLES_PROPERTY_HVAC } from './content/articles-property-hvac';
 import { ARTICLES_PROPERTY_ROOF } from './content/articles-property-roof';
+import { ARTICLES_CARE_GUIDES } from './content/articles-care-guides';
+import { ARTICLES_CARE_GUIDE_ROADMAP } from './content/articles-care-guide-roadmap';
+import { CARE_CORNERSTONE_OVERRIDES } from './content/articles-care-cornerstone-overrides';
+import { CARE_CAREGIVING_DEEP_DIVE_OVERRIDES } from './content/articles-caregiving-deep-dive-overrides';
+import { CARE_MEDICARE_GUIDE_OVERRIDES } from './content/articles-medicare-guide-overrides';
+import {
+  CARE_INSURANCE_PAYMENT_GUIDE_OVERRIDES,
+  CARE_INSURANCE_PAYMENT_NEW_GUIDES,
+} from './content/articles-insurance-payment-guide-overrides';
+import { CARE_WELLBEING_HEALTH_GUIDE_OVERRIDES } from './content/articles-wellbeing-health-guide-overrides';
+import { CARE_CHECKLISTS_SCRIPTS_GUIDE_OVERRIDES } from './content/articles-checklists-scripts-guide-overrides';
+import {
+  CARE_LOCAL_RESOURCES_RIGHTS_GUIDE_OVERRIDES,
+  CARE_LOCAL_RESOURCES_RIGHTS_NEW_GUIDES,
+} from './content/articles-local-resources-rights-guide-overrides';
+import {
+  CARE_SETTING_TRANSITION_GUIDE_OVERRIDES,
+  CARE_SETTING_TRANSITION_NEW_GUIDES,
+} from './content/articles-senior-care-setting-transition-overrides';
+import { CARE_LEGAL_PLANNING_NEW_GUIDES } from './content/articles-legal-planning-guide-overrides';
+import { CARE_DAILY_SAFETY_NEW_GUIDES } from './content/articles-daily-care-safety-guide-overrides';
+import { CARE_WORKSHEETS_TEMPLATES_NEW_GUIDES } from './content/articles-worksheets-templates-guide-overrides';
+import { CARE_TRUST_GOVERNANCE_NEW_GUIDES } from './content/articles-trust-governance-guide-overrides';
+import { CARE_PLAYBOOK_NEW_GUIDES } from './content/articles-care-playbooks';
 
 // Writer-AI V3 enhancement overrides (merged in at export time below).
 import { SCRABBLE_ENHANCEMENTS } from './content/scrabble-enhancements';
@@ -156,6 +180,22 @@ import {
   SCRABBLE_NEW_GUIDES,
   type ArticlePatch,
 } from './content/scrabble-docs-update';
+
+export const CARE_GUIDE_CATEGORIES = new Set([
+  'Senior Care Guides',
+  'Caregiving Guides',
+  'Daily Care & Safety',
+  'Worksheets & Templates',
+  'Trust & Governance',
+  'Care Playbooks',
+  'Medicare Guides',
+  'Insurance & Payment Guides',
+  'Wellbeing Guides',
+  'Checklists & Scripts',
+  'Local Resources & Rights',
+  'Legal & Planning Documents',
+  'Family Decision Support',
+]);
 
 const RAW_CONTENT_PAGES: ContentPageConfig[] = [
   ...CLUSTER_A,
@@ -194,6 +234,16 @@ const RAW_CONTENT_PAGES: ContentPageConfig[] = [
   ...ARTICLES_CLUSTER_OVERVIEW_GUIDES,
   ...ARTICLES_PROPERTY_HVAC,
   ...ARTICLES_PROPERTY_ROOF,
+  ...ARTICLES_CARE_GUIDES,
+  ...ARTICLES_CARE_GUIDE_ROADMAP,
+  ...CARE_INSURANCE_PAYMENT_NEW_GUIDES,
+  ...CARE_LOCAL_RESOURCES_RIGHTS_NEW_GUIDES,
+  ...CARE_SETTING_TRANSITION_NEW_GUIDES,
+  ...CARE_LEGAL_PLANNING_NEW_GUIDES,
+  ...CARE_DAILY_SAFETY_NEW_GUIDES,
+  ...CARE_WORKSHEETS_TEMPLATES_NEW_GUIDES,
+  ...CARE_TRUST_GOVERNANCE_NEW_GUIDES,
+  ...CARE_PLAYBOOK_NEW_GUIDES,
 ];
 
 const ENHANCEMENT_OVERRIDES: Record<string, Partial<ContentPageConfig>> = {
@@ -201,6 +251,14 @@ const ENHANCEMENT_OVERRIDES: Record<string, Partial<ContentPageConfig>> = {
   ...TEXT_CLEANUP_ENHANCEMENTS,
   ...UNSCRAMBLE_ENHANCEMENTS,
   ...WORD_FAMILIES_ENHANCEMENTS,
+  ...CARE_CORNERSTONE_OVERRIDES,
+  ...CARE_CAREGIVING_DEEP_DIVE_OVERRIDES,
+  ...CARE_MEDICARE_GUIDE_OVERRIDES,
+  ...CARE_INSURANCE_PAYMENT_GUIDE_OVERRIDES,
+  ...CARE_WELLBEING_HEALTH_GUIDE_OVERRIDES,
+  ...CARE_CHECKLISTS_SCRIPTS_GUIDE_OVERRIDES,
+  ...CARE_LOCAL_RESOURCES_RIGHTS_GUIDE_OVERRIDES,
+  ...CARE_SETTING_TRANSITION_GUIDE_OVERRIDES,
 };
 
 function withDefaultImageAsset(p: ContentPageConfig): ContentPageConfig {
@@ -502,6 +560,7 @@ export function contentHref(c: ContentPageConfig): string {
     case 'word-tools':
       return `/word-tools/${c.slug}/`;
     case 'guides':
+      if (CARE_GUIDE_CATEGORIES.has(c.guideCategory ?? '')) return `/care/guides/${c.slug}/`;
       return `/guides/${c.slug}/`;
     case 'calculators':
       return `/calculators/${c.slug}/`;

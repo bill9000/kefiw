@@ -1,82 +1,117 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
+import CareCategoryCard from '~/components/CareCategoryCard.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
-import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
+import { CARE_CATEGORIES, CARE_CATEGORIES_BY_SLUG, careCategoryHref } from '~/data/care-categories';
 
-const seniorCarePages = VERTICAL_CALCULATORS_BY_AREA.care.filter((page) => page.group === 'Senior Care');
-const caregivingPages = VERTICAL_CALCULATORS_BY_AREA.care.filter((page) => page.group === 'Caregiving');
-const medicarePages = VERTICAL_CALCULATORS_BY_AREA.care.filter((page) => page.group === 'Medicare');
+const lab = CARE_CATEGORIES_BY_SLUG.lab;
+const seniorCare = CARE_CATEGORIES_BY_SLUG['senior-care'];
+const caregiving = CARE_CATEGORIES_BY_SLUG.caregiving;
+const medicare = CARE_CATEGORIES_BY_SLUG.medicare;
+const insurance = CARE_CATEGORIES_BY_SLUG.insurance;
+const wellbeing = CARE_CATEGORIES_BY_SLUG.wellbeing;
 ---
 
 <BaseLayout
-  title="Care Lab — Senior Care, Caregiving, Medicare, and Insurance Calculators | Kefiw"
-  description="Care planning calculators for senior care costs, assisted living, memory care, home care, caregiving hours, Medicare costs, and insurance planning."
+  title="Care Hub: Senior Care, Medicare, Insurance, and Family Care Planning | Kefiw"
+  description="Estimate senior care costs, caregiving workload, Medicare expenses, insurance costs, and family care needs with Kefiw tools and guides."
   canonical="/care/"
-  keywords={['care calculators', 'senior care cost calculator', 'assisted living cost calculator', 'caregiver hours calculator', 'medicare cost calculator']}
+  keywords={['care hub', 'care calculators', 'senior care cost calculator', 'caregiver hours calculator', 'medicare cost calculator', 'family care planning']}
 >
   <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/care/', label: 'Care' }]} />
   <article class="container-wide py-6">
-    <header class="mb-8 max-w-3xl">
-      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Care Lab</p>
-      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Care</h1>
-      <p class="mt-3 text-slate-700">
-        Care-cost planning is different from generic health content. The focus here is family budgeting, care workload,
-        Medicare and insurance costs, and safety-aware planning language approved by registered nurse review.
+    <header class="mb-8 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Care Hub</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Care planning, made clearer.</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">
+        Estimate family care costs, understand caregiving workload, compare Medicare and insurance factors, and build a plan your family can actually use.
+      </p>
+      <p class="mt-3 max-w-3xl text-slate-600">
+        For families planning senior care, managing caregiving responsibilities, or preparing for Medicare and insurance decisions.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="/care/start/">
+          Start here
+        </a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/family-care-plan-summary/">
+          Build family summary
+        </a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/senior-care/">
+          Estimate care costs
+        </a>
+      </div>
+      <p class="mt-4 max-w-3xl rounded-md border border-cyan-200 bg-cyan-50 px-3 py-2 text-sm leading-6 text-cyan-950">
+        Kefiw tools are designed to help you organize decisions, estimate costs, and prepare better questions for professionals. They do not replace medical, legal, financial, benefits, or insurance advice.
       </p>
     </header>
 
-    <div class="grid gap-4 md:grid-cols-2">
-      <section id="senior-care" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Senior Care</h2>
-        <p class="mt-1 text-sm text-slate-600">Senior care cost, assisted living, nursing home, memory care, and home care calculators.</p>
-        <ul class="mt-3 space-y-1 text-sm">
-          {seniorCarePages.map((page) => (
-            <li><a class="text-brand-700 hover:underline" href={verticalCalculatorHref(page)}>{page.h1}</a></li>
-          ))}
-        </ul>
+    <section class="mb-10 grid gap-4 md:grid-cols-3">
+      <a class="rounded-lg border border-brand-200 bg-brand-50 p-4 text-slate-900 no-underline hover:border-brand-400" href="/care/start/">
+        <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Guided intake</p>
+        <h2 class="mt-1 text-lg font-semibold">Not sure where to start?</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">Answer six questions and get a recommended calculator, worksheet, playbook, and care track.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/care/family-care-plan-summary/">
+        <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Family output</p>
+        <h2 class="mt-1 text-lg font-semibold">Family Care Plan Summary</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">Create a printable/shareable summary for siblings, providers, tours, attorneys, or advisors.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/care/playbooks/">
+        <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Care Playbooks</p>
+        <h2 class="mt-1 text-lg font-semibold">What should we do this week?</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">Use scenario playbooks for falls, discharge, cost, dementia, facilities, burnout, Medicare, and insurance claims.</p>
+      </a>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-semibold text-slate-900">Choose the care decision</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {CARE_CATEGORIES.map((category) => <CareCategoryCard card={{ title: category.label, href: careCategoryHref(category.slug), text: category.description, eyebrow: category.slug === 'lab' ? 'Start' : 'Care' }} />)}
+      </div>
+    </section>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <section class="border-t border-slate-200 pt-6">
+        <h2 class="text-xl font-semibold text-slate-900">Know what care may cost before the decision becomes urgent.</h2>
+        <p class="mt-2 leading-7 text-slate-700">
+          Senior care costs can vary by location, care setting, care needs, and family support. Kefiw calculators estimate monthly and annual costs for assisted living, nursing home care, memory care, home care, and mixed care plans.
+        </p>
+        <a class="mt-3 inline-block text-sm font-semibold text-brand-700 hover:underline" href={careCategoryHref(seniorCare.slug)}>Explore senior care calculators</a>
       </section>
 
-      <section id="caregiving" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Caregiving</h2>
-        <p class="mt-1 text-sm text-slate-600">Caregiver hours, family care budget, respite care cost, and care-needs checklists.</p>
-        <ul class="mt-3 space-y-1 text-sm">
-          {caregivingPages.map((page) => (
-            <li><a class="text-brand-700 hover:underline" href={verticalCalculatorHref(page)}>{page.h1}</a></li>
-          ))}
-        </ul>
+      <section class="border-t border-slate-200 pt-6">
+        <h2 class="text-xl font-semibold text-slate-900">Caregiving is more than a budget line.</h2>
+        <p class="mt-2 leading-7 text-slate-700">
+          Track the hours, responsibilities, unpaid labor, and family coordination behind care. Caregiving tools help estimate workload, divide responsibilities, and create a more realistic family care plan.
+        </p>
+        <a class="mt-3 inline-block text-sm font-semibold text-brand-700 hover:underline" href={careCategoryHref(caregiving.slug)}>Calculate caregiver hours</a>
       </section>
 
-      <section id="medicare" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Medicare</h2>
-        <p class="mt-1 text-sm text-slate-600">Medicare cost, IRMAA, Part B premiums, and Part D estimates.</p>
-        <ul class="mt-3 space-y-1 text-sm">
-          {medicarePages.map((page) => (
-            <li><a class="text-brand-700 hover:underline" href={verticalCalculatorHref(page)}>{page.h1}</a></li>
-          ))}
-        </ul>
+      <section class="border-t border-slate-200 pt-6">
+        <h2 class="text-xl font-semibold text-slate-900">Separate what may be covered from what families may need to pay.</h2>
+        <p class="mt-2 leading-7 text-slate-700">
+          Medicare, health insurance, long-term care insurance, HSAs, and FSAs can all affect the cost of care. Kefiw helps families estimate premiums, out-of-pocket exposure, and planning gaps before enrolling, switching, or paying out of pocket.
+        </p>
+        <div class="mt-3 flex flex-wrap gap-3 text-sm font-semibold">
+          <a class="text-brand-700 hover:underline" href={careCategoryHref(medicare.slug)}>Explore Medicare tools</a>
+          <a class="text-brand-700 hover:underline" href={careCategoryHref(insurance.slug)}>Explore insurance tools</a>
+        </div>
       </section>
 
-      <section id="insurance" class="rounded-lg border border-slate-200 bg-white p-4">
-        <h2 class="text-lg font-semibold text-slate-900">Insurance</h2>
-        <p class="mt-1 text-sm text-slate-600">HSA/FSA, health insurance cost, and long-term care insurance calculators.</p>
+      <section class="border-t border-slate-200 pt-6">
+        <h2 class="text-xl font-semibold text-slate-900">Care plans should include the caregiver.</h2>
+        <p class="mt-2 leading-7 text-slate-700">
+          Stress, sleep disruption, and decision fatigue are common when families manage care. Wellbeing tools help caregivers reset, check in, and build healthier routines alongside practical planning.
+        </p>
+        <a class="mt-3 inline-block text-sm font-semibold text-brand-700 hover:underline" href={careCategoryHref(wellbeing.slug)}>Try a wellbeing check-in</a>
       </section>
     </div>
 
-    <section class="mt-8 rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-sm text-cyan-950">
-      <h2 class="text-base font-semibold">Existing health tools</h2>
-      <p class="mt-1">
-        Deterministic health tools remain in the <a href="/health/" class="font-semibold underline">Health suite</a>.
-        Care will lead with planning, costs, and family decisions rather than generic symptom or diagnosis pages.
-      </p>
-    </section>
-
-    <section class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-      <h2 class="text-base font-semibold">Caregiver cost and immigration boundary</h2>
-      <p class="mt-1">
-        The new care tools include household caregiver payroll, cost-reduction planning, and foreign-caregiver compliance prompts.
-        They intentionally point users to official sources and professional review for immigration, wage, tax, and benefits decisions.
-      </p>
+    <section class="mt-10 rounded-lg border border-slate-200 bg-white p-4">
+      <h2 class="text-lg font-semibold text-slate-900">Care Lab</h2>
+      <p class="mt-1 max-w-3xl text-sm leading-6 text-slate-600">{lab.intro}</p>
+      <a class="mt-3 inline-block text-sm font-semibold text-brand-700 hover:underline" href={careCategoryHref(lab.slug)}>Open Care Lab</a>
     </section>
 
     <ReviewMethodologyFooter

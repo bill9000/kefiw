@@ -1,0 +1,145 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { TRACKS, trackHref, type Track } from '~/data/tracks';
+
+const businessTracks = TRACKS.filter((track) => track.category === 'business');
+const bySlug = (slug: string): Track | undefined => businessTracks.find((track) => track.slug === slug);
+const featuredSlugs = ['start-freelancing', 'price-my-work', 'hire-my-first-employee', 'plan-my-tax-reserve', 'clean-up-software-spend', 'stress-test-revenue'];
+const advancedSlugs = ['decide-if-s-corp-is-worth-it', 'fix-busy-but-broke-business', 'launch-subscription-or-retainer', 'prepare-for-price-increase'];
+const featuredTracks = featuredSlugs.map(bySlug).filter((track): track is Track => Boolean(track));
+const advancedTracks = advancedSlugs.map(bySlug).filter((track): track is Track => Boolean(track));
+const momentCards = [
+  { label: 'I am starting freelancing.', href: trackHref('start-freelancing') },
+  { label: 'I need to price my work.', href: trackHref('price-my-work') },
+  { label: 'I am thinking about hiring.', href: trackHref('hire-my-first-employee') },
+  { label: 'I need to plan taxes.', href: trackHref('plan-my-tax-reserve') },
+  { label: 'I am considering S-corp.', href: trackHref('decide-if-s-corp-is-worth-it') },
+  { label: 'I need to clean up software spend.', href: trackHref('clean-up-software-spend') },
+  { label: 'I need to stress-test revenue.', href: trackHref('stress-test-revenue') },
+  { label: 'I am busy but not profitable.', href: trackHref('fix-busy-but-broke-business') },
+  { label: 'I want to launch a retainer or subscription.', href: trackHref('launch-subscription-or-retainer') },
+  { label: 'I need to raise prices.', href: trackHref('prepare-for-price-increase') },
+];
+
+function bestFor(track: Track): string {
+  return track.whoThisIsFor?.[0] ?? track.description;
+}
+
+function trackCalculations(track: Track): string[] {
+  return track.trackScore?.summaryOutputs.slice(0, 6) ?? track.finalPlan.checklist.slice(0, 6);
+}
+---
+
+<BaseLayout
+  title="Business Tracks: Run the Numbers in the Right Order | Kefiw"
+  description="Guided business decision paths for freelancing, pricing, hiring, tax planning, revenue, S-corp decisions, and software spend."
+  canonical="/business/tracks/"
+  keywords={['business tracks', 'freelance readiness score', 'hiring readiness calculator', 'software spend health score', 'revenue fragility score']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/tracks/', label: 'Business Tracks' }]} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business Tracks</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Business Tracks: Run the Numbers in the Right Order</h1>
+      <p class="mt-3 text-xl font-semibold text-brand-800">A calculator is useful. A sequence is better.</p>
+      <p class="mt-3 text-lg text-slate-700">
+        Follow guided paths for freelancing, pricing, hiring, tax planning, revenue, and software spend with calculators,
+        checkpoints, templates, and plain-English verdicts.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <a class="btn-primary no-underline" href="#featured-tracks">Choose a track</a>
+        <a class="btn-ghost no-underline" href="/business/tracks/how-kefiw-business-tracks-work/">How tracks work</a>
+      </div>
+    </header>
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-slate-50 p-4">
+      <h2 class="text-xl font-semibold text-slate-900">Choose your business moment</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+        {momentCards.map((card) => (
+          <a class="rounded-lg border border-slate-200 bg-white p-4 text-sm font-semibold text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm" href={card.href}>
+            {card.label}
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="featured-tracks" class="scroll-mt-36">
+      <div class="mb-4 max-w-3xl">
+        <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Featured tracks</p>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-950">Start with the decision in front of you</h2>
+        <p class="mt-2 text-sm text-slate-600">
+          These paths combine calculators, checkpoints, scorecards, templates, and next actions. The point is not one number. The point is knowing what to calculate first.
+        </p>
+      </div>
+      <div class="grid gap-4 lg:grid-cols-2">
+        {featuredTracks.map((track) => (
+          <a href={trackHref(track)} class="block rounded-lg border border-slate-200 bg-white p-5 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm">
+            <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-700">Guided journey</div>
+            <h3 class="mt-2 text-xl font-semibold">{track.title}</h3>
+            {track.tagline && <p class="mt-1 text-base font-semibold text-brand-800">{track.tagline}</p>}
+            <p class="mt-2 text-sm text-slate-700"><span class="font-semibold">Best for:</span> {bestFor(track)}</p>
+            <div class="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">You will calculate</div>
+              <ul class="mt-2 grid gap-1 text-sm text-slate-700 sm:grid-cols-2">
+                {trackCalculations(track).map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+            {track.trackScore && <p class="mt-3 text-sm font-semibold text-slate-800">Score: {track.trackScore.title}</p>}
+            <p class="mt-4 text-sm font-semibold text-brand-700">Start the track</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <div class="mb-4 max-w-3xl">
+        <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Advanced operator tracks</p>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-950">Use these when the decision has more moving parts</h2>
+      </div>
+      <div class="grid gap-4 lg:grid-cols-2">
+        {advancedTracks.map((track) => (
+          <a href={trackHref(track)} class="block rounded-lg border border-slate-200 bg-white p-5 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-xl font-semibold">{track.title}</h3>
+            {track.tagline && <p class="mt-1 text-base font-semibold text-brand-800">{track.tagline}</p>}
+            <p class="mt-2 text-sm text-slate-700">{track.promise ?? track.description}</p>
+            {track.trackScore && <p class="mt-3 text-sm font-semibold text-slate-800">Main score: {track.trackScore.title}</p>}
+            <p class="mt-4 text-sm font-semibold text-brand-700">Open track</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-white p-5">
+      <h2 class="text-xl font-semibold text-slate-900">What makes a track different?</h2>
+      <p class="mt-2 text-sm text-slate-700">
+        Business decisions usually fail because the numbers are run in the wrong order. People price before calculating expenses,
+        hire before checking revenue stability, choose S-corp before modeling salary and admin, buy software before assigning
+        ownership, and forecast revenue before checking payment timing.
+      </p>
+      <p class="mt-3 text-sm text-slate-700">
+        Kefiw tracks put the calculators in sequence so the decision gets clearer step by step.
+      </p>
+    </section>
+
+    <section class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-semibold text-slate-900">Track methodology</h2>
+      <p class="mt-2 text-sm text-slate-700">
+        Each track uses calculators, scenario presets, decision checkpoints, result states, scorecards, templates, and
+        "what most advice leaves out" sections. The goal is not fake certainty. The goal is to show which assumptions are
+        strong enough to act on and which ones need more work.
+      </p>
+      <a class="mt-4 inline-flex rounded-md border border-brand-200 bg-white px-3 py-2 text-sm font-semibold text-brand-800 no-underline hover:border-brand-400" href="/business/tracks/how-kefiw-business-tracks-work/">
+        Read the methodology
+      </a>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

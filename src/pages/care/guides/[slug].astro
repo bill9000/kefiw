@@ -1,0 +1,77 @@
+---
+import GuideLayout from '~/layouts/GuideLayout.astro';
+import {
+  CARE_GUIDE_CATEGORIES,
+  contentPagesBySection,
+  type ContentPageConfig,
+} from '~/data/content-pages';
+
+export async function getStaticPaths() {
+  const guides = contentPagesBySection('guides')
+    .filter((c) => c.kind === 'guide')
+    .filter((c) => CARE_GUIDE_CATEGORIES.has(c.guideCategory ?? ''));
+  const paths = guides.map((config) => ({
+    params: { slug: config.slug },
+    props: { config },
+  }));
+  const byId = new Map(guides.map((config) => [config.id, config]));
+  const aliases: Array<{ slug: string; id: string }> = [
+    { slug: 'what-medicare-covers-for-senior-care', id: 'art-care-medicare-coverage' },
+    { slug: 'how-to-choose-assisted-living-community', id: 'art-assisted-living-choice' },
+    { slug: 'medicare-costs-guide', id: 'art-medicare-costs-2026' },
+    { slug: 'caregiver-hours-what-counts-as-caregiving', id: 'art-care-what-counts-caregiving' },
+    { slug: 'how-to-divide-caregiving-responsibilities-across-a-family', id: 'art-care-divide-responsibilities' },
+    { slug: 'long-distance-caregiving-guide', id: 'art-care-long-distance-caregiving' },
+    { slug: 'caregiving-for-a-parent-who-refuses-help', id: 'art-care-parent-refuses-help' },
+    { slug: 'medication-management-for-family-caregivers', id: 'art-care-medication-management-caregivers' },
+    { slug: 'transportation-and-appointment-planning-for-caregivers', id: 'art-care-transportation-appointments' },
+    { slug: 'caregiver-emergency-binder-guide', id: 'art-care-emergency-binder' },
+    { slug: 'how-to-ask-for-help-without-starting-a-family-fight', id: 'art-care-ask-help-family-fight' },
+    { slug: 'medicare-basics-parts-a-b-c-d-medigap', id: 'art-care-medicare-basics' },
+    { slug: 'medicare-part-b-premiums-guide', id: 'art-care-part-b-premiums-guide' },
+    { slug: 'how-to-compare-medicare-plans-without-getting-overwhelmed', id: 'art-care-compare-medicare-plans' },
+    { slug: 'medicare-and-long-term-care-guide', id: 'art-care-medicare-long-term-care' },
+    { slug: 'medicare-mistakes-families-make-when-planning-senior-care', id: 'art-care-medicare-mistakes' },
+    { slug: 'hsa-guide-for-care-expenses', id: 'art-care-hsa-guide' },
+    { slug: 'fsa-guide-for-predictable-medical-expenses', id: 'art-care-fsa-guide' },
+    { slug: 'can-i-use-hsa-or-fsa-money-for-caregiving-expenses', id: 'art-care-hsa-fsa-caregiving-expenses' },
+    { slug: 'medicaid-and-long-term-care-basics', id: 'art-care-medicaid-ltss-basics' },
+    { slug: 'medicaid-home-and-community-based-services-guide', id: 'art-care-medicaid-hcbs' },
+    { slug: 'medicaid-look-back-period-guide', id: 'art-care-medicaid-look-back' },
+    { slug: 'care-facility-contract-checklist', id: 'art-care-facility-contract-checklist' },
+    { slug: 'mind-reset-guide-for-caregivers', id: 'art-care-mind-reset-caregivers' },
+    { slug: 'how-to-sleep-when-you-are-worried-about-a-parent', id: 'art-care-sleep-worried-parent' },
+    { slug: 'decision-fatigue-in-caregiving', id: 'art-care-decision-fatigue' },
+    { slug: 'how-to-set-boundaries-as-a-family-caregiver', id: 'art-care-set-boundaries' },
+    { slug: 'when-to-seek-urgent-medical-help-for-a-loved-one', id: 'art-care-urgent-medical-help' },
+    { slug: 'home-safety-checklist-for-older-adults', id: 'art-care-home-safety-checklist' },
+    { slug: 'dementia-wandering-and-safety-guide', id: 'art-care-dementia-wandering' },
+    { slug: 'questions-to-ask-a-home-care-agency', id: 'art-care-questions-home-care-agency' },
+    { slug: 'questions-to-ask-before-hiring-a-private-caregiver', id: 'art-care-questions-private-caregiver' },
+    { slug: 'questions-to-ask-medicare-broker-or-agent', id: 'art-care-questions-medicare-agent' },
+    { slug: 'questions-to-ask-about-long-term-care-insurance', id: 'art-care-questions-ltc-insurance' },
+    { slug: 'how-to-talk-to-a-parent-about-needing-more-help', id: 'art-care-talk-parent-help' },
+    { slug: 'how-to-talk-to-siblings-about-sharing-care-costs', id: 'art-care-talk-siblings-costs' },
+    { slug: 'how-to-tell-a-parent-assisted-living-may-be-needed', id: 'art-care-tell-parent-assisted-living' },
+    { slug: 'how-to-discuss-memory-changes-with-a-loved-one', id: 'art-care-discuss-memory-changes' },
+    { slug: 'how-to-find-local-senior-care-resources', id: 'art-care-find-local-resources' },
+    { slug: 'what-is-a-long-term-care-ombudsman', id: 'art-care-ltc-ombudsman' },
+    { slug: 'resident-rights-assisted-living-and-nursing-homes', id: 'art-care-resident-rights' },
+    { slug: 'how-to-report-concerns-about-a-care-facility', id: 'art-care-report-facility-concerns' },
+    { slug: 'emergency-contacts-and-documents-checklist', id: 'art-care-emergency-contacts-documents' },
+    { slug: 'senior-care-transition-hospital-to-home-rehab-or-facility', id: 'art-care-hospital-transition-guide' },
+  ];
+  return [
+    ...paths,
+    ...aliases.flatMap((alias) => {
+      const config = byId.get(alias.id);
+      return config ? [{ params: { slug: alias.slug }, props: { config } }] : [];
+    }),
+  ];
+}
+
+interface Props { config: ContentPageConfig; }
+const { config } = Astro.props;
+---
+
+<GuideLayout config={config} />

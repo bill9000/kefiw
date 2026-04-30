@@ -1,0 +1,112 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { monetizationBySection, sourceReferences } from '~/data/business-seo-moat';
+
+const sourceLinks = sourceReferences.filter((source) => source.label.includes('FTC'));
+---
+
+<BaseLayout
+  title="How Kefiw Makes Money | Kefiw"
+  description="How Kefiw handles affiliate links, sponsored placements, recommendations, calculator neutrality, and disclosure."
+  canonical="/business/how-kefiw-makes-money/"
+  keywords={['how Kefiw makes money', 'Kefiw affiliate disclosure', 'business calculator monetization policy', 'Kefiw sponsored disclosure']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/how-kefiw-makes-money/', label: 'How Kefiw Makes Money' }]} />
+  <article class="container-narrow py-6">
+    <header class="mb-8">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Monetization policy</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">How Kefiw Makes Money</h1>
+      <p class="mt-3 text-xl font-semibold text-brand-800">Useful first. Monetized second.</p>
+      <p class="mt-3 text-lg text-slate-700">
+        Kefiw may earn money from affiliate links, partnerships, ads, sponsored placements, or software referrals. Calculator results are not changed based on affiliate relationships.
+      </p>
+    </header>
+
+    <section class="rounded-lg border border-brand-200 bg-brand-50 p-5">
+      <h2 class="text-xl font-semibold text-slate-950">The rule</h2>
+      <p class="mt-2 text-sm text-slate-700">Help first. Recommend second. Disclose always.</p>
+      <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+        <li>Sponsored or affiliate recommendations should be disclosed near the recommendation, not hidden in a footer.</li>
+        <li>Kefiw does not publish fake reviews, fake ratings, or invented testimonials.</li>
+        <li>Kefiw may recommend categories of tools before recommending specific products.</li>
+        <li>High-risk tax, payroll, worker-classification, cloud, SaaS, and AI pricing pages use source verification and visible assumptions.</li>
+      </ul>
+    </section>
+
+    <section class="mt-8 rounded-lg border border-slate-200 bg-white p-5">
+      <h2 class="text-xl font-semibold text-slate-900">Where monetization belongs</h2>
+      <ol class="mt-3 list-decimal space-y-1 pl-5 text-sm text-slate-700">
+        <li>Calculator</li>
+        <li>Result</li>
+        <li>Interpretation</li>
+        <li>Assumptions</li>
+        <li>Related guides and templates</li>
+        <li>Monetization block</li>
+      </ol>
+    </section>
+
+    <section class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-semibold text-slate-900">Disclosure examples</h2>
+      <div class="mt-4 grid gap-4">
+        <div class="rounded-md border border-slate-200 bg-white p-4">
+          <h3 class="text-base font-semibold text-slate-950">Affiliate disclosure</h3>
+          <p class="mt-2 text-sm text-slate-700">
+            Disclosure: Kefiw may earn a commission if you buy through some links. The calculator result is not affected by affiliate relationships.
+          </p>
+        </div>
+        <div class="rounded-md border border-slate-200 bg-white p-4">
+          <h3 class="text-base font-semibold text-slate-950">Sponsored disclosure</h3>
+          <p class="mt-2 text-sm text-slate-700">
+            Sponsored: This placement is paid. Paid placements do not change calculator results or source-check requirements.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-8">
+      <h2 class="text-xl font-semibold text-slate-900">Monetization by section</h2>
+      <div class="mt-4 space-y-4">
+        {monetizationBySection.map((section) => (
+          <div class="rounded-lg border border-slate-200 bg-white p-5">
+            <h3 class="text-lg font-semibold text-slate-950">{section.section}</h3>
+            <div class="mt-3 grid gap-4 md:grid-cols-2">
+              <div>
+                <h4 class="text-sm font-semibold text-slate-900">User problems</h4>
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+                  {section.problems.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-slate-900">Useful recommendation categories</h4>
+                <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+                  {section.recommendations.map((item) => <li>{item}</li>)}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-8 rounded-lg border border-slate-200 bg-white p-5">
+      <h2 class="text-xl font-semibold text-slate-900">Source discipline</h2>
+      <p class="mt-2 text-sm text-slate-700">
+        This policy is aligned with FTC guidance that material connections should be clearly and conspicuously disclosed, and with the FTC consumer review rule focus on fake or misleading reviews and testimonials.
+      </p>
+      <ul class="mt-3 space-y-2 text-sm">
+        {sourceLinks.map((source) => (
+          <li><a class="text-brand-700 hover:underline" href={source.href}>{source.label}</a></li>
+        ))}
+      </ul>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

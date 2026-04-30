@@ -1,0 +1,74 @@
+---
+interface Props {
+  sectionLabel: string;
+  calculatorHref?: string;
+}
+
+const { sectionLabel, calculatorHref } = Astro.props;
+---
+
+<section class="mt-8 grid gap-4 lg:grid-cols-2">
+  <div class="rounded-lg border border-slate-200 bg-white p-5">
+    <h2 class="text-xl font-bold text-slate-950">When to use this</h2>
+    <p class="mt-2 text-sm leading-6 text-slate-700">
+      Use this template after you have run the related calculator or named the business assumption you need to act on.
+      The template is meant to turn the result into a next step, not replace the math.
+    </p>
+  </div>
+  <div class="rounded-lg border border-amber-200 bg-amber-50 p-5">
+    <h2 class="text-xl font-bold text-amber-950">When not to use this</h2>
+    <p class="mt-2 text-sm leading-6 text-amber-950">
+      Do not use this as a legal, tax, payroll, accounting, contract, or compliance conclusion. If the result affects
+      filing, worker classification, contracts, payroll, tax elections, or provider terms, use the template to prepare
+      better questions for the right professional.
+    </p>
+  </div>
+</section>
+
+<section class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 class="text-xl font-bold text-slate-950">Download / copy</h2>
+      <p class="mt-1 text-sm text-slate-700">
+        Print or save this page after you adapt the template to the result you calculated.
+      </p>
+    </div>
+    <button type="button" class="btn-ghost text-sm" onclick="window.print()">Print / save page</button>
+  </div>
+  <div class="mt-4 flex flex-wrap gap-2">
+    {calculatorHref && (
+      <a class="rounded-md bg-brand-700 px-3 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href={calculatorHref}>
+        Run related calculator
+      </a>
+    )}
+    <a class="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 no-underline hover:border-brand-400" href="/business/templates/">
+      Template hub
+    </a>
+    <a class="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 no-underline hover:border-brand-400" href="/business/tracks/">
+      Business Tracks
+    </a>
+  </div>
+</section>
+
+<section class="mt-8 rounded-lg border border-slate-200 bg-white p-5">
+  <h2 class="text-xl font-bold text-slate-950">Tools that may help after this template</h2>
+  <p class="mt-2 text-sm leading-6 text-slate-700">
+    If this {sectionLabel} workflow repeats, software may help track inputs, owners, reminders, approvals, or records.
+    Kefiw may earn a commission from some links, but recommendations should be based on the decision you are trying to make,
+    not commission size.
+  </p>
+</section>
+
+<section class="mt-8 rounded-lg border border-slate-200 bg-white p-5">
+  <h2 class="text-xl font-bold text-slate-950">FAQ</h2>
+  <div class="mt-4 space-y-4">
+    <div>
+      <h3 class="text-base font-semibold text-slate-900">Should I run the calculator before using the template?</h3>
+      <p class="mt-1 text-sm leading-6 text-slate-700">Yes when the template depends on a number, score, threshold, or result state. The template is strongest when it acts on a specific result.</p>
+    </div>
+    <div>
+      <h3 class="text-base font-semibold text-slate-900">Can I use this as-is?</h3>
+      <p class="mt-1 text-sm leading-6 text-slate-700">Use it as a starting point. Adjust the wording, numbers, timing, scope, and assumptions to match your business situation.</p>
+    </div>
+  </div>
+</section>

@@ -5,6 +5,19 @@ export interface TrackProgressStep {
   type: string;
   href?: string;
   description: string;
+  whyNow?: string;
+  resultToWatch?: string[];
+  ifResultLooksBad?: string;
+  checkpoint?: string;
+  relatedGuide?: {
+    title: string;
+    href: string;
+  };
+  relatedTemplate?: {
+    title: string;
+    href: string;
+  };
+  carryForward?: string;
 }
 
 interface Props {
@@ -161,6 +174,52 @@ export default function TrackProgress({ trackSlug, steps }: Props): JSX.Element 
                   </div>
                 </div>
               </div>
+
+              {(step.whyNow || step.resultToWatch?.length || step.checkpoint || step.ifResultLooksBad || step.carryForward) && (
+                <div className="mt-4 grid gap-3 lg:grid-cols-3">
+                  {step.whyNow && (
+                    <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                      <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Why this comes now</h4>
+                      <p className="mt-1 text-sm text-slate-700">{step.whyNow}</p>
+                    </div>
+                  )}
+                  {step.resultToWatch && step.resultToWatch.length > 0 && (
+                    <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+                      <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Result to watch</h4>
+                      <ul className="mt-1 list-disc pl-4 text-sm text-slate-700">
+                        {step.resultToWatch.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                  {(step.checkpoint || step.ifResultLooksBad) && (
+                    <div className="rounded-md border border-amber-200 bg-amber-50 p-3">
+                      <h4 className="text-xs font-semibold uppercase tracking-wide text-amber-800">Decision checkpoint</h4>
+                      {step.checkpoint && <p className="mt-1 text-sm text-amber-950">{step.checkpoint}</p>}
+                      {step.ifResultLooksBad && <p className="mt-2 text-sm text-amber-950"><strong>If the result looks bad:</strong> {step.ifResultLooksBad}</p>}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {(step.carryForward || step.relatedGuide || step.relatedTemplate) && (
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+                  {step.carryForward && (
+                    <span className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-1.5 font-semibold text-emerald-900">
+                      Carry forward: {step.carryForward}
+                    </span>
+                  )}
+                  {step.relatedGuide && (
+                    <a className="rounded-md bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 no-underline hover:bg-slate-200" href={step.relatedGuide.href}>
+                      Guide: {step.relatedGuide.title}
+                    </a>
+                  )}
+                  {step.relatedTemplate && (
+                    <a className="rounded-md bg-slate-100 px-3 py-1.5 font-semibold text-slate-700 no-underline hover:bg-slate-200" href={step.relatedTemplate.href}>
+                      Template: {step.relatedTemplate.title}
+                    </a>
+                  )}
+                </div>
+              )}
 
               <div className="mt-4 grid gap-2 sm:grid-cols-4">
                 <a

@@ -9,7 +9,7 @@ export const ARTICLES_HEALTH_CLUSTER_GUIDES: ContentPageConfig[] = [
     section: 'guides',
     slug: 'biological-maintenance-guide',
     guideCategory: 'Health',
-    title: 'Biological Maintenance Guide: Calories, Sleep, Stimulants, and Triage | Kefiw',
+    title: 'Biological Maintenance Guide: Calories, Sleep, Stimulants, and Care Urgency | Kefiw',
     h1: 'Biological Maintenance Guide',
     subhead: 'Use baseline calculators for everyday planning without turning them into diagnosis or medical advice.',
     discoverHeadline: 'The daily body-maintenance numbers worth checking before guessing',
@@ -28,7 +28,7 @@ export const ARTICLES_HEALTH_CLUSTER_GUIDES: ContentPageConfig[] = [
       'Metabolic Floor estimates BMR and TDEE as a starting range, not a prescription.',
       'Substance Decay helps visualize caffeine and alcohol timing, but individual clearance varies.',
       'REM-Sync is a bedtime planning aid and cannot diagnose sleep disorders.',
-      'Medical Triage is a red-flag routing helper, not a nurse, clinician, or emergency service.',
+      'Care Urgency Check is a red-flag routing helper, not a nurse, clinician, or emergency service.',
       'Use conservative interpretation when the cost of being wrong is high.',
     ],
     examples: [
@@ -64,7 +64,7 @@ export const ARTICLES_HEALTH_CLUSTER_GUIDES: ContentPageConfig[] = [
 
 Users do not open maintenance calculators because they want trivia. They want a practical answer for today: "How many calories is a reasonable starting estimate?" "Is this coffee too late?" "What bedtime gives me a cleaner wake-up?" "Is this symptom pattern something I should escalate?"
 
-Those are different tasks, but they share one principle: the tool can structure the decision, not replace judgment. The [Metabolic Floor](/health/metabolic-floor/) tool estimates BMR and TDEE. The [Substance Decay](/health/substance-decay/) tool visualizes timing. [REM-Sync](/health/rem-sync/) helps plan sleep windows. [Medical Triage](/health/medical-triage/) is a conservative red-flag router.
+Those are different tasks, but they share one principle: the tool can structure the decision, not replace judgment. The [Metabolic Floor](/health/metabolic-floor/) tool estimates BMR and TDEE. The [Substance Decay](/health/substance-decay/) tool visualizes timing. [REM-Sync](/health/rem-sync/) helps plan sleep windows. [Care Urgency Check](/health/medical-triage/) is a conservative red-flag router.
 
 The right tone is modest. A calculator can help a user avoid random guessing, but it should never imply diagnosis, treatment, or individualized medical advice. CDC sleep guidance, for example, emphasizes habits such as avoiding caffeine in the afternoon or evening, but exact sensitivity still varies by person. NIDDK's Body Weight Planner is a good reminder that energy models are estimates and can be wrong for individual metabolism or activity.
 
@@ -78,7 +78,7 @@ Substance Decay uses timing models. Caffeine is commonly modeled with half-life 
 
 REM-Sync uses the common 90-minute sleep-cycle planning heuristic. The input is target wake time or bedtime. The limitation is that real sleep cycles vary, sleep latency varies, and sleep quality depends on more than cycle math.
 
-Medical Triage uses red-flag routing. The most important assumption is conservative safety: when uncertainty is high and the potential downside is severe, escalate.
+Care Urgency Check uses red-flag routing. The most important assumption is conservative safety: when uncertainty is high and the potential downside is severe, escalate.
 
 ## Worked example
 
@@ -87,7 +87,7 @@ A user wants to wake at 6:30am, had a 200 mg coffee at 2:30pm, and is estimating
 1. Use Metabolic Floor to estimate a starting TDEE.
 2. Use Substance Decay to see whether meaningful caffeine may remain near bedtime.
 3. Use REM-Sync to pick a target bedtime window.
-4. If symptoms are involved, use Medical Triage only as a conservative pointer, not as permission to ignore red flags.
+4. If symptoms are involved, use Care Urgency Check only as a conservative pointer, not as permission to ignore red flags.
 
 If the caffeine curve suggests a high residual at 10:30pm, the user can move caffeine earlier tomorrow. If the TDEE estimate misses real weight trends after several weeks, the estimate gets adjusted. If triage shows uncertainty around red flags, the user should contact appropriate care rather than trying to tune inputs.
 
@@ -104,7 +104,7 @@ The third mistake is using triage tools to talk yourself out of care. The safe i
       },
       {
         q: 'What should I use first in this health cluster?',
-        a: 'Start with the tool matching the immediate decision: Metabolic Floor for calorie range, Substance Decay for timing, REM-Sync for sleep windows, and Medical Triage for conservative routing. Do not run every tool unless the situation genuinely involves multiple decisions.',
+        a: 'Start with the tool matching the immediate decision: Metabolic Floor for calorie range, Substance Decay for timing, REM-Sync for sleep windows, and Care Urgency Check for conservative routing. Do not run every tool unless the situation genuinely involves multiple decisions.',
         faq_intent: 'how-to',
       },
       {
@@ -118,8 +118,8 @@ The third mistake is using triage tools to talk yourself out of care. The safe i
         faq_intent: 'definition',
       },
       {
-        q: 'Should Medical Triage replace a nurse line?',
-        a: 'No, Medical Triage should not replace a nurse line, clinician, emergency service, or local health guidance. It is a conservative red-flag helper. If the answer matters urgently or symptoms are severe, choose human medical support.',
+        q: 'Should Care Urgency Check replace a nurse line?',
+        a: 'No, Care Urgency Check should not replace a nurse line, clinician, emergency service, or local health guidance. It is a conservative red-flag helper. If the answer matters urgently or symptoms are severe, choose human medical support.',
         faq_intent: 'trust',
       },
     ],

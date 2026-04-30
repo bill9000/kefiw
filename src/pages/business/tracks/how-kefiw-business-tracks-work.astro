@@ -1,0 +1,102 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+
+const sections = [
+  {
+    heading: 'Why tracks exist',
+    body: 'A business calculator is useful when you know what to calculate. A business track is useful when you do not know what to calculate first.',
+  },
+  {
+    heading: 'Why calculators are sequenced',
+    body: 'Kefiw tracks are designed for messy business moments: pricing, taxes, hiring, revenue, and software spend. Each track puts calculators in sequence so one result informs the next.',
+  },
+  {
+    heading: 'Why each track has checkpoints',
+    body: 'A checkpoint explains what result matters and what to do if the number looks bad. The point is to prevent users from running a calculator and then acting on the wrong assumption.',
+  },
+  {
+    heading: 'Why scores use ranges',
+    body: 'Track scores use ranges because business planning has uncertainty. Ready, almost ready, fragile, and not ready are more honest than pretending a single number creates certainty.',
+  },
+  {
+    heading: 'Why some results say not ready',
+    body: 'A not-ready verdict is useful when the decision would add permanent cost, payroll pressure, tax risk, weak margin, or fragile revenue. It gives the user a safer next move.',
+  },
+  {
+    heading: 'How templates turn results into action',
+    body: 'Templates appear after the calculator sequence so the user can act on the result: set payment terms, send a price increase, define a role, clean up SaaS, or prepare CPA questions.',
+  },
+  {
+    heading: 'How sources are handled',
+    body: 'Tax, payroll, worker classification, and cloud/SaaS pages show source checks and assumption notes where stale rules, provider pricing, or compliance context could change the result.',
+  },
+  {
+    heading: 'How monetization is handled',
+    body: 'Recommended tools and services appear after value is delivered. They are tied to the problem revealed by the track, not placed before the calculator result.',
+  },
+];
+---
+
+<BaseLayout
+  title="How Kefiw Business Tracks Work | Kefiw"
+  description="Kefiw Business Tracks sequence calculators, checkpoints, scorecards, and templates so users can make business decisions in the right order."
+  canonical="/business/tracks/how-kefiw-business-tracks-work/"
+  keywords={['how business tracks work', 'business calculator methodology', 'guided business calculators', 'Kefiw tracks methodology']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/tracks/', label: 'Business Tracks' }, { href: '/business/tracks/how-kefiw-business-tracks-work/', label: 'Methodology' }]} />
+  <article class="container-narrow py-6">
+    <header class="mb-8">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business Tracks methodology</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">How Kefiw Business Tracks Work</h1>
+      <p class="mt-3 text-xl font-semibold text-brand-800">The order of the numbers matters.</p>
+      <p class="mt-3 text-lg text-slate-700">
+        Kefiw sequences calculators, warnings, scorecards, and templates so users can make decisions without pretending one number tells the whole story.
+      </p>
+    </header>
+
+    <section class="rounded-lg border border-brand-200 bg-brand-50 p-5">
+      <h2 class="text-xl font-semibold text-slate-950">Key idea</h2>
+      <p class="mt-2 text-sm text-slate-700">
+        A business calculator is useful when you know what to calculate. A business track is useful when you do not know what to calculate first.
+      </p>
+      <p class="mt-3 text-sm text-slate-700">
+        Kefiw tracks are designed for decisions where the order matters: pricing before profit, tax reserve before spending, revenue fragility before hiring, and ownership before software cleanup.
+      </p>
+    </section>
+
+    <div class="mt-8 space-y-4">
+      {sections.map((section) => (
+        <section class="rounded-lg border border-slate-200 bg-white p-5">
+          <h2 class="text-xl font-semibold text-slate-900">{section.heading}</h2>
+          <p class="mt-2 text-sm text-slate-700">{section.body}</p>
+        </section>
+      ))}
+    </div>
+
+    <section class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-semibold text-slate-900">What a strong track helps users say</h2>
+      <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+        <li>I know what to calculate first.</li>
+        <li>I know what result matters.</li>
+        <li>I know what could break the plan.</li>
+        <li>I know what to do if the number looks bad.</li>
+        <li>I know which template to use next.</li>
+        <li>I know whether I am ready or not ready.</li>
+      </ul>
+    </section>
+
+    <div class="mt-8 flex flex-wrap gap-2">
+      <a class="btn-primary no-underline" href="/business/tracks/">Open Business Tracks</a>
+      <a class="btn-ghost no-underline" href="/business/">Back to Business hub</a>
+    </div>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

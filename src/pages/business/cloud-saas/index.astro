@@ -1,0 +1,182 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
+import {
+  cloudSaasGuideHref,
+  cloudSaasGuidePages,
+  cloudSaasSituationRoutes,
+  cloudSaasTemplateHref,
+  cloudSaasTemplatePages,
+  cloudSaasTrackCards,
+} from '~/data/business-cloud-saas';
+
+const cloudSaasCalculators = VERTICAL_CALCULATORS_BY_AREA.business.filter((page) => page.group === 'Cloud');
+const featuredSlugs = [
+  'software-spend-health-score',
+  'saas-cost-calculator',
+  'seat-cost-calculator',
+  'ai-tool-roi-calculator',
+  'cloud-bill-shock-simulator',
+  'cloud-unit-economics-calculator',
+  'cloud-exit-calculator',
+  'subscription-vs-lifetime-crossover-calculator',
+];
+const featuredCalculators = featuredSlugs.flatMap((slug) => {
+  const page = cloudSaasCalculators.find((item) => item.slug === slug);
+  return page ? [page] : [];
+});
+
+const costProblems = [
+  'SaaS subscriptions',
+  'Unused seats',
+  'Renewal risk',
+  'Duplicate tools',
+  'Cloud bill growth',
+  'AI tool ROI',
+  'AI token/API cost',
+  'Software ROI',
+  'Cloud exit',
+  'Lifetime vs subscription pricing',
+];
+---
+
+<BaseLayout
+  title="Cloud, SaaS, and AI Cost Calculators | Kefiw"
+  description="Estimate software subscriptions, seats, cloud usage, AI cost, renewals, tech debt, and cloud-exit tradeoffs with visible assumptions and practical next steps."
+  canonical="/business/cloud-saas/"
+  keywords={['cloud cost calculator', 'SaaS cost calculator', 'AI tool ROI calculator', 'software spend health score', 'cloud bill shock calculator']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/cloud-saas/', label: 'Cloud, SaaS, and AI' }]} />
+
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business technology costs</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Cloud, SaaS, and AI Cost Calculators</h1>
+      <p class="mt-3 text-lg text-slate-700">Your tools are part of payroll now.</p>
+      <p class="mt-3 max-w-3xl text-slate-700">
+        Estimate software subscriptions, seats, cloud usage, AI cost, renewals, tech debt, and cloud-exit tradeoffs with
+        visible assumptions and practical next steps.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/business/software-spend-health-score/" class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800">Audit my software stack</a>
+        <a href="/business/cloud-bill-shock-simulator/" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400">Stress-test cloud cost</a>
+      </div>
+    </header>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What cost are you trying to control?</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {costProblems.map((item) => (
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-900">{item}</div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What are you trying to figure out?</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {cloudSaasSituationRoutes.map((route) => (
+          <a href={route.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <p class="text-sm text-slate-700">{route.situation}</p>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{route.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Featured calculators</p>
+          <h2 class="mt-1 text-xl font-bold text-slate-950">Run the uncomfortable technology math</h2>
+        </div>
+        <a href="#all-cloud-saas-calculators" class="text-sm font-semibold text-brand-700 no-underline hover:text-brand-900">See all Cloud, SaaS, and AI tools</a>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {featuredCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="flex min-h-52 flex-col rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+            <span class="mt-auto pt-4 text-sm font-semibold text-brand-700">Run calculator</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">The uncomfortable technology math</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Most technology waste does not start as waste. It starts as a useful tool nobody owns, a seat nobody removes, a
+        renewal nobody reviews, a cloud feature nobody prices, or an AI workflow nobody measures after review time.
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Cloud, SaaS, and AI tracks</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {cloudSaasTrackCards.map((track) => (
+          <a href={track.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{track.situation}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{track.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Mistakes and field guides</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {cloudSaasGuidePages.slice(0, 12).map((page) => (
+          <a href={cloudSaasGuideHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Templates and worksheets</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+        {cloudSaasTemplatePages.map((page) => (
+          <a href={cloudSaasTemplateHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="all-cloud-saas-calculators" class="mt-10 scroll-mt-28">
+      <h2 class="text-xl font-bold text-slate-950">All Cloud, SaaS, and AI calculators</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {cloudSaasCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">Kefiw technology-cost methodology</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Kefiw technology-cost tools show assumptions because cloud, SaaS, and AI bills usually fail predictability through
+        hidden usage, weak ownership, auto-renewals, review time, or product behavior, not because the base price was unknown.
+      </p>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

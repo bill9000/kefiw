@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
+import CareTrustFooter from '~/components/CareTrustFooter.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
 import TrackProgress from '~/components/tracks/TrackProgress';
 import TrackWhatIfPlanner from '~/components/tracks/TrackWhatIfPlanner';
@@ -53,12 +54,29 @@ const reviewerLinks =
 const relatedTracks = track.relatedSlugs
   .map((slug) => TRACKS_BY_SLUG[slug])
   .filter((item): item is Track => Boolean(item));
-const progressSteps = track.steps.map(({ title, type, href, description }) => ({
+const progressSteps = track.steps.map(({ title, type, href, description, whyNow, resultToWatch, ifResultLooksBad, checkpoint, relatedGuide, relatedTemplate, carryForward }) => ({
   title,
   type,
   href,
   description,
+  whyNow,
+  resultToWatch,
+  ifResultLooksBad,
+  checkpoint,
+  relatedGuide,
+  relatedTemplate,
+  carryForward,
 }));
+const secondaryHref = track.secondaryCtaHref ?? '#final-plan';
+const breadcrumbCrumbs =
+  track.category === 'business'
+    ? [
+        { href: '/', label: 'Home' },
+        { href: '/business/', label: 'Business' },
+        { href: '/business/tracks/', label: 'Business Tracks' },
+        { href: trackHref(track), label: track.title },
+      ]
+    : [{ href: '/', label: 'Home' }, { href: '/tracks/', label: 'Tracks' }, { href: trackHref(track), label: track.title }];
 ---
 
 <BaseLayout
@@ -68,15 +86,16 @@ const progressSteps = track.steps.map(({ title, type, href, description }) => ({
   keywords={track.keywords}
   ogType="article"
 >
-  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/tracks/', label: 'Tracks' }, { href: trackHref(track), label: track.title }]} />
+  <Breadcrumb crumbs={breadcrumbCrumbs} />
   <article class="container-wide py-6">
     <header class="max-w-4xl">
       <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{track.vertical} Track</p>
-      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{track.title} Track</h1>
-      <p class="mt-3 text-lg text-slate-700">{track.description}</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{track.h1 ?? `${track.title} Track`}</h1>
+      {track.tagline && <p class="mt-3 text-xl font-semibold text-brand-800">{track.tagline}</p>}
+      <p class="mt-3 text-lg text-slate-700">{track.promise ?? track.description}</p>
       <div class="mt-5 flex flex-wrap gap-2">
-        <a class="btn-primary no-underline" href="#track-progress">Start track</a>
-        <a class="btn-ghost no-underline" href="#final-plan">See final plan</a>
+        <a class="btn-primary no-underline" href="#track-progress">{track.primaryCtaLabel ?? 'Start track'}</a>
+        <a class="btn-ghost no-underline" href={secondaryHref}>{track.secondaryCtaLabel ?? 'See final plan'}</a>
       </div>
     </header>
 
@@ -113,6 +132,35 @@ const progressSteps = track.steps.map(({ title, type, href, description }) => ({
         <p class="mt-2 text-sm text-slate-700">{track.steps.length} guided steps with progress saved on this device.</p>
       </div>
     </section>
+
+    {(track.whoThisIsFor || track.decisions || track.beforeYouStart) && (
+      <section class="mt-8 grid gap-4 lg:grid-cols-3">
+        {track.whoThisIsFor && (
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-lg font-semibold text-slate-900">Who this is for</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {track.whoThisIsFor.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        )}
+        {track.decisions && (
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-lg font-semibold text-slate-900">What this track helps you decide</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {track.decisions.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        )}
+        {track.beforeYouStart && (
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-lg font-semibold text-slate-900">Before you start</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {track.beforeYouStart.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        )}
+      </section>
+    )}
 
     <section class="mt-8 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
       <h2 class="text-lg font-semibold text-emerald-950">What you will get at the end</h2>
@@ -170,6 +218,56 @@ const progressSteps = track.steps.map(({ title, type, href, description }) => ({
       </div>
     </section>
 
+    {track.trackScore && (
+      <section id="track-score" class="scroll-mt-36 mt-8 rounded-lg border border-brand-200 bg-brand-50 p-4">
+        <div class="max-w-3xl">
+          <div class="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">Track score</div>
+          <h2 class="mt-1 text-xl font-semibold text-slate-950">{track.trackScore.title}</h2>
+          <p class="mt-1 text-sm text-slate-700">
+            The score is built from the calculator results in this path. It is a planning range, not fake certainty.
+          </p>
+        </div>
+        <div class="mt-4 grid gap-3 lg:grid-cols-4">
+          {track.trackScore.states.map((state) => (
+            <div class="rounded-md border border-brand-100 bg-white p-3">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{state.range}</div>
+              <h3 class="mt-1 text-base font-semibold text-slate-950">{state.state}</h3>
+              <p class="mt-1 text-sm text-slate-700">{state.meaning}</p>
+            </div>
+          ))}
+        </div>
+        <div class="mt-4 grid gap-4 lg:grid-cols-2">
+          <div class="rounded-md border border-brand-100 bg-white p-3">
+            <h3 class="text-base font-semibold text-slate-900">Inputs</h3>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {track.trackScore.inputs.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <div class="rounded-md border border-brand-100 bg-white p-3">
+            <h3 class="text-base font-semibold text-slate-900">Your track summary</h3>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {track.trackScore.summaryOutputs.map((item) => <li>{item}: ____</li>)}
+            </ul>
+          </div>
+        </div>
+        <div class="mt-4 grid gap-3 lg:grid-cols-2">
+          {track.trackScore.verdicts.map((verdict) => (
+            <div class="rounded-md border border-brand-100 bg-white p-3">
+              <h3 class="text-sm font-semibold text-slate-900">{verdict.state} verdict</h3>
+              <p class="mt-1 text-sm text-slate-700">{verdict.verdict}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {track.whatMostAdviceLeavesOut && (
+      <section class="mt-8 rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <h2 class="text-lg font-semibold text-amber-950">What most advice leaves out</h2>
+        <p class="mt-2 text-sm text-amber-950">{track.whatMostAdviceLeavesOut}</p>
+      </section>
+    )}
+
     <section class="mt-8 grid gap-4 lg:grid-cols-2">
       <div class="rounded-lg border border-slate-200 bg-white p-4">
         <h2 class="text-lg font-semibold text-slate-900">Recommended guides</h2>
@@ -186,6 +284,47 @@ const progressSteps = track.steps.map(({ title, type, href, description }) => ({
         </ul>
       </div>
     </section>
+
+    {(track.trackTemplates || track.nextTracks || track.monetizationRecommendations) && (
+      <section class="mt-8 grid gap-4 lg:grid-cols-3">
+        {track.trackTemplates && (
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-lg font-semibold text-slate-900">Templates</h2>
+            <ul class="mt-3 space-y-2 text-sm">
+              {track.trackTemplates.map((item) => (
+                <li><a class="text-brand-700 hover:underline" href={item.href}>{item.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {track.nextTracks && (
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-lg font-semibold text-slate-900">Next tracks</h2>
+            <ul class="mt-3 space-y-3 text-sm">
+              {track.nextTracks.map((item) => (
+                <li>
+                  <a class="font-semibold text-brand-700 hover:underline" href={item.href}>{item.label}</a>
+                  <p class="mt-1 text-slate-600">{item.reason}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {track.monetizationRecommendations && (
+          <div class="rounded-lg border border-slate-200 bg-white p-4">
+            <h2 class="text-lg font-semibold text-slate-900">Tools that may help after this track</h2>
+            <ul class="mt-3 space-y-3 text-sm">
+              {track.monetizationRecommendations.map((item) => (
+                <li>
+                  <div class="font-semibold text-slate-900">{item.condition}</div>
+                  <p class="mt-1 text-slate-600">{item.recommendation}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+    )}
 
     <section class="mt-8 rounded-lg border border-slate-200 bg-white p-4">
       <h2 class="text-lg font-semibold text-slate-900">Methodology</h2>
@@ -214,6 +353,8 @@ const progressSteps = track.steps.map(({ title, type, href, description }) => ({
         </div>
       </section>
     )}
+
+    {(track.category === 'care' || track.category === 'daily') && <CareTrustFooter variant="track" />}
 
     <ReviewMethodologyFooter
       reviewerLinks={reviewerLinks}

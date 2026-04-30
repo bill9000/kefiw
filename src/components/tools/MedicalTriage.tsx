@@ -117,9 +117,10 @@ const SYMPTOM_FLAGS: Record<SymptomId, Flag[]> = {
 interface State {
   symptom: SymptomId | '';
   selectedFlags: string[];
+  baseline: string;
 }
 
-const DEFAULT_STATE: State = { symptom: '', selectedFlags: [] };
+const DEFAULT_STATE: State = { symptom: '', selectedFlags: [], baseline: '' };
 
 export default function MedicalTriage() {
   const [state, setState] = useState<State>(DEFAULT_STATE);
@@ -172,8 +173,8 @@ export default function MedicalTriage() {
     3: {
       label: 'Level 3 · Home Maintenance',
       color: COLOR_GREEN,
-      action: 'Home care and OTC treatment are reasonable starting points.',
-      sub: 'Book routine appointment if symptoms persist beyond typical window.',
+      action: 'Based on what you entered, this may be appropriate to discuss with a clinician if it persists.',
+      sub: 'If symptoms worsen, feel severe, or you are unsure, seek urgent or emergency help.',
       pulse: false,
     },
   };
@@ -188,24 +189,51 @@ export default function MedicalTriage() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.75rem' }}>
         <Shield size={18} color={COLOR_CYAN} />
         <div style={{ fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: COLOR_DIM }}>
-          Medical Triage · Red-Flag Logic
+          Care Urgency Check · Red-Flag Logic
         </div>
       </div>
 
       <div style={{ background: '#1f1017', border: `1px solid ${COLOR_RED}55`, color: '#fca5a5', padding: '0.65rem 0.9rem', borderRadius: 6, fontSize: 11, marginBottom: '1rem', display: 'flex', gap: 8, alignItems: 'flex-start' }}>
         <AlertTriangle size={14} style={{ flex: '0 0 auto', marginTop: 2 }} />
         <div>
-          Not medical advice. Educational red-flag triage. If in doubt, call emergency services. If symptoms feel life-threatening, do not wait for this tool.
+          If someone may be experiencing a medical emergency, call emergency services now. Do not use this tool instead of emergency care.
+          <div style={{ marginTop: 4 }}>
+            <a href="/care/guides/care-urgency-safety/" style={{ color: '#fecaca', textDecoration: 'underline' }}>Read Care Urgency Check safety information</a>
+          </div>
         </div>
       </div>
 
       <div style={{ ...panel, marginBottom: '1rem' }}>
-        <div style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: COLOR_DIM, marginBottom: 8 }}>Step 1 · Primary symptom</div>
+        <label>
+          <div style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: COLOR_DIM, marginBottom: 8 }}>Step 1 · Baseline change</div>
+          <div style={{ fontSize: 12, color: COLOR_TEXT, marginBottom: 8 }}>What is normal for this person, and what changed?</div>
+          <textarea
+            value={state.baseline}
+            onChange={(event) => setState((current) => ({ ...current, baseline: event.target.value }))}
+            placeholder="Normally they can ____. Today they cannot ____. This started at ____."
+            style={{
+              width: '100%',
+              minHeight: 72,
+              borderRadius: 6,
+              border: `1px solid ${COLOR_BORDER}`,
+              background: '#0b1120',
+              color: COLOR_TEXT,
+              fontFamily: 'inherit',
+              fontSize: 12,
+              padding: '0.6rem 0.7rem',
+              resize: 'vertical',
+            }}
+          />
+        </label>
+      </div>
+
+      <div style={{ ...panel, marginBottom: '1rem' }}>
+        <div style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: COLOR_DIM, marginBottom: 8 }}>Step 2 · Primary symptom</div>
         <div style={{ display: 'grid', gap: '0.4rem', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
           {SYMPTOMS.map((s) => (
             <button
               key={s.id}
-              onClick={() => setState({ symptom: s.id, selectedFlags: [] })}
+              onClick={() => setState((current) => ({ ...current, symptom: s.id, selectedFlags: [] }))}
               style={{
                 padding: '0.5rem 0.75rem',
                 borderRadius: 6,
@@ -226,7 +254,7 @@ export default function MedicalTriage() {
 
       {state.symptom && (
         <div style={{ ...panel, marginBottom: '1rem' }}>
-          <div style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: COLOR_DIM, marginBottom: 8 }}>Step 2 · Red flags (check all that apply)</div>
+          <div style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: COLOR_DIM, marginBottom: 8 }}>Step 3 · Red flags (check all that apply)</div>
           <div style={{ display: 'grid', gap: '0.3rem' }}>
             {allFlags.map((f) => {
               const on = state.selectedFlags.includes(f.id);

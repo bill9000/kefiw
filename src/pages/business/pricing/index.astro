@@ -1,0 +1,170 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
+import {
+  pricingGuideHref,
+  pricingGuidePages,
+  pricingSituationRoutes,
+  pricingTemplateHref,
+  pricingTemplatePages,
+  pricingTrackCards,
+} from '~/data/business-pricing';
+
+const pricingCalculators = VERTICAL_CALCULATORS_BY_AREA.business.filter((page) => page.group === 'Pricing');
+const featuredSlugs = [
+  'minimum-viable-freelance-rate-calculator',
+  'discount-damage-calculator',
+  'scope-creep-cost-calculator',
+  'client-profitability-calculator',
+  'break-even-calculator',
+  'profit-calculator',
+];
+const featuredCalculators = featuredSlugs
+  .flatMap((slug) => {
+    const page = pricingCalculators.find((item) => item.slug === slug);
+    return page ? [page] : [];
+  });
+
+const pricingTypes = ['Freelance or consulting work', 'Project work', 'Retainers', 'Products or marked-up services', 'Subscriptions', 'Client work', 'Price increases', 'Discounts'];
+---
+
+<BaseLayout
+  title="Business Pricing Calculators: Price Work Without Guessing | Kefiw"
+  description="Pricing calculators for freelance rates, margins, discounts, scope creep, client profitability, break-even, walk-away price, and price increases."
+  canonical="/business/pricing/"
+  keywords={['business pricing calculators', 'freelance pricing calculator', 'discount damage calculator', 'scope creep cost calculator', 'client profitability calculator']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/pricing/', label: 'Pricing' }]} />
+
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business pricing</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Business Pricing Calculators: Price Work Without Guessing</h1>
+      <p class="mt-3 text-lg text-slate-700">Charge enough to keep doing the work well.</p>
+      <p class="mt-3 max-w-3xl text-slate-700">
+        Use clear calculators and scenario guides to turn expenses, taxes, non-billable time, discounts, scope creep, margin,
+        and profit goals into prices you can defend.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/business/minimum-viable-freelance-rate-calculator/" class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800">Start with your rate</a>
+        <a href="/business/discount-damage-calculator/" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400">Check a discount</a>
+      </div>
+    </header>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What are you trying to figure out?</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {pricingSituationRoutes.map((route) => (
+          <a href={route.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <p class="text-sm text-slate-700">{route.situation}</p>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{route.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What are you pricing?</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {pricingTypes.map((item) => (
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-900">{item}</div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Featured calculators</p>
+          <h2 class="mt-1 text-xl font-bold text-slate-950">Run the uncomfortable pricing math</h2>
+        </div>
+        <a href="#all-pricing-calculators" class="text-sm font-semibold text-brand-700 no-underline hover:text-brand-900">See all pricing tools</a>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {featuredCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="flex min-h-52 flex-col rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+            <span class="mt-auto pt-4 text-sm font-semibold text-brand-700">Run calculator</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">The uncomfortable pricing math</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Most pricing problems are not caused by one bad number. They come from hidden unpaid work, unclear scope, discounts,
+        weak margins, slow payment, and treating revenue like take-home pay.
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Pricing tracks</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {pricingTrackCards.map((track) => (
+          <a href={track.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{track.situation}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{track.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Mistakes and field guides</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {pricingGuidePages.slice(0, 9).map((page) => (
+          <a href={pricingGuideHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Scripts and templates</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {pricingTemplatePages.map((page) => (
+          <a href={pricingTemplateHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="all-pricing-calculators" class="mt-10 scroll-mt-28">
+      <h2 class="text-xl font-bold text-slate-950">All pricing calculators</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {pricingCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">Kefiw pricing methodology</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Kefiw pricing tools show the assumptions behind the result because pricing decisions usually fail when hidden work,
+        weak scope, or unrealistic billable time goes uncounted.
+      </p>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

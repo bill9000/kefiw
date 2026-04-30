@@ -339,7 +339,7 @@ export const ARTICLES_HEALTH_METABOLIC: ContentPageConfig[] = [
   },
 
   // ============================================================
-  // MEDICAL TRIAGE — 3 articles
+  // CARE URGENCY CHECK — 3 articles
   // ============================================================
   {
     id: 'art-hm-triage-logic',
@@ -420,7 +420,7 @@ export const ARTICLES_HEALTH_METABOLIC: ContentPageConfig[] = [
     h1: 'What Triage Tools Cannot Do',
     subhead: 'A routing heuristic is not a diagnosis. Here is what the tool cannot see.',
     outcomeLine: 'Triage routing is based on published red-flag lists. It misses atypical presentations, pediatric cases, and multi-symptom interactions.',
-    description: 'Medical triage tools work from published red-flag lists and cannot detect atypical presentations. Pediatric, elderly, immunocompromised, and pregnant patients need lower triage thresholds than general adults.',
+    description: 'Care urgency tools work from published red-flag lists and cannot detect atypical presentations. Pediatric, elderly, immunocompromised, and pregnant patients need lower triage thresholds than general adults.',
     keywords: ['triage tool accuracy', 'when to override triage', 'atypical symptoms', 'pediatric triage', 'elderly triage'],
     intro: 'A triage tool is a routing heuristic. It asks about published red-flag symptoms and applies published rules. It cannot examine you, cannot hear your voice, and cannot pattern-match 20 years of seen-it-before experience the way a nurse can. Below are the situations where the tool under-triages and you should lean toward higher acuity anyway.',
     keyPoints: [

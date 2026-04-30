@@ -1,0 +1,101 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+---
+
+<BaseLayout
+  title="Rental and Investment Property Decisions | Kefiw"
+  description="Rental and investment property planning for cash flow, cap rate, cash-on-cash return, DSCR, vacancy, expenses, repairs, reserves, and due diligence."
+  canonical="/property/invest/"
+  keywords={['rental property decisions', 'investment property calculator', 'rental cash flow', 'cap rate']}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/property/', label: 'Property' },
+    { href: '/property/invest/', label: 'Invest' },
+  ]} />
+
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Property Investing</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Rental and investment property decisions</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">
+        A rental is not good because the rent is high. It works only if vacancy, operating costs, repairs, capex, debt, reserves, rules, and exit risk still leave a durable margin.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="/property/rental-investor-planner/">Use rental investor planner</a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/checklists/rental-due-diligence-documents/">Due diligence checklist</a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/decision-packet/">Build decision packet</a>
+      </div>
+    </header>
+
+    <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section class="rounded-lg border border-brand-200 bg-brand-50 p-4">
+        <h2 class="text-base font-semibold text-slate-950">Am I making a mistake?</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">Do not compare the rent to the mortgage. Compare rent after vacancy and reserves to all operating costs and debt service.</p>
+      </section>
+      <section class="rounded-lg border border-brand-200 bg-brand-50 p-4">
+        <h2 class="text-base font-semibold text-slate-950">What am I forgetting?</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">Repairs, capex, turnover, management, tax reset, insurance, HOA restrictions, licensing, and post-close cash reserves.</p>
+      </section>
+      <section class="rounded-lg border border-brand-200 bg-brand-50 p-4">
+        <h2 class="text-base font-semibold text-slate-950">What would make this go bad?</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">One vacancy, a roof/HVAC repair, insurance change, tax reassessment, weak lease, or local rental rule can erase the projected return.</p>
+      </section>
+      <section class="rounded-lg border border-brand-200 bg-brand-50 p-4">
+        <h2 class="text-base font-semibold text-slate-950">What should I do next?</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">Run the planner, collect due diligence documents, then build a packet with evidence for every major assumption.</p>
+      </section>
+    </section>
+
+    <section class="mt-10 grid gap-4 md:grid-cols-2">
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/property/rental-investor-planner/">
+        <div class="text-xs font-semibold uppercase tracking-wide text-brand-700">Planner</div>
+        <h2 class="mt-1 text-lg font-semibold">Rental Investor Planner</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Cash flow, cap rate, cash-on-cash return, DSCR, reserve target, vacancy, repairs, capex, management, and debt service.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/property/checklists/rental-due-diligence-documents/">
+        <div class="text-xs font-semibold uppercase tracking-wide text-brand-700">Checklist</div>
+        <h2 class="mt-1 text-lg font-semibold">Rental due diligence documents</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Collect leases, rent evidence, bills, repair needs, reserve proof, financing terms, local rules, and exit assumptions.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/calculators/mortgage-calculator/">
+        <div class="text-xs font-semibold uppercase tracking-wide text-brand-700">Debt</div>
+        <h2 class="mt-1 text-lg font-semibold">Mortgage payment</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Estimate the loan payment that feeds the investor model.</p>
+      </a>
+      <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400" href="/finance/horizon-point/">
+        <div class="text-xs font-semibold uppercase tracking-wide text-brand-700">Exit</div>
+        <h2 class="mt-1 text-lg font-semibold">Hold horizon</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-600">Stress-test whether transaction costs and ownership duration make the deal fragile.</p>
+      </a>
+    </section>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-white p-4">
+      <h2 class="text-xl font-semibold text-slate-900">What people usually do here</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-3">
+        <section class="rounded-md border border-slate-200 bg-slate-50 p-3">
+          <h3 class="text-sm font-semibold text-slate-900">First rental</h3>
+          <p class="mt-1 text-xs leading-5 text-slate-600">Start with conservative vacancy, management, repair, and reserve assumptions even if you plan to self-manage.</p>
+        </section>
+        <section class="rounded-md border border-slate-200 bg-slate-50 p-3">
+          <h3 class="text-sm font-semibold text-slate-900">House hack</h3>
+          <p class="mt-1 text-xs leading-5 text-slate-600">Separate personal affordability from rental durability. The rental side still needs reserves and rule checks.</p>
+        </section>
+        <section class="rounded-md border border-slate-200 bg-slate-50 p-3">
+          <h3 class="text-sm font-semibold text-slate-900">Value-add deal</h3>
+          <p class="mt-1 text-xs leading-5 text-slate-600">Treat future rent as unproven until leases, repairs, budget, permits, and timing support it.</p>
+        </section>
+      </div>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'realtor', href: '/realtor-review/' },
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

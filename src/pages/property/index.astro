@@ -1,7 +1,11 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
+import PropertyCategoryCard from '~/components/PropertyCategoryCard.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { PROPERTY_CATEGORIES, propertyCategoryHref } from '~/data/property-categories';
+import { PROPERTY_CHECKLISTS, propertyChecklistHref } from '~/data/property-checklists';
+import { PROPERTY_PLAYBOOKS, propertyPlaybookHref } from '~/data/property-playbooks';
 import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
 
 const propertyPages = VERTICAL_CALCULATORS_BY_AREA.property;
@@ -99,6 +103,52 @@ const calculatorGroups = [
     links: pageLinksFor(['cash-to-close-calculator']),
   },
 ];
+
+const decisionQuestions = [
+  {
+    title: 'Am I making a mistake?',
+    body: 'Compare scope, proof, cash exposure, warranty, contract terms, and timing before comparing final prices.',
+  },
+  {
+    title: 'What am I forgetting?',
+    body: 'Look for hidden line items: decking, ducts, title fees, tax proration, HOA documents, concessions, insurance holdbacks, and repair reserves.',
+  },
+  {
+    title: 'What would make this go bad?',
+    body: 'A decision usually fails through missing scope, optimistic assumptions, verbal promises, unclear paperwork, or no backup plan.',
+  },
+  {
+    title: 'What should I do next?',
+    body: 'Run the right calculator, read the mistake-check guide, then collect everything into a decision packet before signing or spending.',
+  },
+];
+
+const workbenchLinks = [
+  {
+    href: '/property/quote-comparison/',
+    eyebrow: 'Contractors',
+    title: 'Quote Comparison Matrix',
+    summary: 'Normalize bids by scope, exclusions, proof, warranty, timeline, cash exposure, and risk.',
+  },
+  {
+    href: '/property/option-comparison/',
+    eyebrow: 'Offers',
+    title: 'Option Comparison Matrix',
+    summary: 'Compare seller offers, buyer closing versions, repair credits, and alternatives beyond headline price.',
+  },
+  {
+    href: '/property/checklists/',
+    eyebrow: 'Documents',
+    title: 'Property Document Checklists',
+    summary: 'Collect claim, quote, closing, title, HOA, seller, buyer, and rental due diligence documents before acting.',
+  },
+  {
+    href: '/property/rental-investor-planner/',
+    eyebrow: 'Invest',
+    title: 'Rental Investor Planner',
+    summary: 'Stress-test cash flow, cap rate, cash-on-cash return, DSCR, vacancy, repairs, capex, and reserves.',
+  },
+];
 ---
 
 <BaseLayout
@@ -111,12 +161,116 @@ const calculatorGroups = [
   <article class="container-wide py-6">
     <header class="mb-8 max-w-3xl">
       <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Property</p>
-      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Property</h1>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Property decisions, made harder to mess up.</h1>
       <p class="mt-3 text-slate-700">
-        Real-estate calculators belong in their own vertical: selling, buying, owning, and investing have different questions than generic finance.
+        Real-estate calculators belong in their own vertical: selling, buying, owning, repairing, and investing have different questions than generic finance.
         This hub is approved by realtor review for real-estate workflow and by engineering and scientific review for calculator and assumption framing.
       </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="/property/start/">
+          Start here
+        </a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/decision-packet/">
+          Build decision packet
+        </a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/checklists/">
+          Use checklists
+        </a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/tracks/#property-tracks">
+          Use a track
+        </a>
+      </div>
     </header>
+
+    <section class="mb-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {decisionQuestions.map((item) => (
+        <section class="rounded-lg border border-brand-200 bg-brand-50 p-4">
+          <h2 class="text-base font-semibold text-slate-950">{item.title}</h2>
+          <p class="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
+        </section>
+      ))}
+    </section>
+
+    <section class="mb-10">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 class="text-xl font-semibold text-slate-900">Choose the property decision</h2>
+          <p class="mt-1 max-w-3xl text-sm leading-6 text-slate-600">
+            Each section combines calculators with the mistake checks, missing items, and failure modes that usually matter more than the raw number.
+          </p>
+        </div>
+        <a class="text-sm font-semibold text-brand-700 hover:underline" href="/property/start/">Not sure? Use Start Here</a>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {PROPERTY_CATEGORIES.map((category) => (
+          <PropertyCategoryCard card={{ title: category.label, href: propertyCategoryHref(category.slug), text: category.intro, eyebrow: category.slug === 'guides' ? 'Guide system' : 'Decision area' }} />
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Decision workbenches</p>
+          <h2 class="mt-1 text-xl font-semibold text-slate-900">When the number is not enough</h2>
+          <p class="mt-1 max-w-3xl text-sm leading-6 text-slate-600">
+            These surfaces answer the real follow-up questions: what am I forgetting, which option is cleaner, what documents prove this, and whether the deal is still worth it.
+          </p>
+        </div>
+        <a class="text-sm font-semibold text-brand-700 hover:underline" href="/property/decision-packet/">Package the answer</a>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {workbenchLinks.map((item) => (
+          <a class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm" href={item.href}>
+            <div class="text-xs font-semibold uppercase tracking-wide text-brand-700">{item.eyebrow}</div>
+            <h3 class="mt-1 text-base font-semibold">{item.title}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{item.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-white p-4">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Scenario playbooks</p>
+          <h2 class="mt-1 text-xl font-semibold text-slate-900">What should I do this week?</h2>
+          <p class="mt-1 max-w-3xl text-sm leading-6 text-slate-600">
+            Use these when the decision starts as pressure, not math: storm damage, dead AC, concessions, low bids, repair prep, or a closing surprise.
+          </p>
+        </div>
+        <a class="text-sm font-semibold text-brand-700 hover:underline" href="/property/playbooks/">All property playbooks</a>
+      </div>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {PROPERTY_PLAYBOOKS.slice(0, 6).map((playbook) => (
+          <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-slate-900 no-underline transition hover:border-brand-400 hover:bg-white" href={propertyPlaybookHref(playbook)}>
+            <div class="text-sm font-semibold text-brand-800">{playbook.h1}</div>
+            <div class="mt-1 text-xs leading-5 text-slate-600">{playbook.trigger}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-10 rounded-lg border border-slate-200 bg-white p-4">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Document layer</p>
+          <h2 class="mt-1 text-xl font-semibold text-slate-900">What should I collect before I trust this?</h2>
+          <p class="mt-1 max-w-3xl text-sm leading-6 text-slate-600">
+            Checklists make the calculators feel less thin because they turn a result into evidence, missing documents, and verification questions.
+          </p>
+        </div>
+        <a class="text-sm font-semibold text-brand-700 hover:underline" href="/property/checklists/">All checklists</a>
+      </div>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {PROPERTY_CHECKLISTS.slice(0, 6).map((checklist) => (
+          <a class="rounded-md border border-slate-200 bg-slate-50 p-3 text-slate-900 no-underline transition hover:border-brand-400 hover:bg-white" href={propertyChecklistHref(checklist)}>
+            <div class="text-sm font-semibold text-brand-800">{checklist.h1}</div>
+            <div class="mt-1 text-xs leading-5 text-slate-600">{checklist.trigger}</div>
+          </a>
+        ))}
+      </div>
+    </section>
 
     <section id="calculators" class="grid gap-4 md:grid-cols-2">
       {calculatorGroups.map((group) => (
@@ -156,6 +310,18 @@ const calculatorGroups = [
         </ul>
       </section>
 
+      <section id="invest" class="rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-lg font-semibold text-slate-900">Rental and investment property</h2>
+        <p class="mt-1 text-sm text-slate-600">Stress-test rent, vacancy, expenses, debt, reserves, due diligence, and hold horizon before treating a deal as good.</p>
+        <ul class="mt-3 space-y-1 text-sm">
+          <li><a class="text-brand-700 hover:underline" href="/property/invest/">Investment Property Hub</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/property/rental-investor-planner/">Rental Investor Planner</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/property/checklists/rental-due-diligence-documents/">Rental Due Diligence Checklist</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/calculators/mortgage-calculator/">Mortgage Calculator</a></li>
+          <li><a class="text-brand-700 hover:underline" href="/finance/horizon-point/">Hold Horizon</a></li>
+        </ul>
+      </section>
+
       <section id="guides" class="rounded-lg border border-slate-200 bg-white p-4">
         <h2 class="text-lg font-semibold text-slate-900">High-value guides</h2>
           <p class="mt-1 text-sm text-slate-600">Practical counter-scope advice for expensive contractor decisions.</p>
@@ -176,7 +342,7 @@ const calculatorGroups = [
       <h2 class="text-base font-semibold">Current approved tool coverage</h2>
       <p class="mt-1">
         Property now links real calculators for HVAC replacement, seller proceeds, closing costs, cash to close, title company costs,
-        tax proration, resale certificates, association dues, and association transfer fees.
+        tax proration, resale certificates, association dues, association transfer fees, comparison workbenches, document checklists, and rental investor planning.
       </p>
     </section>
 

@@ -1,0 +1,181 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
+import {
+  revenueGuideHref,
+  revenueGuidePages,
+  revenueSituationRoutes,
+  revenueTemplateHref,
+  revenueTemplatePages,
+  revenueTrackCards,
+} from '~/data/business-revenue';
+
+const revenueCalculators = VERTICAL_CALCULATORS_BY_AREA.business.filter((page) => page.group === 'Revenue');
+const featuredSlugs = [
+  'revenue-fragility-score',
+  'revenue-forecast-calculator',
+  'sales-target-calculator',
+  'client-concentration-risk-calculator',
+  'churn-calculator',
+  'small-business-cash-runway-calculator',
+  'subscription-pricing-calculator',
+  'operating-leverage-calculator',
+];
+const featuredCalculators = featuredSlugs.flatMap((slug) => {
+  const page = revenueCalculators.find((item) => item.slug === slug);
+  return page ? [page] : [];
+});
+
+const revenueQuestions = [
+  'I need a revenue forecast.',
+  'I need to know if the forecast is fragile.',
+  'I need to hit a sales target.',
+  'I might lose a big client.',
+  'I need to calculate churn.',
+  'I am pricing a subscription.',
+  'Clients pay late.',
+  'Revenue is growing but profit is not.',
+  'I need to know how long cash lasts.',
+];
+---
+
+<BaseLayout
+  title="Revenue Calculators for Small Businesses | Kefiw"
+  description="Forecast revenue, stress-test client loss, calculate sales targets, model churn, plan subscription pricing, and see whether growth actually improves cash and profit."
+  canonical="/business/revenue/"
+  keywords={['revenue forecast calculator', 'client concentration risk calculator', 'sales target calculator', 'churn replacement calculator', 'small business cash runway calculator']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/revenue/', label: 'Revenue' }]} />
+
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business revenue</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Revenue Calculators for Small Businesses</h1>
+      <p class="mt-3 text-lg text-slate-700">Make revenue feel less imaginary.</p>
+      <p class="mt-3 max-w-3xl text-slate-700">
+        Forecast revenue, stress-test client loss, calculate sales targets, model churn, plan subscription pricing, and see
+        whether growth actually improves cash and profit.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/business/revenue-forecast-calculator/" class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800">Forecast revenue</a>
+        <a href="/business/client-concentration-risk-calculator/" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400">Stress-test client loss</a>
+      </div>
+    </header>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What revenue question are you trying to answer?</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {revenueQuestions.map((item) => (
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-900">{item}</div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What are you trying to figure out?</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {revenueSituationRoutes.map((route) => (
+          <a href={route.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <p class="text-sm text-slate-700">{route.situation}</p>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{route.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Featured calculators</p>
+          <h2 class="mt-1 text-xl font-bold text-slate-950">Run the uncomfortable revenue math</h2>
+        </div>
+        <a href="#all-revenue-calculators" class="text-sm font-semibold text-brand-700 no-underline hover:text-brand-900">See all Revenue tools</a>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {featuredCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="flex min-h-52 flex-col rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+            <span class="mt-auto pt-4 text-sm font-semibold text-brand-700">Run calculator</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">The uncomfortable revenue math</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Most revenue stress comes from hidden assumptions: deals that are not real yet, clients that pay late, churn that is
+        replaced but not fixed, one big client that carries the business, and growth that adds cost before it adds breathing room.
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Revenue tracks</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {revenueTrackCards.map((track) => (
+          <a href={track.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{track.situation}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{track.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Mistakes and field guides</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {revenueGuidePages.map((page) => (
+          <a href={revenueGuideHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Templates and worksheets</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {revenueTemplatePages.map((page) => (
+          <a href={revenueTemplateHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="all-revenue-calculators" class="mt-10 scroll-mt-28">
+      <h2 class="text-xl font-bold text-slate-950">All Revenue calculators</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {revenueCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">Kefiw revenue methodology</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Kefiw revenue tools show assumptions because revenue plans usually fail when the hidden inputs are wrong: close rate,
+        sales cycle, client concentration, churn, payment timing, delivery capacity, and fixed-cost timing.
+      </p>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

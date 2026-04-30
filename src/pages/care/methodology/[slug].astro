@@ -1,0 +1,241 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import CareTrustFooter from '~/components/CareTrustFooter.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import {
+  VERTICAL_CALCULATORS_BY_AREA,
+  verticalCalculatorHref,
+  type VerticalCalculatorPage,
+} from '~/data/vertical-calculators';
+
+export function getStaticPaths() {
+  return VERTICAL_CALCULATORS_BY_AREA.care.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+interface Props {
+  page: VerticalCalculatorPage;
+}
+
+const { page } = Astro.props;
+const calculatorHref = verticalCalculatorHref(page);
+const canonical = `/care/methodology/${page.slug}/`;
+
+function lowRiskFactors(page: VerticalCalculatorPage): string[] {
+  if (page.riskProfile === 'medicare-insurance') {
+    return [
+      'A drug, pharmacy, provider, network, prior authorization, or plan rule is missing from the inputs.',
+      'Income changes create IRMAA, subsidy, eligibility, or tax effects that the calculator does not fully model.',
+      'A bad-year scenario includes more care, uncovered services, or denied claims than expected.',
+    ];
+  }
+  if (page.kind === 'caregiver-hours') {
+    return [
+      'Supervision time is not counted because no one is actively doing a task.',
+      'Nighttime calls, family coordination, paperwork, and emotional support are ignored.',
+      'The main caregiver is assumed to be available without backup, sleep, work, or health limits.',
+    ];
+  }
+  return [
+    'Overnight supervision, dementia support, incontinence care, medication management, or two-person transfers are needed.',
+    'Transportation, supplies, move-in fees, respite, missed-shift backup, or care-level fees are not included.',
+    'Local provider rates, staffing limits, rate increases, or facility policies are higher than the planning assumptions.',
+  ];
+}
+
+function highRiskFactors(page: VerticalCalculatorPage): string[] {
+  if (page.riskProfile === 'medicare-insurance') {
+    return [
+      'The user enters a conservative bad-year cost that is higher than actual use.',
+      'A subsidy, employer support, Extra Help, Medicaid, VA benefit, or other assistance applies but is not entered.',
+      'A plan negotiates lower costs or includes services the simplified model treats as out of pocket.',
+    ];
+  }
+  if (page.kind === 'caregiver-hours') {
+    return [
+      'Some tasks are combined efficiently or handled by providers, adult day care, facility staff, or delivery services.',
+      'The person improves after rehab, medication review, home changes, or added equipment.',
+      'Family members share tasks more reliably than assumed.',
+    ];
+  }
+  return [
+    'Benefits, Medicaid, VA support, long-term care insurance, local programs, or family task coverage reduce out-of-pocket cost.',
+    'The person needs fewer care hours or a lower care level than assumed.',
+    'Provider pricing includes services that were entered separately.',
+  ];
+}
+
+function includedItems(page: VerticalCalculatorPage): string[] {
+  return [
+    'The visible inputs listed on the calculator page.',
+    'The assumptions shown below the calculator.',
+    'Monthly, annual, or scenario math based on the calculator family.',
+    'Risk flags and follow-up prompts designed to help users ask better questions.',
+    ...page.fields.slice(0, 10).map((field) => `Input: ${field.label}.`),
+  ];
+}
+
+function excludedItems(page: VerticalCalculatorPage): string[] {
+  const common = [
+    'Provider quotes, plan documents, eligibility decisions, legal interpretation, tax treatment, or clinical judgment.',
+    'Every state, plan, facility, agency, pharmacy, family, or future health-change scenario.',
+    'Guaranteed pricing, coverage, admission, benefits, claims approval, or professional advice.',
+  ];
+  if (page.riskProfile === 'medicare-insurance') {
+    return [
+      ...common,
+      'Full formulary review, pharmacy-specific pricing, network validation, prior authorization outcomes, appeals, or subsidy determinations.',
+    ];
+  }
+  return [
+    ...common,
+    'Full care assessment, home safety evaluation, staffing availability, care contract review, or emergency triage.',
+  ];
+}
+---
+
+<BaseLayout
+  title={`${page.h1} Methodology | Kefiw`}
+  description={`Learn how the ${page.h1} works, including inputs, assumptions, included items, excluded items, limitations, and when to confirm with a professional.`}
+  canonical={canonical}
+  keywords={[...page.keywords, `${page.h1.toLowerCase()} methodology`, 'calculator assumptions']}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/care/', label: 'Care' },
+    { href: calculatorHref, label: page.h1 },
+    { href: canonical, label: 'Methodology' },
+  ]} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Calculator Methodology</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">How the {page.h1} estimate works</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">{page.summary}</p>
+      <p class="mt-3 max-w-3xl rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-950">
+        This estimate is for educational planning only. Actual costs may vary based on location, provider, care needs, plan terms, income, eligibility, family support, market rates, and future changes. Confirm details with providers, insurers, Medicare, Medicaid, tax professionals, legal professionals, or qualified advisors as appropriate.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href={calculatorHref}>Use the calculator</a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/family-care-plan-summary/">Build family summary</a>
+      </div>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div class="space-y-8">
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">Inputs used</h2>
+          <p class="mt-2 text-sm leading-6 text-slate-600">The result changes when these inputs change. Defaults are planning placeholders, not recommendations.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            {page.fields.map((field) => (
+              <div class="rounded-md border border-slate-200 bg-slate-50 p-3">
+                <div class="text-sm font-semibold text-slate-900">{field.label}</div>
+                <div class="mt-1 text-xs text-slate-600">
+                  Default: {String(field.defaultValue)}
+                  {field.prefix ? ` ${field.prefix}` : ''}
+                  {field.suffix ? ` ${field.suffix}` : ''}
+                </div>
+                {field.help && <div class="mt-1 text-xs text-slate-600">{field.help}</div>}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">What is included</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            {includedItems(page).map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">What is excluded</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            {excludedItems(page).map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="grid gap-4 md:grid-cols-2">
+          <div class="rounded-lg border border-rose-200 bg-rose-50 p-4">
+            <h2 class="text-lg font-semibold text-rose-950">What can make the estimate too low</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-rose-950">
+              {lowRiskFactors(page).map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <div class="rounded-lg border border-cyan-200 bg-cyan-50 p-4">
+            <h2 class="text-lg font-semibold text-cyan-950">What can make the estimate too high</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-cyan-950">
+              {highRiskFactors(page).map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">Assumptions</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            {page.assumptions.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">When to confirm with a professional</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            <li>Before signing a facility, home care, insurance, employment, or financial agreement.</li>
+            <li>Before relying on Medicare, Medicaid, VA, long-term care insurance, HSA, FSA, tax, or legal assumptions.</li>
+            <li>When medical symptoms, medication changes, falls, dementia safety, or urgent-care questions are involved.</li>
+            <li>When a provider quote, plan document, policy, or agency rule conflicts with the estimate.</li>
+          </ul>
+        </section>
+      </div>
+
+      <aside class="h-fit rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Methodology snapshot</h2>
+        <dl class="mt-3 space-y-3 text-sm">
+          <div>
+            <dt class="font-semibold text-slate-900">Calculator</dt>
+            <dd><a class="text-brand-700 hover:underline" href={calculatorHref}>{page.h1}</a></dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-slate-900">Family</dt>
+            <dd class="text-slate-700">{page.group}</dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-slate-900">Data year / source check</dt>
+            <dd class="text-slate-700">{page.sourceCheckedAt ?? 'Uses current calculator defaults shown on the page.'}</dd>
+          </div>
+          {page.sourceScope && (
+            <div>
+              <dt class="font-semibold text-slate-900">Scope checked</dt>
+              <dd class="text-slate-700">{page.sourceScope}</dd>
+            </div>
+          )}
+        </dl>
+
+        {page.worksheetLinks && page.worksheetLinks.length > 0 && (
+          <div class="mt-5 border-t border-slate-200 pt-4">
+            <h2 class="text-sm font-semibold text-slate-900">Worksheet to use next</h2>
+            <div class="mt-2 grid gap-2">
+              {page.worksheetLinks.slice(0, 4).map((link) => (
+                <a class="rounded-md border border-slate-200 bg-slate-50 p-2 text-xs font-semibold text-brand-700 no-underline hover:border-brand-400" href={link.href}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </aside>
+    </div>
+
+    <CareTrustFooter variant="calculator" />
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'registered nurse', href: '/registered-nurse-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+      includeHealthDisclaimer={page.healthDisclaimer}
+    />
+  </article>
+</BaseLayout>

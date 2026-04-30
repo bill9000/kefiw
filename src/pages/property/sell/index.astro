@@ -1,0 +1,8 @@
+---
+import PropertyCategoryLayout from '~/layouts/PropertyCategoryLayout.astro';
+import { PROPERTY_CATEGORIES_BY_SLUG } from '~/data/property-categories';
+
+const category = PROPERTY_CATEGORIES_BY_SLUG.sell;
+---
+
+<PropertyCategoryLayout category={category} />

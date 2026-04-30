@@ -1,0 +1,46 @@
+---
+interface Props {
+  variant?: 'guide' | 'calculator' | 'track';
+}
+
+const { variant = 'guide' } = Astro.props;
+const maintainedTitle =
+  variant === 'calculator'
+    ? 'How this calculator is maintained'
+    : variant === 'track'
+      ? 'How this track is maintained'
+      : 'How this guide is maintained';
+const maintainedSubject =
+  variant === 'calculator'
+    ? 'Calculator assumptions and result language are'
+    : variant === 'track'
+      ? 'Track steps, calculator links, and final-plan language are'
+      : 'Guide content is';
+---
+
+<aside aria-label="Care trust and safety information" class="mt-8 rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-700">
+  <h2 class="text-base font-semibold text-slate-900">{maintainedTitle}</h2>
+  <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+    <li class="rounded-md bg-slate-50 p-3">Written for family caregivers and care decision-makers.</li>
+    <li class="rounded-md bg-slate-50 p-3">{maintainedSubject} reviewed for clarity, safety, and practical usefulness.</li>
+    <li class="rounded-md bg-slate-50 p-3">Updated when Medicare, insurance, tax, legal, or care guidance changes.</li>
+    <li class="rounded-md bg-slate-50 p-3">Includes sources or reviewer notes where appropriate.</li>
+    <li class="rounded-md bg-slate-50 p-3 sm:col-span-2">Designed to support, not replace, qualified professional advice.</li>
+  </ul>
+
+  <p class="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-950">
+    Kefiw provides educational care-planning tools and guides. Content is designed to help families organize decisions,
+    estimate costs, prepare questions, and identify next steps. Kefiw does not replace medical, legal, tax, financial,
+    insurance, Medicare, Medicaid, or emergency guidance. For urgent medical concerns or immediate danger, call emergency services.
+  </p>
+
+  <div class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold">
+    <a class="text-brand-700 hover:underline" href="/care/guides/review-board/">Review Board</a>
+    <a class="text-brand-700 hover:underline" href="/care/guides/editorial-standards/">Editorial Standards</a>
+    <a class="text-brand-700 hover:underline" href="/care/guides/source-policy/">Source Policy</a>
+    <a class="text-brand-700 hover:underline" href="/care/guides/health-disclaimer/">Health Disclaimer</a>
+    <a class="text-brand-700 hover:underline" href="/care/guides/calculator-limitations/">Calculator Limitations</a>
+    <a class="text-brand-700 hover:underline" href="/care/guides/corrections-policy/">Corrections</a>
+    <a class="text-brand-700 hover:underline" href="/care/guides/privacy-care-data-notice/">Privacy Notice</a>
+  </div>
+</aside>

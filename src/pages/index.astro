@@ -9,6 +9,32 @@ import { getPopularTools } from '~/data/popular-tools';
 
 const popular = getPopularTools({ mode: 'fallback', limit: 5 });
 const clusterSlugs = ['scrabble', 'unscramble', 'pattern', 'rhyme', 'everyday-calculators', 'daily'];
+const cognitiveBoostCategories = [
+  {
+    category: 'calculators',
+    label: 'Decision calculators',
+    href: '/calculators/',
+    summary: 'Simple math tools for estimates, tradeoffs, dates, rates, ratios, and next-step decisions.',
+  },
+  {
+    category: 'converters',
+    label: 'Conversion tools',
+    href: '/converters/',
+    summary: 'Unit conversions framed as practical number sense for planning, comparing, and checking assumptions.',
+  },
+  {
+    category: 'word-tools',
+    label: 'Language boost',
+    href: '/word-tools/',
+    summary: 'Word, spelling, vocabulary, and text tools for pattern recognition and language practice.',
+  },
+  {
+    category: 'games',
+    label: 'Cognitive play',
+    href: '/games/',
+    summary: 'Daily and vibe-style thinking drills for attention, recall, spatial reasoning, and logic.',
+  },
+] as const;
 
 const siteBase = (Astro.site?.toString() ?? 'https://kefiw.com').replace(/\/$/, '');
 const jsonLd = {
@@ -25,7 +51,7 @@ const jsonLd = {
         width: 1200,
         height: 630,
       },
-      description: 'Kefiw connects calculators, guides, and tracks into practical decision plans for property, business, care, everyday tools, and cognitive play.',
+      description: 'Kefiw connects decision calculators, guides, tracks, and cognitive boost tools into practical plans for property, business, care, and everyday thinking.',
     },
     {
       '@type': 'WebSite',
@@ -44,21 +70,21 @@ const jsonLd = {
 };
 ---
 <BaseLayout
-  title="Kefiw — Calculators, Tracks, and Practical Decision Guides"
-  description="Kefiw helps you plan property, business, care, and everyday decisions with calculators, guided tracks, practical guides, and daily cognitive puzzle tools."
+  title="Kefiw — Decision Tools, Tracks, and Cognitive Boost"
+  description="Kefiw helps you plan property, business, care, and everyday decisions with guided tracks, deterministic calculators, practical guides, and cognitive boost tools."
   canonical="/"
-  keywords={['word tools', 'unscrambler', 'anagram solver', 'converters', 'calculators', 'decision tools', 'daily challenges']}
+  keywords={['decision tools', 'cognitive boost', 'guided tracks', 'practical calculators', 'thinking tools', 'daily challenges']}
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
 
   <section class="container-wide py-8 sm:py-12">
     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-700">Kefiw</p>
-    <h1 class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">Decision tools that turn numbers into next steps.</h1>
+    <h1 class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">Decision tools and cognitive boosts for real-life choices.</h1>
     <p class="mt-3 max-w-2xl text-lg text-slate-600">
-      Use Kefiw to estimate costs, compare options, stress-test assumptions, and follow guided tracks across property,
-      business, care, everyday tools, and cognitive play.
+      Use Kefiw to estimate costs, compare options, stress-test assumptions, and sharpen everyday thinking across property,
+      business, care, guided tracks, and cognitive boost tools.
     </p>
-    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
       <a href="/property/" class="rounded-md border border-slate-200 bg-white p-4 no-underline transition hover:border-brand-300 hover:bg-brand-50">
         <div class="text-sm font-semibold text-slate-900">Property</div>
         <div class="mt-1 text-xs leading-5 text-slate-600">Improve, estimate, buy, sell, own, invest, and insure.</div>
@@ -71,17 +97,21 @@ const jsonLd = {
         <div class="text-sm font-semibold text-slate-900">Care</div>
         <div class="mt-1 text-xs leading-5 text-slate-600">Senior care, caregiving, Medicare, insurance, and wellbeing.</div>
       </a>
+      <a href="#cognitive-boost" class="rounded-md border border-slate-200 bg-white p-4 no-underline transition hover:border-brand-300 hover:bg-brand-50">
+        <div class="text-sm font-semibold text-slate-900">Cognitive Boost</div>
+        <div class="mt-1 text-xs leading-5 text-slate-600">Language, number sense, conversion, and thinking drills.</div>
+      </a>
       <a href="/tracks/" class="rounded-md border border-slate-200 bg-white p-4 no-underline transition hover:border-brand-300 hover:bg-brand-50">
         <div class="text-sm font-semibold text-slate-900">Tracks</div>
         <div class="mt-1 text-xs leading-5 text-slate-600">Guided pipelines that turn related tools into a plan.</div>
       </a>
     </div>
     <div class="mt-4 flex flex-wrap gap-2">
-      <a href="/calculators/" class="btn-ghost">Tools</a>
-      <a href="/games/" class="btn-ghost">Cognitive Play</a>
+      <a href="#cognitive-boost" class="btn-ghost">Cognitive Boost</a>
+      <a href="/tracks/" class="btn-ghost">Tracks</a>
       <a href="/guides/" class="btn-ghost">Guides</a>
-      <a href="/word-tools/" class="btn-ghost">Word Tools</a>
-      <a href="/converters/" class="btn-ghost">Converters</a>
+      <a href="/property/" class="btn-ghost">Property</a>
+      <a href="/business/" class="btn-ghost">Business</a>
     </div>
   </section>
 
@@ -90,7 +120,7 @@ const jsonLd = {
       <div class="flex items-center gap-2">
         <span class="inline-flex items-center rounded-full bg-cyan-600 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white">Daily</span>
         <p class="text-sm font-semibold text-cyan-900">
-          Short, repeatable cognitive play for words, numbers, visual patterns, and logic —
+          Short, repeatable cognitive practice for words, numbers, visual patterns, and logic —
           <a href="/guides/word-games-and-puzzles-brain-health-routine/" class="underline hover:text-cyan-700">not a cure, not a diagnosis</a>,
           just a thinking routine you&rsquo;ll actually keep.
         </p>
@@ -138,16 +168,30 @@ const jsonLd = {
 
   <AdSlot slot="between-sections" />
 
-  {(['word-tools','converters','calculators','games'] as const).map((cat) => (
-    <section class="container-wide mt-10">
-      <div class="flex items-baseline justify-between">
-        <h2 class="text-xl font-semibold">{CATEGORIES[cat].title}</h2>
-        <a href={`/${cat}/`} class="text-sm">See all →</a>
-      </div>
-      <p class="mt-1 text-sm text-slate-600">{CATEGORIES[cat].blurb}</p>
-      <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {toolsByCategory(cat).slice(0, 6).map((t) => <ToolCard tool={t} />)}
-      </div>
-    </section>
-  ))}
+  <section id="cognitive-boost" class="container-wide mt-10 scroll-mt-24">
+    <div class="max-w-3xl">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-700">Cognitive Boost / Play</p>
+      <h2 class="mt-2 text-2xl font-semibold">Thinking tools grouped as practice, not a casual utility dump.</h2>
+      <p class="mt-2 text-sm leading-6 text-slate-600">
+        Word helpers, converters, simple calculators, daily puzzles, and vibe tools all sit here as lightweight support
+        for attention, language, number sense, pattern recognition, and faster everyday decisions.
+      </p>
+    </div>
+    <div class="mt-6 grid gap-8 lg:grid-cols-2">
+      {cognitiveBoostCategories.map((group) => (
+        <section class="border-t border-slate-200 pt-4">
+          <div class="flex items-baseline justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-semibold text-slate-900">{group.label}</h3>
+              <p class="mt-1 text-sm leading-6 text-slate-600">{group.summary}</p>
+            </div>
+            <a href={group.href} class="shrink-0 text-sm">See all →</a>
+          </div>
+          <div class="mt-3 grid gap-3 sm:grid-cols-2">
+            {toolsByCategory(group.category).slice(0, 4).map((t) => <ToolCard tool={t} />)}
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
 </BaseLayout>

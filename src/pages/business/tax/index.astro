@@ -1,0 +1,183 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
+import {
+  taxGuideHref,
+  taxGuidePages,
+  taxSituationRoutes,
+  taxTemplateHref,
+  taxTemplatePages,
+  taxTrackCards,
+} from '~/data/business-tax';
+
+const taxCalculators = VERTICAL_CALCULATORS_BY_AREA.business.filter((page) => page.group === 'Tax');
+const featuredSlugs = [
+  'tax-reserve-health-score',
+  'self-employed-tax-calculator',
+  'quarterly-tax-estimate-calculator',
+  'dangerous-deduction-checker',
+  'llc-vs-s-corp-calculator',
+  's-corp-tax-savings-calculator',
+  'reasonable-salary-planner',
+];
+const featuredCalculators = featuredSlugs.flatMap((slug) => {
+  const page = taxCalculators.find((item) => item.slug === slug);
+  return page ? [page] : [];
+});
+
+const taxProblems = [
+  'I do not know how much to set aside.',
+  'I missed a quarterly payment.',
+  'My income is irregular.',
+  'I have W-2 and 1099 income.',
+  'I want to review deductions.',
+  'I am worried a deduction is risky.',
+  'I am considering S-corp.',
+  'I need a reasonable salary assumption.',
+];
+---
+
+<BaseLayout
+  title="Tax Calculators for Self-Employed Operators and Small Businesses | Kefiw"
+  description="Tax calculators for self-employed tax reserve, quarterly payments, deduction caution, S-corp savings, LLC vs S-corp tradeoffs, and reasonable salary planning."
+  canonical="/business/tax/"
+  keywords={['self employed tax calculators', 'tax reserve health score', 'quarterly tax catch up calculator', 'dangerous deduction checker', 's corp break even calculator']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/tax/', label: 'Tax' }]} />
+
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business tax</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Tax Calculators for Self-Employed Operators and Small Businesses</h1>
+      <p class="mt-3 text-lg text-slate-700">Know what is not really yours yet.</p>
+      <p class="mt-3 max-w-3xl text-slate-700">
+        Estimate tax reserves, quarterly payments, deduction caution, S-corp savings, and owner-salary planning with visible
+        assumptions and plain-English next steps.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/business/tax-reserve-health-score/" class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800">Check my tax reserve</a>
+        <a href="/business/quarterly-tax-estimate-calculator/" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400">Estimate quarterly tax</a>
+      </div>
+    </header>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What tax problem are you trying to avoid?</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {taxProblems.map((item) => (
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-900">{item}</div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What are you trying to figure out?</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {taxSituationRoutes.map((route) => (
+          <a href={route.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <p class="text-sm text-slate-700">{route.situation}</p>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{route.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Featured calculators</p>
+          <h2 class="mt-1 text-xl font-bold text-slate-950">Run the uncomfortable tax math</h2>
+        </div>
+        <a href="#all-tax-calculators" class="text-sm font-semibold text-brand-700 no-underline hover:text-brand-900">See all tax tools</a>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {featuredCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="flex min-h-52 flex-col rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+            <span class="mt-auto pt-4 text-sm font-semibold text-brand-700">Run calculator</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">The uncomfortable tax math</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Most tax stress starts before tax season. It starts when gross revenue looks spendable, deductions are remembered
+        instead of documented, quarterly payments are guessed, and S-corp savings are modeled without payroll, salary,
+        filing, state, and admin costs.
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Tax tracks</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {taxTrackCards.map((track) => (
+          <a href={track.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{track.situation}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{track.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Mistakes and field guides</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {taxGuidePages.slice(0, 9).map((page) => (
+          <a href={taxGuideHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Checklists and templates</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+        {taxTemplatePages.map((page) => (
+          <a href={taxTemplateHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="all-tax-calculators" class="mt-10 scroll-mt-28">
+      <h2 class="text-xl font-bold text-slate-950">All tax calculators</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {taxCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">Kefiw tax methodology</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Kefiw tax tools use visible assumptions, source checks, conservative scenarios, and "what this tool does not do"
+        sections because tax decisions are damaged by hidden inputs and stale certainty.
+      </p>
+      <a href="/business/tax/source-verification-policy/" class="mt-4 inline-flex rounded-md border border-brand-200 bg-white px-3 py-2 text-sm font-semibold text-brand-800 no-underline hover:border-brand-400">
+        Read the Tax Source Verification Policy
+      </a>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

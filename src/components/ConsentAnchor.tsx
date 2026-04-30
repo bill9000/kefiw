@@ -491,14 +491,14 @@ export default function ConsentAnchor(): JSX.Element | null {
         >
           <p style={helpText}>Care-cost planning, Medicare, insurance, and wellbeing tools with nurse-review boundaries.</p>
           <ul style={linkList}>
-            <li><a href="/care/" style={linkStyle}>Care Lab</a></li>
-            <li><a href="/care/#senior-care" style={linkStyle}>Senior Care</a></li>
-            <li><a href="/care/#caregiving" style={linkStyle}>Caregiving</a></li>
-            <li><a href="/care/#medicare" style={linkStyle}>Medicare</a></li>
-            <li><a href="/care/#insurance" style={linkStyle}>Insurance</a></li>
-            <li><a href="/health/" style={linkStyle}>Wellbeing</a></li>
+            <li><a href="/care/lab/" style={linkStyle}>Care Lab</a></li>
+            <li><a href="/care/senior-care/" style={linkStyle}>Senior Care</a></li>
+            <li><a href="/care/caregiving/" style={linkStyle}>Caregiving</a></li>
+            <li><a href="/care/medicare/" style={linkStyle}>Medicare</a></li>
+            <li><a href="/care/insurance/" style={linkStyle}>Insurance</a></li>
+            <li><a href="/care/wellbeing/" style={linkStyle}>Wellbeing</a></li>
             <li><a href="/tracks/#care-tracks" style={linkStyle}>Care Tracks</a></li>
-            <li><a href="/care/" style={linkStyle}>Care Guides</a></li>
+            <li><a href="/care/guides/" style={linkStyle}>Care Guides</a></li>
             <li><a href="/health/" style={linkStyle}>Health Calculators</a></li>
           </ul>
         </CollapsibleSection>

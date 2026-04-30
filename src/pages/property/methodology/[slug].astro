@@ -1,0 +1,205 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import {
+  VERTICAL_CALCULATORS_BY_AREA,
+  verticalCalculatorHref,
+  type VerticalCalculatorPage,
+} from '~/data/vertical-calculators';
+
+export function getStaticPaths() {
+  return VERTICAL_CALCULATORS_BY_AREA.property.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+interface Props {
+  page: VerticalCalculatorPage;
+}
+
+const { page } = Astro.props;
+const calculatorHref = verticalCalculatorHref(page);
+const canonical = `/property/methodology/${page.slug}/`;
+
+function includedItems(page: VerticalCalculatorPage): string[] {
+  return [
+    'The visible inputs listed on the calculator page.',
+    'The assumptions shown below the calculator.',
+    'A planning estimate based on the calculator family, not a binding quote, contract, appraisal, insurance settlement, title statement, or lender disclosure.',
+    ...page.fields.slice(0, 12).map((field) => `Input: ${field.label}.`),
+  ];
+}
+
+function excludedItems(page: VerticalCalculatorPage): string[] {
+  const common = [
+    'Final contractor pricing, local permit interpretation, lender underwriting, title-company settlement, insurance claim approval, tax advice, legal advice, or property-specific professional judgment.',
+    'Every local custom, contract term, hidden condition, inspection finding, market shift, and timing issue.',
+    'Guaranteed savings, resale value, coverage, approval, or final cash due.',
+  ];
+  if (page.group === 'Improve') {
+    return [
+      ...common,
+      'Full Manual J design, in-person HVAC diagnosis, roof inspection, structural inspection, code inspection, or contractor warranty review.',
+    ];
+  }
+  return [
+    ...common,
+    'Full title commitment review, purchase contract interpretation, settlement statement preparation, payoff quote, tax bill reconciliation, HOA resale package, or brokerage advice.',
+  ];
+}
+
+function tooLowFactors(page: VerticalCalculatorPage): string[] {
+  if (page.group === 'Improve') {
+    return [
+      'Hidden damage, access difficulty, permit/code requirements, disposal, electrical, gas, duct, decking, flashing, ventilation, or warranty scope is not included.',
+      'The quote is a low base price with change orders likely.',
+      'Emergency timing reduces quote leverage.',
+    ];
+  }
+  return [
+    'Title, tax proration, association fees, payoff timing, seller credits, concessions, prepaids, escrow setup, repair credits, or contract-specific terms are missing.',
+    'The estimate uses optimistic sale price, low fee assumptions, or stale payoff data.',
+    'Local custom shifts a cost to the side that did not budget for it.',
+  ];
+}
+
+function tooHighFactors(page: VerticalCalculatorPage): string[] {
+  if (page.group === 'Improve') {
+    return [
+      'A narrower repair, partial replacement, roof-over, owner-supplied material path, rebate, or scope trim is safe and documented.',
+      'Access is easier, hidden conditions are absent, or the project is bundled efficiently.',
+      'A second quote proves the first quote included unnecessary scope.',
+    ];
+  }
+  return [
+    'Seller credits, lender credits, negotiated fees, lower concessions, lower association charges, or better payoff timing apply.',
+    'A title company or lender fee sheet replaces broad percentage assumptions.',
+    'A conservative scenario was used for planning but the final contract is cleaner.',
+  ];
+}
+---
+
+<BaseLayout
+  title={`${page.h1} Methodology | Kefiw`}
+  description={`Learn how the ${page.h1} works, including inputs, assumptions, included items, excluded items, limitations, and when to verify with a professional.`}
+  canonical={canonical}
+  keywords={[...page.keywords, `${page.h1.toLowerCase()} methodology`, 'property calculator assumptions']}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/property/', label: 'Property' },
+    { href: calculatorHref, label: page.h1 },
+    { href: canonical, label: 'Methodology' },
+  ]} />
+
+  <article class="container-wide py-6">
+    <header class="mb-6 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Calculator Methodology</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">How the {page.h1} estimate works</h1>
+      <p class="mt-3 text-lg leading-7 text-slate-700">{page.summary}</p>
+      <p class="mt-3 max-w-3xl rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-950">
+        This estimate is for planning. Actual results may change based on local pricing, contracts, title practice, lender disclosures, insurance documents, inspection findings, hidden conditions, timing, and professional review.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href={calculatorHref}>Use the calculator</a>
+        <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/decision-packet/">Build decision packet</a>
+      </div>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div class="space-y-8">
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">Inputs used</h2>
+          <p class="mt-2 text-sm leading-6 text-slate-600">Defaults are planning placeholders, not recommendations.</p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            {page.fields.map((field) => (
+              <div class="rounded-md border border-slate-200 bg-slate-50 p-3">
+                <div class="text-sm font-semibold text-slate-900">{field.label}</div>
+                <div class="mt-1 text-xs text-slate-600">
+                  Default: {String(field.defaultValue)}
+                  {field.prefix ? ` ${field.prefix}` : ''}
+                  {field.suffix ? ` ${field.suffix}` : ''}
+                </div>
+                {field.help && <div class="mt-1 text-xs text-slate-600">{field.help}</div>}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">What is included</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            {includedItems(page).map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">What is excluded</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            {excludedItems(page).map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="grid gap-4 md:grid-cols-2">
+          <div class="rounded-lg border border-rose-200 bg-rose-50 p-4">
+            <h2 class="text-lg font-semibold text-rose-950">What can make the estimate too low</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-rose-950">
+              {tooLowFactors(page).map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <div class="rounded-lg border border-cyan-200 bg-cyan-50 p-4">
+            <h2 class="text-lg font-semibold text-cyan-950">What can make the estimate too high</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-cyan-950">
+              {tooHighFactors(page).map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">Assumptions</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            {page.assumptions.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+
+        <section class="rounded-lg border border-slate-200 bg-white p-4">
+          <h2 class="text-xl font-semibold text-slate-900">When to verify before acting</h2>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            <li>Before signing a contractor quote, purchase contract, listing agreement, loan document, title document, insurance claim document, or association document.</li>
+            <li>When a result depends on local custom, contract language, code, warranty, hidden conditions, eligibility, or professional judgment.</li>
+            <li>When the result changes whether you repair, replace, sell, buy, claim, finance, or walk away.</li>
+          </ul>
+        </section>
+      </div>
+
+      <aside class="h-fit rounded-lg border border-slate-200 bg-white p-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-700">Methodology snapshot</h2>
+        <dl class="mt-3 space-y-3 text-sm">
+          <div>
+            <dt class="font-semibold text-slate-900">Calculator</dt>
+            <dd><a class="text-brand-700 hover:underline" href={calculatorHref}>{page.h1}</a></dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-slate-900">Family</dt>
+            <dd class="text-slate-700">{page.group}</dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-slate-900">Source check</dt>
+            <dd class="text-slate-700">{page.sourceCheckedAt ?? 'Uses calculator defaults shown on the page.'}</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'realtor', href: '/realtor-review/' },
+        { label: 'remodeling contractor', href: '/remodeling-contractor-review/' },
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

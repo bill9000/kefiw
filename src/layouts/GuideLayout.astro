@@ -7,10 +7,11 @@ import FAQ from '~/components/FAQ.astro';
 import AdSlot from '~/components/ads/AdSlot.tsx';
 import InlineMetric from '~/components/InlineMetric.astro';
 import PivotSwitch from '~/components/PivotSwitch.tsx';
+import CareTrustFooter from '~/components/CareTrustFooter.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
 import { reviewPanelForArea } from '~/data/review';
 import type { ContentPageConfig } from '~/data/content-pages';
-import { CATEGORY_LABEL, contentPageById, contentHref } from '~/data/content-pages';
+import { CARE_GUIDE_CATEGORIES, CATEGORY_LABEL, contentPageById, contentHref } from '~/data/content-pages';
 import { TOOLS_BY_ID, toolHref } from '~/data/tools';
 import { CLUSTERS_BY_SLUG, clusterHref } from '~/data/clusters';
 import { renderMarkdown } from '~/lib/markdown';
@@ -46,11 +47,12 @@ interface Props {
 }
 
 const { config } = Astro.props;
-const canonical = `/guides/${config.slug}/`;
+const canonical = contentHref(config);
+const guideIndexHref = CARE_GUIDE_CATEGORIES.has(config.guideCategory ?? '') ? '/care/guides/' : '/guides/';
 
 const crumbs = [
   { href: '/', label: 'Home' },
-  { href: '/guides/', label: 'Guides' },
+  { href: guideIndexHref, label: config.guideCategory ?? 'Guides' },
   { href: canonical, label: config.h1 },
 ];
 
@@ -91,7 +93,10 @@ const guideRelatedToolCategories = (config.relatedIds ?? []).flatMap((id) => {
   const category = TOOLS_BY_ID[id]?.category;
   return category ? [category] : [];
 });
-const guideReviewArea = cluster?.section === 'health'
+const isCareGuide = CARE_GUIDE_CATEGORIES.has(config.guideCategory ?? '');
+const guideReviewArea = isCareGuide
+  ? 'health-guide'
+  : cluster?.section === 'health'
   ? 'health-guide'
   : cluster?.section ?? guideRelatedToolCategories[0];
 const reviewConfig = reviewPanelForArea(guideReviewArea);
@@ -517,6 +522,8 @@ const relatedItemListJsonLd = allRelated.length ? {
     <div class="my-6">
       <AdSlot client:idle zoneId="EPSILON" />
     </div>
+
+    {isCareGuide && <CareTrustFooter variant="guide" />}
 
     <ReviewMethodologyFooter reviewerLinks={reviewApprovalLinks} includeHealthDisclaimer={usesHealthReview} />
 

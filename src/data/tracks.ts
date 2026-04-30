@@ -1,3 +1,5 @@
+import { BUSINESS_TRACK_OVERRIDES, BUSINESS_TRACKS } from './business-tracks';
+
 export type TrackCategory = 'home' | 'property' | 'business' | 'care' | 'daily';
 
 export type TrackStepType = 'calculator' | 'checklist' | 'guide' | 'comparison' | 'result';
@@ -7,11 +9,48 @@ export interface TrackStep {
   type: TrackStepType;
   href?: string;
   description: string;
+  whyNow?: string;
+  resultToWatch?: string[];
+  ifResultLooksBad?: string;
+  checkpoint?: string;
+  relatedGuide?: TrackGuide;
+  relatedTemplate?: TrackGuide;
+  carryForward?: string;
 }
 
 export interface TrackGuide {
   title: string;
   href: string;
+}
+
+export interface TrackScoreState {
+  range: string;
+  state: string;
+  meaning: string;
+}
+
+export interface TrackScoreVerdict {
+  state: string;
+  verdict: string;
+}
+
+export interface TrackScore {
+  title: string;
+  inputs: string[];
+  states: TrackScoreState[];
+  verdicts: TrackScoreVerdict[];
+  summaryOutputs: string[];
+}
+
+export interface TrackNextLink {
+  label: string;
+  href: string;
+  reason: string;
+}
+
+export interface TrackMonetizationRecommendation {
+  condition: string;
+  recommendation: string;
 }
 
 export interface TrackFinalPlan {
@@ -30,11 +69,20 @@ export interface TrackSafety {
 export interface Track {
   slug: string;
   title: string;
+  h1?: string;
+  tagline?: string;
+  promise?: string;
+  primaryCtaLabel?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
   resultTitle: string;
   category: TrackCategory;
   vertical: string;
   goal: string;
   description: string;
+  whoThisIsFor?: string[];
+  decisions?: string[];
+  beforeYouStart?: string[];
   reviewedBy: string[];
   duration: string;
   monetization: string[];
@@ -43,6 +91,11 @@ export interface Track {
   recommendedGuides: TrackGuide[];
   commonMistakes: string[];
   methodology: string[];
+  whatMostAdviceLeavesOut?: string;
+  trackScore?: TrackScore;
+  trackTemplates?: TrackGuide[];
+  nextTracks?: TrackNextLink[];
+  monetizationRecommendations?: TrackMonetizationRecommendation[];
   relatedSlugs: string[];
   keywords: string[];
   safety?: TrackSafety;
@@ -61,12 +114,12 @@ export const TRACK_CATEGORY_LABELS: Record<TrackCategory, string> = {
 export const TRACK_CATEGORY_DESCRIPTIONS: Record<TrackCategory, string> = {
   home: 'High-intent home improvement plans for roof, HVAC, and remodel decisions.',
   property: 'Real estate plans for sale proceeds, closing math, ownership, and investing.',
-  business: 'Pricing, tax, hiring, and operating plans for self-employed and small-business decisions.',
+  business: 'Guided operating paths for freelancing, pricing, hiring, tax reserves, revenue, S-corp, and software spend decisions.',
   care: 'Family care budgets, senior care planning, Medicare cost framing, and caregiving workload.',
   daily: 'Retention-friendly wellbeing tracks for sleep, stress, focus, and routine resets.',
 };
 
-export const TRACKS: Track[] = [
+const BASE_TRACKS: Track[] = [
   {
     slug: 'replace-my-roof',
     title: 'Replace My Roof',
@@ -808,6 +861,14 @@ export const TRACKS: Track[] = [
     relatedSlugs: ['mind-reset', 'plan-senior-care'],
     keywords: ['sleep reset', 'sleep debt calculator', 'sleep cycle timing', 'focus reset'],
   },
+];
+
+export const TRACKS: Track[] = [
+  ...BASE_TRACKS.map((track) => {
+    const override = BUSINESS_TRACK_OVERRIDES[track.slug];
+    return override ? { ...track, ...override } : track;
+  }),
+  ...BUSINESS_TRACKS,
 ];
 
 export const TRACKS_BY_SLUG: Record<string, Track | undefined> = Object.fromEntries(

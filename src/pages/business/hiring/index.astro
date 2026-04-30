@@ -1,0 +1,178 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { VERTICAL_CALCULATORS_BY_AREA, verticalCalculatorHref } from '~/data/vertical-calculators';
+import {
+  hiringGuideHref,
+  hiringGuidePages,
+  hiringSituationRoutes,
+  hiringTemplateHref,
+  hiringTemplatePages,
+  hiringTrackCards,
+} from '~/data/business-hiring';
+
+const hiringCalculators = VERTICAL_CALCULATORS_BY_AREA.business.filter((page) => page.group === 'Hiring');
+const featuredSlugs = [
+  'hiring-readiness-score',
+  'payroll-burden-calculator',
+  'first-90-day-hire-cost-calculator',
+  'contractor-vs-employee-calculator',
+  'hire-vs-automate-calculator',
+  'role-clarity-scorecard',
+];
+const featuredCalculators = featuredSlugs.flatMap((slug) => {
+  const page = hiringCalculators.find((item) => item.slug === slug);
+  return page ? [page] : [];
+});
+
+const helpTypes = [
+  'I need an employee.',
+  'I need a contractor.',
+  'I might automate this.',
+  'I am overwhelmed but not sure what to hire for.',
+  'I need the real payroll cost.',
+  'I need to test the role first.',
+  'I need to know if revenue can support the hire.',
+];
+---
+
+<BaseLayout
+  title="Hiring Calculators for Small Businesses: Know the Cost Before Payroll Starts | Kefiw"
+  description="Hiring calculators for payroll burden, contractor vs employee, hire vs automate, hiring readiness, first 90-day cost, role clarity, and payroll stress testing."
+  canonical="/business/hiring/"
+  keywords={['hiring calculators small business', 'hiring readiness score', 'payroll burden calculator', 'hire vs automate calculator', 'first employee cost calculator']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/hiring/', label: 'Hiring' }]} />
+
+  <article class="container-wide py-6">
+    <header class="max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business hiring</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Hiring Calculators for Small Businesses: Know the Cost Before Payroll Starts</h1>
+      <p class="mt-3 text-lg text-slate-700">Add help without adding chaos.</p>
+      <p class="mt-3 max-w-3xl text-slate-700">
+        Estimate payroll burden, contractor cost, automation tradeoffs, role clarity, revenue support, and first-90-day hiring risk
+        before adding permanent overhead.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/business/hiring-readiness-score/" class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800">Check hiring readiness</a>
+        <a href="/business/contractor-vs-employee-calculator/" class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400">Compare contractor vs employee</a>
+      </div>
+    </header>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What are you trying to decide?</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {hiringSituationRoutes.map((route) => (
+          <a href={route.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <p class="text-sm text-slate-700">{route.situation}</p>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{route.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">What kind of help do you need?</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {helpTypes.map((item) => (
+          <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-900">{item}</div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Featured calculators</p>
+          <h2 class="mt-1 text-xl font-bold text-slate-950">Run the uncomfortable hiring math</h2>
+        </div>
+        <a href="#all-hiring-calculators" class="text-sm font-semibold text-brand-700 no-underline hover:text-brand-900">See all hiring tools</a>
+      </div>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {featuredCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="flex min-h-52 flex-col rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+            <span class="mt-auto pt-4 text-sm font-semibold text-brand-700">Run calculator</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">The uncomfortable hiring math</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Hiring is not only a cost decision. It is a commitment decision. A person can add capacity, but they can also add payroll pressure,
+        training work, management load, quality-control work, and emotional responsibility. Before hiring, Kefiw helps you test whether the
+        work should be hired, contracted, automated, simplified, or deleted.
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Hiring tracks</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {hiringTrackCards.map((track) => (
+          <a href={track.href} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-base font-bold text-slate-950">{track.situation}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{track.label}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Mistakes and field guides</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {hiringGuidePages.slice(0, 9).map((page) => (
+          <a href={hiringGuideHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-xl font-bold text-slate-950">Scripts and templates</h2>
+      <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {hiringTemplatePages.map((page) => (
+          <a href={hiringTemplateHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section id="all-hiring-calculators" class="mt-10 scroll-mt-28">
+      <h2 class="text-xl font-bold text-slate-950">All hiring calculators</h2>
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {hiringCalculators.map((page) => (
+          <a href={verticalCalculatorHref(page)} class="rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline hover:border-brand-400 hover:shadow-sm">
+            <h3 class="text-sm font-bold text-slate-950">{page.h1}</h3>
+            {page.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{page.tagline}</p>}
+            <p class="mt-2 text-sm leading-6 text-slate-700">{page.promise ?? page.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 max-w-4xl rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-bold text-slate-950">Kefiw hiring methodology</h2>
+      <p class="mt-2 leading-7 text-slate-700">
+        Kefiw hiring tools show hidden costs because hiring decisions usually fail when salary is treated as the whole cost,
+        ramp time is ignored, or owner stress is mistaken for a real role.
+      </p>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

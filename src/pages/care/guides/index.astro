@@ -1,0 +1,8 @@
+---
+import CareCategoryLayout from '~/layouts/CareCategoryLayout.astro';
+import { CARE_CATEGORIES_BY_SLUG } from '~/data/care-categories';
+
+const category = CARE_CATEGORIES_BY_SLUG.guides;
+---
+
+<CareCategoryLayout category={category} />

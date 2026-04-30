@@ -1,0 +1,43 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import CareTrustFooter from '~/components/CareTrustFooter.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import PlaybookClient from '~/components/care/PlaybookClient';
+import { CARE_PLAYBOOKS, carePlaybookHref, type CarePlaybook } from '~/data/care-playbooks';
+
+export function getStaticPaths() {
+  return CARE_PLAYBOOKS.map((playbook) => ({
+    params: { slug: playbook.slug },
+    props: { playbook },
+  }));
+}
+
+const { playbook } = Astro.props as { playbook: CarePlaybook };
+---
+
+<BaseLayout
+  title={`${playbook.metaTitle} | Kefiw`}
+  description={playbook.metaDescription}
+  canonical={carePlaybookHref(playbook)}
+  keywords={['care playbook', playbook.shortTitle, 'family caregiving', 'senior care planning']}
+>
+  <Breadcrumb crumbs={[
+    { href: '/', label: 'Home' },
+    { href: '/care/', label: 'Care' },
+    { href: '/care/playbooks/', label: 'Care Playbooks' },
+    { href: carePlaybookHref(playbook), label: playbook.shortTitle },
+  ]} />
+
+  <article class="container-wide py-6">
+    <PlaybookClient client:load playbook={playbook} />
+    <CareTrustFooter variant="guide" />
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'registered nurse', href: '/registered-nurse-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+      includeHealthDisclaimer
+    />
+  </article>
+</BaseLayout>

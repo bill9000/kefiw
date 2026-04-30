@@ -1,15 +1,21 @@
 import type { APIRoute } from 'astro';
 import { TOOLS, CATEGORIES, toolHref } from '~/data/tools';
 import { buildSeoPages } from '~/lib/seo-pages';
-import {
-  contentPagesBySection,
-  contentHref,
-  type ContentPageConfig,
-} from '~/data/content-pages';
+import { contentPagesBySection, contentHref, type ContentPageConfig } from '~/data/content-pages';
 import { CLUSTERS, clusterHref } from '~/data/clusters';
 import { DAILY_GAMES } from '~/data/daily-games';
 import { TRACKS, trackHref } from '~/data/tracks';
 import { VERTICAL_CALCULATORS, verticalCalculatorHref } from '~/data/vertical-calculators';
+import { CARE_CATEGORIES, careCategoryHref } from '~/data/care-categories';
+import { CARE_PLAYBOOKS, carePlaybookHref } from '~/data/care-playbooks';
+import { PROPERTY_CATEGORIES, propertyCategoryHref } from '~/data/property-categories';
+import { PROPERTY_CHECKLISTS, propertyChecklistHref } from '~/data/property-checklists';
+import { PROPERTY_PLAYBOOKS, propertyPlaybookHref } from '~/data/property-playbooks';
+import { pricingGuideHref, pricingGuidePages, pricingTemplateHref, pricingTemplatePages } from '~/data/business-pricing';
+import { hiringGuideHref, hiringGuidePages, hiringTemplateHref, hiringTemplatePages } from '~/data/business-hiring';
+import { taxGuideHref, taxGuidePages, taxTemplateHref, taxTemplatePages } from '~/data/business-tax';
+import { cloudSaasGuideHref, cloudSaasGuidePages, cloudSaasTemplateHref, cloudSaasTemplatePages } from '~/data/business-cloud-saas';
+import { revenueGuideHref, revenueGuidePages, revenueTemplateHref, revenueTemplatePages } from '~/data/business-revenue';
 
 const STATIC_ROUTES = [
   '/',
@@ -68,8 +74,36 @@ const STATIC_ROUTES = [
   '/homelab/methodology/',
   '/homelab/about/',
   '/property/',
+  '/property/start/',
+  '/property/decision-packet/',
+  '/property/playbooks/',
+  '/property/checklists/',
+  '/property/quote-comparison/',
+  '/property/option-comparison/',
+  '/property/rental-investor-planner/',
+  ...PROPERTY_CATEGORIES.map((category) => propertyCategoryHref(category.slug)),
+  ...PROPERTY_PLAYBOOKS.map(propertyPlaybookHref),
+  ...PROPERTY_CHECKLISTS.map(propertyChecklistHref),
   '/business/',
+  '/business/tax/',
+  '/business/tax/source-verification-policy/',
+  '/business/pricing/',
+  '/business/hiring/',
+  '/business/cloud-saas/',
+  '/business/revenue/',
+  '/business/guides/',
+  '/business/templates/',
+  '/business/methodology/',
+  '/business/what-most-advice-leaves-out/',
+  '/business/how-kefiw-makes-money/',
+  '/business/tracks/',
+  '/business/tracks/how-kefiw-business-tracks-work/',
   '/care/',
+  '/care/start/',
+  '/care/playbooks/',
+  '/care/family-care-plan-summary/',
+  ...CARE_CATEGORIES.map((category) => careCategoryHref(category.slug)),
+  ...CARE_PLAYBOOKS.map(carePlaybookHref),
   '/tracks/',
 ];
 
@@ -92,6 +126,18 @@ export const GET: APIRoute = ({ site }) => {
     ...STATIC_ROUTES,
     ...TRACKS.map(trackHref),
     ...VERTICAL_CALCULATORS.map(verticalCalculatorHref),
+    ...taxGuidePages.map(taxGuideHref),
+    ...taxTemplatePages.map(taxTemplateHref),
+    ...pricingGuidePages.map(pricingGuideHref),
+    ...pricingTemplatePages.map(pricingTemplateHref),
+    ...hiringGuidePages.map(hiringGuideHref),
+    ...hiringTemplatePages.map(hiringTemplateHref),
+    ...cloudSaasGuidePages.map(cloudSaasGuideHref),
+    ...cloudSaasTemplatePages.map(cloudSaasTemplateHref),
+    ...revenueGuidePages.map(revenueGuideHref),
+    ...revenueTemplatePages.map(revenueTemplateHref),
+    ...VERTICAL_CALCULATORS.filter((page) => page.area === 'property').map((page) => `/property/methodology/${page.slug}/`),
+    ...VERTICAL_CALCULATORS.filter((page) => page.area === 'care').map((page) => `/care/methodology/${page.slug}/`),
     ...CLUSTERS.map(clusterHref),
     // Exclude noindex tools (reagent-* etc.) — same rationale as above.
     ...TOOLS.filter((t) => !t.comingSoon && !t.noindex).map(toolHref),
@@ -103,9 +149,6 @@ export const GET: APIRoute = ({ site }) => {
     ...publishedContent('games').map(contentHref),
   ];
   const xml =
-    `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    urls.map((u) => `  <url><loc>${base}${u}</loc></url>`).join('\n') +
-    `\n</urlset>\n`;
+    `<?xml version="1.0" encoding="UTF-8"?>\n` + `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` + urls.map((u) => `  <url><loc>${base}${u}</loc></url>`).join('\n') + `\n</urlset>\n`;
   return new Response(xml, { headers: { 'Content-Type': 'application/xml' } });
 };

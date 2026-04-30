@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
-import { contentPagesBySection, type ContentPageConfig } from '~/data/content-pages';
+import { contentHref, contentPagesBySection, type ContentPageConfig } from '~/data/content-pages';
 
 const guides = contentPagesBySection('guides').filter((c) => c.kind === 'guide');
 
@@ -10,7 +10,52 @@ for (const g of guides) {
   const cat = g.guideCategory ?? 'General';
   (byCat[cat] ??= []).push(g);
 }
-const cats = Object.keys(byCat).sort();
+const categoryOrder = [
+  'Senior Care Guides',
+  'Caregiving Guides',
+  'Daily Care & Safety',
+  'Worksheets & Templates',
+  'Care Playbooks',
+  'Trust & Governance',
+  'Medicare Guides',
+  'Insurance & Payment Guides',
+  'Wellbeing Guides',
+  'Checklists & Scripts',
+  'Local Resources & Rights',
+  'Legal & Planning Documents',
+  'Family Decision Support',
+  'Property',
+  'Business',
+  'Health',
+  'Word Tools',
+  'Word Games',
+  'Converters',
+  'Calculators',
+  'Logic',
+  'Games',
+  'General',
+];
+const categoryDescriptions: Record<string, string> = {
+  'Senior Care Guides': 'Care settings, costs, transitions, aging in place, and decisions families make before and after a crisis.',
+  'Caregiving Guides': 'Workload, family roles, hidden costs, long-distance care, appointments, boundaries, and emergency planning.',
+  'Daily Care & Safety': 'Day-to-day care routines for meals, medication, bathing, toileting, mobility, dementia, falls, hydration, and caregiver notes.',
+  'Worksheets & Templates': 'Printable scorecards, logs, comparison sheets, meeting agendas, and decision worksheets families can bring to tours, calls, appointments, and care meetings.',
+  'Care Playbooks': 'Short scenario-based action plans for falls, discharge, cost pressure, dementia safety, facility choices, burnout, Medicare review, and LTC insurance claims.',
+  'Trust & Governance': 'Review, source, safety, accessibility, privacy, corrections, AI, affiliate, and calculator limitation policies for Care Hub content.',
+  'Medicare Guides': 'Medicare costs, IRMAA, Part B, Part D, Medigap, plan comparison, and senior-care coverage gaps.',
+  'Insurance & Payment Guides': 'Long-term care insurance, Medicaid, HSA/FSA planning, health insurance, and practical payment paths.',
+  'Wellbeing Guides': 'Caregiver stress, sleep, guilt, urgent-care framing, falls, dementia safety, and reset tools.',
+  'Checklists & Scripts': 'Questions to ask, red flags to watch for, and family conversation scripts that turn stress into action.',
+  'Local Resources & Rights': 'Local senior-care resources, ombudsman programs, resident rights, facility concerns, and documents.',
+  'Legal & Planning Documents': 'Decision authority, advance directives, power of attorney, HIPAA access, benefits authority, guardianship, and document storage.',
+  'Family Decision Support': 'Money handling, caregiver payments, reimbursements, records, and shared family financial transparency.',
+};
+const cats = Object.keys(byCat).sort((a, b) => {
+  const ai = categoryOrder.indexOf(a);
+  const bi = categoryOrder.indexOf(b);
+  if (ai !== -1 || bi !== -1) return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  return a.localeCompare(b);
+});
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -20,7 +65,7 @@ const crumbs = [
 
 <BaseLayout
   title="Guides — Kefiw"
-  description="In-depth guides on word games, scoring, Scrabble strategy, Wordle tips, and more."
+  description="Human-curated guides for care, property, business, tools, and cognitive play decisions."
   canonical="/guides/"
 >
   <Breadcrumb crumbs={crumbs} />
@@ -28,8 +73,8 @@ const crumbs = [
     <header class="mb-6">
       <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Guides</h1>
       <p class="mt-2 max-w-3xl text-slate-600">
-        Explainers, strategy, and reference for word games, text tools, and puzzles. Short reads,
-        one topic each.
+        Human-curated decision guides for what to do next, what it may cost, what to ask,
+        what red flags to watch for, and which calculator or track to run next.
       </p>
     </header>
 
@@ -40,11 +85,14 @@ const crumbs = [
     {cats.map((cat) => (
       <section class="mb-8">
         <h2 class="mb-3 text-xl font-semibold">{cat}</h2>
+        {categoryDescriptions[cat] && (
+          <p class="mb-3 max-w-3xl text-sm text-slate-600">{categoryDescriptions[cat]}</p>
+        )}
         <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {byCat[cat].map((g) => (
             <li>
               <a
-                href={`/guides/${g.slug}/`}
+                href={contentHref(g)}
                 class="block rounded-lg border border-slate-200 bg-white p-4 transition hover:border-brand-500 hover:bg-brand-50"
               >
                 <div class="font-semibold text-slate-900">{g.h1}</div>

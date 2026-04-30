@@ -1,9 +1,10 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
+import CareTrustFooter from '~/components/CareTrustFooter.astro';
 import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
 import DecisionCalculator from '~/components/vertical/DecisionCalculator';
-import { verticalCalculatorHref, verticalLabel, type BusinessRiskProfile, type VerticalCalculatorPage } from '~/data/vertical-calculators';
+import { verticalCalculatorHref, verticalLabel, type VerticalRiskProfile, type VerticalCalculatorPage } from '~/data/vertical-calculators';
 
 interface Props {
   page: VerticalCalculatorPage;
@@ -12,6 +13,12 @@ interface Props {
 const { page } = Astro.props;
 const areaLabel = verticalLabel(page.area);
 const canonical = verticalCalculatorHref(page);
+const methodologyHref =
+  page.area === 'care'
+    ? `/care/methodology/${page.slug}/`
+    : page.area === 'property'
+      ? `/property/methodology/${page.slug}/`
+      : undefined;
 const reviewerLinks =
   page.area === 'property'
     ? [
@@ -41,7 +48,7 @@ const jsonLd = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 };
 
-const highRiskCopy: Record<BusinessRiskProfile, string[]> = {
+const highRiskCopy: Record<VerticalRiskProfile, string[]> = {
   'federal-tax': [
     'This calculator estimates federal tax planning reserves using educational assumptions. It does not file taxes or guarantee that penalties are avoided.',
     'State tax, local tax, credits, deductions, withholding, uneven income, and filing status can change the result.',
@@ -66,9 +73,89 @@ const highRiskCopy: Record<BusinessRiskProfile, string[]> = {
     'Cloud and SaaS pricing can change by vendor, product, region, usage, commitment, contract term, support plan, renewal, data transfer, and cancellation rule.',
     'This calculator is a planning model and does not fully predict a provider bill or vendor contract outcome.',
   ],
+  'revenue-planning': [
+    'Revenue forecasts, churn estimates, sales targets, and growth scenarios depend on customer behavior, market conditions, payment timing, and operating costs.',
+    'This calculator is a planning model and does not promise actual revenue, cash collection, retention, or growth.',
+  ],
+  'care-planning': [
+    'Care cost and workload estimates vary by location, provider, care setting, health status, family support, benefits, and safety needs.',
+    'This calculator helps organize questions and scenarios. It does not provide medical, legal, financial, benefits, or insurance advice.',
+  ],
+  'medicare-insurance': [
+    'Medicare, insurance, HSA, FSA, and long-term care rules can change by year, plan, location, income, employer, and eligibility.',
+    'Confirm plan details with Medicare, insurers, employers, licensed agents, tax professionals, or other qualified advisors before acting.',
+  ],
+  'household-care': [
+    'Household caregiver, payroll, wage-hour, immigration, and benefits rules can vary by federal and state law and by the facts of the arrangement.',
+    'This tool compares planning costs and compliance prompts. It does not create a lawful work arrangement or replace professional advice.',
+  ],
 };
 
 const highRiskNotes = page.riskProfile ? highRiskCopy[page.riskProfile] : [];
+const isBusinessTaxRisk =
+  page.area === 'business' &&
+  (page.riskProfile === 'federal-tax' || page.riskProfile === 'deduction-risk' || page.riskProfile === 's-corp');
+const cloudSaasCloudKinds = ['cloud-cost', 'cloud-exit', 'cloud-bill-shock', 'cloud-unit-economics', 'cloud-commitment-risk'];
+const cloudSaasAiKinds = ['ai-tool-roi', 'ai-token-cost'];
+const isBusinessCloudSaasRisk = page.area === 'business' && page.riskProfile === 'cloud-saas';
+const isBusinessCloudCostRisk = isBusinessCloudSaasRisk && cloudSaasCloudKinds.includes(page.kind);
+const isBusinessAiRisk = isBusinessCloudSaasRisk && cloudSaasAiKinds.includes(page.kind);
+const isBusinessSaasRisk = isBusinessCloudSaasRisk && !isBusinessCloudCostRisk && !isBusinessAiRisk;
+const revenueForecastKinds = ['revenue-forecast', 'revenue-fragility', 'sales-target', 'sales-pipeline-reality', 'client-concentration-risk', 'operating-leverage', 'expansion-vs-new-sales'];
+const revenueChurnKinds = ['churn', 'churn-replacement', 'subscription-pricing', 'retainer-stability'];
+const revenueCashKinds = ['cash-runway', 'payment-delay-impact'];
+const isBusinessRevenueRisk = page.area === 'business' && page.riskProfile === 'revenue-planning';
+const isBusinessRevenueForecastRisk = isBusinessRevenueRisk && revenueForecastKinds.includes(page.kind);
+const isBusinessRevenueChurnRisk = isBusinessRevenueRisk && revenueChurnKinds.includes(page.kind);
+const isBusinessRevenueCashRisk = isBusinessRevenueRisk && revenueCashKinds.includes(page.kind);
+
+function propertyDecisionCheckFor(page: VerticalCalculatorPage) {
+  if (page.kind === 'buyer-cash') {
+    return {
+      mistake: 'Treating the down payment as the whole cash need.',
+      forgetting: ['Prepaids and escrow setup', 'Inspection, appraisal, survey, and association fees', 'Move-in and first-repair reserve'],
+      goBad: ['Cash is too tight after closing', 'Tax, insurance, or HOA assumptions jump', 'A repair credit does not solve the real defect'],
+      usual: 'Buyers usually run cash to close first, then stress-test the payment and hold horizon.',
+      next: 'Build a packet with closing cash, repair reserve, lender disclosure questions, and title-company questions.',
+    };
+  }
+  if (page.kind === 'seller-net' || page.kind === 'commission-cost' || page.kind === 'home-sale-prep') {
+    return {
+      mistake: 'Optimizing sale price while ignoring the check after payoff, prep, credits, and closing costs.',
+      forgetting: ['Payoff timing', 'Concessions and repair credits', 'Prep cash that may not return value', 'Title, tax, and association line items'],
+      goBad: ['A high offer nets less than expected', 'Cosmetic prep eats cash without changing buyer behavior', 'Commission savings reduce support or exposure more than expected'],
+      usual: 'Sellers usually run realistic, low-offer, and optimistic net sheets before committing to prep or price.',
+      next: 'Build a packet with the three net scenarios, prep assumptions, missing fees, and agent/title questions.',
+    };
+  }
+  if (page.kind === 'seller-closing-cost' || page.kind === 'title-company-cost' || page.kind === 'tax-proration' || page.kind === 'association-cost') {
+    return {
+      mistake: 'Letting small closing lines hide inside one generic percentage.',
+      forgetting: ['Title and escrow add-ons', 'Tax proration direction', 'Resale documents and rush fees', 'Association dues, transfer fees, and assessments'],
+      goBad: ['The final statement moves because local custom or contract language differs', 'A fee belongs to the other side in your mental model', 'A title, HOA, or tax line arrives late'],
+      usual: 'Users usually break closing into title, tax, association, payoff, credit, and contract lines.',
+      next: 'Ask the title company or association for the fee sheet and put every unknown line in the packet.',
+    };
+  }
+  if (page.group === 'Improve') {
+    return {
+      mistake: 'Buying the replacement story before scope, diagnosis, ducts, warranty, or repair economics are clear.',
+      forgetting: ['Cheaper service-call causes', 'Ducts, returns, zoning, and comfort distribution', 'Partial replacement or repair options', 'Rebate eligibility and payback limits'],
+      goBad: ['The quote replaces good parts', 'A new system still leaves comfort problems', 'The low bid excludes duct, electrical, permit, or warranty work'],
+      usual: 'Owners usually start with symptoms or repair-vs-replace, then compare repair, partial replacement, full replacement, and duct options.',
+      next: 'Use the decision packet to compare scopes, missing measurements, warranty terms, and cheaper causes ruled out.',
+    };
+  }
+  return {
+    mistake: 'Taking the output as a decision instead of a planning estimate.',
+    forgetting: ['Local custom and contract terms', 'Professional verification', 'Worst-case cash exposure', 'Documents that prove the assumption'],
+    goBad: ['A missing line item changes the result', 'The estimate is right but the scope is wrong', 'Timing makes the same number harder to act on'],
+    usual: 'Users usually run a base case, conservative case, and failure case before acting.',
+    next: 'Save the result in a packet with questions, documents, and the person who should verify it.',
+  };
+}
+
+const propertyDecisionCheck = page.area === 'property' ? propertyDecisionCheckFor(page) : undefined;
 ---
 
 <BaseLayout
@@ -96,6 +183,21 @@ const highRiskNotes = page.riskProfile ? highRiskCopy[page.riskProfile] : [];
           <span class="font-semibold text-slate-900">Best for:</span> {page.bestFor}
         </p>
       )}
+      {page.area === 'care' && (
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="#tool-start">Use calculator</a>
+          <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href={methodologyHref}>How this estimate works</a>
+          <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/care/family-care-plan-summary/">Build family summary</a>
+        </div>
+      )}
+      {page.area === 'property' && (
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a class="rounded-md bg-brand-700 px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="#tool-start">Use calculator</a>
+          <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href={methodologyHref}>How this estimate works</a>
+          <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/decision-packet/">Build decision packet</a>
+          <a class="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 no-underline hover:border-brand-400" href="/property/start/">Not sure where to start?</a>
+        </div>
+      )}
     </header>
 
     <section id="tool-start" class="scroll-mt-32">
@@ -108,6 +210,41 @@ const highRiskNotes = page.riskProfile ? highRiskCopy[page.riskProfile] : [];
         <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
           {page.assumptions.map((item) => <li>{item}</li>)}
         </ul>
+      </section>
+    )}
+
+    {propertyDecisionCheck && (
+      <section class="mt-6 max-w-5xl rounded-lg border border-brand-200 bg-brand-50 p-4">
+        <div class="max-w-3xl">
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Decision check</p>
+          <h2 class="mt-1 text-xl font-semibold text-slate-950">Before you act on the number</h2>
+          <p class="mt-2 text-sm leading-6 text-slate-700">
+            The output is useful only if it survives the missing-scope, fragile-assumption, and next-step check.
+          </p>
+        </div>
+        <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <section class="rounded-md border border-white bg-white p-3">
+            <h3 class="text-sm font-semibold text-slate-900">Mistake check</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{propertyDecisionCheck.mistake}</p>
+          </section>
+          <section class="rounded-md border border-white bg-white p-3">
+            <h3 class="text-sm font-semibold text-slate-900">What people forget</h3>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+              {propertyDecisionCheck.forgetting.map((item) => <li>{item}</li>)}
+            </ul>
+          </section>
+          <section class="rounded-md border border-white bg-white p-3">
+            <h3 class="text-sm font-semibold text-slate-900">What makes it go bad</h3>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+              {propertyDecisionCheck.goBad.map((item) => <li>{item}</li>)}
+            </ul>
+          </section>
+          <section class="rounded-md border border-white bg-white p-3">
+            <h3 class="text-sm font-semibold text-slate-900">What to do next</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{propertyDecisionCheck.usual}</p>
+            <p class="mt-2 text-sm leading-6 text-slate-700">{propertyDecisionCheck.next}</p>
+          </section>
+        </div>
       </section>
     )}
 
@@ -171,15 +308,90 @@ const highRiskNotes = page.riskProfile ? highRiskCopy[page.riskProfile] : [];
         <h2 class="text-lg font-semibold">Source check and limits</h2>
         {page.sourceCheckedAt && <p class="mt-2"><strong>Last source check:</strong> {page.sourceCheckedAt}</p>}
         {page.sourceScope && <p class="mt-1"><strong>Scope checked:</strong> {page.sourceScope}</p>}
-        <ul class="mt-3 list-disc space-y-1 pl-5">
-          {highRiskNotes.map((note) => <li>{note}</li>)}
-        </ul>
-        <p class="mt-3">
-          Kefiw shows the assumptions used so you can audit the math before relying on the result. This tool does not provide legal, tax,
-          payroll, accounting, compliance, or provider-specific pricing advice.
-        </p>
+        {isBusinessTaxRisk ? (
+          <>
+            <p class="mt-3">
+              This calculator uses educational planning assumptions. Tax rules, thresholds, forms, deadlines, and state rules can change.
+              Kefiw shows the assumptions used so you can audit the math before relying on the result. This tool does not provide legal,
+              tax, accounting, payroll, or filing advice.
+            </p>
+            {page.riskProfile === 'deduction-risk' && (
+              <p class="mt-2">This tool flags documentation and caution issues. It does not determine whether an expense is deductible.</p>
+            )}
+            {page.riskProfile === 's-corp' && (
+              <p class="mt-2">
+                This tool estimates possible savings after reasonable salary, payroll, filing, state, and admin assumptions. It does not
+                determine a reasonable salary or tax election.
+              </p>
+            )}
+          </>
+        ) : isBusinessCloudSaasRisk ? (
+          <>
+            <p class="mt-3">
+              This calculator uses educational planning assumptions. Cloud, SaaS, AI, licensing, and provider pricing can change.
+              Kefiw shows the assumptions used so you can audit the math before relying on the result. Provider-specific estimates
+              should be checked against current pricing pages, contracts, and usage data.
+            </p>
+            {isBusinessCloudCostRisk && (
+              <p class="mt-2">
+                This tool estimates planning scenarios. It does not fully predict a provider bill, because region, architecture,
+                support plans, commitments, data transfer, and product-specific pricing can change the result.
+              </p>
+            )}
+            {isBusinessSaasRisk && (
+              <p class="mt-2">
+                This tool estimates software spend and renewal risk. It does not determine contract rights, cancellation rights,
+                true-up obligations, or vendor-specific licensing compliance.
+              </p>
+            )}
+            {isBusinessAiRisk && (
+              <p class="mt-2">
+                This tool estimates AI ROI using cost, adoption, review time, error risk, and workflow assumptions. It does not
+                guarantee time savings or model performance.
+              </p>
+            )}
+          </>
+        ) : isBusinessRevenueRisk ? (
+          <>
+            <p class="mt-3">
+              This calculator uses educational business-planning assumptions. Revenue forecasts, churn estimates, sales targets,
+              and growth scenarios depend on the inputs you provide and can change with market conditions, customer behavior,
+              payment timing, and operating costs. Kefiw shows the assumptions so you can audit the math before relying on the result.
+            </p>
+            {isBusinessRevenueForecastRisk && (
+              <p class="mt-2">
+                This forecast is a planning scenario, not a promise. Use conservative, expected, and aggressive versions before
+                making hiring, spending, or tax decisions.
+              </p>
+            )}
+            {isBusinessRevenueChurnRisk && (
+              <p class="mt-2">
+                Churn and retention benchmarks vary by business model, customer segment, price point, contract structure, and
+                stage. This tool is designed to make the assumptions visible, not to declare one universal benchmark.
+              </p>
+            )}
+            {isBusinessRevenueCashRisk && (
+              <p class="mt-2">
+                This tool estimates cash runway using simplified planning assumptions. It does not replace bookkeeping,
+                accounting, or cash-flow management.
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <ul class="mt-3 list-disc space-y-1 pl-5">
+              {highRiskNotes.map((note) => <li>{note}</li>)}
+            </ul>
+            <p class="mt-3">
+              Kefiw shows the assumptions used so you can audit the math before relying on the result. This tool does not provide legal, tax,
+              payroll, accounting, medical, insurance, benefits, immigration, compliance, or provider-specific pricing advice.
+            </p>
+          </>
+        )}
       </section>
     )}
+
+    {page.area === 'care' && <CareTrustFooter variant="calculator" />}
 
     <ReviewMethodologyFooter reviewerLinks={reviewerLinks} includeHealthDisclaimer={page.healthDisclaimer} />
   </article>

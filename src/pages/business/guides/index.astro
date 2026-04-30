@@ -1,0 +1,84 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import Breadcrumb from '~/components/Breadcrumb.astro';
+import ReviewMethodologyFooter from '~/components/ReviewMethodologyFooter.astro';
+import { businessSectionInventories, highestValueMoatPages } from '~/data/business-seo-moat';
+---
+
+<BaseLayout
+  title="Business Guides for Operators Who Want the Real Math | Kefiw"
+  description="Business guides for pricing, tax, hiring, revenue, and software spend decisions, built around hidden costs, scenarios, traps, and next-step calculators."
+  canonical="/business/guides/"
+  keywords={['business guides', 'small business pricing guides', 'business tax guides', 'hiring guides small business', 'revenue forecast guides']}
+>
+  <Breadcrumb crumbs={[{ href: '/', label: 'Home' }, { href: '/business/', label: 'Business' }, { href: '/business/guides/', label: 'Guides' }]} />
+  <article class="container-wide py-6">
+    <header class="mb-8 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">Business Guides</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">Business Guides for Operators Who Want the Real Math</h1>
+      <p class="mt-3 text-xl font-semibold text-brand-800">The math is only useful if the decision gets better.</p>
+      <p class="mt-3 text-lg text-slate-700">
+        Use these guides when a calculator result needs context: what could break, what most advice leaves out, and which next step makes the number usable.
+      </p>
+    </header>
+
+    <section class="mb-10 rounded-lg border border-brand-200 bg-brand-50 p-5">
+      <h2 class="text-xl font-semibold text-slate-950">Highest-value moat pages</h2>
+      <p class="mt-2 text-sm text-slate-700">
+        These are the decision-heavy pages Kefiw prioritizes because they combine anxiety, hidden cost, calculator fit, and a clear next action.
+      </p>
+      <div class="mt-4 grid gap-4 lg:grid-cols-2">
+        {highestValueMoatPages.map((group) => (
+          <div class="rounded-lg border border-brand-100 bg-white p-4">
+            <h3 class="text-base font-semibold text-slate-950">{group.section}</h3>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+              {group.pages.map((page) => <li>{page}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <div class="space-y-10">
+      {businessSectionInventories.map((section) => (
+        <section id={section.id} class="scroll-mt-36">
+          <div class="mb-4 max-w-3xl">
+            <p class="text-xs font-semibold uppercase tracking-wide text-brand-700">{section.label}</p>
+            <h2 class="text-2xl font-bold tracking-tight text-slate-950">{section.tagline}</h2>
+          </div>
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {section.guides.map((guide) => (
+              <a href={guide.href} class="flex min-h-56 flex-col rounded-lg border border-slate-200 bg-white p-4 text-slate-900 no-underline transition hover:border-brand-400 hover:shadow-sm">
+                <h3 class="text-base font-semibold">{guide.title}</h3>
+                {guide.tagline && <p class="mt-2 text-sm font-semibold text-brand-800">{guide.tagline}</p>}
+                {guide.promise && <p class="mt-2 text-sm text-slate-700">{guide.promise}</p>}
+                {guide.primaryCalculator && <p class="mt-auto pt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Calculator-led guide</p>}
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <section class="mt-10 rounded-lg border border-slate-200 bg-slate-50 p-5">
+      <h2 class="text-xl font-semibold text-slate-900">How to use these guides</h2>
+      <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+        <li>Start with the calculator when you need a number.</li>
+        <li>Use the guide when the number feels wrong, fragile, or incomplete.</li>
+        <li>Use the related template when you need to turn the result into an email, checklist, worksheet, or memo.</li>
+        <li>Use a Business Track when you do not know which number to calculate first.</li>
+      </ul>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <a class="rounded-md bg-brand-700 px-3 py-2 text-sm font-semibold text-white no-underline hover:bg-brand-800" href="/business/templates/">Open templates</a>
+        <a class="rounded-md border border-brand-200 bg-white px-3 py-2 text-sm font-semibold text-brand-800 no-underline hover:border-brand-400" href="/business/tracks/">Open Business Tracks</a>
+      </div>
+    </section>
+
+    <ReviewMethodologyFooter
+      reviewerLinks={[
+        { label: 'engineering', href: '/engineering-review/' },
+        { label: 'scientific reviewer', href: '/scientific-review/' },
+      ]}
+    />
+  </article>
+</BaseLayout>

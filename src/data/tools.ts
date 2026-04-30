@@ -7,12 +7,13 @@ export type FaqIntent =
   | 'how-to'
   | 'troubleshooting'
   | 'cost'
-  | 'trust';
+  | 'trust'
+  | 'safety';
 
 export interface FaqItem {
   q: string;
   a: string;
-  faq_intent?: FaqIntent;
+  faq_intent?: FaqIntent | (string & {});
 }
 
 export interface ExampleBlock {
@@ -58,24 +59,24 @@ export interface ToolConfig {
 
 export const CATEGORIES: Record<ToolCategory, { title: string; slug: string; blurb: string }> = {
   'word-tools': {
-    title: 'Word Tools',
+    title: 'Language Boost Tools',
     slug: 'word-tools',
-    blurb: 'Unscramblers, anagram solvers, word finders, and text utilities — all running locally in your browser.',
+    blurb: 'Language pattern tools for vocabulary, spelling, text cleanup, and puzzle-style thinking routines.',
   },
   converters: {
-    title: 'Converters',
+    title: 'Conversion Tools',
     slug: 'converters',
-    blurb: 'Fast unit converters for length, weight, temperature, area, volume, speed, and time.',
+    blurb: 'Fast unit conversions for everyday estimation, comparison, planning, and number sense.',
   },
   calculators: {
-    title: 'Calculators',
+    title: 'Decision Calculators',
     slug: 'calculators',
-    blurb: 'Percentage, age, date, discount, tip, hours, fraction, ratio, and more — clean mobile-first input.',
+    blurb: 'Simple deterministic calculators for everyday choices, time, money, ratios, and planning.',
   },
   games: {
-    title: 'Games',
+    title: 'Cognitive Play',
     slug: 'games',
-    blurb: 'Lightweight browser games — Sudoku and daily puzzles. No popups, no mid-game interstitials.',
+    blurb: 'Short thinking drills for words, numbers, spatial patterns, logic, and low-friction daily practice.',
   },
   health: {
     title: 'Health',
@@ -3201,11 +3202,11 @@ const RAW_TOOLS: ToolConfig[] = [
     category: 'health',
     noindex: true,
     slug: 'medical-triage',
-    title: 'Medical Triage — ER vs Urgent Care vs Home | Kefiw',
-    h1: 'Medical Triage · Red-Flag Router',
-    description: 'Three-tier triage routing for common symptoms. Flags red symptoms to ER, amber to urgent care, green to self-care. Hard-coded heuristic only — not a diagnosis.',
+    title: 'Care Urgency Check — ER vs Urgent Care vs Home | Kefiw',
+    h1: 'Care Urgency Check',
+    description: 'Educational urgency routing for common symptoms. Flags red symptoms to ER, amber to urgent care, green to self-care. Hard-coded heuristic only — not a diagnosis.',
     keywords: ['ER or urgent care', 'should I go to the ER', 'medical triage', 'red flag symptoms'],
-    intro: 'Picks between ER, urgent care, and self-care based on published red-flag lists. Checks universal killers first (chest pain + arm radiation, FAST stroke signs, unresponsive, cyanosis) then symptom-specific flags.',
+    intro: 'Helps users think through ER, urgent care, and self-care urgency based on published red-flag lists. Checks universal red flags first, then symptom-specific flags.',
     howTo: [
       'Pick primary symptom.',
       'Check any red-flag boxes that apply.',
