@@ -9,7 +9,7 @@
 //   - Viewability gate (60% for 30s) — only then refresh
 //   - Fill / unfill → labeled shell state, ZincPlaceholder on unfill in LTD
 //   - Emits telemetry: ad_request, impression, viewable, fill, unfill, click
-//   - If no PUBLIC_ADSENSE_PUBLISHER_ID set, renders dev placeholder only
+//   - If no publisher/slot is set, renders a placeholder in dev and nothing in production
 
 import { useEffect, useRef, useState } from 'react';
 import { track } from '~/lib/telemetry';
@@ -30,6 +30,7 @@ interface Props {
 }
 
 const PUBLISHER_ID = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID as string | undefined) ?? '';
+const SHOW_DEV_PLACEHOLDERS = import.meta.env.DEV;
 const REFRESH_FLOOR_MS = 30_000;
 
 const DEFAULT_MIN_HEIGHT: Record<ZoneId, number> = {
@@ -62,7 +63,7 @@ export default function AdSlot({
   className,
   closeable = true,
   fullBleed = true,
-}: Props): JSX.Element {
+}: Props): JSX.Element | null {
   const [mounted, setMounted] = useState(false);
   const [state, setState] = useState<'loading' | 'filled' | 'unfilled'>('loading');
   const [dismissedUntil, setDismissedUntil] = useState<number>(0);
@@ -231,6 +232,10 @@ export default function AdSlot({
     marginLeft: fullBleed ? 'calc(50% - 50vw)' : 0,
     marginRight: fullBleed ? 'calc(50% - 50vw)' : 0,
   };
+
+  if (devMode && !SHOW_DEV_PLACEHOLDERS) {
+    return null;
+  }
 
   if (dismissed) {
     return (

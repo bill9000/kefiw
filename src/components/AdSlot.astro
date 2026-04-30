@@ -8,6 +8,8 @@ const heights: Record<string, string> = {
   'sidebar': 'min-h-[600px]',
 };
 ---
-<div class={`ad-slot ${heights[slot]} my-6 flex items-center justify-center rounded border border-dashed border-slate-200 text-xs text-slate-300`} data-slot={slot} aria-hidden="true">
-  <!-- Ad slot reserved ({slot}). Populated later. -->
-</div>
+{import.meta.env.DEV && (
+  <div class={`ad-slot ${heights[slot]} my-6 flex items-center justify-center rounded border border-dashed border-slate-200 text-xs text-slate-300`} data-slot={slot} aria-hidden="true">
+    <!-- Ad slot reserved ({slot}). Populated later. -->
+  </div>
+)}

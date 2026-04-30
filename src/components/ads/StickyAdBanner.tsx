@@ -16,6 +16,7 @@ import SystemTray from '~/components/SystemTray';
 
 const PUBLISHER_ID = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID as string | undefined) ?? '';
 const SLOT_ID = (import.meta.env.PUBLIC_ADSENSE_STICKY_SLOT as string | undefined) ?? '';
+const SHOW_DEV_PLACEHOLDERS = import.meta.env.DEV;
 const DISMISS_KEY = 'kfw_sticky_closed_at';
 const DISMISS_MS = 60_000;
 const BANNER_HEIGHT = 60;
@@ -79,7 +80,8 @@ export default function StickyAdBanner(): JSX.Element | null {
   const routeLtd = typeof window !== 'undefined' ? resolveCluster(window.location.pathname).risk_tier === 'ltd' : false;
   const ltd = routeLtd || consent !== 'full';
   const devMode = !PUBLISHER_ID || !SLOT_ID;
-  const bannerRendered = mounted && visible && !(state === 'unfilled' && !devMode);
+  const showDevPlaceholder = devMode && SHOW_DEV_PLACEHOLDERS;
+  const bannerRendered = mounted && visible && (showDevPlaceholder || !devMode) && !(state === 'unfilled' && !devMode);
 
   useEffect(() => {
     window.__KFW_STICKY_AD_VISIBLE = bannerRendered;
@@ -147,6 +149,7 @@ export default function StickyAdBanner(): JSX.Element | null {
   }, [state]);
 
   if (!mounted || !visible) return null;
+  if (devMode && !SHOW_DEV_PLACEHOLDERS) return null;
   if (state === 'unfilled' && !devMode) return null;
 
   const close = (): void => {
