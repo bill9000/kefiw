@@ -22,5 +22,31 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
     return Response.redirect(url.toString(), 301);
   }
 
+  const dailyRouteRedirects: Record<string, string> = {
+    '/daily/percent/': '/daily/math/percent/',
+    '/daily/discount/': '/daily/math/discount/',
+    '/daily/convert/': '/daily/math/convert/',
+    '/daily/tip/': '/daily/math/tip/',
+    '/daily/timedelta/': '/daily/math/timedelta/',
+    '/daily/crypt/': '/daily/verbal/crypt/',
+    '/daily/link/': '/daily/verbal/link/',
+    '/daily/shift/': '/daily/verbal/shift/',
+    '/daily/crosser/': '/daily/verbal/crosser/',
+    '/daily/twist/': '/daily/verbal/twist/',
+    '/daily/circuit/': '/daily/spatial/circuit/',
+    '/daily/drop/': '/daily/spatial/drop/',
+    '/daily/pair/': '/daily/spatial/pair/',
+    '/daily/hex/': '/daily/spatial/hex/',
+    '/daily/path/': '/daily/spatial/path/',
+  };
+
+  const normalizedDailyPath = path.endsWith('/') ? path : `${path}/`;
+  const dailyRouteRedirect = dailyRouteRedirects[normalizedDailyPath];
+  if (dailyRouteRedirect) {
+    url.pathname = dailyRouteRedirect;
+    url.search = '';
+    return Response.redirect(url.toString(), 301);
+  }
+
   return next();
 };
