@@ -3,8 +3,9 @@
 // Injects the adsbygoogle loader script once per page.
 // Include in BaseLayout.astro <head> slot.
 const publisherId = import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID as string | undefined;
+const adsDisabled = true;
 ---
-{publisherId && (
+{!adsDisabled && publisherId && (
   <script
     is:inline
     async

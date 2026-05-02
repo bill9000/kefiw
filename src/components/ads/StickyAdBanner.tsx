@@ -17,6 +17,7 @@ import SystemTray from '~/components/SystemTray';
 const PUBLISHER_ID = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID as string | undefined) ?? '';
 const SLOT_ID = (import.meta.env.PUBLIC_ADSENSE_STICKY_SLOT as string | undefined) ?? '';
 const SHOW_DEV_PLACEHOLDERS = import.meta.env.DEV;
+const ADS_DISABLED = true;
 const DISMISS_KEY = 'kfw_sticky_closed_at';
 const DISMISS_MS = 60_000;
 const BANNER_HEIGHT = 60;
@@ -60,6 +61,8 @@ function remainingMs(): number {
 }
 
 export default function StickyAdBanner(): JSX.Element | null {
+  if (ADS_DISABLED) return null;
+
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(true);
   const [state, setState] = useState<'loading' | 'filled' | 'unfilled'>('loading');

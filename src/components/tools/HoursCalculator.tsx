@@ -72,16 +72,19 @@ export default function HoursCalculator() {
       <div className="card">
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
-            <label className="label" htmlFor="s">Start</label>
-            <input id="s" type="time" className="input" value={start} onChange={(e) => setStart(e.target.value)} />
+            <label className="label" htmlFor="s">Work started</label>
+            <input id="s" type="time" className="input" value={start} onChange={(e) => setStart(e.target.value)} aria-describedby="s-help" />
+            <p id="s-help" className="mt-1 text-xs text-slate-500">Use the clock time when paid work began.</p>
           </div>
           <div>
-            <label className="label" htmlFor="e">End</label>
-            <input id="e" type="time" className="input" value={end} onChange={(e) => setEnd(e.target.value)} />
+            <label className="label" htmlFor="e">Work ended</label>
+            <input id="e" type="time" className="input" value={end} onChange={(e) => setEnd(e.target.value)} aria-describedby="e-help" />
+            <p id="e-help" className="mt-1 text-xs text-slate-500">If this is earlier than the start time, the calculator treats it as an overnight shift.</p>
           </div>
           <div>
             <label className="label" htmlFor="b">Unpaid break (min)</label>
-            <input id="b" type="number" inputMode="numeric" className="input" value={breakMin} onChange={(e) => setBreakMin(e.target.value)} />
+            <input id="b" type="number" inputMode="numeric" className="input" value={breakMin} onChange={(e) => setBreakMin(e.target.value)} aria-describedby="b-help" />
+            <p id="b-help" className="mt-1 text-xs text-slate-500">Enter minutes not counted as work, such as 30 for lunch.</p>
           </div>
         </div>
         <button
@@ -90,21 +93,24 @@ export default function HoursCalculator() {
           onClick={() => setShowAdvanced((x) => !x)}
           aria-expanded={showAdvanced}
         >
-          {showAdvanced ? 'Hide pay & overtime' : 'Add hourly rate and overtime →'}
+          {showAdvanced ? 'Hide pay estimate' : 'Optional: estimate pay from an hourly rate ->'}
         </button>
         {showAdvanced && (
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
             <div>
               <label className="label" htmlFor="rate">Hourly rate ($)</label>
-              <input id="rate" type="number" inputMode="decimal" className="input" value={rate} onChange={(e) => setRate(e.target.value)} placeholder="e.g. 25" />
+              <input id="rate" type="number" inputMode="decimal" className="input" value={rate} onChange={(e) => setRate(e.target.value)} placeholder="e.g. 25" aria-describedby="rate-help" />
+              <p id="rate-help" className="mt-1 text-xs text-slate-500">Use your regular hourly pay before overtime.</p>
             </div>
             <div>
-              <label className="label" htmlFor="ot">Daily overtime threshold (hours)</label>
-              <input id="ot" type="number" inputMode="decimal" className="input" value={otThreshold} onChange={(e) => setOtThreshold(e.target.value)} />
+              <label className="label" htmlFor="ot">Overtime starts after (hours)</label>
+              <input id="ot" type="number" inputMode="decimal" className="input" value={otThreshold} onChange={(e) => setOtThreshold(e.target.value)} aria-describedby="ot-help" />
+              <p id="ot-help" className="mt-1 text-xs text-slate-500">Use 8 if overtime begins after 8 worked hours in one day.</p>
             </div>
             <div>
-              <label className="label" htmlFor="otm">Overtime multiplier</label>
-              <input id="otm" type="number" inputMode="decimal" className="input" value={otMultiplier} onChange={(e) => setOtMultiplier(e.target.value)} step="0.1" />
+              <label className="label" htmlFor="otm">Overtime pay rate</label>
+              <input id="otm" type="number" inputMode="decimal" className="input" value={otMultiplier} onChange={(e) => setOtMultiplier(e.target.value)} step="0.1" aria-describedby="otm-help" />
+              <p id="otm-help" className="mt-1 text-xs text-slate-500">1.5 means time-and-a-half. 2 means double time.</p>
             </div>
           </div>
         )}

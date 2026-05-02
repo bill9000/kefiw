@@ -31,6 +31,7 @@ interface Props {
 
 const PUBLISHER_ID = (import.meta.env.PUBLIC_ADSENSE_PUBLISHER_ID as string | undefined) ?? '';
 const SHOW_DEV_PLACEHOLDERS = import.meta.env.DEV;
+const ADS_DISABLED = true;
 const REFRESH_FLOOR_MS = 30_000;
 
 const DEFAULT_MIN_HEIGHT: Record<ZoneId, number> = {
@@ -64,6 +65,8 @@ export default function AdSlot({
   closeable = true,
   fullBleed = true,
 }: Props): JSX.Element | null {
+  if (ADS_DISABLED) return null;
+
   const [mounted, setMounted] = useState(false);
   const [state, setState] = useState<'loading' | 'filled' | 'unfilled'>('loading');
   const [dismissedUntil, setDismissedUntil] = useState<number>(0);

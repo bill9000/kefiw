@@ -16,6 +16,23 @@ interface Props {
   cards: MaybeCard[];
 }
 
+const FRIENDLY_LABELS: Record<string, string> = {
+  Gross: 'Before breaks',
+  Break: 'Unpaid break',
+  Worked: 'Time worked',
+  'Decimal hrs': 'Decimal hours',
+  'Regular hrs': 'Regular hours',
+  'Overtime hrs': 'Overtime hours',
+  Delta: 'Difference',
+  'RPH delta': 'Revenue-per-employee change',
+  Multiplier: 'Pay multiplier',
+  Threshold: 'Starts after',
+};
+
+function friendlyLabel(label: string) {
+  return FRIENDLY_LABELS[label] ?? label;
+}
+
 export default function OutcomeLayer({ cards }: Props) {
   const visible = cards.filter((c): c is OutcomeCard => Boolean(c));
   if (visible.length === 0) return null;
@@ -40,7 +57,7 @@ function Card({ card }: { card: OutcomeCard }) {
         <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {card.items.map((s) => (
             <div key={s.label} className="rounded border border-slate-200 bg-white px-3 py-2 text-center">
-              <dt className="text-xs text-slate-500">{s.label}</dt>
+              <dt className="text-xs text-slate-500">{friendlyLabel(s.label)}</dt>
               <dd className="font-mono text-sm font-semibold text-slate-900">{s.value}</dd>
             </div>
           ))}

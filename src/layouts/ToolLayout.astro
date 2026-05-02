@@ -63,15 +63,19 @@ const numericToolIds = new Set([
 
 const cueText =
   tool.id === 'average-calculator'
-      ? 'Enter numbers below'
+      ? 'Paste or type your numbers below'
+      : tool.id === 'hours-calculator'
+        ? 'Enter your shift times below'
       : numericToolIds.has(tool.id)
-        ? 'Enter values below'
+        ? 'Enter the numbers you know below'
         : tool.category === 'word-tools'
-          ? 'Enter letters or text below'
+          ? 'Enter letters, words, or text below'
           : tool.category === 'converters'
-            ? 'Enter a value below'
+            ? 'Enter the value to convert below'
             : 'Start below';
-const cueHelp = 'Scroll up for overview, down for guides';
+const cueHelp = tool.category === 'games'
+  ? 'Play first; notes and related practice are below'
+  : 'Fields marked optional can be skipped; results update as you type';
 ---
 <BaseLayout
   title={tool.title}

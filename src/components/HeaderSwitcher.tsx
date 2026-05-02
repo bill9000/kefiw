@@ -6,6 +6,7 @@ import AdSlot from './ads/AdSlot';
 
 const AUTO_AD_MS = 3_000;
 const RESTORE_IDLE_MS = 6_000;
+const HEADER_ADS_DISABLED = true;
 
 interface NavLink {
   label: string;
@@ -1026,7 +1027,7 @@ export default function HeaderSwitcher(): JSX.Element {
   };
 
   useEffect(() => {
-    const active = shouldAutoCollapseHeader();
+    const active = !HEADER_ADS_DISABLED && shouldAutoCollapseHeader();
     setEnabled(active);
     if (active) scheduleAd(AUTO_AD_MS);
     const currentGroup = groupForPath(window.location.pathname);
@@ -1106,7 +1107,7 @@ export default function HeaderSwitcher(): JSX.Element {
   const activeGroup = NAV_GROUPS.find((group) => group.label === openMenu) ?? null;
   const activeMobileGroup = NAV_GROUPS.find((group) => group.label === mobileMenu) ?? null;
 
-  if (enabled && adMode) {
+  if (!HEADER_ADS_DISABLED && enabled && adMode) {
     return (
       <header className="sticky top-0 z-40 grid grid-cols-[40px_minmax(0,1fr)] border-b border-slate-200 bg-white">
         <div className="flex min-h-16 flex-col items-center justify-center gap-1 border-r border-slate-200 bg-slate-50 px-1 py-1">
