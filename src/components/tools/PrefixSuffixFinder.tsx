@@ -63,7 +63,7 @@ export default function PrefixSuffixFinder({ mode, label, placeholder }: Props) 
         const nextActions =
           mode === 'startsWith'
             ? [
-                { href: '/word-tools/words-ending-in/', label: 'Words ending in' },
+                { href: '/word-tools/words-ending-with/', label: 'Words ending with' },
                 { href: '/word-tools/words-containing/', label: 'Words containing' },
               ]
             : mode === 'endsWith'
@@ -73,7 +73,7 @@ export default function PrefixSuffixFinder({ mode, label, placeholder }: Props) 
                 ]
               : [
                   { href: '/word-tools/words-starting-with/', label: 'Words starting with' },
-                  { href: '/word-tools/words-ending-in/', label: 'Words ending in' },
+                  { href: '/word-tools/words-ending-with/', label: 'Words ending with' },
                 ];
         const cards: MaybeCard[] = [
           { kind: 'summary', text: `${results.length.toLocaleString()} word${results.length === 1 ? '' : 's'} ${verb} "${query}".` },

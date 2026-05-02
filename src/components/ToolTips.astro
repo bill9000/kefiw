@@ -42,7 +42,7 @@ if (cluster) {
   for (const id of cluster.featuredListIds) {
     if (relatedLinks.length >= 6) break;
     const p = contentPageById(id);
-    if (p) relatedLinks.push({ href: contentHref(p), label: p.h1 });
+    if (p && p.kind !== 'word-list') relatedLinks.push({ href: contentHref(p), label: p.h1 });
   }
 }
 

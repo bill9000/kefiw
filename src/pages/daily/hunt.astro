@@ -27,6 +27,40 @@ const crumbs = [
 
     <HuntGame client:only="react" />
 
+    <section class="mx-auto mt-8 max-w-3xl rounded-lg border border-slate-200 bg-white p-5">
+      <h2 class="text-xl font-semibold text-slate-900">Why Five-Letter Hunt is in Kefiw Daily</h2>
+      <div class="mt-3 grid gap-4 text-sm leading-6 text-slate-700 md:grid-cols-2">
+        <div>
+          <h3 class="font-semibold text-slate-900">What it trains</h3>
+          <p class="mt-1">
+            Five-Letter Hunt is a constraint-solving drill. Each guess tests a hypothesis,
+            then the color feedback narrows the search space for the next decision.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-900">How scoring works</h3>
+          <p class="mt-1">
+            Lower guess counts rank better. Good play balances information gathering,
+            letter-position memory, and avoiding repeated letters that feedback has ruled out.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-900">Privacy</h3>
+          <p class="mt-1">
+            Your current board and local streak stay in the browser. Leaderboard posting is separate
+            from the playable round.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-slate-900">Use it with</h3>
+          <p class="mt-1">
+            After playing, use the <a href="/word-tools/pattern-solver/" class="text-brand-700 underline">Pattern Solver</a>
+            to study how letter constraints change the possible answer set.
+          </p>
+        </div>
+      </div>
+    </section>
+
     <section class="mx-auto mt-8 max-w-md">
       <h2 class="mb-3 text-lg font-semibold">Today's top solvers</h2>
       <Leaderboard client:only="react" gameId="hunt" limit={20} />

@@ -13,9 +13,10 @@ interface Props {
   words: string[];
   keyStats?: KeyStat[];
   breadcrumbParent?: { href: string; label: string };
+  noindex?: boolean;
 }
 
-const { config, words, keyStats, breadcrumbParent } = Astro.props;
+const { config, words, keyStats, breadcrumbParent, noindex = true } = Astro.props;
 
 const canonical = `/word-tools/${config.slug}/`;
 
@@ -83,6 +84,7 @@ const showCtaRow = !!config.primaryCta || secondaryCtas.length > 0;
   description={config.description}
   canonical={canonical}
   keywords={config.keywords}
+  noindex={noindex}
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(itemListJsonLd)} />
   <Breadcrumb crumbs={crumbs} />

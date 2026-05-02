@@ -101,6 +101,7 @@ export interface ContentPageConfig {
   // cluster
   clusterId?: string;
   pageType?: PageType;
+  noindex?: boolean;
   // guide-specific
   guideCategory?: string;
   bodyHtml?: string; // escape hatch — use typed fields first
@@ -517,6 +518,27 @@ function guideRelatedSupplements(page: ContentPageConfig): ContentCta[] {
   ];
 }
 
+const DUPLICATE_COMPANION_GUIDE_SLUGS = new Set([
+  'parent-fall-what-now',
+  'hospital-discharge-coming-questions',
+  'home-care-getting-too-expensive',
+  'sibling-wont-help-caregiving',
+  'dementia-safety-getting-worse',
+  'choose-facility-this-week',
+  'caregiver-burning-out-playbook',
+  'medicare-open-enrollment-review-playbook',
+  'long-term-care-insurance-claim-starter',
+  'hvac-diagnosis-live-matrix',
+]);
+
+function applyIndexingPolicy(page: ContentPageConfig): ContentPageConfig {
+  if (page.kind === 'word-list') return { ...page, noindex: true };
+  if (page.kind === 'guide' && DUPLICATE_COMPANION_GUIDE_SLUGS.has(page.slug)) {
+    return { ...page, noindex: true };
+  }
+  return page;
+}
+
 function applyGuideQualitySupplements(page: ContentPageConfig): ContentPageConfig {
   if (page.kind !== 'guide') return page;
   const existingFaq = page.faq ?? [];
@@ -547,12 +569,12 @@ const mergedPages: ContentPageConfig[] = RAW_CONTENT_PAGES.map((p) => {
   const afterOverride: ContentPageConfig = override ? { ...p, ...override } : p;
   const patch = SCRABBLE_ARTICLE_PATCHES[p.id];
   const afterPatch = patch ? applyArticlePatch(afterOverride, patch) : afterOverride;
-  return applyGuideQualitySupplements(afterPatch);
+  return applyIndexingPolicy(applyGuideQualitySupplements(afterPatch));
 }).map(withDefaultImageAsset);
 
 export const CONTENT_PAGES: ContentPageConfig[] = [
   ...mergedPages,
-  ...SCRABBLE_NEW_GUIDES.map(applyGuideQualitySupplements).map(withDefaultImageAsset),
+  ...SCRABBLE_NEW_GUIDES.map(applyGuideQualitySupplements).map(applyIndexingPolicy).map(withDefaultImageAsset),
 ];
 
 export function contentHref(c: ContentPageConfig): string {

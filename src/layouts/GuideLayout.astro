@@ -281,6 +281,7 @@ const relatedItemListJsonLd = allRelated.length ? {
   ogImage={resolvedOgImage}
   ogImageAlt={resolvedImageAlt}
   ogType="article"
+  noindex={config.noindex === true}
 >
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(articleJsonLd)} />
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(breadcrumbJsonLd)} />

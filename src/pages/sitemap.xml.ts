@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro';
 import { TOOLS, CATEGORIES, toolHref } from '~/data/tools';
-import { buildSeoPages } from '~/lib/seo-pages';
 import { contentPagesBySection, contentHref, type ContentPageConfig } from '~/data/content-pages';
 import { CLUSTERS, clusterHref } from '~/data/clusters';
 import { DAILY_GAMES } from '~/data/daily-games';
@@ -16,6 +15,13 @@ import { hiringGuideHref, hiringGuidePages, hiringTemplateHref, hiringTemplatePa
 import { taxGuideHref, taxGuidePages, taxTemplateHref, taxTemplatePages } from '~/data/business-tax';
 import { cloudSaasGuideHref, cloudSaasGuidePages, cloudSaasTemplateHref, cloudSaasTemplatePages } from '~/data/business-cloud-saas';
 import { revenueGuideHref, revenueGuidePages, revenueTemplateHref, revenueTemplatePages } from '~/data/business-revenue';
+
+function dailyGameHref(game: { id: string; slug: string }): string {
+  if (game.id.startsWith('math-')) return `/daily/math/${game.slug}/`;
+  if (game.id.startsWith('verbal-')) return `/daily/verbal/${game.slug}/`;
+  if (game.id.startsWith('spatial-')) return `/daily/spatial/${game.slug}/`;
+  return `/daily/${game.slug}/`;
+}
 
 const STATIC_ROUTES = [
   '/',
@@ -40,7 +46,7 @@ const STATIC_ROUTES = [
   '/corrections/',
   '/daily/',
   '/daily/leaderboard/',
-  ...DAILY_GAMES.map((g) => `/daily/${g.slug}/`),
+  ...DAILY_GAMES.map(dailyGameHref),
   '/scenarios/',
   '/scenarios/stress-test-triad/',
   '/scenarios/focus-triad/',
@@ -112,16 +118,16 @@ function publishedContent(section: 'word-tools' | 'guides' | 'calculators' | 'co
     // Drop any content page marked noindex — never submit a URL to the sitemap
     // that we also tell Google not to index. That produces Search Console warnings.
     if ((c as { noindex?: boolean }).noindex === true) return false;
-    if (c.kind !== 'word-list') return true;
-    const words = c.buildWords?.() ?? [];
-    const min = c.minWords ?? 10;
-    return words.length >= min;
+    // Generated word-list pages stay usable for visitors, but they are not part
+    // of the indexed sitemap footprint. Kefiw should read as a decision and
+    // cognitive boost site, not a scaled dictionary/list site.
+    if (c.kind === 'word-list') return false;
+    return true;
   });
 }
 
 export const GET: APIRoute = ({ site }) => {
   const base = (site ?? new URL('https://kefiw.com')).toString().replace(/\/$/, '');
-  const { pages: seoPages } = buildSeoPages();
   const urls = [
     ...STATIC_ROUTES,
     ...TRACKS.map(trackHref),
@@ -141,7 +147,6 @@ export const GET: APIRoute = ({ site }) => {
     ...CLUSTERS.map(clusterHref),
     // Exclude noindex tools (reagent-* etc.) — same rationale as above.
     ...TOOLS.filter((t) => !t.comingSoon && !t.noindex).map(toolHref),
-    ...seoPages.map((p) => `/word-tools/${p.slug}/`),
     ...publishedContent('word-tools').map(contentHref),
     ...publishedContent('guides').map(contentHref),
     ...publishedContent('calculators').map(contentHref),

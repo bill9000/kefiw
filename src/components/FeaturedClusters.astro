@@ -38,7 +38,7 @@ const cards: ClusterCard[] = slugs
     const topListId = cluster.featuredListIds[0];
     if (topListId) {
       const page = contentPageById(topListId);
-      if (page) chips.push({ href: contentHref(page), label: page.h1 });
+      if (page && page.kind !== 'word-list') chips.push({ href: contentHref(page), label: page.h1 });
     }
 
     return {

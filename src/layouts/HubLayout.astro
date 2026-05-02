@@ -19,12 +19,7 @@ const tools = cluster.featuredToolIds
 const lists: ContentPageConfig[] = cluster.featuredListIds
   .map((id) => contentPageById(id))
   .filter((p): p is ContentPageConfig => !!p)
-  .filter((p) => {
-    if (p.kind !== 'word-list') return true;
-    const words = p.buildWords?.() ?? [];
-    const min = p.minWords ?? 10;
-    return words.length >= min;
-  });
+  .filter((p) => p.kind !== 'word-list');
 
 const supports: ContentPageConfig[] = cluster.featuredSupportIds
   .map((id) => contentPageById(id))

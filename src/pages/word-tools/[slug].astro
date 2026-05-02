@@ -4,7 +4,7 @@ import WordListPageLayout from '~/layouts/WordListPageLayout.astro';
 import HubLayout from '~/layouts/HubLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import FAQ from '~/components/FAQ.astro';
-import { buildSeoPages, buildFaq, relatedSlugs, type SeoPage } from '~/lib/seo-pages';
+import { buildFaq, relatedSlugs, type SeoPage } from '~/lib/seo-pages';
 import {
   contentPagesBySection,
   type ContentPageConfig,
@@ -17,30 +17,11 @@ type HubProps = { kind: 'hub'; cluster: ClusterConfig };
 type PageProps = SeoProps | ContentProps | HubProps;
 
 export async function getStaticPaths() {
-  const { pages: seoPages } = buildSeoPages();
-  const contentPages = contentPagesBySection('word-tools').filter((c) => c.kind === 'word-list');
   const hubClusters = clustersBySection('word-tools');
 
-  const seoSlugs = new Set(seoPages.map((p) => p.slug));
   const seen = new Set<string>();
   const results: Array<{ params: { slug: string }; props: PageProps }> = [];
 
-  for (const page of seoPages) {
-    if (seen.has(page.slug)) throw new Error(`[word-tools/[slug]] duplicate slug: ${page.slug}`);
-    seen.add(page.slug);
-    results.push({ params: { slug: page.slug }, props: { kind: 'seo', page } });
-  }
-  for (const config of contentPages) {
-    if (seoSlugs.has(config.slug)) {
-      throw new Error(`[word-tools/[slug]] content-page slug collides with SEO page: ${config.slug}`);
-    }
-    if (seen.has(config.slug)) throw new Error(`[word-tools/[slug]] duplicate slug: ${config.slug}`);
-    const words = config.buildWords?.() ?? [];
-    const threshold = config.minWords ?? 10;
-    if (words.length < threshold) continue;
-    seen.add(config.slug);
-    results.push({ params: { slug: config.slug }, props: { kind: 'content', config, words } });
-  }
   for (const cluster of hubClusters) {
     if (seen.has(cluster.hubSlug)) throw new Error(`[word-tools/[slug]] hub slug collides: ${cluster.hubSlug}`);
     seen.add(cluster.hubSlug);
@@ -126,6 +107,7 @@ const seoCrumbs = seoPage
     title={seoPage!.title}
     description={seoPage!.metaDescription}
     canonical={canonical}
+    noindex={true}
   >
     <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(itemListJsonLd)} />
     <Breadcrumb crumbs={seoCrumbs} />
