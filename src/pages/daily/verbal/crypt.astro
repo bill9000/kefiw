@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import VerbalCrypt from '~/components/daily/VerbalCrypt.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <VerbalCrypt client:only="react" />
+    <DailyPracticeNote
+      title="Cryptogram"
+      trains="Cryptogram trains substitution reasoning: letter frequency, repeated patterns, common word shapes, and patient hypothesis testing."
+      scoring="The best runs decode more of the quote with fewer false assumptions. The useful skill is holding a mapping in memory while revising it carefully."
+      routine="Use it as a verbal warmup when you want slower, deliberate pattern recognition instead of a speed-only word game."
+      href="/daily/verbal/"
+      linkLabel="Kefiw Verbal"
+    />
   </article>
 </BaseLayout>

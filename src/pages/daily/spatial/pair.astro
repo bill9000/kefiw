@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import SpatialGame from '~/components/daily/SpatialGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -24,5 +25,13 @@ const crumbs = [
       <p class="mt-1 text-slate-600">Ten rounds. Find the rotated twin of the target shape.</p>
     </header>
     <SpatialGame client:only="react" gameId="spatial-pair" title="Tile Pair" />
+    <DailyPracticeNote
+      title="Tile Pair"
+      trains="Tile Pair trains mental rotation: holding a target shape in memory while checking whether another tile matches after rotation."
+      scoring="A correct rotated match scores best when chosen quickly. The useful habit is comparing stable features instead of relying on the first visual impression."
+      routine="Use it as a short spatial-reasoning drill for attention, orientation, and shape comparison."
+      href="/daily/spatial/"
+      linkLabel="Kefiw Spatial"
+    />
   </article>
 </BaseLayout>

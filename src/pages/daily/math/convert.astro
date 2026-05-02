@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import MathGame from '~/components/daily/MathGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <MathGame client:only="react" gameId="math-convert" title="Convert Sprint" />
+    <DailyPracticeNote
+      title="Convert Sprint"
+      trains="Convert Sprint trains unit sense: miles to kilometers, pounds to kilograms, Fahrenheit to Celsius, and other everyday conversions."
+      scoring="Each round rewards a close and fast conversion. Good play means remembering anchor values and checking whether the answer is plausible."
+      routine="Use it as a quick calibration drill before travel, cooking, shipping, fitness, or project planning where wrong units can create bad assumptions."
+      href="/converters/"
+      linkLabel="Conversion Tools"
+    />
   </article>
 </BaseLayout>

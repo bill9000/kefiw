@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import SpatialGame from '~/components/daily/SpatialGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -24,5 +25,13 @@ const crumbs = [
       <p class="mt-1 text-slate-600">Ten rounds. Pick the piece that fills the gap.</p>
     </header>
     <SpatialGame client:only="react" gameId="spatial-hex" title="Hex Fit" />
+    <DailyPracticeNote
+      title="Hex Fit"
+      trains="Hex Fit trains shape fitting: checking edges, angles, and empty space before selecting the piece that belongs in the gap."
+      scoring="Correct fits score higher when chosen quickly. Strong play means eliminating pieces that almost fit but break one edge or corner."
+      routine="Use it as a visual pattern drill when you want compact spatial practice without a large board or long session."
+      href="/daily/spatial/"
+      linkLabel="Kefiw Spatial"
+    />
   </article>
 </BaseLayout>

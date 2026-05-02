@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import MathGame from '~/components/daily/MathGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <MathGame client:only="react" gameId="math-percent" title="Percent Dash" />
+    <DailyPracticeNote
+      title="Percent Dash"
+      trains="Percent Dash trains fast proportional reasoning: turning X percent of Y into a clean mental estimate before choosing or typing the exact answer."
+      scoring="Each daily set has ten timed rounds. Correct answers score higher when they are both accurate and quick, so the useful habit is controlled estimation rather than random tapping."
+      routine="Use it as a short number-sense warmup before shopping, budgeting, pricing, or comparing options where percentages can distort the decision."
+      href="/calculators/percentage-calculator/"
+      linkLabel="Percentage Calculator"
+    />
   </article>
 </BaseLayout>

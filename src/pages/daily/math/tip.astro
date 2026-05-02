@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import MathGame from '~/components/daily/MathGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <MathGame client:only="react" gameId="math-tip" title="Tip Drill" />
+    <DailyPracticeNote
+      title="Tip Drill"
+      trains="Tip Drill trains quick restaurant math: estimating common tip rates, checking totals, and separating the service percentage from the bill."
+      scoring="Correct answers score higher when they are quick. The goal is a repeatable mental shortcut for 15, 18, and 20 percent without overthinking."
+      routine="Use it as a small everyday-money drill for meals, service quotes, shared bills, and situations where a quick estimate prevents decision friction."
+      href="/calculators/tip-calculator/"
+      linkLabel="Tip Calculator"
+    />
   </article>
 </BaseLayout>

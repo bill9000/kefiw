@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import VerbalCrosser from '~/components/daily/VerbalCrosser.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <VerbalCrosser client:only="react" />
+    <DailyPracticeNote
+      title="Mini Crosser"
+      trains="Mini Crosser trains intersecting constraints: every answer must fit its clue and also support the crossing letters."
+      scoring="Clean solves reward careful placement. The fastest path is usually to fill certain entries first, then use crossings to unlock weaker clues."
+      routine="Use it as a short language-and-logic drill when you want more structure than a free word search."
+      href="/word-tools/crossword-solver/"
+      linkLabel="Crossword Solver"
+    />
   </article>
 </BaseLayout>

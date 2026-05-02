@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import SpatialGame from '~/components/daily/SpatialGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -24,5 +25,13 @@ const crumbs = [
       <p class="mt-1 text-slate-600">Ten rounds. Pick the cell that completes the path.</p>
     </header>
     <SpatialGame client:only="react" gameId="spatial-circuit" title="Circuit Path" />
+    <DailyPracticeNote
+      title="Circuit Path"
+      trains="Circuit Path trains visual completion: following a broken route, checking continuity, and choosing the missing cell that makes the system coherent."
+      scoring="Each round rewards a correct choice under time pressure. Good play means tracing the path before looking at the answer options."
+      routine="Use it as a quick spatial attention drill when you want pattern work without numbers or words."
+      href="/daily/spatial/"
+      linkLabel="Kefiw Spatial"
+    />
   </article>
 </BaseLayout>

@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import MathGame from '~/components/daily/MathGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <MathGame client:only="react" gameId="math-timedelta" title="Time Delta" />
+    <DailyPracticeNote
+      title="Time Delta"
+      trains="Time Delta trains calendar math: counting days between dates, noticing month boundaries, and avoiding off-by-one mistakes."
+      scoring="Each answer is scored on accuracy and speed. The useful habit is building a quick timeline, then checking whether endpoints are included."
+      routine="Use it before planning deadlines, travel, billing windows, project timelines, age-on-date questions, or any decision where dates drive the next step."
+      href="/calculators/date-difference-calculator/"
+      linkLabel="Date Difference Calculator"
+    />
   </article>
 </BaseLayout>

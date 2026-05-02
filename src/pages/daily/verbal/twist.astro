@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import VerbalTwist from '~/components/daily/VerbalTwist.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <VerbalTwist client:only="react" />
+    <DailyPracticeNote
+      title="Word Twist"
+      trains="Word Twist trains flexible recall: rearranging a small letter set into many valid words without losing the original constraints."
+      scoring="Higher scores come from finding more words, especially longer ones. The useful habit is rotating prefixes, endings, and common letter pairs."
+      routine="Use it before or after Hive when you want to review how many different words can come from the same small set of letters."
+      href="/word-tools/anagram-solver/"
+      linkLabel="Anagram Solver"
+    />
   </article>
 </BaseLayout>

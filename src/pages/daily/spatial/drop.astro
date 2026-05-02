@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import SpatialGame from '~/components/daily/SpatialGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -24,5 +25,13 @@ const crumbs = [
       <p class="mt-1 text-slate-600">Ten rounds. Tap the column with the lowest stack.</p>
     </header>
     <SpatialGame client:only="react" gameId="spatial-drop" title="Drop Stack" />
+    <DailyPracticeNote
+      title="Drop Stack"
+      trains="Drop Stack trains fast visual measurement: comparing stacks, spotting the lowest column, and resisting misleading shapes."
+      scoring="Correct answers score higher when made quickly. The useful habit is scanning the whole field before locking onto the first obvious option."
+      routine="Use it as a short eye-calibration drill before spatial work, layout decisions, or any task where visual comparison matters."
+      href="/daily/spatial/"
+      linkLabel="Kefiw Spatial"
+    />
   </article>
 </BaseLayout>

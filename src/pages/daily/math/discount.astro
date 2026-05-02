@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import MathGame from '~/components/daily/MathGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <MathGame client:only="react" gameId="math-discount" title="Discount Duel" />
+    <DailyPracticeNote
+      title="Discount Duel"
+      trains="Discount Duel trains stacked-percent judgment: coupon order, cashback, markdowns, and final-price estimation under a small time limit."
+      scoring="Correct final prices score best when answered quickly. The point is to notice how multiple discounts compound instead of adding every percent together."
+      routine="Use it as a practical shopping drill before comparing offers, sale prices, subscriptions, or any decision where the sticker discount is not the real savings."
+      href="/calculators/discount-calculator/"
+      linkLabel="Discount Calculator"
+    />
   </article>
 </BaseLayout>

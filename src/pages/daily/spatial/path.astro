@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import SpatialGame from '~/components/daily/SpatialGame.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -24,5 +25,13 @@ const crumbs = [
       <p class="mt-1 text-slate-600">Ten rounds. Pick the shortest of the four routes.</p>
     </header>
     <SpatialGame client:only="react" gameId="spatial-path" title="Path Length" />
+    <DailyPracticeNote
+      title="Path Length"
+      trains="Path Length trains distance estimation: comparing routes, weighing turns, and choosing the shortest path without measuring every segment."
+      scoring="Correct shortest-path choices score higher when made quickly. The useful habit is estimating structure first, then checking close candidates."
+      routine="Use it as a quick spatial-decision drill for maps, layouts, and visual planning tasks."
+      href="/daily/spatial/"
+      linkLabel="Kefiw Spatial"
+    />
   </article>
 </BaseLayout>

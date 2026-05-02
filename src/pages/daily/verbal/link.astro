@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import VerbalLink from '~/components/daily/VerbalLink.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <VerbalLink client:only="react" />
+    <DailyPracticeNote
+      title="Link Grid"
+      trains="Link Grid trains categorization: finding the hidden relationship between words while avoiding tempting but partial matches."
+      scoring="You get a limited number of mistakes. Strong play means testing a group only when all four items share the same rule."
+      routine="Use it as a short decision drill for sorting ambiguous information into cleaner buckets before acting."
+      href="/daily/verbal/"
+      linkLabel="Kefiw Verbal"
+    />
   </article>
 </BaseLayout>

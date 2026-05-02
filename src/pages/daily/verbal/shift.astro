@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import Breadcrumb from '~/components/Breadcrumb.astro';
 import VerbalShift from '~/components/daily/VerbalShift.tsx';
+import DailyPracticeNote from '~/components/daily/DailyPracticeNote.astro';
 
 const crumbs = [
   { href: '/', label: 'Home' },
@@ -26,5 +27,13 @@ const crumbs = [
     </header>
 
     <VerbalShift client:only="react" />
+    <DailyPracticeNote
+      title="Letter Shift"
+      trains="Letter Shift trains positional language memory: scanning columns, aligning candidates, and noticing when a near-word is not actually valid."
+      scoring="Better scores come from building real words with fewer resets. The useful habit is checking constraints before committing a row."
+      routine="Use it when you want a compact verbal puzzle that sits between spelling practice and pattern matching."
+      href="/word-tools/pattern-solver/"
+      linkLabel="Pattern Solver"
+    />
   </article>
 </BaseLayout>
