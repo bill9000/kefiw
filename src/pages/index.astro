@@ -4,8 +4,10 @@ import ToolCard from '~/components/ToolCard.astro';
 import PopularTools from '~/components/PopularTools.astro';
 import FeaturedClusters from '~/components/FeaturedClusters.astro';
 import AdSlot from '~/components/AdSlot.astro';
+import ReleaseRail from '~/components/ReleaseRail.astro';
 import { CATEGORIES, toolsByCategory } from '~/data/tools';
 import { getPopularTools } from '~/data/popular-tools';
+import { NEWS_RELEASES } from '~/data/news-releases';
 
 const popular = getPopularTools({ mode: 'fallback', limit: 5 });
 const clusterSlugs = ['scrabble', 'unscramble', 'pattern', 'rhyme', 'everyday-calculators', 'daily'];
@@ -114,6 +116,8 @@ const jsonLd = {
       <a href="/business/" class="btn-ghost">Business</a>
     </div>
   </section>
+
+  <ReleaseRail releases={NEWS_RELEASES} />
 
   <aside class="border-y border-cyan-200 bg-gradient-to-r from-cyan-50 via-cyan-50 to-white">
     <div class="container-wide py-4">

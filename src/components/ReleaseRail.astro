@@ -1,0 +1,343 @@
+---
+import type { NewsRelease } from '~/data/news-releases';
+
+interface Props {
+  kicker?: string;
+  title?: string;
+  releases: NewsRelease[];
+  autoplayMs?: number;
+}
+
+const {
+  kicker = 'Kefiw News',
+  title = 'Latest updates',
+  releases,
+  autoplayMs = 10000,
+} = Astro.props;
+
+const railId = `release-rail-${Math.random().toString(36).slice(2)}`;
+---
+
+{releases.length > 0 && (
+  <section class="release-rail-section" aria-labelledby={`${railId}-title`}>
+    <div class="release-rail-shell">
+      <div class="release-rail-header">
+        <div>
+          <p class="release-rail-kicker">{kicker}</p>
+          <h2 id={`${railId}-title`} class="release-rail-heading">{title}</h2>
+        </div>
+        <div class="release-rail-controls" aria-label="News release controls">
+          <button class="release-rail-button" type="button" data-release-prev aria-label="Previous release">&#8249;</button>
+          <button class="release-rail-button" type="button" data-release-next aria-label="Next release">&#8250;</button>
+        </div>
+      </div>
+
+      <div
+        class="release-rail-viewport"
+        data-release-rail
+        data-release-autoplay-ms={String(autoplayMs)}
+        tabindex="0"
+        aria-label="Kefiw news and announcements"
+      >
+        {releases.map((release, index) => (
+          <article
+            class={`release-card${index === 0 ? ' is-active' : ''}`}
+            data-release-card
+            aria-hidden={index === 0 ? 'false' : 'true'}
+            style={`--release-accent: ${release.accent}`}
+          >
+            <div class="release-card-copy">
+              <div class="release-meta">
+                <span>{release.label}</span>
+                <span>{release.date}</span>
+              </div>
+              <h3>
+                {release.title.includes(release.accentText)
+                  ? (
+                    <>
+                      {release.title.split(release.accentText)[0]}
+                      <span>{release.accentText}</span>
+                      {release.title.split(release.accentText).slice(1).join(release.accentText)}
+                    </>
+                  )
+                  : release.title}
+              </h3>
+              <p class="release-lead">{release.lead}</p>
+              {release.copy.map((paragraph) => <p>{paragraph}</p>)}
+              <a href={release.href} class="release-cta">{release.cta} <span aria-hidden="true">-&gt;</span></a>
+            </div>
+            <div class="release-facts" aria-label={`${release.title} details`}>
+              {release.facts.map((fact) => (
+                <div>
+                  <strong>{fact.title}</strong>
+                  <span>{fact.text}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const rails = document.querySelectorAll('[data-release-rail]');
+
+    for (const rail of rails) {
+      const shell = rail.closest('.release-rail-shell');
+      const cards = Array.from(rail.querySelectorAll('[data-release-card]'));
+      const prev = shell?.querySelector('[data-release-prev]');
+      const next = shell?.querySelector('[data-release-next]');
+      const autoplayMs = Number(rail.getAttribute('data-release-autoplay-ms') ?? '0');
+      let active = cards.findIndex((card) => card.classList.contains('is-active'));
+      let timer = 0;
+
+      if (active < 0) active = 0;
+
+      if (cards.length <= 1) {
+        prev?.setAttribute('disabled', 'true');
+        next?.setAttribute('disabled', 'true');
+        continue;
+      }
+
+      const show = (nextIndex = 0) => {
+        active = (nextIndex + cards.length) % cards.length;
+        cards.forEach((card, index) => {
+          const isActive = index === active;
+          card.classList.toggle('is-active', isActive);
+          card.setAttribute('aria-hidden', String(!isActive));
+        });
+      };
+
+      const stop = () => {
+        if (timer !== 0) window.clearInterval(timer);
+        timer = 0;
+      };
+
+      const start = () => {
+        stop();
+        if (autoplayMs > 0) timer = window.setInterval(() => show(active + 1), autoplayMs);
+      };
+
+      prev?.addEventListener('click', () => {
+        show(active - 1);
+        start();
+      });
+      next?.addEventListener('click', () => {
+        show(active + 1);
+        start();
+      });
+      rail.addEventListener('focusin', stop);
+      rail.addEventListener('focusout', start);
+      start();
+    }
+  </script>
+</>
+)}
+
+<style>
+  .release-rail-section {
+    border-block: 1px solid rgb(191 219 254);
+    background:
+      linear-gradient(90deg, rgba(239, 246, 255, 0.92), rgba(240, 253, 250, 0.68)),
+      #ffffff;
+  }
+
+  .release-rail-shell {
+    width: min(1180px, calc(100% - 2rem));
+    margin-inline: auto;
+    padding-block: 1.25rem;
+  }
+
+  .release-rail-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .release-rail-kicker {
+    margin: 0;
+    color: #1d4ed8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .release-rail-heading {
+    margin: 0.15rem 0 0;
+    color: #0f172a;
+    font-size: clamp(1.25rem, 2vw, 1.7rem);
+    line-height: 1.15;
+  }
+
+  .release-rail-controls {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .release-rail-button {
+    display: inline-grid;
+    width: 2.1rem;
+    height: 2.1rem;
+    place-items: center;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #1e3a8a;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .release-rail-button:hover {
+    border-color: #2563eb;
+    color: #1d4ed8;
+  }
+
+  .release-rail-button:disabled {
+    cursor: default;
+    opacity: 0.45;
+  }
+
+  .release-rail-viewport {
+    position: relative;
+    min-height: 21rem;
+    outline: none;
+  }
+
+  .release-rail-viewport:focus-visible {
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.28);
+  }
+
+  .release-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.45fr);
+    gap: 1rem;
+    width: 100%;
+    min-height: 20rem;
+    padding: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.38);
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    transform: translateX(0.75rem);
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .release-card.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    position: relative;
+    transform: translateX(0);
+  }
+
+  .release-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .release-card h3 {
+    max-width: 46rem;
+    margin: 0.6rem 0 0;
+    color: #0f172a;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .release-card h3 span {
+    color: var(--release-accent);
+  }
+
+  .release-card p {
+    max-width: 48rem;
+    margin: 0.65rem 0 0;
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .release-lead {
+    color: #1e293b !important;
+    font-size: 1.05rem !important;
+    font-weight: 700;
+  }
+
+  .release-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 1rem;
+    color: #1d4ed8;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .release-cta:hover {
+    text-decoration: underline;
+  }
+
+  .release-facts {
+    display: grid;
+    align-content: start;
+    gap: 0.65rem;
+  }
+
+  .release-facts div {
+    border-left: 3px solid var(--release-accent);
+    border-radius: 0.35rem;
+    background: #f8fafc;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .release-facts strong,
+  .release-facts span {
+    display: block;
+  }
+
+  .release-facts strong {
+    color: #0f172a;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .release-facts span {
+    margin-top: 0.25rem;
+    color: #475569;
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 760px) {
+    .release-rail-shell {
+      width: min(100% - 1rem, 1180px);
+      padding-block: 1rem;
+    }
+
+    .release-rail-header {
+      align-items: center;
+    }
+
+    .release-card {
+      grid-template-columns: 1fr;
+      min-height: 31rem;
+      padding: 0.9rem;
+    }
+  }
+</style>
