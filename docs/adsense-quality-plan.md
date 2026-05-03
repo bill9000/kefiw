@@ -14,9 +14,9 @@ Kefiw is no longer a junk-page site after removing the generated word-list URL i
 
 ### 1. Disable AdSense code until approval
 
-Status: todo
+Status: done
 
-Live pages no longer show visible ad placeholders, but the AdSense loader still appears on every page. For a site that was already rejected for low-value content, that is an avoidable signal.
+Live pages no longer show visible ad placeholders, and the AdSense loader is disabled while the site is pending approval.
 
 Actions:
 
@@ -24,9 +24,11 @@ Actions:
 - Keep ad disclosure pages, but make sure they describe future monetization clearly.
 - Confirm live HTML has no `adsbygoogle`, `pagead2.googlesyndication`, `data-ad-slot`, `Ad placeholder`, or `No ad available` strings before resubmitting.
 
+Latest production crawl confirmed no `adsbygoogle`, `pagead2.googlesyndication`, `data-ad-slot`, `Ad placeholder`, or `No ad available` strings.
+
 ### 2. Plain-language wording pass for tools
 
-Status: todo
+Status: implemented as a shared pass; continue as editorial maintenance
 
 Every tool page should answer these questions without the visitor needing technical context:
 
@@ -43,6 +45,8 @@ Review rule:
 - If a control is advanced, explain when to use it.
 - Avoid internal/geek wording such as "threshold", "multiplier", "gross", "decimal hrs", "pipeline", "delta", "effective", "coefficient", "arbitrage", "optimizer", or "scenario" unless the page immediately explains it.
 
+Implemented shared plain-language guardrails in `ToolLayout.astro` so every tool page now includes a category-specific "before you trust the result" section. High-friction hours-calculator labels and result labels were also rewritten directly.
+
 Example issue from `/calculators/hours-calculator/`:
 
 - "Daily overtime threshold (hours)" is accurate, but many users will not know whether this means legal overtime, company overtime, or "hours before overtime starts." Better label/helper: "Overtime starts after this many worked hours in one day. Use 8 if overtime begins after 8 hours."
@@ -53,7 +57,7 @@ Example issue from `/calculators/hours-calculator/`:
 
 ### 3. Expand and separate similar pages
 
-Status: todo
+Status: implemented for current weak clusters; continue as editorial maintenance
 
 Pages with similar structure should not only swap nouns. They need different examples, explanations, internal links, and page shapes so Google can see distinct value.
 
@@ -67,11 +71,13 @@ Actions:
   - daily pages
   - thin business guides under 400 words
   - similar property HVAC pages
-  - scenarios/comparisons pages
+- scenarios/comparisons pages
+
+Implemented shared expansion sections for daily practice pages, business guide templates, business template pages, converter hub, scenario pages, corrections, and advertising disclosure. The current built sitemap has no indexed page under 400 words.
 
 ### 4. Decide what should not be indexed yet
 
-Status: todo
+Status: done for current sitemap
 
 Some useful pages may still be too thin for AdSense review. If a page is mainly an interactive app with little crawlable explanation, either expand it or temporarily `noindex` it.
 
@@ -82,9 +88,11 @@ Actions:
 - Temporarily noindex pages that are useful to users but weak as publisher content.
 - Keep the sitemap focused on pages that demonstrate depth and purpose.
 
+Latest local sitemap crawl after the quality pass: 1,262 sitemap URLs, zero pages under 400 words, zero ad leaks, and no missing built files.
+
 ### 5. Final pre-submit crawl
 
-Status: todo
+Status: done for the current production crawl; repeat after each quality pass
 
 Run a live crawl before asking for another review.
 

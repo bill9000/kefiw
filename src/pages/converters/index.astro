@@ -26,6 +26,33 @@ const clusterSlugs = clustersBySection('converters').map((c) => c.slug);
     </div>
   </section>
 
+  <section class="container-wide py-8">
+    <div class="grid gap-4 md:grid-cols-3">
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <h2 class="text-lg font-semibold text-slate-950">Use exact units first</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">
+          Pick the unit you actually have before rounding. A small rounding shortcut can matter when you are
+          scaling a recipe, checking a shipment, comparing speed, or converting measurements for a quote.
+        </p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <h2 class="text-lg font-semibold text-slate-950">Check the context</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">
+          Conversions answer the unit question, not the decision around it. Temperature, weight, volume, and
+          area can each need a margin of safety depending on the material, tolerance, or local convention.
+        </p>
+      </div>
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <h2 class="text-lg font-semibold text-slate-950">Move from unit to plan</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-700">
+          After converting, use the related calculator or guide when cost, time, dosage, material quantity, or
+          comparison matters. The converter is the first step; the next page turns the converted value into a
+          decision.
+        </p>
+      </div>
+    </div>
+  </section>
+
   {clusterSlugs.length > 0 && (
     <FeaturedClusters
       slugs={clusterSlugs}
